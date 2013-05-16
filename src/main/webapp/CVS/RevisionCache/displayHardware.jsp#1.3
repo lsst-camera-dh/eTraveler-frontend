@@ -1,0 +1,117 @@
+<%-- 
+    Document   : displayHardware
+    Created on : Jan 15, 2013, 12:36:21 PM
+    Author     : focke
+--%>
+
+<%@page contentType="text/html" pageEncoding="US-ASCII"%>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql" %>
+<%@taglib prefix="display" uri="http://displaytag.sf.net" %>
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+        <title>Hardware</title>
+    </head>
+    <body>
+        <h1>Hardware!</h1>
+        <sql:query var="Type" dataSource="jdbc/rd-lsst-cam">
+            select HardwareType.name from Hardware, HardwareType where 
+             Hardware.id=${param['id']} and HardwareType.id=Hardware.TypeId
+        </sql:query>
+        <table>
+            <tr><td>Id:</td><td>${param['id']}</td></tr>
+            <tr><td>Type:</td><td>${Type.rows[0]['name']}</td></tr>
+        </table>
+        
+        <h2>Identifiers</h2>
+        <sql:query var="Identifiers" dataSource="jdbc/rd-lsst-cam">
+            select HardwareIdentifier.identifier, HardwareIdentifierAuthority.authorityName
+            from HardwareIdentifier, HardwareIdentifierAuthority
+            where HardwareIdentifier.hardwareId=${param['id']} 
+            and HardwareIdentifierAuthority.id=HardwareIdentifier.authorityId
+        </sql:query>
+        <display:table name="${Identifiers.rows}" class="datatable">
+            <display:column property="identifier"/>
+            <display:column property="authorityName" title="IdAuth"/>
+        </display:table>
+            
+        <sql:query var="idAuth" dataSource="jdbc/rd-lsst-cam">
+           select * from HardwareIdentifierAuthority
+        </sql:query>
+        <form METHOD=POST ACTION="addIdentifier.jsp">
+            Identifier: <INPUT TYPE=TEXT NAME=identifier SIZE=20>
+            Identifier Authority: <select name="authId">
+                <c:forEach var="row" items="${idAuth.rows}">
+                    <option value="${row.id}">${row.authorityName}</option>
+                </c:forEach>
+            </select>
+            <INPUT TYPE=SUBMIT value="Add Identifier">
+            <input type="hidden" name="hardwareId" value="${param['id']}">
+        </form>
+        
+        <h2>Components</h2>
+        <sql:query var="LeftRels" dataSource="jdbc/rd-lsst-cam">
+            select HardwareRelationship.hardwareId2, HardwareRelationship.begin, HardwareRelationship.end, 
+                RelationshipType.relationshipName, HardwareType.name
+            from HardwareRelationship, RelationshipType, HardwareType, Hardware
+            where HardwareRelationship.hardwareId1=${param['id']} 
+                and HardwareRelationship.relationshipTypeId=RelationshipType.id
+                and HardwareType.id=Hardware.TypeId
+                and Hardware.id=HardwareRelationship.hardwareId2
+        </sql:query>
+        <display:table name="${LeftRels.rows}" class="datatable">
+            <display:column property="hardwareId2" sortable="true" headerClass="sortable"
+                            href="displayHardware.jsp" paramId="id" paramProperty="hardwareId2"/>
+            <display:column property="name" title="Type"/>
+            <display:column property="begin" sortable="true" headerClass="sortable"/>
+            <display:column property="end" sortable="true" headerClass="sortable"/>
+            <display:column property="relationshipName"/>
+        </display:table>
+        <sql:query var="Hardware" dataSource="jdbc/rd-lsst-cam">
+            select Hardware.id, HardwareType.name 
+            from Hardware, HardwareType
+            where Hardware.typeId=HardwareType.id
+        </sql:query>
+            <%--
+        <sql:query var="Relations" dataSource="jdbc/rd-lsst-cam">
+            select id, relationshipName from RelationshipType
+        </sql:query>
+        <form METHOD=POST ACTION="addRelation.jsp">
+            HW2: <select name="hardwareId2">
+                <c:forEach var="row" items="${Hardware.rows}">
+                    <option value="${row.id}">${row.id} ${row.name}</option>
+                </c:forEach>
+            </select>
+            Type: <select name="relationshipTypeId">
+                <c:forEach var="row" items="${Relations.rows}">
+                    <option value="${row.id}">${row.relationshipName}</option>
+                </c:forEach>
+            </select>
+            <input type="submit" value="Add Relationship">
+            <input type="hidden" name="hardwareId1" value="${param['id']}">
+        </form>
+            --%>
+        
+        <h2>Component of</h2>
+        <sql:query var="RightRels" dataSource="jdbc/rd-lsst-cam">
+            select HardwareRelationship.hardwareId1, HardwareRelationship.begin, HardwareRelationship.end, 
+                RelationshipType.relationshipName, HardwareType.name
+            from HardwareRelationship, RelationshipType, HardwareType, Hardware
+            where HardwareRelationship.hardwareId2=${param['id']} 
+                and HardwareRelationship.relationshipTypeId=RelationshipType.id
+                and HardwareType.id=Hardware.TypeId
+                and Hardware.id=HardwareRelationship.hardwareId1
+        </sql:query>
+        <display:table name="${RightRels.rows}" class="datatable">
+            <display:column property="hardwareId1" sortable="true" headerClass="sortable"
+                            href="displayHardware.jsp" paramId="id" paramProperty="hardwareId1"/>
+            <display:column property="name" title="Type"/>
+            <display:column property="begin" sortable="true" headerClass="sortable"/>
+            <display:column property="end" sortable="true" headerClass="sortable"/>
+            <display:column property="relationshipName"/>
+        </display:table>
+        
+    </body>
+</html>

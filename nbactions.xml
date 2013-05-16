@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<actions>
+    <action>
+        <actionName>CUSTOM-srs-deploy-dev</actionName>
+        <displayName>tomcat LSST deploy (dev)</displayName>
+        <goals>
+            <goal>package</goal>
+            <goal>tomcat:deploy</goal>
+        </goals>
+        <activatedProfiles>
+            <activatedProfile>deploy-dev</activatedProfile>
+            <activatedProfile>SRS</activatedProfile>
+        </activatedProfiles>
+    </action>
+</actions>

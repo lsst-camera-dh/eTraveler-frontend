@@ -1,0 +1,120 @@
+<%-- 
+    Document   : displayHardware
+    Created on : Jan 15, 2013, 12:36:21 PM
+    Author     : focke
+--%>
+
+<%@page contentType="text/html" pageEncoding="US-ASCII"%>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql" %>
+<%@taglib prefix="display" uri="http://displaytag.sf.net" %>
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+        <title>Hardware</title>
+    </head>
+    <body>
+        <h1>Hardware!</h1>
+        <sql:query var="Type" dataSource="jdbc/rd-lsst-cam">
+            select HardwareType.name from Hardware, HardwareType where 
+             Hardware.id=? and HardwareType.id=Hardware.TypeId
+             <sql:param value="${param['hardwareId']}"/>
+        </sql:query>
+        <table>
+            <tr><td>Id:</td><td>${param['hardwareId']}</td></tr>
+            <tr><td>Type:</td><td>${Type.rows[0]['name']}</td></tr>
+        </table>
+        
+        <h2>Identifiers</h2>
+        <sql:query var="Identifiers" dataSource="jdbc/rd-lsst-cam">
+            select HI.identifier, HIA.authorityName
+            from HardwareIdentifier HI, HardwareIdentifierAuthority HIA
+            where HI.hardwareId=? 
+            and HIA.id=HI.authorityId
+             <sql:param value="${param['hardwareId']}"/>
+        </sql:query>
+        <display:table name="${Identifiers.rows}" class="datatable">
+            <display:column property="identifier"/>
+            <display:column property="authorityName" title="IdAuth"/>
+        </display:table>
+            
+        <sql:query var="idAuth" dataSource="jdbc/rd-lsst-cam">
+           select * from HardwareIdentifierAuthority 
+           where
+           id not in (select HIA.id from 
+                HardwareIdentifierAuthority HIA, HardwareIdentifier HI
+                where
+                HI.hardwareId=? 
+                and
+                HIA.id=HI.authorityId)
+             <sql:param value="${param['hardwareId']}"/>
+        </sql:query>
+        <c:if test="${not empty idAuth.rows}">
+            <form METHOD=GET ACTION="addIdentifier.jsp">
+                <input type="hidden" name="hardwareId" value="${param['hardwareId']}">
+
+                Identifier: <INPUT TYPE=TEXT NAME=identifier SIZE=20>
+
+                Identifier Authority: <select name="authId">
+                <c:forEach var="row" items="${idAuth.rows}">
+                    <option value="${row.id}">${row.authorityName}</option>
+                </c:forEach>
+                </select>
+
+                <INPUT TYPE=SUBMIT value="Add Identifier">
+            </form>
+        </c:if>
+        
+        <h2>Components</h2>
+        <sql:query var="components" dataSource="jdbc/rd-lsst-cam">
+            select HR.componentId, HR.begin, HR.end, HRT.relationshipName, HT.name
+            from HardwareRelationship HR, HardwareRelationshipType HRT, HardwareType HT, Hardware H
+            where 
+            HR.hardwareId=? 
+            and 
+            HR.hardwareRelationshipTypeId=HRT.id
+            and 
+            HT.id=H.TypeId
+            and 
+            H.id=HR.componentId
+            and 
+            HR.end is null
+             <sql:param value="${param['hardwareId']}"/>
+        </sql:query>
+        <display:table name="${components.rows}" class="datatable">
+            <display:column property="componentId" sortable="true" headerClass="sortable"
+                            href="displayHardware.jsp" paramId="hardwareId" paramProperty="componentId"/>
+            <display:column property="name" title="Type"/>
+            <display:column property="begin" sortable="true" headerClass="sortable"/>
+            <display:column property="end" sortable="true" headerClass="sortable"/>
+            <display:column property="relationshipName"/>
+        </display:table>
+        
+        <h2>Component of</h2>
+        <sql:query var="componentOf" dataSource="jdbc/rd-lsst-cam">
+            select HR.hardwareId, HR.begin, HR.end, HRT.relationshipName, HT.name
+            from HardwareRelationship HR, HardwareRelationshipType HRT, HardwareType HT, Hardware H
+            where 
+            HR.componentId=? 
+            and 
+            HR.hardwareRelationshipTypeId=HRT.id
+            and 
+            HT.id=H.TypeId
+            and 
+            H.id=HR.hardwareId
+            and 
+            HR.end is null
+             <sql:param value="${param['hardwareId']}"/>
+        </sql:query>
+        <display:table name="${componentOf.rows}" class="datatable">
+            <display:column property="hardwareId" sortable="true" headerClass="sortable"
+                            href="displayHardware.jsp" paramId="hardwareId" paramProperty="hardwareId"/>
+            <display:column property="name" title="Type"/>
+            <display:column property="begin" sortable="true" headerClass="sortable"/>
+            <display:column property="end" sortable="true" headerClass="sortable"/>
+            <display:column property="relationshipName"/>
+        </display:table>
+        
+    </body>
+</html>
