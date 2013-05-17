@@ -20,17 +20,15 @@
     H.id=?<sql:param value="${hardwareId}"/>;
 </sql:query>
 <c:set var="hardware" value="${hardwareQ.rows[0]}"/>
-<h1>
-    <c:url var="hwtLink" value="displayHardwareType.jsp">
-        <c:param name="hardwareTypeId" value="${hardware.hardwareTypeId}"/>
-    </c:url>
-    <c:url var="hwLink" value="displayHardware.jsp">
-        <c:param name="hardwareId" value="${hardware.id}"/>
-    </c:url>
-    <a href="${hwtLink}"><c:out value="${hardware.name}"/></a> <a href="<c:out value="${hwLink}"/>"><c:out value="${hardware.lsstId}"/></a>
-</h1>
-<h2>
-    Created at <c:out value="${hardware.creationTS}"/> by <c:out value="${hardware.createdBy}"/>
-</h2>
+
+<c:url var="hwtLink" value="displayHardwareType.jsp">
+    <c:param name="hardwareTypeId" value="${hardware.hardwareTypeId}"/>
+</c:url>
+<c:url var="hwLink" value="displayHardware.jsp">
+    <c:param name="hardwareId" value="${hardware.id}"/>
+</c:url>
+<a href="${hwtLink}"><c:out value="${hardware.name}"/></a> <a href="<c:out value="${hwLink}"/>"><c:out value="${hardware.lsstId}"/></a>
+<br>
+Created at <c:out value="${hardware.creationTS}"/> by <c:out value="${hardware.createdBy}"/>
 
 <c:set var="hardwareTypeId" value="${hardware.typeId}" scope="request"/>

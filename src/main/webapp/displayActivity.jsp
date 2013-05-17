@@ -22,22 +22,16 @@
             select * from Activity where id=?<sql:param value="${param.activityId}"/>;
         </sql:query>
         <c:set var="activity" value="${activityQ.rows[0]}"/>
-            
-        <h1>Activity
-            <c:out value="${activityPath}"/>
-            <traveler:activityCrumbs activityPath="${activityPath}"/>
-        </h1>
-        <display:table name="${activityQ.rows}" class="datatable"/>
-
-        <h2>Process
-            <c:out value="${processPath}"/>
-            <traveler:processCrumbs processPath="${processPath}"/>
-        </h2>
-        <sql:query var="processQ" dataSource="jdbc/rd-lsst-cam">
-            select * from Process where id=?<sql:param value="${activity.processId}"/>;
-        </sql:query>
-        <display:table name="${processQ.rows}" class="datatable"/>
+          
+        <h2>Process</h2>
+        <traveler:processCrumbs processPath="${processPath}"/>
+        <traveler:processWidget processId="${activity.processId}"/>
         
+        <h2>Activity</h2>
+        <traveler:activityCrumbs activityPath="${activityPath}"/>
+        <traveler:activityWidget activityId="${param.activityId}"/>
+     
+        <h2>Component</h2>
         <traveler:hardwareHeader hardwareId="${activity.hardwareId}"/>
         
         <h2>Steps</h2>

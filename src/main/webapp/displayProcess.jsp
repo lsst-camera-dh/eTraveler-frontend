@@ -19,15 +19,16 @@
 
         <traveler:lastInPath processPath="${param.processPath}"/>
 
+        <h2>Process</h2>
         <traveler:processCrumbs processPath="${param.processPath}"/>
 
         <sql:query var="processQ" dataSource="jdbc/rd-lsst-cam">
             select * from Process where id=?<sql:param value="${processId}"/>;
         </sql:query>
         <c:set var="process" value="${processQ.rows[0]}"/>
-        <display:table name="${processQ.rows}" class="datatable"/>
+        <traveler:processWidget processId="${processId}"/>
 
-        <h2>Applies to component type</h2>
+        <h2>Component type</h2>
         <traveler:hardwareTypeList hardwareTypeId="${process.hardwareTypeId}"/>
 
         <h2>Steps</h2>

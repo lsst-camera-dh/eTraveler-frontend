@@ -91,15 +91,16 @@
         <form method=GET action="createTraveler.jsp">
             <input type="hidden" name="hardwareId" value="${param.hardwareId}">
             <input type="hidden" name="inNCR" value="FALSE">
-            Traveler Type: <select name="processId">
+            Traveler Type: 
+            <select name="processId">
                 <c:forEach var="pRow" items="${applicableTTypesQ.rows}">
                     <option value="${pRow.id}">${pRow.name} v${pRow.version}</option>
                 </c:forEach>
-                In NCR?
-                <input type="radio" name="inNCR" value="FALSE" checked="true"/>No
-                <input type="radio" name="inNCR" value="TRUE"/>Yes
-                <input type="SUBMIT" value="Apply Traveler">
             </select>
+            In NCR?
+            <input type="radio" name="inNCR" value="FALSE" checked="true"/>No
+            <input type="radio" name="inNCR" value="TRUE"/>Yes
+            <input type="SUBMIT" value="Apply Traveler">
         </form>
                 
         <h2>Component of</h2>
