@@ -15,27 +15,18 @@
     <tr>
         <c:forTokens items="${processPath}" delims="." var="processId" varStatus="status">
             <sql:query var="processNameQ" dataSource="jdbc/rd-lsst-cam">
-                select name, version from Process where id=?<sql:param value="${processId}"/>;
+                select concat(name, ' v', version) as processName from Process where id=?<sql:param value="${processId}"/>;
             </sql:query>
-            <c:set var="processName" value="${processNameQ.rows[0]}"/>
-            <c:set var="nameAndVersion" value="${processName.name} v${processName.version}"/>
             <c:if test="${status.first}">
                 <c:set var="myProcessPath" value="${processId}"/>
             </c:if>
-<%--            <c:choose>
-                <c:when test="${status.last}">
-                    <td>${nameAndVersion}</td>
-                </c:when>
-                <c:otherwise>--%>
-                    <c:if test="${! status.first}">
-                        <c:set var="myProcessPath" value="${myProcessPath}.${processId}"/>
-                    </c:if>
-                    <c:url value="displayProcess.jsp" var="procLink">
-                        <c:param name="processPath" value="${myProcessPath}"/>
-                    </c:url>
-<td><a href="${procLink}">${nameAndVersion}</a> <c:if test="${not status.last}">/</c:if> </td>
-<%--                </c:otherwise>
-            </c:choose>--%>
+            <c:if test="${! status.first}">
+                <c:set var="myProcessPath" value="${myProcessPath}.${processId}"/>
+            </c:if>
+            <c:url value="displayProcess.jsp" var="procLink">
+                <c:param name="processPath" value="${myProcessPath}"/>
+            </c:url>
+            <td><a href="${procLink}">${processNameQ.rows[0].processName}</a> <c:if test="${not status.last}">/</c:if> </td>
         </c:forTokens>
     </tr>
 </table>

@@ -12,8 +12,16 @@
 <%-- The list of normal or fragment attributes can be specified here: --%>
 <%@attribute name="hardwareTypeId"%>
 
+<c:url var="inProgressLink" value="listTravelers.jsp">
+    <c:param name="end" value="None"/>
+</c:url>
+<c:url var="completeLink" value="listTravelers.jsp">
+    <c:param name="end" value="Any"/>
+</c:url>
+
 <sql:query var="result" dataSource="jdbc/rd-lsst-cam">
-    select P.id, P.name as processName, P.version, HT.name as hardwareName, HT.id as hardwareTypeId, count(A.id) as count 
+    select P.id as processId, concat(P.name, ' v', P.version) as processName, HT.name as hardwareName, HT.id as hardwareTypeId, 
+        count(A.id)-count(A.end) as inProgress, count(A.id) as total, count(A.end) as completed 
     from
     Process P
     inner join HardwareType HT on HT.id=P.hardwareTypeId
@@ -27,9 +35,13 @@
 </sql:query>
 <display:table name="${result.rows}" class="datatable">
     <display:column property="processName" sortable="true" headerClass="sortable"
-                    href="displayProcess.jsp" paramId="processPath" paramProperty="id"/>
-    <display:column property="version" sortable="true" headerClass="sortable"/>
+                    href="displayProcess.jsp" paramId="processPath" paramProperty="processId"/>
     <display:column property="hardwareName" title="Component Type" sortable="true" headerClass="sortable"
                     href="displayHardwareType.jsp" paramId="hardwareTypeId" paramProperty="hardwareTypeId"/>
-    <display:column property="count" sortable="true" headerClass="sortable"/>
+    <display:column property="inProgress" sortable="true" headerClass="sortable"
+                    href="${inProgressLink}" paramId="processId" paramProperty="processId"/>
+    <display:column property="completed" sortable="true" headerClass="sortable"
+                    href="${completeLink}" paramId="processId" paramProperty="processId"/>
+    <display:column property="total" sortable="true" headerClass="sortable"
+                    href="listTravelers.jsp" paramId="processId" paramProperty="processId"/>
 </display:table>

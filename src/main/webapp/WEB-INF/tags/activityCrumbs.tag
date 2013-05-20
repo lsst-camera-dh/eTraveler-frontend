@@ -16,23 +16,14 @@
     <tr>
         <c:forTokens items="${activityPath}" delims="." var="activityId" varStatus="status">
             <sql:query var="processNameQ" dataSource="jdbc/rd-lsst-cam">
-                select P.name, P.version 
+                select concat(P.name, ' v', P.version) as processName 
                 from Process P, Activity A 
                 where P.id=A.processId and A.id=?<sql:param value="${activityId}"/>;
             </sql:query>
-            <c:set var="processName" value="${processNameQ.rows[0]}"/>
-            <c:set var="nameAndVersion" value="${processName.name} v${processName.version}"/>
-<%--            <c:choose>
-                <c:when test="${status.last}">
-                    <td>${nameAndVersion}</td>
-                </c:when>
-                <c:otherwise>--%>
-                    <c:url value="displayActivity.jsp" var="actLink">
-                        <c:param name="activityId" value="${activityId}"/>
-                    </c:url>
-<td><a href="${actLink}">${nameAndVersion}</a> <c:if test="${not status.last}">/</c:if> </td>
-<%--                </c:otherwise>
-            </c:choose>--%>
+            <c:url value="displayActivity.jsp" var="actLink">
+                <c:param name="activityId" value="${activityId}"/>
+            </c:url>
+            <td><a href="${actLink}">${processNameQ.rows[0].processName}</a> <c:if test="${not status.last}">/</c:if> </td>
         </c:forTokens>
     </tr>
 </table>

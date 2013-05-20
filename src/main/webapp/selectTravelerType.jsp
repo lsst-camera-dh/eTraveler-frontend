@@ -18,19 +18,19 @@
         
             <%-- should make sure these are the latest versions --%>
         <sql:query var="process" dataSource="jdbc/rd-lsst-cam">
-           select * from Process where
+           select id, concat(name, ' v', version) as processName
+           from Process where
            Process.id not in (select distinct child from ProcessEdge);
         </sql:query>
 
         <form METHOD=GET ACTION="initiateTraveler.jsp">
             Process: <select name="processId">
                 <c:forEach var="pRow" items="${process.rows}">
-                    <option value="${pRow.id}">${pRow.name} v${pRow.version}</option>
+                    <option value="${pRow.id}">${pRow.processName}</option>
                 </c:forEach>
             </select>
             <INPUT TYPE=SUBMIT value="Initiate Traveller">
-        </form>
-        
+        </form>        
         
     </body>
 </html>

@@ -82,7 +82,8 @@
         <traveler:travelerList hardwareId="${param.hardwareId}"/>
         
         <sql:query var="applicableTTypesQ" dataSource="jdbc/rd-lsst-cam">
-            select * from Process P
+            select id, concat(name, ' v', version) as processName
+            from Process P
             where 
             P.id not in (select distinct child from ProcessEdge)
             and
@@ -94,7 +95,7 @@
             Traveler Type: 
             <select name="processId">
                 <c:forEach var="pRow" items="${applicableTTypesQ.rows}">
-                    <option value="${pRow.id}">${pRow.name} v${pRow.version}</option>
+                    <option value="${pRow.id}">${pRow.processName}</option>
                 </c:forEach>
             </select>
             In NCR?

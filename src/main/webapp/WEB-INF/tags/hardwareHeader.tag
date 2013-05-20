@@ -27,8 +27,8 @@
 <c:url var="hwLink" value="displayHardware.jsp">
     <c:param name="hardwareId" value="${hardware.id}"/>
 </c:url>
-<a href="${hwtLink}"><c:out value="${hardware.name}"/></a> <a href="<c:out value="${hwLink}"/>"><c:out value="${hardware.lsstId}"/></a>
+<a href="${hwtLink}"><c:out value="${hardware.name}"/></a> Id <a href="<c:out value="${hwLink}"/>"><c:out value="${hardware.lsstId}"/></a>
 <br>
-Created at <c:out value="${hardware.creationTS}"/> by <c:out value="${hardware.createdBy}"/>
+Registered at <c:out value="${hardware.creationTS}"/> by <c:out value="${hardware.createdBy}"/>
 
 <c:set var="hardwareTypeId" value="${hardware.typeId}" scope="request"/>
