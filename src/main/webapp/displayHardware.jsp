@@ -60,25 +60,6 @@
         </c:if>
         
         <h2>Travelers</h2>
-        <%--
-        <sql:query var="travelersQ" dataSource="jdbc/rd-lsst-cam">
-            select A.*, P.name from Activity A, Process P
-            where
-            P.id=A.processId
-            and
-            A.hardwareId=?<sql:param value="${param.hardwareId}"/>
-            and
-            A.processEdgeId is null;
-        </sql:query>
-        <display:table name="${travelersQ.rows}" class="datatable">
-            <display:column property="name" title="Name" sortable="true" headerClass="sortable"
-                            href="displayActivity.jsp" paramId="activityId" paramProperty="id"/>
-            <display:column property="begin" sortable="true" headerClass="sortable"/>
-            <display:column property="createdBy" sortable="true" headerClass="sortable"/>
-            <display:column property="end" sortable="true" headerClass="sortable"/>
-            <display:column property="closedBy" sortable="true" headerClass="sortable"/>
-        </display:table>
-        --%>
         <traveler:travelerList hardwareId="${param.hardwareId}"/>
         
         <sql:query var="applicableTTypesQ" dataSource="jdbc/rd-lsst-cam">
@@ -105,10 +86,10 @@
         </form>
                 
         <h2>Component of</h2>
-        <traveler:table hardwareId="${param.hardwareId}" mode="p"/>
+        <traveler:componentTable hardwareId="${param.hardwareId}" mode="p"/>
                 
         <h2>Components</h2>
-        <traveler:table hardwareId="${param.hardwareId}" mode="c"/>
+        <traveler:componentTable hardwareId="${param.hardwareId}" mode="c"/>
         
     </body>
 </html>

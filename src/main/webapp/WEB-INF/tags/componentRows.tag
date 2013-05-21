@@ -10,32 +10,43 @@
 <%@taglib prefix="traveler" tagdir="/WEB-INF/tags"%>
 
 <%-- The list of normal or fragment attributes can be specified here: --%>
-<%@attribute name="hardwareId"%>
+<%@attribute name="hardwareId" required="true"%>
+<%@attribute name="mode" required="true"%><%-- "p" for parents, "c" for children --%>
+
+<c:choose>
+    <c:when test="${mode=='c'}">
+        <c:set var="me" value="hardwareId"/>
+        <c:set var="you" value="componentId"/>
+    </c:when>
+    <c:when test="${mode=='p'}">
+        <c:set var="me" value="componentId"/>
+        <c:set var="you" value="hardwareId"/>
+    </c:when>
+    <c:otherwise>
+        <c:set var="me" value="tarzan"/>
+        <c:set var="you" value="jane"/>        
+    </c:otherwise>
+</c:choose>
 
 <sql:query var="componentsQ" dataSource="jdbc/rd-lsst-cam">
-    select HR.componentId, HR.begin, HR.end, HRT.name as relationshipName, HT.name as hardwareName, H.lsstId
+    select HR.${you} as itemId, HR.begin, HR.end, HRT.name as relationshipName, HT.name as hardwareName, HT.id as hardwareTypeId, H.lsstId
     from HardwareRelationship HR, HardwareRelationshipType HRT, HardwareType HT, Hardware H
     where 
-    HR.hardwareId=?<sql:param value="${hardwareId}"/>
+    HR.${me}=?<sql:param value="${hardwareId}"/>
     and 
     HR.hardwareRelationshipTypeId=HRT.id
     and 
     HT.id=H.typeId
     and 
-    H.id=HR.componentId
+    H.id=HR.${you}
     and 
     HR.end is null;
 </sql:query>
 
 <c:forEach var="cRow" items="${componentsQ.rows}">
-    <tr>
-        <c:url value="displayHardware.jsp" var="hwLink">
-            <c:param name="hardwareId" value="${cRow.componentId}"/>
-        </c:url>
-        <td><a href="${hwLink}">${cRow.lsstId}</a></td>
-        <td>${cRow.hardwareName}</td>
-        <td>${cRow.begin}</td>
-        <td>${cRow.relationshipName}</td>
-    </tr>
-    <traveler:componentRows hardwareId="${cRow.componentId}"/>
+    <c:set var="cRowJsp" value="${cRow}" scope="request"/>
+    <%
+        ((java.util.List)request.getAttribute("components")).add(request.getAttribute("cRowJsp"));
+    %>
+    <traveler:componentRows hardwareId="${cRow.itemId}" mode="${mode}"/>
 </c:forEach>

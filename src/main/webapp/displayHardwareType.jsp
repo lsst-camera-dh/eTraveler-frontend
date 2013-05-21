@@ -28,5 +28,14 @@
    
         <h2>Instances</h2>
         <traveler:hardwareList  hardwareTypeId="${param.hardwareTypeId}"/>
+        <h3>Register a new one:</h3>
+        <form METHOD=GET ACTION="createHardware.jsp">
+
+            Identifier: 
+            <INPUT TYPE=TEXT NAME=lsstId SIZE=50 autofocus>
+            
+            <input type="hidden" name="typeId" value="${param.hardwareTypeId}"/>
+            <INPUT TYPE=SUBMIT value="Do It!">
+        </form>
     </body>   
 </html>
