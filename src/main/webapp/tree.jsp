@@ -13,21 +13,29 @@
         <title>JSP Page</title>
     </head>
     <body>
-        <iframe name="content"></iframe>
         <%
-    org.freehep.webutil.tree.DefaultTreeNode root = new org.freehep.webutil.tree.DefaultTreeNode("root");
-    root.setHref("listHardwareTypes.jsp");
-    root.setTarget("content");
-    root.createNodeAtPath("A");
-    org.freehep.webutil.tree.DefaultTreeNode nodeAa = new org.freehep.webutil.tree.DefaultTreeNode("a");
-    nodeAa.setHref("listTravelerTypes.jsp");
-    nodeAa.setTarget("content");
-    root.addNodeAtPath(nodeAa, "A");
-    root.createNodeAtPath("/A/B");
-    root.createNodeAtPath("/A/B/b/");
-    root.createNodeAtPath("/A/B/c");
-    session.setAttribute("root", root);
-    %>
-    <tree:tree model="${root}"/>
+            org.freehep.webutil.tree.DefaultTreeNode root = new org.freehep.webutil.tree.DefaultTreeNode("root");
+            root.setHref("listHardwareTypes.jsp");
+            root.setTarget("content");
+            root.createNodeAtPath("A");
+            org.freehep.webutil.tree.DefaultTreeNode nodeAa = new org.freehep.webutil.tree.DefaultTreeNode("a");
+            nodeAa.setHref("listTravelerTypes.jsp");
+            nodeAa.setTarget("content");
+            root.addNodeAtPath(nodeAa, "A");
+            root.createNodeAtPath("/A/B");
+            root.createNodeAtPath("/A/B/b/");
+            root.createNodeAtPath("/A/B/c");
+            session.setAttribute("root", root);
+        %>
+        <table>
+            <tr>
+                <td>
+                    <tree:tree model="${root}"/>
+                </td>
+                <td>
+                    <iframe name="content"></iframe>
+                </td>
+            </tr>
+        </table>
     </body>
 </html>

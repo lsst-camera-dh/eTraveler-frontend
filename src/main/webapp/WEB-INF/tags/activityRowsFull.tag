@@ -45,9 +45,13 @@
             <c:url value="displayActivity.jsp" var="childLink">
                 <c:param name="activityId" value="${childRow.activityId}"/>
             </c:url>
+            <c:url var="contentLink" value="activityPane.jsp">
+                <c:param name="activityId" value="${childRow.activityId}"/>
+            </c:url>
             <tr>
                 <td><a href="${childLink}">${hierStep}</a></td>
-                <td>${childRow.name}</td> <td>${childRow.begin}</td> 
+                <td><a href="${contentLink}" target="content">${childRow.name}</a></td> 
+                <td>${childRow.begin}</td> 
                 <td>
                     <c:choose>
                         <c:when test="${! empty childRow.end}">
@@ -68,9 +72,12 @@
             <c:url value="displayProcess.jsp" var="childLink">
                 <c:param name="processPath" value="${myProcessPath}"/>
             </c:url>
+            <c:url var="contentLink" value="processPane.jsp">
+                <c:param name="processId" value="${childRow.processId}"/>
+            </c:url>
             <tr>
                 <td><a href="${childLink}">${hierStep}</a></td>
-                <td>${childRow.name}</td> 
+                <td><a href="${contentLink}" target="content">${childRow.name}</a></td> 
                 <td>
                     <c:if test="${firstUnStarted && noneStartedAndUnFinished}">
                         <c:set var="firstUnStarted" value="false"/>

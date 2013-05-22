@@ -32,7 +32,19 @@
         <traveler:hardwareTypeList hardwareTypeId="${process.hardwareTypeId}"/>
 
         <h2>Steps</h2>
-        <traveler:processTable processPath="${param.processPath}"/>
+        <table>
+            <tr>
+                <td>
+                    <traveler:processTable processPath="${param.processPath}"/>
+                </td>
+                <td>
+                    <c:url var="contentLink" value="processPane.jsp">
+                        <c:param name="processId" value="${processId}"/>
+                    </c:url>
+                    <iframe name="content" src="${contentLink}" width="600" height="400"></iframe>
+                </td>
+            </tr>
+        </table>
 
         <h2>Instances</h2>
         <traveler:travelerList processId="${processId}"/>

@@ -34,9 +34,12 @@
     <c:url value="displayProcess.jsp" var="childLink">
         <c:param name="processPath" value="${myProcessPath}"/>
     </c:url>
+    <c:url var="contentLink" value="processPane.jsp">
+        <c:param name="processId" value="${row.child}"/>
+    </c:url>
     <tr>
         <td><a href="${childLink}">${hierStep}</a></td>
-        <td>${row.name}</td>
+        <td><a href="${contentLink}" target="content">${row.name}</a></td>
         <c:if test="${! empty emptyFields}"> <%-- Find a way to do this with a loop --%>
             <td></td> <td></td>
         </c:if>

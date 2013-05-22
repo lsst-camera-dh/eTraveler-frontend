@@ -35,7 +35,19 @@
         <traveler:hardwareHeader hardwareId="${activity.hardwareId}"/>
         
         <h2>Steps</h2>
-        <traveler:activityTable activityId="${param.activityId}"/>
+        <table>
+            <tr>
+                <td>
+                    <traveler:activityTable activityId="${param.activityId}"/>
+                </td>
+                <td>
+                    <c:url var="contentLink" value="activityPane.jsp">
+                        <c:param name="activityId" value="${param.activityId}"/>
+                    </c:url>
+                    <iframe name="content" src="${contentLink}" width="600" height="400"></iframe>
+                </td>
+            </tr>
+        </table>
             
     </body>
 </html>

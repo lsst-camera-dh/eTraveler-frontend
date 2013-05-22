@@ -3,6 +3,7 @@
     Created on : Mar 27, 2013, 12:28:50 PM
     Author     : focke
 --%>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql" %>
 <%@taglib prefix="traveler" tagdir="/WEB-INF/tags"%>
 
@@ -13,6 +14,9 @@
 <sql:query var="meQ" dataSource="jdbc/rd-lsst-cam">
     select * from Process where id=?<sql:param value="${processId}"/>;
 </sql:query>
+    <c:url var="contentLink" value="processPane.jsp">
+        <c:param name="processId" value="${processId}"/>
+    </c:url>
 <table border="1">
     <tr>
         <th>Step</th>
@@ -20,7 +24,7 @@
     </tr>
     <tr>
         <td>&nbsp;</td>
-        <td>${meQ.rows[0].name}</td>
+        <td><a href="${contentLink}" target="content">${meQ.rows[0].name}</a></td>
     </tr>
     <traveler:processRows parentId="${processId}" processPath="${processPath}"/> 
 </table>

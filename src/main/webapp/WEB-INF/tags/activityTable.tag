@@ -20,11 +20,15 @@
 </sql:query>
 <c:set var="activity" value="${activityQ.rows[0]}"/>
 
+<c:url var="contentLink" value="activityPane.jsp">
+    <c:param name="activityId" value="${activityId}"/>
+</c:url>
+
 <table border="1">
     <tr> <th>Step</th> <th>Name</th> <th>Begin</th> <th>End</th> </tr>
     <tr>
         <td></td>
-        <td>${activity.name}</td>
+        <td><a href="${contentLink}" target="content">${activity.name}</a></td>
         <td>${activity.begin}</td>
         <td><traveler:closeoutButton activityId="${activityId}"/></td>
     </tr>
