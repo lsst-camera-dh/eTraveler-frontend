@@ -90,7 +90,7 @@
                                 and
                                 HT.id=HRT.componentTypeId
                                 and
-                                H.typeId=HRT.componentTypeId
+                                H.hardwareTypeId=HRT.componentTypeId
                                 and 
                                 H.id=A.hardwareId and A.end is not null and A.parentActivityId is null
                                 and

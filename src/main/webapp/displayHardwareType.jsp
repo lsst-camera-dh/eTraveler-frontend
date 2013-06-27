@@ -20,7 +20,8 @@
     </head>
     <body>
         <h1>Component type <c:out value="${hardwareType.name}"/></h1>
-        <h2>Added by <c:out value="${hardwareType.createdBy}"/><br>
+        <h2>Drawing <c:out value="${hardwareType.drawing}"/><br>
+        Added by <c:out value="${hardwareType.createdBy}"/><br>
         At <c:out value="${hardwareType.creationTS}"/></h2>
 
         <h2>Applicable Traveler Types</h2>
@@ -29,13 +30,6 @@
         <h2>Instances</h2>
         <traveler:hardwareList  hardwareTypeId="${param.hardwareTypeId}"/>
         <h3>Register a new one:</h3>
-        <form METHOD=GET ACTION="createHardware.jsp">
-
-            Identifier: 
-            <INPUT TYPE=TEXT NAME=lsstId SIZE=50 autofocus>
-            
-            <input type="hidden" name="typeId" value="${param.hardwareTypeId}"/>
-            <INPUT TYPE=SUBMIT value="Do It!">
-        </form>
+        <traveler:newHardwareForm hardwareTypeId="${param.hardwareTypeId}"/>
     </body>   
 </html>

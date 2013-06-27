@@ -7,6 +7,7 @@
 <%@page contentType="text/html" pageEncoding="US-ASCII"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql" %>
+<%@taglib prefix="traveler" tagdir="/WEB-INF/tags"%>
 <!DOCTYPE html>
 <html>
     <head>
@@ -15,23 +16,7 @@
     </head>
     <body>
 
-        <sql:query var="typesQ" dataSource="jdbc/rd-lsst-cam">
-            select * from HardwareType;
-        </sql:query>
-        
-        <form METHOD=GET ACTION="createHardware.jsp">
-
-            Identifier: 
-            <INPUT TYPE=TEXT NAME=lsstId SIZE=50 autofocus>
+        <traveler:newHardwareForm/>
             
-            Type: 
-            <select name="typeId">
-                <c:forEach var="tRow" items="${typesQ.rows}">
-                    <option value="${tRow.id}">${tRow.name}</option>
-                </c:forEach>
-            </select>
-
-            <INPUT TYPE=SUBMIT value="Do It!">
-        </form>
     </body>
 </html>

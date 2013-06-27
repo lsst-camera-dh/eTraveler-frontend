@@ -25,7 +25,7 @@
     AND 
     A.processId=P.id 
     AND A.hardwareId=H.id 
-    AND H.typeId=HT.id
+    AND H.hardwareTypeId=HT.id
     <c:if test="${! empty processId}">
         and P.id=?<sql:param value="${processId}"/>
     </c:if>

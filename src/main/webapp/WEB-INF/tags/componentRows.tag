@@ -36,7 +36,7 @@
     and 
     HR.hardwareRelationshipTypeId=HRT.id
     and 
-    HT.id=H.typeId
+    HT.id=H.hardwareTypeId
     and 
     H.id=HR.${you}
     and 
