@@ -83,7 +83,7 @@
                         <c:set var="firstUnStarted" value="false"/>
                         <c:if test="${! empty childRow.hardwareRelationshipTypeId}">
                             <sql:query var="potentialComponentsQ" dataSource="jdbc/rd-lsst-cam">
-                                select H.id, H.lsstId, HT.name 
+<%--                                select H.id, H.lsstId, HT.name 
                                 from Hardware H, HardwareType HT, HardwareRelationshipType HRT, Activity A
                                 where 
                                 HRT.id=?<sql:param value="${childRow.hardwareRelationshipTypeId}"/>
@@ -94,7 +94,17 @@
                                 and 
                                 H.id=A.hardwareId and A.end is not null and A.parentActivityId is null
                                 and
-                                H.id not in (select componentId from HardwareRelationship where end is null);
+                                H.id not in (select componentId from HardwareRelationship where end is null);--%>
+                                select H.id, H.lsstId, HT.name 
+                                from Hardware H, HardwareType HT, HardwareRelationshipType HRT
+                                where 
+                                HRT.id=?<sql:param value="${childRow.hardwareRelationshipTypeId}"/>
+                                and
+                                HT.id=HRT.componentTypeId
+                                and
+                                H.hardwareTypeId=HRT.componentTypeId
+                                and 
+                                H.hardwareStatusId=(select id from HardwareStatus where name='READY');
                             </sql:query>
                         </c:if>            
                         <c:choose>
