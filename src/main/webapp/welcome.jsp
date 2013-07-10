@@ -9,6 +9,23 @@
     <body>
         Howdy, ${empty userName?"stranger":userName}.<br>
         
+        <table>
+            <tr>
+                <td>Role: ${empty sessionScope.role?"Unknown":sessionScope.role}</td>
+                <td>
+                    <form action="setRole.jsp" method="GET">
+                        <select name="role">
+                            <option value="Approver">Approver</option>
+                            <option value="Supervisor">Supervisor</option>
+                            <option value="Operator">Operator</option>
+                            <option value="Spectator">Spectator</option>
+                       </select>
+                        <input type="submit" value="Change Role"/>
+                    </form>
+                </td>
+            </tr>
+        </table>
+        
         <sql:query var="idAuthQ" dataSource="jdbc/rd-lsst-cam">
             select * from HardwareIdentifierAuthority;
         </sql:query>
