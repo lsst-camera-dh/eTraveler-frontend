@@ -36,10 +36,10 @@
                 </form>
             </c:when>
             <c:otherwise>
-                <c:url var="activityLink" value="displayActivity.jsp">
+<%--                <c:url var="activityLink" value="displayActivity.jsp">
                     <c:param name="activityId" value="${activityId}"/>
                 </c:url>
-<%--                <a href="${activityLink}">Needs work</a>--%>
+                <a href="${activityLink}">Needs work</a>--%>
                 Needs Work
             </c:otherwise>
         </c:choose>

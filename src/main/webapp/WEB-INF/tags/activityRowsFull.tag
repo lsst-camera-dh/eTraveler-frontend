@@ -59,7 +59,7 @@
                         </c:when>
                         <c:otherwise>
                             <c:set var="noneStartedAndUnFinished" value="false"/>
-                            <traveler:closeoutButton activityId="${childRow.activityId}"/>
+<%--                            <traveler:closeoutButton activityId="${childRow.activityId}"/>--%>
                         </c:otherwise>
                     </c:choose>
                 </td>
