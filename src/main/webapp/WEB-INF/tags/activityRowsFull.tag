@@ -32,7 +32,7 @@
     left join Activity Ac on Ac.parentActivityId=Ap.id and Ac.processEdgeId=PE.id
     where
     Ap.id=?<sql:param value="${activityId}"/>
-    order by PE.step;
+    order by abs(PE.step);
 </sql:query>
     
 <c:set var="noneStartedAndUnFinished" value="true"/>
