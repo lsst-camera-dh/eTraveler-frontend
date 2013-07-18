@@ -12,7 +12,7 @@
 <%-- The list of normal or fragment attributes can be specified here: --%>
 <%@attribute name="processId"%>
 <%@attribute name="hardwareId"%>
-<%@attribute name="end"%>
+<%@attribute name="done"%>
 
 <sql:query var="result" dataSource="jdbc/rd-lsst-cam">
   select A.id as activityId, A.begin, A.end, A.createdBy, A.closedBy,
@@ -32,8 +32,8 @@
     <c:if test="${! empty hardwareId}">
         and H.id=?<sql:param value="${hardwareId}"/>
     </c:if>
-    <c:if test="${! empty end}">
-        and A.end is <c:if test="${end!='None'}">not</c:if> null
+    <c:if test="${! empty done}">
+        and A.end is <c:if test="${done!='None'}">not</c:if> null
     </c:if>
 </sql:query>
 <display:table name="${result.rows}" class="datatable">

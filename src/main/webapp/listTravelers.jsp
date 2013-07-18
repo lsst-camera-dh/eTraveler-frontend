@@ -22,6 +22,6 @@
         </title>
     </head>
     <body>
-        <traveler:travelerList processId="${param.processId}" end="${param.end}"/>
+        <traveler:activityList travelersOnly="true" processId="${param.processId}" done="${param.done}"/>
     </body>
 </html>

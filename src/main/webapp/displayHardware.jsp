@@ -61,7 +61,10 @@
         </c:if>
         
         <h2>Travelers</h2>
-        <traveler:travelerList hardwareId="${param.hardwareId}"/>
+        <traveler:activityList travelersOnly="true" hardwareId="${param.hardwareId}"/>
+        
+        <h2>Recent Activities</h2>
+        <traveler:activityList hardwareId="${param.hardwareId}"/>
         
         <sql:query var="applicableTTypesQ" dataSource="jdbc/rd-lsst-cam">
             select id, concat(name, ' v', version) as processName
