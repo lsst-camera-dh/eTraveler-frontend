@@ -30,7 +30,7 @@
         <td></td>
         <td><a href="${contentLink}" target="content">${activity.name}</a></td>
         <td>${activity.begin}</td>
-        <td><%--<traveler:closeoutButton activityId="${activityId}"/>--%>${activity.end}</td>
+        <td><traveler:closeoutButton activityId="${activityId}"/></td>
     </tr>
 
     <traveler:activityRowsFull activityId="${activityId}"/>

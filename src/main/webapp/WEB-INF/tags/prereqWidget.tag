@@ -14,7 +14,6 @@
 <%@attribute name="parentActivityId"%>
 <%@attribute name="processEdgeId"%>
 
-<%-- any content can be specified here e.g.: --%>
 <h2>Prerquisites</h2>
 
 <sql:query var="prereqQ" dataSource="jdbc/rd-lsst-cam">

@@ -17,9 +17,14 @@
 </sql:query>
 <c:set var="activity" value="${activityQ.rows[0]}"/>
 
-Started at <c:out value="${activity.begin}"/> by <c:out value="${activity.createdBy}"/>
-<br>
-<table><tr><td>End:</td><td><traveler:closeoutButton activityId="${param.activityId}"/></td></tr></table>
-<%--<c:if test="${! empty activity.end}">
-    Ended at <c:out value="${activity.end}"/> by <c:out value="${activity.closedBy}"/>
-</c:if>--%>
+<table>
+    <tr><td>Started:</td><td><c:out value="${activity.begin}"/> by <c:out value="${activity.createdBy}"/></td></tr>
+    <tr><td>Ened:</td>
+        <td>
+            <%--<traveler:closeoutButton activityId="${param.activityId}"/>--%>
+            <c:if test="${! empty activity.end}">
+                Ended at <c:out value="${activity.end}"/> by <c:out value="${activity.closedBy}"/>
+            </c:if>
+        </td></tr>
+</table>
+<%----%>

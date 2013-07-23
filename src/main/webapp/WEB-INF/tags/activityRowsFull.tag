@@ -59,7 +59,8 @@
                         </c:when>
                         <c:otherwise>
                             <c:set var="noneStartedAndUnFinished" value="false"/>
-<%--                            <traveler:closeoutButton activityId="${childRow.activityId}"/>--%>
+                            <c:set var="currentStepLink" value="${contentLink}" scope="request"/>
+                            <traveler:closeoutButton activityId="${childRow.activityId}"/>
                         </c:otherwise>
                     </c:choose>
                 </td>
@@ -81,6 +82,7 @@
                 <td>
                     <c:if test="${firstUnStarted && noneStartedAndUnFinished}">
                         <c:set var="firstUnStarted" value="false"/>
+                        <c:set var="currentStepLink" value="${contentLink}" scope="request"/>
                         <c:if test="${! empty childRow.hardwareRelationshipTypeId}">
                             <sql:query var="potentialComponentsQ" dataSource="jdbc/rd-lsst-cam">
 <%--                                select H.id, H.lsstId, HT.name 
