@@ -30,8 +30,9 @@
         </sql:query>
         <c:choose>
             <c:when test="${stepsRemainingQ.rows[0]['stepsRemaining']==0}">
-                <form METHOD=GET ACTION="closeoutActivity.jsp">
+                <form METHOD=GET ACTION="closeoutActivity.jsp" target="_top">
                     <input type="hidden" name="activityId" value="${activityId}">       
+                    <input type="hidden" name="topActivityId" value="${param.topActivityId}">       
                     <INPUT TYPE=SUBMIT value="Closeout">
                 </form>
             </c:when>

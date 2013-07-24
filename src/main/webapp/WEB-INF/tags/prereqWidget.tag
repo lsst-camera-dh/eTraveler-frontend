@@ -14,7 +14,7 @@
 <%@attribute name="parentActivityId"%>
 <%@attribute name="processEdgeId"%>
 
-<h2>Prerquisites</h2>
+<h2>Prerequisites</h2>
 
 <sql:query var="prereqQ" dataSource="jdbc/rd-lsst-cam">
     select PP.*, PT.name as type

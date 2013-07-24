@@ -47,6 +47,7 @@
             </c:url>
             <c:url var="contentLink" value="activityPane.jsp">
                 <c:param name="activityId" value="${childRow.activityId}"/>
+                <c:param name="topActivityId" value="${param.activityId}"/>
             </c:url>
             <tr>
                 <td><a href="${childLink}">${hierStep}</a></td>
@@ -60,7 +61,8 @@
                         <c:otherwise>
                             <c:set var="noneStartedAndUnFinished" value="false"/>
                             <c:set var="currentStepLink" value="${contentLink}" scope="request"/>
-                            <traveler:closeoutButton activityId="${childRow.activityId}"/>
+<%--                            <traveler:closeoutButton activityId="${childRow.activityId}"/>--%>
+                            Needs Work
                         </c:otherwise>
                     </c:choose>
                 </td>
@@ -75,6 +77,7 @@
             </c:url>
             <c:url var="contentLink" value="processPane.jsp">
                 <c:param name="processId" value="${childRow.processId}"/>
+                <c:param name="topActivityId" value="${param.activityId}"/>
             </c:url>
             <tr>
                 <td><a href="${childLink}">${hierStep}</a></td>
