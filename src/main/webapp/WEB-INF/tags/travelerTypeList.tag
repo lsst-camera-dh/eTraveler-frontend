@@ -20,7 +20,7 @@
 </c:url>
 
 <sql:query var="result" dataSource="jdbc/rd-lsst-cam">
-    select P.id as processId, concat(P.name, ' v', P.version) as processName, HT.name as hardwareName, HT.id as hardwareTypeId, 
+    select P.id as processId, P.name as processName, P.version, HT.name as hardwareName, HT.id as hardwareTypeId, 
         count(A.id)-count(A.end) as inProgress, count(A.id) as total, count(A.end) as completed 
     from
     Process P
@@ -34,7 +34,11 @@
     group by P.id
 </sql:query>
 <display:table name="${result.rows}" class="datatable">
+    <display:column property="processId" sortable="true" headerClass="sortable"
+                    href="displayProcess.jsp" paramId="processPath" paramProperty="processId"/>
     <display:column property="processName" sortable="true" headerClass="sortable"
+                    href="displayProcess.jsp" paramId="processPath" paramProperty="processId"/>
+    <display:column property="version" sortable="true" headerClass="sortable"
                     href="displayProcess.jsp" paramId="processPath" paramProperty="processId"/>
     <display:column property="hardwareName" title="Component Type" sortable="true" headerClass="sortable"
                     href="displayHardwareType.jsp" paramId="hardwareTypeId" paramProperty="hardwareTypeId"/>

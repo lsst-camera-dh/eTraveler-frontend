@@ -47,6 +47,6 @@
         </table>
 
         <h2>Instances</h2>
-        <traveler:travelerList processId="${processId}"/>
+        <traveler:activityList processId="${processId}"/>
     </body>
 </html>

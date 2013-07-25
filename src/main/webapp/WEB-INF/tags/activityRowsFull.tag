@@ -32,7 +32,7 @@
     left join Activity Ac on Ac.parentActivityId=Ap.id and Ac.processEdgeId=PE.id
     where
     Ap.id=?<sql:param value="${activityId}"/>
-    order by PE.step;
+    order by abs(PE.step);
 </sql:query>
     
 <c:set var="noneStartedAndUnFinished" value="true"/>
@@ -47,6 +47,7 @@
             </c:url>
             <c:url var="contentLink" value="activityPane.jsp">
                 <c:param name="activityId" value="${childRow.activityId}"/>
+                <c:param name="topActivityId" value="${param.activityId}"/>
             </c:url>
             <tr>
                 <td><a href="${childLink}">${hierStep}</a></td>
@@ -59,7 +60,9 @@
                         </c:when>
                         <c:otherwise>
                             <c:set var="noneStartedAndUnFinished" value="false"/>
-                            <traveler:closeoutButton activityId="${childRow.activityId}"/>
+                            <c:set var="currentStepLink" value="${contentLink}" scope="request"/>
+<%--                            <traveler:closeoutButton activityId="${childRow.activityId}"/>--%>
+                            Needs Work
                         </c:otherwise>
                     </c:choose>
                 </td>
@@ -74,6 +77,7 @@
             </c:url>
             <c:url var="contentLink" value="processPane.jsp">
                 <c:param name="processId" value="${childRow.processId}"/>
+                <c:param name="topActivityId" value="${param.activityId}"/>
             </c:url>
             <tr>
                 <td><a href="${childLink}">${hierStep}</a></td>
@@ -81,20 +85,19 @@
                 <td>
                     <c:if test="${firstUnStarted && noneStartedAndUnFinished}">
                         <c:set var="firstUnStarted" value="false"/>
+                        <c:set var="currentStepLink" value="${contentLink}" scope="request"/>
                         <c:if test="${! empty childRow.hardwareRelationshipTypeId}">
                             <sql:query var="potentialComponentsQ" dataSource="jdbc/rd-lsst-cam">
                                 select H.id, H.lsstId, HT.name 
-                                from Hardware H, HardwareType HT, HardwareRelationshipType HRT, Activity A
+                                from Hardware H, HardwareType HT, HardwareRelationshipType HRT
                                 where 
                                 HRT.id=?<sql:param value="${childRow.hardwareRelationshipTypeId}"/>
                                 and
                                 HT.id=HRT.componentTypeId
                                 and
-                                H.typeId=HRT.componentTypeId
+                                H.hardwareTypeId=HRT.componentTypeId
                                 and 
-                                H.id=A.hardwareId and A.end is not null and A.parentActivityId is null
-                                and
-                                H.id not in (select componentId from HardwareRelationship where end is null);
+                                H.hardwareStatusId=(select id from HardwareStatus where name='READY');
                             </sql:query>
                         </c:if>            
                         <c:choose>

@@ -22,7 +22,9 @@
 
 <c:url var="contentLink" value="activityPane.jsp">
     <c:param name="activityId" value="${activityId}"/>
+    <c:param name="topActivityId" value="${activityId}"/>
 </c:url>
+<c:set var="currentStepLink" value="${contentLink}" scope="request"/>
 
 <table border="1">
     <tr> <th>Step</th> <th>Name</th> <th>Begin</th> <th>End</th> </tr>
@@ -30,7 +32,10 @@
         <td></td>
         <td><a href="${contentLink}" target="content">${activity.name}</a></td>
         <td>${activity.begin}</td>
-        <td><traveler:closeoutButton activityId="${activityId}"/></td>
+        <td>
+            <%--<traveler:closeoutButton activityId="${activityId}"/>--%>
+            ${activity.end}
+        </td>
     </tr>
 
     <traveler:activityRowsFull activityId="${activityId}"/>

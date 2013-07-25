@@ -33,6 +33,12 @@
                 </sql:query>
                 <c:set var="relationship" value="${relationshipQ.rows[0]}"/>
                 <c:set var="relationShipId" value="${relationship.id}"/>
+                <sql:update>
+                    update Hardware H set 
+                    hardwareStatusId=(select id from HardwareStatus where name='USED') 
+                    where 
+                    H.id=?<sql:param value="${param.componentId}"/>;
+                </sql:update>
             </c:if>
             <sql:update>
                 insert into Activity set

@@ -21,7 +21,7 @@
     where PE.parent=?<sql:param value="${parentId}"/>
     and
     PE.child=P.id
-    order by PE.step;
+    order by abs(PE.step);
 </sql:query>
 
 <c:if test="${! empty prefix}">

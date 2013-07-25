@@ -12,11 +12,11 @@
 <%-- The list of normal or fragment attributes can be specified here: --%>
 <%@attribute name="processId"%>
 <%@attribute name="hardwareId"%>
-<%@attribute name="end"%>
+<%@attribute name="done"%>
 
 <sql:query var="result" dataSource="jdbc/rd-lsst-cam">
   select A.id as activityId, A.begin, A.end, A.createdBy, A.closedBy,
-    concat(P.name, ' v', P.version) as processName,
+    P.id as processId, P.name as processName, P.version,
     H.id as hardwareId, H.lsstId, 
     HT.name as hardwareName, HT.id as hardwareTypeId
     from Activity A, Process P, Hardware H, HardwareType HT 
@@ -25,20 +25,26 @@
     AND 
     A.processId=P.id 
     AND A.hardwareId=H.id 
-    AND H.typeId=HT.id
+    AND H.hardwareTypeId=HT.id
     <c:if test="${! empty processId}">
         and P.id=?<sql:param value="${processId}"/>
     </c:if>
     <c:if test="${! empty hardwareId}">
         and H.id=?<sql:param value="${hardwareId}"/>
     </c:if>
-    <c:if test="${! empty end}">
-        and A.end is <c:if test="${end!='None'}">not</c:if> null
+    <c:if test="${! empty done}">
+        and A.end is <c:if test="${done!='None'}">not</c:if> null
     </c:if>
 </sql:query>
 <display:table name="${result.rows}" class="datatable">
-    <display:column property="processName" title="Traveler" sortable="true" headerClass="sortable"
+    <display:column property="activityId" sortable="true" headerClass="sortable"
                     href="displayActivity.jsp" paramId="activityId" paramProperty="activityId"/>
+    <display:column property="processId" sortable="true" headerClass="sortable"
+                    href="displayProcess.jsp" paramId="processPath" paramProperty="processId"/>
+    <display:column property="processName" sortable="true" headerClass="sortable"
+                    href="displayProcess.jsp" paramId="processPath" paramProperty="processId"/>
+    <display:column property="version" sortable="true" headerClass="sortable"
+                    href="displayProcess.jsp" paramId="processPath" paramProperty="processId"/>
     <display:column property="lsstId" title="Component" sortable="true" headerClass="sortable"
                     href="displayHardware.jsp" paramId="hardwareId" paramProperty="hardwareId"/>
     <display:column property="hardwareName" title="Component Type" sortable="true" headerClass="sortable"

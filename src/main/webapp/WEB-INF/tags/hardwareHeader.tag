@@ -13,9 +13,11 @@
 <%@attribute name="hardwareId" required="true"%>
 
 <sql:query var="hardwareQ" dataSource="jdbc/rd-lsst-cam">
-    select H.*, HT.name, HT.id as hardwareTypeId from Hardware H, HardwareType HT
+    select H.*, HT.name, HT.id as hardwareTypeId, HS.name as hardwareStatusName from Hardware H, HardwareType HT, HardwareStatus HS
     where 
-    HT.id=H.typeId
+    HT.id=H.hardwareTypeId
+    and
+    HS.id=H.hardwareStatusId
     and
     H.id=?<sql:param value="${hardwareId}"/>;
 </sql:query>
@@ -27,8 +29,20 @@
 <c:url var="hwLink" value="displayHardware.jsp">
     <c:param name="hardwareId" value="${hardware.id}"/>
 </c:url>
+<%--
 <a href="${hwtLink}"><c:out value="${hardware.name}"/></a> Id <a href="<c:out value="${hwLink}"/>"><c:out value="${hardware.lsstId}"/></a>
 <br>
 Registered at <c:out value="${hardware.creationTS}"/> by <c:out value="${hardware.createdBy}"/>
+--%>
+<table>
+    <tr><td>Type:</td><td><a href="${hwtLink}"><c:out value="${hardware.name}"/></a></td></tr>
+    <tr><td>LSST Id:</td><td><a href="<c:out value="${hwLink}"/>"><c:out value="${hardware.lsstId}"/></a></td></tr>
+    <tr><td>Manufacturer:</td><td><c:out value="${hardware.manufacturer}"/></td></tr>
+    <tr><td>Model:</td><td><c:out value="${hardware.model}"/></td></tr>
+    <tr><td>Date:</td><td><c:out value="${hardware.manufactureDate}"/></td></tr>
+    <tr><td>Status:</td><td><c:out value="${hardware.hardwareStatusName}"/></td></tr>
+    <tr><td>Registered by:</td><td><c:out value="${hardware.createdBy}"/></td></tr>
+    <tr><td>Registered at:</td><td><c:out value="${hardware.creationTS}"/></td></tr>
+</table>
 
-<c:set var="hardwareTypeId" value="${hardware.typeId}" scope="request"/>
+<c:set var="hardwareTypeId" value="${hardware.hardwareTypeId}" scope="request"/>

@@ -16,7 +16,7 @@
     select HT.id, HT.name, count(H.id) as count
     from
     HardwareType HT
-    left join Hardware H on H.typeId=HT.id
+    left join Hardware H on H.hardwareTypeId=HT.id
     where 1
     <c:if test="${! empty hardwareTypeId}">
         and HT.id=?<sql:param value="${hardwareTypeId}"/>

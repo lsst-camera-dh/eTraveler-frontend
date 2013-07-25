@@ -36,9 +36,9 @@
                 </sql:update>
             </c:if>
         </sql:transaction>
-<%--        <c:redirect url="displayActivity.jsp">
-            <c:param name="activityId" value="${param['activityId']}"/>
-        </c:redirect>--%>
-        <c:redirect url="${header.referer}"/>
+        <c:redirect url="displayActivity.jsp">
+            <c:param name="activityId" value="${param.topActivityId}"/>
+        </c:redirect>
+<%--        <c:redirect url="${header.referer}"/>--%>
     </body>
 </html>

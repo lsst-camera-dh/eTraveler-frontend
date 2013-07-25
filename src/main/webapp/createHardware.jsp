@@ -18,7 +18,11 @@
             <sql:update>
                 insert into Hardware set
                 lsstId=?<sql:param value="${param.lsstId}"/>,
-                typeId=?<sql:param value="${param.typeId}"/>,
+                hardwareTypeId=?<sql:param value="${param.hardwareTypeId}"/>,
+                manufacturer=?<sql:param value="${param.manufacturer}"/>,
+                model=?<sql:param value="${param.model}"/>,
+                manufactureDate=?<sql:param value="${param.manufactureDate}"/>,
+                hardwareStatusId=(select id from HardwareStatus where name="NEW"),
                 createdBy=?<sql:param value="${userName}"/>,
                 creationTS=NOW();
             </sql:update>

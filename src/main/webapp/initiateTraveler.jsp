@@ -22,9 +22,9 @@
         <sql:query var="hardwareQ" dataSource="jdbc/rd-lsst-cam">
             select H.*, HT.name as typeName from Hardware H, HardwareType HT
             where 
-            HT.id=H.typeId
+            HT.id=H.hardwareTypeId
             and
-            typeId=?<sql:param value="${process.hardwareTypeId}"/>;
+            H.hardwareTypeId=?<sql:param value="${process.hardwareTypeId}"/>;
         </sql:query>
        
         <h1>
