@@ -88,18 +88,6 @@
                         <c:set var="currentStepLink" value="${contentLink}" scope="request"/>
                         <c:if test="${! empty childRow.hardwareRelationshipTypeId}">
                             <sql:query var="potentialComponentsQ" dataSource="jdbc/rd-lsst-cam">
-<%--                                select H.id, H.lsstId, HT.name 
-                                from Hardware H, HardwareType HT, HardwareRelationshipType HRT, Activity A
-                                where 
-                                HRT.id=?<sql:param value="${childRow.hardwareRelationshipTypeId}"/>
-                                and
-                                HT.id=HRT.componentTypeId
-                                and
-                                H.hardwareTypeId=HRT.componentTypeId
-                                and 
-                                H.id=A.hardwareId and A.end is not null and A.parentActivityId is null
-                                and
-                                H.id not in (select componentId from HardwareRelationship where end is null);--%>
                                 select H.id, H.lsstId, HT.name 
                                 from Hardware H, HardwareType HT, HardwareRelationshipType HRT
                                 where 
