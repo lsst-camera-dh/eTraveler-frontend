@@ -17,6 +17,8 @@
 <c:set var="activity" value="${activityQ.rows[0]}"/>
 
 <c:choose>
+    <c:when test="${empty activity.begin}">
+    </c:when>
     <c:when test="${empty activity.end}">
         <sql:query var="stepsRemainingQ" dataSource="jdbc/rd-lsst-cam">
             select (

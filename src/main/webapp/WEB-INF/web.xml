@@ -71,6 +71,7 @@
     </filter-mapping>
     <!-- Done adding Sitemesh Filter -->
 
+    <!-- Icons for tree tag -->
     <servlet>
        <servlet-name>fhicon</servlet-name>
        <servlet-class>org.freehep.webutil.tree.IconServlet</servlet-class>
@@ -81,4 +82,5 @@
         <servlet-name>fhicon</servlet-name>
         <url-pattern>/icon.jsp</url-pattern>
     </servlet-mapping>
+    <!-- Done with tree tag icons -->
 </web-app>

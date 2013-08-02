@@ -80,8 +80,10 @@
                 </c:forEach>
             </select>
             In NCR?
+<%--
             <input type="radio" name="inNCR" value="FALSE" checked="true"/>No
             <input type="radio" name="inNCR" value="TRUE"/>Yes
+--%>
             <input type="SUBMIT" value="Apply Traveler">
         </form>
                         

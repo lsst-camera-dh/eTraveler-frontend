@@ -36,7 +36,7 @@ Registered at <c:out value="${hardware.creationTS}"/> by <c:out value="${hardwar
 --%>
 <table>
     <tr><td>Type:</td><td><a href="${hwtLink}"><c:out value="${hardware.name}"/></a></td></tr>
-    <tr><td>LSST Id:</td><td><a href="<c:out value="${hwLink}"/>"><c:out value="${hardware.lsstId}"/></a></td></tr>
+    <tr><td>Serial:</td><td><a href="<c:out value="${hwLink}"/>"><c:out value="${hardware.lsstId}"/></a></td></tr>
     <tr><td>Manufacturer:</td><td><c:out value="${hardware.manufacturer}"/></td></tr>
     <tr><td>Model:</td><td><c:out value="${hardware.model}"/></td></tr>
     <tr><td>Date:</td><td><c:out value="${hardware.manufactureDate}"/></td></tr>

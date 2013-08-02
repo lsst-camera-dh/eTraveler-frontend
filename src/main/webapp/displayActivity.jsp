@@ -41,9 +41,6 @@
                     <traveler:activityTable activityId="${param.activityId}"/>
                 </td>
                 <td>
-                    <c:url var="contentLink" value="activityPane.jsp">
-                        <c:param name="activityId" value="${param.activityId}"/>
-                    </c:url>
                     <iframe name="content" src="${requestScope.currentStepLink}" width="600" height="400"></iframe>
                 </td>
             </tr>

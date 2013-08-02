@@ -52,22 +52,40 @@
             <tr>
                 <td><a href="${childLink}">${hierStep}</a></td>
                 <td><a href="${contentLink}" target="content">${childRow.name}</a></td> 
-                <td>${childRow.begin}</td> 
+                <td>
+                    <c:choose>
+                        <c:when test="${empty childRow.begin}">
+                            <c:set var="noneStartedAndUnFinished" value="false"/>
+                            <c:set var="currentStepLink" value="${contentLink}" scope="request"/>
+                            In Prep
+                        </c:when>
+                        <c:otherwise>
+                            ${childRow.begin}
+                        </c:otherwise>
+                    </c:choose>
+                </td> 
                 <td>
                     <c:choose>
                         <c:when test="${! empty childRow.end}">
                             ${childRow.end}
                         </c:when>
-                        <c:otherwise>
+                        <c:when test="${! empty childRow.begin}">
                             <c:set var="noneStartedAndUnFinished" value="false"/>
                             <c:set var="currentStepLink" value="${contentLink}" scope="request"/>
 <%--                            <traveler:closeoutButton activityId="${childRow.activityId}"/>--%>
                             Needs Work
-                        </c:otherwise>
+                        </c:when>
                     </c:choose>
                 </td>
             </tr>
-            <traveler:activityRowsFull activityId="${childRow.activityId}" prefix="${hierStep}"/>
+            <c:choose>
+                <c:when test="${empty childRow.begin}">
+                    <traveler:processRows parentId="${childRow.processId}" prefix="${hierStep}" processPath="${myProcessPath}" emptyFields="true"/>                    
+                </c:when>
+                <c:otherwise>
+                    <traveler:activityRowsFull activityId="${childRow.activityId}" prefix="${hierStep}"/>
+                </c:otherwise>
+            </c:choose>
         </c:when>
                 
         <c:otherwise>   
@@ -78,6 +96,12 @@
             <c:url var="contentLink" value="processPane.jsp">
                 <c:param name="processId" value="${childRow.processId}"/>
                 <c:param name="topActivityId" value="${param.activityId}"/>
+                <c:if test="${firstUnStarted && noneStartedAndUnFinished}">
+                    <c:param name="parentActivityId" value="${activityId}"/>
+                    <c:param name="processEdgeId" value="${childRow.processEdgeId}"/>
+                    <c:param name="hardwareId" value="${childRow.hardwareId}"/>       
+                    <c:param name="inNCR" value="${childRow.inNCR}"/>
+                 </c:if>
             </c:url>
             <tr>
                 <td><a href="${childLink}">${hierStep}</a></td>
@@ -86,6 +110,7 @@
                     <c:if test="${firstUnStarted && noneStartedAndUnFinished}">
                         <c:set var="firstUnStarted" value="false"/>
                         <c:set var="currentStepLink" value="${contentLink}" scope="request"/>
+                        <%--
                         <c:if test="${! empty childRow.hardwareRelationshipTypeId}">
                             <sql:query var="potentialComponentsQ" dataSource="jdbc/rd-lsst-cam">
                                 select H.id, H.lsstId, HT.name 
@@ -124,6 +149,8 @@
                                 </form>    
                             </c:otherwise>
                         </c:choose>
+                        --%>
+                        Needs Prep
                     </c:if>
                 </td> 
                 <td></td>
