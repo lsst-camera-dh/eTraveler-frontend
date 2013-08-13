@@ -72,7 +72,6 @@
                         <c:when test="${! empty childRow.begin}">
                             <c:set var="noneStartedAndUnFinished" value="false"/>
                             <c:set var="currentStepLink" value="${contentLink}" scope="request"/>
-<%--                            <traveler:closeoutButton activityId="${childRow.activityId}"/>--%>
                             Needs Work
                         </c:when>
                     </c:choose>
@@ -93,6 +92,7 @@
             <c:url value="displayProcess.jsp" var="childLink">
                 <c:param name="processPath" value="${myProcessPath}"/>
             </c:url>
+            <%--
             <c:url var="contentLink" value="processPane.jsp">
                 <c:param name="processId" value="${childRow.processId}"/>
                 <c:param name="topActivityId" value="${param.activityId}"/>
@@ -103,6 +103,25 @@
                     <c:param name="inNCR" value="${childRow.inNCR}"/>
                  </c:if>
             </c:url>
+            --%>
+            <c:choose>
+                <c:when test="${firstUnStarted && noneStartedAndUnFinished}">
+                    <c:url var="contentLink" value="createActivity.jsp">
+                        <c:param name="processId" value="${childRow.processId}"/>
+                        <c:param name="topActivityId" value="${param.activityId}"/>
+                        <c:param name="parentActivityId" value="${activityId}"/>
+                        <c:param name="processEdgeId" value="${childRow.processEdgeId}"/>
+                        <c:param name="hardwareId" value="${childRow.hardwareId}"/>       
+                        <c:param name="inNCR" value="${childRow.inNCR}"/>
+                    </c:url>                    
+                </c:when>
+                <c:otherwise>
+                    <c:url var="contentLink" value="processPane.jsp">
+                        <c:param name="processId" value="${childRow.processId}"/>
+                        <c:param name="topActivityId" value="${param.activityId}"/>
+                    </c:url>                  
+                </c:otherwise>
+            </c:choose>
             <tr>
                 <td><a href="${childLink}">${hierStep}</a></td>
                 <td><a href="${contentLink}" target="content">${childRow.name}</a></td> 
@@ -110,6 +129,7 @@
                     <c:if test="${firstUnStarted && noneStartedAndUnFinished}">
                         <c:set var="firstUnStarted" value="false"/>
                         <c:set var="currentStepLink" value="${contentLink}" scope="request"/>
+                        <c:set var="startNextStep" value="true" scope="request"/>
                         Needs Prep
                     </c:if>
                 </td> 
