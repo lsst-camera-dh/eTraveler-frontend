@@ -23,6 +23,9 @@
         </sql:query>
         <c:set var="activity" value="${activityQ.rows[0]}"/>
           
+        <table>
+            <tr>
+                <td>
         <h2>Process</h2>
         <traveler:processCrumbs processPath="${processPath}"/>
         <traveler:processWidget processId="${activity.processId}"/>
@@ -30,9 +33,13 @@
         <h2>Activity</h2>
         <traveler:activityCrumbs activityPath="${activityPath}"/>
         <traveler:activityWidget activityId="${param.activityId}"/>
-     
+                </td>
+                <td>
         <h2>Component</h2>
         <traveler:hardwareHeader hardwareId="${activity.hardwareId}"/>
+                </td>
+            </tr>
+        </table>
         
         <h2>Steps</h2>
         <table>

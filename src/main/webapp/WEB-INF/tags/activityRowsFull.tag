@@ -110,46 +110,6 @@
                     <c:if test="${firstUnStarted && noneStartedAndUnFinished}">
                         <c:set var="firstUnStarted" value="false"/>
                         <c:set var="currentStepLink" value="${contentLink}" scope="request"/>
-                        <%--
-                        <c:if test="${! empty childRow.hardwareRelationshipTypeId}">
-                            <sql:query var="potentialComponentsQ" dataSource="jdbc/rd-lsst-cam">
-                                select H.id, H.lsstId, HT.name 
-                                from Hardware H, HardwareType HT, HardwareRelationshipType HRT
-                                where 
-                                HRT.id=?<sql:param value="${childRow.hardwareRelationshipTypeId}"/>
-                                and
-                                HT.id=HRT.componentTypeId
-                                and
-                                H.hardwareTypeId=HRT.componentTypeId
-                                and 
-                                H.hardwareStatusId=(select id from HardwareStatus where name='READY');
-                            </sql:query>
-                        </c:if>            
-                        <c:choose>
-                            <c:when test="${(! empty childRow.hardwareRelationshipTypeId) && (empty potentialComponentsQ.rows)}">
-                                We're out.
-                            </c:when>
-                            <c:otherwise>
-                                <form METHOD=GET ACTION="createChildActivity.jsp">
-                                    <input type="hidden" name="hardwareId" value="${childRow.hardwareId}">       
-                                    <input type="hidden" name="inNCR" value="${childRow.inNCR}">
-                                    <input type="hidden" name="processId" value="${childRow.processId}">       
-                                    <input type="hidden" name="processEdgeId" value="${childRow.processEdgeid}">
-                                    <input type="hidden" name="parentActivityId" value="${activityId}">
-
-                                    <c:if test="${! empty childRow.hardwareRelationshipTypeId}">
-                                        <select name="componentId">
-                                            <c:forEach var="hRow" items="${potentialComponentsQ.rows}" varStatus="status">
-                                                <option value="${hRow.id}">${hRow.lsstId}</option>
-                                            </c:forEach>
-                                        </select>
-                                    </c:if>            
-
-                                    <INPUT TYPE=SUBMIT value="Initiate">
-                                </form>    
-                            </c:otherwise>
-                        </c:choose>
-                        --%>
                         Needs Prep
                     </c:if>
                 </td> 

@@ -19,6 +19,9 @@
 
         <traveler:lastInPath processPath="${param.processPath}"/>
 
+        <table>
+            <tr>
+                <td>
         <h2>Process</h2>
         <traveler:processCrumbs processPath="${param.processPath}"/>
 
@@ -27,9 +30,14 @@
         </sql:query>
         <c:set var="process" value="${processQ.rows[0]}"/>
         <traveler:processWidget processId="${processId}"/>
+                </td>
+                <td>
 
         <h2>Component type</h2>
         <traveler:hardwareTypeList hardwareTypeId="${process.hardwareTypeId}"/>
+                </td>
+            </tr>
+        </table>
 
         <h2>Steps</h2>
         <table>
