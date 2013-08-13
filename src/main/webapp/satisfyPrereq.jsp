@@ -14,19 +14,44 @@
         <title>JSP Page</title>
     </head>
     <body>
-        <sql:update dataSource="jdbc/rd-lsst-cam">
-            insert into Prerequisite set
-            prerequisitePatternId=?<sql:param value="${param.prerequisitePatternId}"/>,
-            activityId=?<sql:param value="${param.activityId}"/>,
-            <c:if test="${! empty param.prerequisiteActivityId}">
-                prerequisiteActivityId=?<sql:param value="${param.prerequisiteActivityId}"/>,
+        <sql:transaction dataSource="jdbc/rd-lsst-cam">
+            <sql:update>
+                insert into Prerequisite set
+                prerequisitePatternId=?<sql:param value="${param.prerequisitePatternId}"/>,
+                activityId=?<sql:param value="${param.activityId}"/>,
+                <c:if test="${! empty param.prerequisiteActivityId}">
+                    prerequisiteActivityId=?<sql:param value="${param.prerequisiteActivityId}"/>,
+                </c:if>
+                <c:if test="${! empty param.componentId}">
+                    hardwareId=?<sql:param value="${param.componentId}"/>,
+                </c:if>
+                createdBy=?<sql:param value="${userName}"/>,
+                creationTs=now();
+            </sql:update>
+            
+            <c:if test="${! empty param.componentId}">
+                <sql:update>
+                    insert into HardwareRelationship set
+                    hardwareId=?<sql:param value="${param.hardwareId}"/>,
+                    componentId=?<sql:param value="${param.componentId}"/>,
+                    hardwareRelationshipTypeId=?<sql:param value="${param.hardwareRelationshipTypeId}"/>,
+                    createdBy=?<sql:param value="${userName}"/>,
+                    creationTs=now();
+                </sql:update>
+
+                <sql:update>
+                    update Activity set
+                    hardwareRelationshipId=LAST_INSERT_ID()
+                    where id=?<sql:param value="${param.activityId}"/>;
+                </sql:update>
+
+                <sql:update>
+                    update Hardware set
+                    hardwareStatusId=(select id from HardwareStatus where name='USED')
+                    where id=?<sql:param value="${param.componentId}"/>;
+                </sql:update>
             </c:if>
-            <c:if test="${! empty param.hardwareId}">
-                hardwareId=?<sql:param value="${param.hardwareId}"/>,
-            </c:if>
-            createdBy=?<sql:param value="${userName}"/>,
-            creationTs=now();
-        </sql:update>
+        </sql:transaction>
                 
         <c:redirect url="${header.referer}"/>
     </body>
