@@ -17,8 +17,21 @@
 </sql:query>
 <c:set var="activity" value="${activityQ.rows[0]}"/>
 
+<traveler:activityPrereqWidget activityId="${activityId}"/>
 <table>
-    <tr><td>Started:</td><td><c:out value="${activity.begin}"/> by <c:out value="${activity.createdBy}"/></td></tr>
+    <tr>
+        <td>Started:</td>
+        <td>
+            <c:choose>
+                <c:when test="${empty activity.begin}">
+                    In Prep
+                </c:when>
+                <c:otherwise>
+                    <c:out value="${activity.begin}"/> by <c:out value="${activity.createdBy}"/>
+                </c:otherwise>
+            </c:choose>
+        </td>
+    </tr>
     <tr><td>End:</td>
         <td>
             <traveler:closeoutButton activityId="${param.activityId}"/>
@@ -27,4 +40,3 @@
             </c:if>--%>
         </td></tr>
 </table>
-<%----%>

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<decorators defaultdir="/decorators">
+
+  <decorator name="basicDecorator" page="basicDecorator.jsp">
+       <pattern>/*</pattern>
+  </decorator>
+
+  <decorator name="noDecorator" page="noDecorator.jsp">
+       <pattern>*activityPane.jsp*</pattern>
+       <pattern>*processPane.jsp*</pattern>
+  </decorator>
+
+ </decorators>

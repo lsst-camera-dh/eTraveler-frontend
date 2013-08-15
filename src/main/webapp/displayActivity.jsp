@@ -23,6 +23,9 @@
         </sql:query>
         <c:set var="activity" value="${activityQ.rows[0]}"/>
           
+        <table>
+            <tr>
+                <td>
         <h2>Process</h2>
         <traveler:processCrumbs processPath="${processPath}"/>
         <traveler:processWidget processId="${activity.processId}"/>
@@ -30,20 +33,23 @@
         <h2>Activity</h2>
         <traveler:activityCrumbs activityPath="${activityPath}"/>
         <traveler:activityWidget activityId="${param.activityId}"/>
-     
+                </td>
+                <td>
         <h2>Component</h2>
         <traveler:hardwareHeader hardwareId="${activity.hardwareId}"/>
+                </td>
+            </tr>
+        </table>
         
         <h2>Steps</h2>
         <table>
             <tr>
                 <td>
                     <traveler:activityTable activityId="${param.activityId}"/>
+                    <c:if test="${requestScope.startNextStep}"><c:redirect url="${requestScope.currentStepLink}"/></c:if>
+                    <a href="${requestScope.currentStepLink}" target="content">Current step</a>
                 </td>
                 <td>
-                    <c:url var="contentLink" value="activityPane.jsp">
-                        <c:param name="activityId" value="${param.activityId}"/>
-                    </c:url>
                     <iframe name="content" src="${requestScope.currentStepLink}" width="600" height="400"></iframe>
                 </td>
             </tr>

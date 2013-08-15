@@ -24,5 +24,17 @@
           
         <h2><c:out value="${process.processName}"/></h2>
         <traveler:processWidget processId="${param.processId}"/>
+        
+        <c:if test="${! empty param.parentActivityId}">
+            <form METHOD=GET ACTION="createActivity.jsp" target="_top">
+                <input type="hidden" name="parentActivityId" value="${param.parentActivityId}">       
+                <input type="hidden" name="processEdgeId" value="${param.processEdgeId}">       
+                <input type="hidden" name="inNCR" value="${param.inNCR}">       
+                <input type="hidden" name="hardwareId" value="${param.hardwareId}">       
+                <input type="hidden" name="processId" value="${param.processId}">       
+                <input type="hidden" name="topActivityId" value="${param.topActivityId}">       
+                <INPUT TYPE=SUBMIT value="Start Prep">
+            </form>
+        </c:if>
     </body>
 </html>

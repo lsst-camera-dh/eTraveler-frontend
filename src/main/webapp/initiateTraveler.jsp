@@ -36,6 +36,7 @@
         
         <form METHOD=GET ACTION="createTraveler.jsp">
             <input type="hidden" name="processId" value="${param.processId}"/>
+            <input type="hidden" name="inNCR" value="FALSE">
 
             Component: 
             <select name="hardwareId">
@@ -43,11 +44,11 @@
                     <option value="${hRow.id}">${hRow.lsstId}</option>
                 </c:forEach>
             </select>
-
+<%--
             In NCR?
             <input type="radio" name="inNCR" value="FALSE" checked="true"/>No
             <input type="radio" name="inNCR" value="TRUE"/>Yes
-
+--%>
             <INPUT TYPE=SUBMIT value="Begin Process">
         </form>
     </body>

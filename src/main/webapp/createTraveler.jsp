@@ -19,7 +19,6 @@
                 insert into Activity set
                 hardwareId=?<sql:param value="${param.hardwareId}"/>,
                 processId=?<sql:param value="${param.processId}"/>,
-                begin=NOW(),
                 inNCR=?<sql:param value="${param.inNCR}"/>,
                 createdBy=?<sql:param value="${userName}"/>,
                 creationTS=NOW();

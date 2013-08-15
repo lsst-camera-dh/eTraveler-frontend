@@ -13,7 +13,7 @@
 <%@attribute name="activityId" required="true"%>
 
 <sql:query var="activityQ" dataSource="jdbc/rd-lsst-cam">
-    select A.begin, A.end, P.name
+    select A.begin, A.end, P.name, P.id as processId
     from Activity A, Process P where
     P.id=A.processId and
     A.id=?<sql:param value="${activityId}"/>;
@@ -31,13 +31,36 @@
     <tr>
         <td></td>
         <td><a href="${contentLink}" target="content">${activity.name}</a></td>
-        <td>${activity.begin}</td>
+        <td>
+            <c:choose>
+                <c:when test="${empty activity.begin}">
+                    Needs Prep
+                </c:when>
+                <c:otherwise>
+                    ${activity.begin}
+                </c:otherwise>
+            </c:choose>
+        </td>
         <td>
             <%--<traveler:closeoutButton activityId="${activityId}"/>--%>
-            ${activity.end}
+            <c:choose>
+                <c:when test="${empty activity.end}">
+                    Needs Work
+                </c:when>
+                <c:otherwise>
+                    ${activity.end}
+                </c:otherwise>
+            </c:choose>
         </td>
     </tr>
 
-    <traveler:activityRowsFull activityId="${activityId}"/>
+    <c:choose>
+        <c:when test="${empty activity.begin}">
+            <traveler:processRows parentId="${activity.processId}" processPath="${activity.processId}" emptyFields="true"/>
+        </c:when>
+        <c:otherwise>
+            <traveler:activityRowsFull activityId="${activityId}"/>
+        </c:otherwise>
+    </c:choose>
     
 </table>

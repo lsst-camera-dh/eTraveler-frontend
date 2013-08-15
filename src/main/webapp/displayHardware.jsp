@@ -62,10 +62,6 @@
         
         <h2>Travelers</h2>
         <traveler:activityList travelersOnly="true" hardwareId="${param.hardwareId}"/>
-        
-        <h2>Recent Activities</h2>
-        <traveler:activityList hardwareId="${param.hardwareId}"/>
-        
         <sql:query var="applicableTTypesQ" dataSource="jdbc/rd-lsst-cam">
             select id, concat(name, ' v', version) as processName
             from Process P
@@ -84,11 +80,16 @@
                 </c:forEach>
             </select>
             In NCR?
+<%--
             <input type="radio" name="inNCR" value="FALSE" checked="true"/>No
             <input type="radio" name="inNCR" value="TRUE"/>Yes
+--%>
             <input type="SUBMIT" value="Apply Traveler">
         </form>
-                
+                        
+        <h2>Recent Activities</h2>
+        <traveler:activityList hardwareId="${param.hardwareId}"/>
+        
         <h2>Component of</h2>
         <traveler:componentTable hardwareId="${param.hardwareId}" mode="p"/>
                 

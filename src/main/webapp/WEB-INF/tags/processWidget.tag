@@ -30,4 +30,7 @@
 <c:if test="${! empty process.instructionsURL}">
     <a href="${process.instructionsURL}">Detailed Instructions</a>
 </c:if>
-<traveler:prereqWidget processId="${processId}"/>
+<c:if test="${empty param.activityId}">
+    <traveler:processPrereqWidget processId="${processId}"/>
+</c:if>
+    

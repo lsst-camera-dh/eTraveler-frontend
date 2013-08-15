@@ -52,22 +52,39 @@
             <tr>
                 <td><a href="${childLink}">${hierStep}</a></td>
                 <td><a href="${contentLink}" target="content">${childRow.name}</a></td> 
-                <td>${childRow.begin}</td> 
+                <td>
+                    <c:choose>
+                        <c:when test="${empty childRow.begin}">
+                            <c:set var="noneStartedAndUnFinished" value="false"/>
+                            <c:set var="currentStepLink" value="${contentLink}" scope="request"/>
+                            In Prep
+                        </c:when>
+                        <c:otherwise>
+                            ${childRow.begin}
+                        </c:otherwise>
+                    </c:choose>
+                </td> 
                 <td>
                     <c:choose>
                         <c:when test="${! empty childRow.end}">
                             ${childRow.end}
                         </c:when>
-                        <c:otherwise>
+                        <c:when test="${! empty childRow.begin}">
                             <c:set var="noneStartedAndUnFinished" value="false"/>
                             <c:set var="currentStepLink" value="${contentLink}" scope="request"/>
-<%--                            <traveler:closeoutButton activityId="${childRow.activityId}"/>--%>
                             Needs Work
-                        </c:otherwise>
+                        </c:when>
                     </c:choose>
                 </td>
             </tr>
-            <traveler:activityRowsFull activityId="${childRow.activityId}" prefix="${hierStep}"/>
+            <c:choose>
+                <c:when test="${empty childRow.begin}">
+                    <traveler:processRows parentId="${childRow.processId}" prefix="${hierStep}" processPath="${myProcessPath}" emptyFields="true"/>                    
+                </c:when>
+                <c:otherwise>
+                    <traveler:activityRowsFull activityId="${childRow.activityId}" prefix="${hierStep}"/>
+                </c:otherwise>
+            </c:choose>
         </c:when>
                 
         <c:otherwise>   
@@ -75,10 +92,36 @@
             <c:url value="displayProcess.jsp" var="childLink">
                 <c:param name="processPath" value="${myProcessPath}"/>
             </c:url>
+            <%--
             <c:url var="contentLink" value="processPane.jsp">
                 <c:param name="processId" value="${childRow.processId}"/>
                 <c:param name="topActivityId" value="${param.activityId}"/>
+                <c:if test="${firstUnStarted && noneStartedAndUnFinished}">
+                    <c:param name="parentActivityId" value="${activityId}"/>
+                    <c:param name="processEdgeId" value="${childRow.processEdgeId}"/>
+                    <c:param name="hardwareId" value="${childRow.hardwareId}"/>       
+                    <c:param name="inNCR" value="${childRow.inNCR}"/>
+                 </c:if>
             </c:url>
+            --%>
+            <c:choose>
+                <c:when test="${firstUnStarted && noneStartedAndUnFinished}">
+                    <c:url var="contentLink" value="createActivity.jsp">
+                        <c:param name="processId" value="${childRow.processId}"/>
+                        <c:param name="topActivityId" value="${param.activityId}"/>
+                        <c:param name="parentActivityId" value="${activityId}"/>
+                        <c:param name="processEdgeId" value="${childRow.processEdgeId}"/>
+                        <c:param name="hardwareId" value="${childRow.hardwareId}"/>       
+                        <c:param name="inNCR" value="${childRow.inNCR}"/>
+                    </c:url>                    
+                </c:when>
+                <c:otherwise>
+                    <c:url var="contentLink" value="processPane.jsp">
+                        <c:param name="processId" value="${childRow.processId}"/>
+                        <c:param name="topActivityId" value="${param.activityId}"/>
+                    </c:url>                  
+                </c:otherwise>
+            </c:choose>
             <tr>
                 <td><a href="${childLink}">${hierStep}</a></td>
                 <td><a href="${contentLink}" target="content">${childRow.name}</a></td> 
@@ -86,44 +129,8 @@
                     <c:if test="${firstUnStarted && noneStartedAndUnFinished}">
                         <c:set var="firstUnStarted" value="false"/>
                         <c:set var="currentStepLink" value="${contentLink}" scope="request"/>
-                        <c:if test="${! empty childRow.hardwareRelationshipTypeId}">
-                            <sql:query var="potentialComponentsQ" dataSource="jdbc/rd-lsst-cam">
-                                select H.id, H.lsstId, HT.name 
-                                from Hardware H, HardwareType HT, HardwareRelationshipType HRT
-                                where 
-                                HRT.id=?<sql:param value="${childRow.hardwareRelationshipTypeId}"/>
-                                and
-                                HT.id=HRT.componentTypeId
-                                and
-                                H.hardwareTypeId=HRT.componentTypeId
-                                and 
-                                H.hardwareStatusId=(select id from HardwareStatus where name='READY');
-                            </sql:query>
-                        </c:if>            
-                        <c:choose>
-                            <c:when test="${(! empty childRow.hardwareRelationshipTypeId) && (empty potentialComponentsQ.rows)}">
-                                We're out.
-                            </c:when>
-                            <c:otherwise>
-                                <form METHOD=GET ACTION="createChildActivity.jsp">
-                                    <input type="hidden" name="hardwareId" value="${childRow.hardwareId}">       
-                                    <input type="hidden" name="inNCR" value="${childRow.inNCR}">
-                                    <input type="hidden" name="processId" value="${childRow.processId}">       
-                                    <input type="hidden" name="processEdgeId" value="${childRow.processEdgeid}">
-                                    <input type="hidden" name="parentActivityId" value="${activityId}">
-
-                                    <c:if test="${! empty childRow.hardwareRelationshipTypeId}">
-                                        <select name="componentId">
-                                            <c:forEach var="hRow" items="${potentialComponentsQ.rows}" varStatus="status">
-                                                <option value="${hRow.id}">${hRow.lsstId}</option>
-                                            </c:forEach>
-                                        </select>
-                                    </c:if>            
-
-                                    <INPUT TYPE=SUBMIT value="Initiate">
-                                </form>    
-                            </c:otherwise>
-                        </c:choose>
+                        <c:set var="startNextStep" value="true" scope="request"/>
+                        Needs Prep
                     </c:if>
                 </td> 
                 <td></td>
