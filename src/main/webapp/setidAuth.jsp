@@ -14,12 +14,12 @@
         <title>JSP Page</title>
     </head>
     <body>
-        <c:set var="siteId" value="${param.siteId}" scope="session"/>
-        <sql:query var="siteNameQ" dataSource="jdbc/rd-lsst-cam">
-            select name from Site where id=?;
-            <sql:param value="${param.siteId}"/>
+        <c:set var="idAuthId" value="${param.idAuthId}" scope="session"/>
+        <sql:query var="idAuthNameQ" dataSource="jdbc/rd-lsst-cam">
+            select name from HardwareIdentifierAuthority where id=?;
+            <sql:param value="${param.idAuthId}"/>
         </sql:query>
-        <c:set var="siteName" value="${siteNameQ.rows[0]['name']}" scope="session"/>
+        <c:set var="idAuthName" value="${idAuthNameQ.rows[0]['name']}" scope="session"/>
         <c:redirect url="${header.referer}"/>
     </body>
 </html>
