@@ -11,7 +11,8 @@
             <srs_utils:conditonalLink name="Register Hardware" url="registerHardware.jsp" /> |
             <srs_utils:conditonalLink name="List Traveler Types" url="listTravelerTypes.jsp" /> |
             <srs_utils:conditonalLink name="List Travelers" url="listTravelers.jsp" /> |
-            <srs_utils:conditonalLink name="Initiate Traveler" url="selectTravelerType.jsp" />
+            <srs_utils:conditonalLink name="Initiate Traveler" url="selectTravelerType.jsp" /> |
+            <srs_utils:conditonalLink name="Admin" url="admin.jsp" />
         </td>
     </tr>
 </table>
