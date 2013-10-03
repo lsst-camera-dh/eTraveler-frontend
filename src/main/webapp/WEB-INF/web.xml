@@ -83,4 +83,14 @@
         <url-pattern>/icon.jsp</url-pattern>
     </servlet-mapping>
     <!-- Done with tree tag icons -->
+    
+    <servlet>
+        <servlet-name>fakeLims</servlet-name>
+        <jsp-file>/fakeLims.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>fakeLims</servlet-name>
+        <url-pattern>/Results/*</url-pattern>
+    </servlet-mapping>
+    
 </web-app>
