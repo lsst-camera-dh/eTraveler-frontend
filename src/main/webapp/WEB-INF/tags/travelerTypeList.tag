@@ -40,8 +40,10 @@
                     href="displayProcess.jsp" paramId="processPath" paramProperty="processId"/>
     <display:column property="version" sortable="true" headerClass="sortable"
                     href="displayProcess.jsp" paramId="processPath" paramProperty="processId"/>
-    <display:column property="hardwareName" title="Component Type" sortable="true" headerClass="sortable"
-                    href="displayHardwareType.jsp" paramId="hardwareTypeId" paramProperty="hardwareTypeId"/>
+    <c:if test="${empty hardwareTypeId}">
+        <display:column property="hardwareName" title="Component Type" sortable="true" headerClass="sortable"
+                        href="displayHardwareType.jsp" paramId="hardwareTypeId" paramProperty="hardwareTypeId"/>
+    </c:if>
     <display:column property="inProgress" sortable="true" headerClass="sortable"
                     href="${inProgressLink}" paramId="processId" paramProperty="processId"/>
     <display:column property="completed" sortable="true" headerClass="sortable"

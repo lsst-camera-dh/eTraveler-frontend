@@ -27,8 +27,8 @@
             </tr>
         </table>
         
-        <sql:query var="idAuthQ" dataSource="jdbc/rd-lsst-cam">
-            select * from HardwareIdentifierAuthority;
+        <sql:query var="siteQ" dataSource="jdbc/rd-lsst-cam">
+            select * from Site;
         </sql:query>
         <table>
             <tr>
@@ -36,11 +36,32 @@
                 <td>
                     <form action="setSite.jsp" method="GET">
                         <select name="siteId">
+                            <c:forEach var="sRow" items="${siteQ.rows}">
+                                <c:if test="${empty sessionScope.siteName or sRow.name!=sessionScope.siteName}">
+                                    <option value="${sRow.id}">${sRow.name}</option>
+                                </c:if>
+                            </c:forEach>
+                        </select>
+                        <input type="submit" value="Change Site"/>
+                    </form>
+                </td>
+            </tr>
+        </table>
+
+        <sql:query var="idAuthQ" dataSource="jdbc/rd-lsst-cam">
+            select * from HardwareIdentifierAuthority;
+        </sql:query>
+        <table>
+            <tr>
+                <td>Site: ${empty sessionScope.idAuthName?"Unknown":sessionScope.idAuthName}</td>
+                <td>
+                    <form action="setidAuth.jsp" method="GET">
+                        <select name="idAuthId">
                             <c:forEach var="iaRow" items="${idAuthQ.rows}">
                                 <option value="${iaRow.id}">${iaRow.name}</option>
                             </c:forEach>
                         </select>
-                        <input type="submit" value="Change Site"/>
+                        <input type="submit" value="Change Identifier Authority"/>
                     </form>
                 </td>
             </tr>

@@ -30,9 +30,13 @@
 <display:table name="${result.rows}" class="datatable">
     <display:column property="lsstId" title="Component Id" sortable="true" headerClass="sortable"
                     href="displayHardware.jsp" paramId="hardwareId" paramProperty="id"/>
-    <display:column property="hardwareName" title="Type" sortable="true" headerClass="sortable"
-                    href="displayHardwareType.jsp" paramId="hardwareTypeId" paramProperty="hardwareTypeId"/>
-    <display:column property="hardwareStatusName" title="Status" sortable="true" headerClass="sortable"/>
+    <c:if test="${empty hardwareTypeId}">
+        <display:column property="hardwareName" title="Type" sortable="true" headerClass="sortable"
+                        href="displayHardwareType.jsp" paramId="hardwareTypeId" paramProperty="hardwareTypeId"/>
+    </c:if>
+    <c:if test="${empty hardwareStatusId}">
+        <display:column property="hardwareStatusName" title="Status" sortable="true" headerClass="sortable"/>
+    </c:if>
     <display:column property="creationTS" title="Registration Date" sortable="true" headerClass="sortable"/>
     <display:column property="manufacturer" sortable="true" headerClass="sortable"/>
     <display:column property="model" sortable="true" headerClass="sortable"/>

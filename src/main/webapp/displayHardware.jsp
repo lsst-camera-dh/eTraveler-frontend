@@ -21,6 +21,8 @@
         <traveler:hardwareHeader hardwareId="${param.hardwareId}"/>
         <traveler:hardwareStatusForm hardwareId="${param.hardwareId}"/>
         
+        <traveler:hardwareLocationWidget hardwareId="${param.hardwareId}"/>
+        
         <h2>Nicknames</h2>
         <sql:query var="identifiersQ" dataSource="jdbc/rd-lsst-cam">
             select HI.identifier, HIA.name
