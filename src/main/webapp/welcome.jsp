@@ -16,10 +16,11 @@
                 <td>
                     <form action="setRole.jsp" method="GET">
                         <select name="role">
+                            <option value="Admin">Admin</option>
                             <option value="Approver">Approver</option>
                             <option value="Supervisor">Supervisor</option>
                             <option value="Operator">Operator</option>
-                            <option value="Spectator">Spectator</option>
+                            <option value="Spectator" selected>Spectator</option>
                        </select>
                         <input type="submit" value="Change Role"/>
                     </form>
