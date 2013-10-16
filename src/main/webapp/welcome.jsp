@@ -54,7 +54,7 @@
         </sql:query>
         <table>
             <tr>
-                <td>Site: ${empty sessionScope.idAuthName?"Unknown":sessionScope.idAuthName}</td>
+                <td>Default Identifier Authority: ${empty sessionScope.idAuthName?"Unknown":sessionScope.idAuthName}</td>
                 <td>
                     <form action="setidAuth.jsp" method="GET">
                         <select name="idAuthId">
