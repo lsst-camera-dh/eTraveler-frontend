@@ -5,22 +5,23 @@
 --%>
 
 <%@page contentType="application/json" pageEncoding="UTF-8"%>
+<%@page import="com.fasterxml.jackson.databind.ObjectMapper,java.util.Map"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 
 <%
-    com.fasterxml.jackson.databind.ObjectMapper mapper = new com.fasterxml.jackson.databind.ObjectMapper();
-    java.util.Map<String, Object> inputs = mapper.readValue(request.getParameter("jsonObject"), java.util.Map.class);
+    ObjectMapper mapper = new ObjectMapper();
+    Map<String, Object> inputs = mapper.readValue(request.getParameter("jsonObject"), Map.class);
+    request.setAttribute("inputs", inputs);
 %>
-<c:out value="${param.jsonObject}"/>
+
 <%-- for all: check if jobid matches an active JH Activity --%>
-<%= inputs.get("stamp") %>
-<%= inputs.get("stamp").getClass().getName() %>
+
 <c:choose>
     <c:when test="${fn:endsWith(pageContext.request.requestURI, '/requestID')}">
         <%-- get prereqs, return them --%>
 {
-    "jobid": "<%= inputs.get("jobid") %>",
+    "jobid": "${inputs.jobid}",
     "error": "requestID doesn't work yet."
 }
     </c:when>
