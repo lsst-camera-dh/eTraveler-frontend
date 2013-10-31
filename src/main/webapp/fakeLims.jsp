@@ -19,6 +19,7 @@
 
 <c:choose>
     <c:when test="${fn:endsWith(pageContext.request.requestURI, '/requestID')}">
+        <%-- check hardware id --%>
         <%-- get prereqs, return them --%>
 {
     "jobid": "${inputs.jobid}",
@@ -26,6 +27,7 @@
 }
     </c:when>
     <c:when test="${fn:endsWith(pageContext.request.requestURI, '/update')}">
+        <%-- check step is correct next one --%>
         <%-- stick a record in JobStepHistory --%>
 {
     "acknowledge": "update doesn't work yet."

@@ -42,12 +42,18 @@
         from
         Location L
         inner join Site S on S.id=L.siteId
+<%--
+        where L.id!=(select L.id from Location L 
+                        inner join HardwareLocationHistory HLH on L.id=HLH.locationId 
+                        where HLH.hardwareId=?<sql:param value="${hardwareId}"/> 
+                        order by HLH.creationTS desc limit 1)
+--%>
         <c:if test="${! empty sessionScope.siteId}">
             and S.id=?<sql:param value="${sessionScope.siteId}"/>
         </c:if>
     </sql:query>
 
-    <form action="setLocation.jsp" method="GET">
+    <form action="setHardwareLocation.jsp" method="GET">
         <input type="hidden" name="hardwareId" value="${hardwareId}"/>
         <select name="newLocationId">
             <c:forEach var="lRow" items="${locationsQ.rows}">

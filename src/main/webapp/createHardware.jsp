@@ -29,6 +29,13 @@
             <sql:query var="hardwareQ">
                 select * from Hardware where id=LAST_INSERT_ID();
             </sql:query>
+            <sql:update>
+                insert into HardwareStatusHistory set
+                hardwareStatusId=(select id from HardwareStatus where name="NEW"),
+                hardwareId=LAST_INSERT_ID(),
+                createdBy=?<sql:param value="${userName}"/>,
+                creationTS=NOW();
+            </sql:update>
             <c:set var="hardware" value="${hardwareQ.rows[0]}"/>
         </sql:transaction>
         <c:redirect url="displayHardware.jsp">

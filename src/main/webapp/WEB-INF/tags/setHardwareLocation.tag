@@ -27,5 +27,5 @@
     and end is null;
 </sql:query>
 <c:forEach var="childRow" items="${childrenQ.rows}">
-    <traveler:setLocation newLocationId="${newLocationId}" hardwareId="${childRow.componentId}"/>
+    <traveler:setHardwareLocation newLocationId="${newLocationId}" hardwareId="${childRow.componentId}"/>
 </c:forEach>

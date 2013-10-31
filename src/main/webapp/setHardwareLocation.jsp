@@ -28,7 +28,7 @@
                 Sorry, this item cannot be moved because it is part of <a href='<c:out value="${parentLink}"/>'>this</a>.
             </c:when>
             <c:otherwise>
-                <traveler:setLocation newLocationId="${param.newLocationId}" hardwareId="${param.hardwareId}"/>
+                <traveler:setHardwareLocation newLocationId="${param.newLocationId}" hardwareId="${param.hardwareId}"/>
                 <c:redirect url="${header.referer}"/>
             </c:otherwise>
         </c:choose>

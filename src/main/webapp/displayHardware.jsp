@@ -19,7 +19,7 @@
         <h1>Hardware!</h1>
 
         <traveler:hardwareHeader hardwareId="${param.hardwareId}"/>
-        <traveler:hardwareStatusForm hardwareId="${param.hardwareId}"/>
+        <traveler:hardwareStatusWidget hardwareId="${param.hardwareId}"/>
         
         <traveler:hardwareLocationWidget hardwareId="${param.hardwareId}"/>
         
@@ -81,8 +81,8 @@
                     <option value="${pRow.id}">${pRow.processName}</option>
                 </c:forEach>
             </select>
-            In NCR?
 <%--
+            In NCR?
             <input type="radio" name="inNCR" value="FALSE" checked="true"/>No
             <input type="radio" name="inNCR" value="TRUE"/>Yes
 --%>

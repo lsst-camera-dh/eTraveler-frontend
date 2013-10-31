@@ -14,12 +14,21 @@
         <title>JSP Page</title>
     </head>
     <body>
-        <sql:update dataSource="jdbc/rd-lsst-cam">
-            update Hardware set 
-            hardwareStatusId=?<sql:param value="${param.hardwareStatusId}"/>
-            where
-            id=?<sql:param value="${param.hardwareId}"/>
-        </sql:update>
+        <sql:transaction dataSource="jdbc/rd-lsst-cam">
+            <sql:update>
+                update Hardware set 
+                hardwareStatusId=?<sql:param value="${param.hardwareStatusId}"/>
+                where
+                id=?<sql:param value="${param.hardwareId}"/>;
+            </sql:update>
+            <sql:update>
+                insert into HardwareStatusHistory set
+                hardwareStatusId=?<sql:param value="${param.hardwareStatusId}"/>,
+                hardwareId=?<sql:param value="${param.hardwareId}"/>,
+                createdBy=?<sql:param value="${userName}"/>,
+                creationTS=now();
+            </sql:update>
+        </sql:transaction>
         <c:redirect url="${header.referer}"/>
     </body>
 </html>
