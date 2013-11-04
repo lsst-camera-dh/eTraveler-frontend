@@ -8,6 +8,7 @@
 <%@page import="com.fasterxml.jackson.databind.ObjectMapper,java.util.Map"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<%@taglib prefix="traveler" tagdir="/WEB-INF/tags"%>
 
 <%
     ObjectMapper mapper = new ObjectMapper();
@@ -19,12 +20,7 @@
 
 <c:choose>
     <c:when test="${fn:endsWith(pageContext.request.requestURI, '/requestID')}">
-        <%-- check hardware id --%>
-        <%-- get prereqs, return them --%>
-{
-    "jobid": "${inputs.jobid}",
-    "error": "requestID doesn't work yet."
-}
+        <traveler:limsRequestId/>
     </c:when>
     <c:when test="${fn:endsWith(pageContext.request.requestURI, '/update')}">
         <%-- check step is correct next one --%>

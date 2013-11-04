@@ -27,7 +27,7 @@
                 creationTS=NOW();
             </sql:update>
             <sql:query var="hardwareQ">
-                select * from Hardware where id=LAST_INSERT_ID();
+                select id from Hardware where id=LAST_INSERT_ID();
             </sql:query>
             <sql:update>
                 insert into HardwareStatusHistory set
