@@ -9,7 +9,6 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql" %>
 
-
 <c:set var="allOk" value="true"/>
 <%-- check hardware id --%>
 <%-- get prereqs, return them --%>
@@ -30,8 +29,7 @@
     <c:when test="${allOk}">
         {
             "jobid": "${inputs.jobid}",
-            "prereq": [
-            <c:forEach var="prereqRow" items="${prereqQ.rows}" varStatus="status">
+            "prereq": [<c:forEach var="prereqRow" items="${prereqQ.rows}" varStatus="status">
                 {
                     "jobid": "${prereqRow.activityId}",
                     "unit_type": "${prereqRow.hardwareName}",
@@ -39,10 +37,8 @@
                     "job": "${prereqRow.processName}",
                     "version": "${prereqRow.userVersionString}",
                     "operator": "${prereqRow.createdBy}"
-                }
-                <c:if test="${! status.last}">,</c:if>
-            </c:forEach>
-            ]
+                }<c:if test="${! status.last}">,</c:if>
+            </c:forEach>]
         }
     </c:when>
     <c:otherwise>

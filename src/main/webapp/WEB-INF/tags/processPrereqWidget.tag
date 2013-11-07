@@ -29,5 +29,22 @@
     </display:table>
 </c:if>
     
+<sql:query var="processQ" dataSource="jdbc/rd-lsst-cam">
+    select PP.*, P.name as processName, P.userVersionString
+    from PrerequisitePattern PP
+    inner join Process P on P.id=PP.prereqProcessId
+    where PP.prerequisiteTypeId=(select id from PrerequisiteType where name='PROCESS_STEP')
+    and PP.processId=?<sql:param value="${processId}"/>
+</sql:query>
+<c:if test="${! empty processQ.rows}">
+    <h2>Process Steps</h2>
+    <display:table name="${processQ.rows}" class="datatable">
+        <display:column property="name"/>
+        <display:column property="description"/>
+        <display:column property="processName"/>
+        <display:column property="userVersionString"/>
+    </display:table>
+</c:if>
+    
 <traveler:prereqTable prereqTypeName="TEST_EQUIPMENT" processId="${processId}"/>
 <traveler:prereqTable prereqTypeName="CONSUMABLE" processId="${processId}"/>

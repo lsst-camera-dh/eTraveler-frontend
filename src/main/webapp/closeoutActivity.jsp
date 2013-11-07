@@ -18,6 +18,7 @@
         <sql:transaction dataSource="jdbc/rd-lsst-cam">
             <sql:update >
                 update Activity set 
+                activityFinalStatusId=(select id from ActivityFinalStatus where name='success'),
                 end=now(), 
                 closedBy=?<sql:param value="${userName}"/>
                 where 

@@ -21,6 +21,8 @@
 </sql:query>
 <c:set var="activity" value="${activityQ.rows[0]}"/>
 
+<traveler:prereqProcesses activityId="${activityId}"/>
+
 <sql:query var="componentQ" dataSource="jdbc/rd-lsst-cam">
     select PP.*, HT.name as hardwareTypeName, H.id as componentId, H.lsstId, PI.creationTS as satisfaction
     from PrerequisitePattern PP
