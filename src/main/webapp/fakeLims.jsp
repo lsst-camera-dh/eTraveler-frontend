@@ -16,7 +16,7 @@
     request.setAttribute("inputs", inputs);
 %>
 
-<%-- for all: check if jobid matches an active JH Activity --%>
+<%-- for all but requestId: check if jobid matches an active JH Activity --%>
 
 <c:choose>
     <c:when test="${fn:endsWith(pageContext.request.requestURI, '/requestID')}">
@@ -41,6 +41,9 @@
 }
     </c:when>
     <c:otherwise>
-Bad command
+        {
+            "error": "Bad command",
+            "acknowledge": "Bad command"
+        }
     </c:otherwise>
 </c:choose>

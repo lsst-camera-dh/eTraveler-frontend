@@ -17,7 +17,9 @@
     Activity A
     inner join PrerequisitePattern PP on PP.processId=A.processId
     left join Prerequisite PI on PI.prerequisitePatternId=PP.id and PI.activityId=A.id
-    where A.id=?<sql:param value="${activityId}"/>
+    where 
+    A.id=?<sql:param value="${activityId}"/>
+    and PP.prerequisiteTypeid=(select id from PrerequisiteType where name='PROCESS_STEP')
     and PI.id is null;
 </sql:query>
 <c:forEach var="prereq" items="${unfilledPrereqsQ.rows}">
