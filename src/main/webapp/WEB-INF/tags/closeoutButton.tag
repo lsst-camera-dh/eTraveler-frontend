@@ -24,10 +24,15 @@
             select (
                 (select count(*) from ProcessEdge where parent=?<sql:param value="${activity.processId}"/>) 
                 -
-                (select count(*) from Activity where 
-                parentActivityId=?<sql:param value="${activityId}"/>
-                and 
-                end is not null) 
+                (select count(*) from Activity A 
+                inner join Process P on P.id=A.processId
+                where 
+                A.parentActivityId=?<sql:param value="${activityId}"/>
+                and (
+                        A.end is not null or 
+                        (A.begin is not null and P.travelerActionMask&(select maskBit from InternalAction where name='harnessedJob')!=0)
+                    )
+                ) 
             ) stepsRemaining from dual;
         </sql:query>
         <c:choose>

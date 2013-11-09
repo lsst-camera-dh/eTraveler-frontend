@@ -22,7 +22,8 @@
 <sql:query var="childrenQ" dataSource="jdbc/rd-lsst-cam">
     select
     Ap.hardwareId, Ap.inNCR,
-    P.id as processId, P.name, P.hardwareRelationshipTypeId,
+    P.id as processId, P.name, P.hardwareRelationshipTypeId, 
+    P.travelerActionMask&(select maskBit from InternalAction where name='harnessedJob') as isHarnessed,
     PE.id as processEdgeId, PE.step,
     Ac.id as activityId, Ac.begin, Ac.end
     from
@@ -70,9 +71,16 @@
                             ${childRow.end}
                         </c:when>
                         <c:when test="${! empty childRow.begin}">
-                            <c:set var="noneStartedAndUnFinished" value="false"/>
-                            <c:set var="currentStepLink" value="${contentLink}" scope="request"/>
-                            Needs Work
+                            <c:choose>
+                                <c:when test="${childRow.isHarnessed==0}">
+                                    <c:set var="noneStartedAndUnFinished" value="false"/>
+                                    <c:set var="currentStepLink" value="${contentLink}" scope="request"/>
+                                    Needs Work
+                                </c:when>
+                                <c:otherwise>
+                                    JH In Progress
+                                </c:otherwise>
+                            </c:choose>
                         </c:when>
                     </c:choose>
                 </td>

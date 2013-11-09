@@ -31,31 +31,35 @@
         and activityFinalStatusId=(select id from ActivityFinalStatus where name='success')
         order by end desc limit 1;
     </sql:query>
-    <sql:update dataSource="jdbc/rd-lsst-cam">
-        insert into Prerequisite set
-        prerequisitePatternId=?<sql:param value="${prereq.ppid}"/>,
-        activityId=?<sql:param value="${activityId}"/>,
-        prerequisiteActivityId=?<sql:param value="${activityQ.rows[0].id}"/>,
-        createdBy=?<sql:param value="${userName}"/>,
-        creationTS=now();
-    </sql:update>
+    <c:if test="${! empty activityQ.rows}">
+        <sql:update dataSource="jdbc/rd-lsst-cam">
+            insert into Prerequisite set
+            prerequisitePatternId=?<sql:param value="${prereq.ppid}"/>,
+            activityId=?<sql:param value="${activityId}"/>,
+            prerequisiteActivityId=?<sql:param value="${activityQ.rows[0].id}"/>,
+            createdBy=?<sql:param value="${userName}"/>,
+            creationTS=now();
+        </sql:update>
+    </c:if>
 </c:forEach>
         
 <sql:query var="filledPrereqsQ" dataSource="jdbc/rd-lsst-cam">
-    select P.id as processId, P.name, P.userVersionString, Ac.id as activityId, Ac.end
+    select PP.name as patternName, P.id as processId, P.name as processName, P.userVersionString, Ac.id as activityId, Ac.end
     from
     Activity Ap
     inner join PrerequisitePattern PP on PP.processId=Ap.processId
-    inner join Prerequisite PI on PI.prerequisitePatternId=PP.id and PI.activityId=Ap.id
+    left join (Prerequisite PI
     inner join Activity Ac on Ac.id=PI.prerequisiteActivityId
-    inner join Process P on P.id=Ac.processId
-    where Ap.id=?<sql:param value="${activityId}"/>;
+    inner join Process P on P.id=Ac.processId) on PI.prerequisitePatternId=PP.id and PI.activityId=Ap.id
+    where Ap.id=?<sql:param value="${activityId}"/>
+    and PP.prerequisiteTypeid=(select id from PrerequisiteType where name='PROCESS_STEP');
 </sql:query>
 <c:if test="${! empty filledPrereqsQ.rows}">
     <h2>Required Steps</h2>
-<display:table name="${filledPrereqsQ.rows}" id="row" class="datatable">
-    <display:column property="name" title="Step"/>
-    <display:column property="userVersionString" title="Version"/>
-    <display:column property="end" title="Completion"/>
-</display:table>
+    <display:table name="${filledPrereqsQ.rows}" id="row" class="datatable">
+        <display:column property="patternName" title="Pattern"/>
+        <display:column property="processName" title="Job"/>
+        <display:column property="userVersionString" title="Version"/>
+        <display:column property="end" title="Completion"/>
+    </display:table>
 </c:if>
