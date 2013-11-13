@@ -51,6 +51,13 @@
         where
         PI.activityId=?<sql:param value="${activityRow.id}"/>
     </sql:query>
+    <sql:update dataSource="jdbc/rd-lsst-cam">
+        insert into JobStepHistory set
+        jobHarnessStepId=(select id from JobHarnessStep where name='registered'),
+        activityId=?<sql:param value="${activityRow.id}"/>,
+        createdBy=?<sql:param value="${userName}"/>,
+        creationTS=now();
+    </sql:update>
 </c:if>
 
 <c:choose>

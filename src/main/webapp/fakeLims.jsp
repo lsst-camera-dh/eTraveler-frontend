@@ -23,11 +23,7 @@
         <traveler:limsRequestId/>
     </c:when>
     <c:when test="${fn:endsWith(pageContext.request.requestURI, '/update')}">
-        <%-- check step is correct next one --%>
-        <%-- stick a record in JobStepHistory --%>
-{
-    "acknowledge": "update doesn't work yet."
-}
+        <traveler:limsUpdate/>
     </c:when>
     <c:when test="${fn:endsWith(pageContext.request.requestURI, '/ingest')}">
         <%-- ??? --%>
