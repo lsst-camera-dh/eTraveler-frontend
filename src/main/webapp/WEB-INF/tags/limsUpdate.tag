@@ -29,6 +29,9 @@
         from Activity A
         inner join Process P on P.id=A.processId
         where A.id=?<sql:param value="${inputs.jobid}"/>
+        and A.begin is not null
+        and A.end is null
+        and A.activityFinalStatusId is null
         and P.travelerActionMask&(select maskBit from InternalAction where name='harnessedJob')!=0;
     </sql:query>
     <c:if test="${empty activityQ.rows}">
