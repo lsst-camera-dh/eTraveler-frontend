@@ -12,7 +12,10 @@
 <%@attribute name="activityId" required="true"%>
 
 <sql:query var="activityQ" dataSource="jdbc/rd-lsst-cam">
-    select * from Activity where id=?<sql:param value="${activityId}"/>;
+    select A.*, P.travelerActionMask&(select maskBit from InternalAction where name='harnessedJob') as isHarnessed 
+    from Activity A
+    inner join Process P on P.id=A.processId
+    where A.id=?<sql:param value="${activityId}"/>;
 </sql:query>
 <c:set var="activity" value="${activityQ.rows[0]}"/>
 
@@ -36,6 +39,9 @@
             ) stepsRemaining from dual;
         </sql:query>
         <c:choose>
+            <c:when test="${activity.isHarnessed!=0}">
+                JH in progress
+            </c:when>
             <c:when test="${stepsRemainingQ.rows[0]['stepsRemaining']==0}">
                 <form METHOD=GET ACTION="closeoutActivity.jsp" target="_top">
                     <input type="hidden" name="activityId" value="${activityId}">       
