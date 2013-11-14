@@ -25,12 +25,14 @@
     P.id as processId, P.name, P.hardwareRelationshipTypeId, 
     P.travelerActionMask&(select maskBit from InternalAction where name='harnessedJob') as isHarnessed,
     PE.id as processEdgeId, PE.step,
-    Ac.id as activityId, Ac.begin, Ac.end
+    Ac.id as activityId, Ac.begin, Ac.end,
+    AFS.name as statusName
     from
     Activity Ap
     inner join ProcessEdge PE on PE.parent=Ap.processId
     inner join Process P on P.id=PE.child
     left join Activity Ac on Ac.parentActivityId=Ap.id and Ac.processEdgeId=PE.id
+    left join ActivityFinalStatus AFS on AFS.id=Ac.activityFinalStatusId
     where
     Ap.id=?<sql:param value="${activityId}"/>
     order by abs(PE.step);
@@ -68,7 +70,7 @@
                 <td>
                     <c:choose>
                         <c:when test="${! empty childRow.end}">
-                            ${childRow.end}
+                            ${childRow.statusName} ${childRow.end}
                         </c:when>
                         <c:when test="${! empty childRow.begin}">
                             <c:choose>
