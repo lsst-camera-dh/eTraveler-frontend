@@ -14,9 +14,11 @@
 <%@attribute name="activityId"%>
 
 <sql:query var="activityQ" dataSource="jdbc/rd-lsst-cam">
-    select A.*, P.travelerActionMask&(select maskBit from InternalAction where name='harnessedJob') as isHarnessed
+    select A.*, AFS.name as statusName,
+    P.travelerActionMask&(select maskBit from InternalAction where name='harnessedJob') as isHarnessed
     from Activity A
     inner join Process P on P.id=A.processId
+    left join ActivityFinalStatus AFS on AFS.id=A.activityFinalStatusId
     where A.id=?<sql:param value="${activityId}"/>;
 </sql:query>
 <c:set var="activity" value="${activityQ.rows[0]}"/>
@@ -43,6 +45,9 @@
                 Ended at <c:out value="${activity.end}"/> by <c:out value="${activity.closedBy}"/>
             </c:if>--%>
         </td></tr>
+        <c:if test="${! empty activity.statusName}">
+        <tr><td>Status:</td><td>${activity.statusName}</td></tr>
+        </c:if>
 </table>
 
 <c:if test="${activity.isHarnessed != 0}">

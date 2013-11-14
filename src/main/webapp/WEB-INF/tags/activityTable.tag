@@ -13,10 +13,11 @@
 <%@attribute name="activityId" required="true"%>
 
 <sql:query var="activityQ" dataSource="jdbc/rd-lsst-cam">
-    select A.begin, A.end, P.name, P.id as processId
-    from Activity A, Process P where
-    P.id=A.processId and
-    A.id=?<sql:param value="${activityId}"/>;
+    select A.begin, A.end, P.name, P.id as processId, AFS.name as statusName
+    from Activity A
+    inner join Process P on P.id=A.processId
+    left join ActivityFinalStatus AFS on AFS.id=A.activityFinalStatusId
+    where A.id=?<sql:param value="${activityId}"/>;
 </sql:query>
 <c:set var="activity" value="${activityQ.rows[0]}"/>
 
@@ -48,7 +49,7 @@
                     Needs Work
                 </c:when>
                 <c:otherwise>
-                    ${activity.end}
+                    ${activity.statusName} ${activity.end}
                 </c:otherwise>
             </c:choose>
         </td>
