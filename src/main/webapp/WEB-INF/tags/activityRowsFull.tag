@@ -57,7 +57,7 @@
                 <td><a href="${contentLink}" target="content">${childRow.name}</a></td> 
                 <td>
                     <c:choose>
-                        <c:when test="${empty childRow.begin}">
+                        <c:when test="${(empty childRow.begin) && (not travelerFailed)}">
                             <c:set var="noneStartedAndUnFinished" value="false"/>
                             <c:set var="currentStepLink" value="${contentLink}" scope="request"/>
                             In Prep
@@ -74,7 +74,7 @@
                         </c:when>
                         <c:when test="${! empty childRow.begin}">
                             <c:choose>
-                                <c:when test="${childRow.isHarnessed==0}">
+                                <c:when test="${(childRow.isHarnessed==0) && (not travelerFailed)}">
                                     <c:set var="noneStartedAndUnFinished" value="false"/>
                                     <c:set var="currentStepLink" value="${contentLink}" scope="request"/>
                                     Needs Work
@@ -136,7 +136,7 @@
                 <td><a href="${childLink}">${hierStep}</a></td>
                 <td><a href="${contentLink}" target="content">${childRow.name}</a></td> 
                 <td>
-                    <c:if test="${firstUnStarted && noneStartedAndUnFinished}">
+                    <c:if test="${(firstUnStarted && noneStartedAndUnFinished) && (not travelerFailed)}">
                         <c:set var="firstUnStarted" value="false"/>
                         <c:set var="currentStepLink" value="${contentLink}" scope="request"/>
                         <c:set var="startNextStep" value="true" scope="request"/>

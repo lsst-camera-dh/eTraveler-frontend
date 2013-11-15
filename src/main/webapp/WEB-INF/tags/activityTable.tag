@@ -12,6 +12,8 @@
 <%-- The list of normal or fragment attributes can be specified here: --%>
 <%@attribute name="activityId" required="true"%>
 
+<c:set var="travelerFailed" value="false" scope="request"/>
+
 <sql:query var="activityQ" dataSource="jdbc/rd-lsst-cam">
     select A.begin, A.end, P.name, P.id as processId, AFS.name as statusName
     from Activity A
@@ -20,6 +22,9 @@
     where A.id=?<sql:param value="${activityId}"/>;
 </sql:query>
 <c:set var="activity" value="${activityQ.rows[0]}"/>
+<c:if test="${activity.statusName=='failure'}">
+    <c:set var="travelerFailed" value="true" scope="request"/>
+</c:if>
 
 <c:url var="contentLink" value="activityPane.jsp">
     <c:param name="activityId" value="${activityId}"/>
