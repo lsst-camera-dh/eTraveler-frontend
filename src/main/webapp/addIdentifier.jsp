@@ -15,7 +15,7 @@
     </head>
     <body>
 
-        <sql:update dataSource="jdbc/rd-lsst-cam">
+        <sql:update >
             insert into HardwareIdentifier set
             authorityId=?<sql:param value="${param.authId}"/>,
             hardwareId=?<sql:param value="${param.hardwareId}"/>,

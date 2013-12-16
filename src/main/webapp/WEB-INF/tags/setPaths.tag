@@ -13,7 +13,7 @@
 <%-- The list of normal or fragment attributes can be specified here: --%>
 <%@attribute name="activityId" required="true"%>
 
-<sql:query var="activityQ" dataSource="jdbc/rd-lsst-cam">
+<sql:query var="activityQ" >
     select * from Activity where id=?<sql:param value="${activityId}"/>;
 </sql:query>
 <c:set var="activity" value="${activityQ.rows[0]}"/>

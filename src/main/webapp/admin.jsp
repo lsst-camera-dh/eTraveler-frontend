@@ -22,7 +22,7 @@
             jhOutputRoot: <input type="text" name="jhOutputRoot">
         </form>
             
-        <sql:query var="sitesQ" dataSource="jdbc/rd-lsst-cam">
+        <sql:query var="sitesQ" >
             select id, name from Site
         </sql:query>
         <form method="get" action="addLocation.jsp">
@@ -41,7 +41,7 @@
             Drawing: <input type="text" name="drawing">
         </form>
             
-        <sql:query var="hardwareTypesQ" dataSource="jdbc/rd-lsst-cam">
+        <sql:query var="hardwareTypesQ" >
             select id, name from HardwareType
         </sql:query>
         <form method="get" action="addHardwareRelationshipType.jsp">

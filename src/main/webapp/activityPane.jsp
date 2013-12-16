@@ -15,7 +15,7 @@
         <title>Activity <c:out value="${param.activityId}"/></title>
     </head>
     <body>
-        <sql:query var="activityQ" dataSource="jdbc/rd-lsst-cam">
+        <sql:query var="activityQ" >
             select A.processId, concat(P.name, ' v', P.version) as processName
             from Activity A
             inner join Process P on P.id=A.processId

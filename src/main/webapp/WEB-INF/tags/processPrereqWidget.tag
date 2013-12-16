@@ -13,7 +13,7 @@
 <%-- The list of normal or fragment attributes can be specified here: --%>
 <%@attribute name="processId" required="true"%>
     
-<sql:query var="componentQ" dataSource="jdbc/rd-lsst-cam">
+<sql:query var="componentQ" >
     select PP.*, HT.name as hardwareTypeName
     from PrerequisitePattern PP
     inner join HardwareType HT on HT.id=PP.hardwareTypeId
@@ -29,7 +29,7 @@
     </display:table>
 </c:if>
     
-<sql:query var="processQ" dataSource="jdbc/rd-lsst-cam">
+<sql:query var="processQ" >
     select PP.*, P.name as processName, P.userVersionString
     from PrerequisitePattern PP
     inner join Process P on P.id=PP.prereqProcessId

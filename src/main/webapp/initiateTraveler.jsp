@@ -15,11 +15,11 @@
     </head>
     <body>
 
-        <sql:query var="processQ" dataSource="jdbc/rd-lsst-cam">
+        <sql:query var="processQ" >
             select * from Process where id=?<sql:param value="${param.processId}"/>;
         </sql:query>
         <c:set var="process" value="${processQ.rows[0]}"/>
-        <sql:query var="hardwareQ" dataSource="jdbc/rd-lsst-cam">
+        <sql:query var="hardwareQ" >
             select H.*, HT.name as typeName from Hardware H, HardwareType HT
             where 
             HT.id=H.hardwareTypeId

@@ -11,7 +11,7 @@
 <%-- The list of normal or fragment attributes can be specified here: --%>
 <%@attribute name="activityId" required="true"%>
 
-<sql:query var="activityQ" dataSource="jdbc/rd-lsst-cam">
+<sql:query var="activityQ" >
     select A.*, P.travelerActionMask&(select maskBit from InternalAction where name='harnessedJob') as isHarnessed 
     from Activity A
     inner join Process P on P.id=A.processId
@@ -23,7 +23,7 @@
     <c:when test="${empty activity.begin}">
     </c:when>
     <c:when test="${empty activity.end}">
-        <sql:query var="stepsRemainingQ" dataSource="jdbc/rd-lsst-cam">
+        <sql:query var="stepsRemainingQ" >
             select (
                 (select count(*) from ProcessEdge where parent=?<sql:param value="${activity.processId}"/>) 
                 -

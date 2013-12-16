@@ -14,7 +14,7 @@
 <%@attribute name="hardwareId"%>
 <%@attribute name="done"%>
 
-<sql:query var="result" dataSource="jdbc/rd-lsst-cam">
+<sql:query var="result" >
   select A.id as activityId, A.begin, A.end, A.createdBy, A.closedBy,
     P.id as processId, P.name as processName, P.version,
     H.id as hardwareId, H.lsstId, 

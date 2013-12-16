@@ -28,7 +28,7 @@
             </tr>
         </table>
         
-        <sql:query var="siteQ" dataSource="jdbc/rd-lsst-cam">
+        <sql:query var="siteQ" >
             select * from Site;
         </sql:query>
         <table>
@@ -49,7 +49,7 @@
             </tr>
         </table>
 
-        <sql:query var="idAuthQ" dataSource="jdbc/rd-lsst-cam">
+        <sql:query var="idAuthQ" >
             select * from HardwareIdentifierAuthority;
         </sql:query>
         <table>

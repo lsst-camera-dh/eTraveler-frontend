@@ -15,7 +15,7 @@
     </head>
     <body>
         <c:set var="siteId" value="${param.siteId}" scope="session"/>
-        <sql:query var="siteNameQ" dataSource="jdbc/rd-lsst-cam">
+        <sql:query var="siteNameQ" >
             select name from Site where id=?;
             <sql:param value="${param.siteId}"/>
         </sql:query>

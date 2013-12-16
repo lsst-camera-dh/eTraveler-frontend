@@ -15,7 +15,7 @@
 <table>
     <tr>
         <c:forTokens items="${activityPath}" delims="." var="activityId" varStatus="status">
-            <sql:query var="processNameQ" dataSource="jdbc/rd-lsst-cam">
+            <sql:query var="processNameQ" >
                 select concat(P.name, ' v', P.version) as processName 
                 from Process P, Activity A 
                 where P.id=A.processId and A.id=?<sql:param value="${activityId}"/>;

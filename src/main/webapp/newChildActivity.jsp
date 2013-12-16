@@ -14,7 +14,7 @@
         <title>JSP Page</title>
     </head>
     <body>
-        <sql:transaction dataSource="jdbc/rd-lsst-cam">
+        <sql:transaction >
             <sql:update>
                 insert into Activity set
                 hardwareId=?<sql:param value="${param.hardwareId}"/>,

@@ -14,7 +14,7 @@
         <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
         <title>Traveler List 
             <c:if test="${! empty param.processId}">
-                <sql:query var="processQ" dataSource="jdbc/rd-lsst-cam">
+                <sql:query var="processQ" >
                     select name from Process where id=?<sql:param value="${param.processId}"/>
                 </sql:query>
                 for type <c:out value="${processQ.rows[0].name}"/>

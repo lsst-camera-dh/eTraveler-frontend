@@ -18,9 +18,21 @@
             applicationTitle
         </param-name>
         <param-value>
-            LSST Demo
+            LSST eTraveler
         </param-value>
     </context-param>
+    
+    <!-- Default Database Connection -->
+    <context-param>
+        <param-name>
+            javax.servlet.jsp.jstl.sql.dataSource
+        </param-name>
+        <param-value>
+            jdbc/rd-lsst-cam
+        </param-value>
+    </context-param>
+
+    
 
     <filter>
         <filter-name>ModeSwitcherFilter</filter-name>
@@ -92,5 +104,17 @@
         <servlet-name>fakeLims</servlet-name>
         <url-pattern>/Results/*</url-pattern>
     </servlet-mapping>
-    
+
+    <context-param>
+        <param-name>org.srs.web.base.datasource.mode</param-name>
+        <param-value>dataSourceMode</param-value>
+    </context-param>
+    <context-param>
+        <param-name>org.srs.web.base.datasource.variable</param-name>
+        <param-value>etravelerDb</param-value>
+    </context-param>
+    <listener>
+        <listener-class>org.srs.web.base.datasource.DefaultDataSourceSwitcher</listener-class>
+    </listener>
+
 </web-app>

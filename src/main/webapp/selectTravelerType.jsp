@@ -17,7 +17,7 @@
         <h1>Pick a Traveler type to initiate.</h1>
         
             <%-- should make sure these are the latest versions --%>
-        <sql:query var="process" dataSource="jdbc/rd-lsst-cam">
+        <sql:query var="process" >
            select id, concat(name, ' v', version) as processName
            from Process where
            Process.id not in (select distinct child from ProcessEdge);

@@ -25,7 +25,7 @@
         <h2>Process</h2>
         <traveler:processCrumbs processPath="${param.processPath}"/>
 
-        <sql:query var="processQ" dataSource="jdbc/rd-lsst-cam">
+        <sql:query var="processQ" >
             select * from Process where id=?<sql:param value="${processId}"/>;
         </sql:query>
         <c:set var="process" value="${processQ.rows[0]}"/>

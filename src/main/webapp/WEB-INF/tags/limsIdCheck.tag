@@ -11,7 +11,7 @@
 
 <%@attribute name="jobId" required="true"%>
 
-<sql:query var="actionQ" dataSource="jdbc/rd-lsst-cam">
+<sql:query var="actionQ" >
     select P.travelerActionMask
     from Process P
     inner join Activity A on A.processId=?<sql:param value="${jobId}"/>

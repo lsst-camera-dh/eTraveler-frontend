@@ -13,7 +13,7 @@
 <%-- The list of normal or fragment attributes can be specified here: --%>
 <%@attribute name="activityId" required="true"%>
 
-<sql:query var="activityQ" dataSource="jdbc/rd-lsst-cam">
+<sql:query var="activityQ" >
     select A.*, P.hardwareRelationShipTypeId
     from Activity A
     inner join Process P on P.id=A.processId
@@ -23,7 +23,7 @@
 
 <traveler:prereqProcesses activityId="${activityId}"/>
 
-<sql:query var="componentQ" dataSource="jdbc/rd-lsst-cam">
+<sql:query var="componentQ" >
     select PP.*, HT.name as hardwareTypeName, H.id as componentId, H.lsstId, PI.creationTS as satisfaction
     from PrerequisitePattern PP
     inner join HardwareType HT on HT.id=PP.hardwareTypeId
@@ -84,7 +84,7 @@
 <traveler:prereqTable prereqTypeName="CONSUMABLE" activityId="${activityId}"/>
 
 <c:if test="${empty activity.begin}">
-    <sql:query var="prereqQ" dataSource="jdbc/rd-lsst-cam">
+    <sql:query var="prereqQ" >
         select count(PP.id)-count(PR.id) as prsRemaining from
         PrerequisitePattern PP
         inner join Activity A on A.processId=PP.processId

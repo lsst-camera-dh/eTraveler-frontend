@@ -14,7 +14,7 @@
         <title>Create Traveler</title>
     </head>
     <body>
-        <sql:update dataSource="jdbc/rd-lsst-cam">
+        <sql:update >
             insert into Activity set
             hardwareId=?<sql:param value="${param.hardwareId}"/>,
             processId=?<sql:param value="${param.processId}"/>,

@@ -14,7 +14,7 @@
 <table>
     <tr>
         <c:forTokens items="${processPath}" delims="." var="processId" varStatus="status">
-            <sql:query var="processNameQ" dataSource="jdbc/rd-lsst-cam">
+            <sql:query var="processNameQ" >
                 select concat(name, ' v', version) as processName from Process where id=?<sql:param value="${processId}"/>;
             </sql:query>
             <c:if test="${status.first}">

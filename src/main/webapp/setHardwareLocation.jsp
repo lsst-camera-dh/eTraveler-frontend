@@ -15,7 +15,7 @@
         <title>JSP Page</title>
     </head>
     <body>
-        <sql:query var="parentsQ" dataSource="jdbc/rd-lsst-cam">
+        <sql:query var="parentsQ" >
             select * from HardwareRelationship 
             where componentId=?<sql:param value="${param.hardwareId}"/>
             and end is null;

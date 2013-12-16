@@ -14,7 +14,7 @@
 <%@attribute name="processPath" required="true"%>
 <%@attribute name="emptyFields"%>
 
-<sql:query var="childrenQ" dataSource="jdbc/rd-lsst-cam">
+<sql:query var="childrenQ" >
     select 
     PE.child, PE.step, P.name, P.id 
     from ProcessEdge PE, Process P

@@ -11,7 +11,7 @@
 
 <%@attribute name="processId" required="true"%>
 
-<sql:query var="meQ" dataSource="jdbc/rd-lsst-cam">
+<sql:query var="meQ" >
     select * from Process where id=?<sql:param value="${processId}"/>;
 </sql:query>
 

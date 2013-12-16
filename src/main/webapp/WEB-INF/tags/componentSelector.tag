@@ -11,7 +11,7 @@
 <%-- The list of normal or fragment attributes can be specified here: --%>
 <%@attribute name="activityId" required="true"%>
 
-<sql:query var="potentialComponentsQ" dataSource="jdbc/rd-lsst-cam">
+<sql:query var="potentialComponentsQ" >
     select H.id, H.lsstId, HT.name 
     from Activity A
     inner join Process P on P.id=A.processId

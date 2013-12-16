@@ -18,7 +18,7 @@
     <body>
         <traveler:setPaths activityId="${param.activityId}"/>
         
-        <sql:query var="activityQ" dataSource="jdbc/rd-lsst-cam">
+        <sql:query var="activityQ" >
             select * from Activity where id=?<sql:param value="${param.activityId}"/>;
         </sql:query>
         <c:set var="activity" value="${activityQ.rows[0]}"/>

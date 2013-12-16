@@ -12,7 +12,7 @@
 <%-- The list of normal or fragment attributes can be specified here: --%>
 <%@attribute name="hardwareTypeId"%>
 
-<sql:query var="result" dataSource="jdbc/rd-lsst-cam">
+<sql:query var="result" >
     select HT.id, HT.name, count(H.id) as count
     from
     HardwareType HT

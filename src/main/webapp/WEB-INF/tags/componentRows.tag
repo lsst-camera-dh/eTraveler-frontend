@@ -28,7 +28,7 @@
     </c:otherwise>
 </c:choose>
 
-<sql:query var="componentsQ" dataSource="jdbc/rd-lsst-cam">
+<sql:query var="componentsQ" >
     select HR.${you} as itemId, HR.begin, HR.end, HRT.name as relationshipName, HT.name as hardwareName, HT.id as hardwareTypeId, H.lsstId
     from HardwareRelationship HR, HardwareRelationshipType HRT, HardwareType HT, Hardware H
     where 

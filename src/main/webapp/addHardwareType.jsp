@@ -14,7 +14,7 @@
         <title>JSP Page</title>
     </head>
     <body>
-        <sql:update dataSource="jdbc/rd-lsst-cam">
+        <sql:update >
             insert into HardwareType set
             name=?<sql:param value="${param.name}"/>,
             drawing=?<sql:param value="${param.drawing}"/>,

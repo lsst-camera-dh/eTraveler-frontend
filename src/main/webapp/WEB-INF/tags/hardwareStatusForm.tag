@@ -11,7 +11,7 @@
 <%-- The list of normal or fragment attributes can be specified here: --%>
 <%@attribute name="hardwareId" required="true"%>
 
-<sql:query var="statesQ" dataSource="jdbc/rd-lsst-cam">
+<sql:query var="statesQ" >
     select * from HardwareStatus
 </sql:query>
 

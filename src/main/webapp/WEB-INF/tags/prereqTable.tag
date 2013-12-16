@@ -14,7 +14,7 @@
 <%@attribute name="activityId"%>
 <%@attribute name="processId"%>
 
-<sql:query var="prereqQ" dataSource="jdbc/rd-lsst-cam">
+<sql:query var="prereqQ" >
     select PP.*<c:if test="${! empty activityId}">, PI.creationTS as satisfaction</c:if>
     from PrerequisitePattern PP
     <c:choose>

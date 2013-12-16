@@ -13,14 +13,14 @@
 <%-- The list of normal or fragment attributes can be specified here: --%>
 <%@attribute name="activityId" required="true"%>
 
-<sql:update dataSource="jdbc/rd-lsst-cam">
+<sql:update >
     update Activity set
     activityFinalStatusId=(select id from ActivityFinalStatus where name='failure'),
     end=now()
     where id=?<sql:param value="${activityId}"/>;
 </sql:update>
     
-<sql:query var="activityQ" dataSource="jdbc/rd-lsst-cam">
+<sql:query var="activityQ" >
     select * from Activity where id=?<sql:param value="${activityId}"/>;
 </sql:query>
 <c:if test="${! empty activityQ.rows[0].parentActivityId}">

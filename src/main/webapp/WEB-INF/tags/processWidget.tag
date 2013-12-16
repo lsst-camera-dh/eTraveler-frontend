@@ -14,8 +14,10 @@
 <%@attribute name="parentActivityId"%>
 <%@attribute name="processEdgeId"%>
 
-<sql:query var="processQ" dataSource="jdbc/rd-lsst-cam">
-    select * from Process where id=?<sql:param value="${processId}"/>;
+<sql:query var="processQ" >
+    select P.*
+    from Process P
+    where id=?<sql:param value="${processId}"/>;
 </sql:query>
 <c:set var="process" value="${processQ.rows[0]}"/>
 <%--

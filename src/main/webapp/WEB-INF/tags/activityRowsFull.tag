@@ -19,7 +19,7 @@
     <c:set var="prefixDot" value="${prefix}."/>
 </c:if>
     
-<sql:query var="childrenQ" dataSource="jdbc/rd-lsst-cam">
+<sql:query var="childrenQ" >
     select
     Ap.hardwareId, Ap.inNCR,
     P.id as processId, P.name, P.hardwareRelationshipTypeId, 

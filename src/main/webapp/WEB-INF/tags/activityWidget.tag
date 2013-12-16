@@ -13,7 +13,7 @@
 <%-- The list of normal or fragment attributes can be specified here: --%>
 <%@attribute name="activityId"%>
 
-<sql:query var="activityQ" dataSource="jdbc/rd-lsst-cam">
+<sql:query var="activityQ" >
     select A.*, AFS.name as statusName,
     P.travelerActionMask&(select maskBit from InternalAction where name='harnessedJob') as isHarnessed
     from Activity A
@@ -52,7 +52,7 @@
 
 <c:if test="${activity.isHarnessed != 0}">
     <h3>Job Harness History</h3>
-    <sql:query var="historyQ" dataSource="jdbc/rd-lsst-cam">
+    <sql:query var="historyQ" >
         select JSH.*, JHS.name
         from JobStepHistory JSH
         inner join JobHarnessStep JHS on JHS.id=JSH.jobHarnessStepId

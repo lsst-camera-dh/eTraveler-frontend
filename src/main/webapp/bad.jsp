@@ -19,7 +19,7 @@
             This tickles a bug somewhere unless the connection url has ?useOldAliasMetadataBehavior=true<br>
             You should see a table with 2 columns if things are working right and there are Activities and Hardwares.
         </p>
-        <sql:query var="resultQ" dataSource="jdbc/rd-lsst-cam">
+        <sql:query var="resultQ" >
             select A.id as activityId, H.id as hardwareId
             from Activity A, Hardware H
             where A.hardwareId=H.id;

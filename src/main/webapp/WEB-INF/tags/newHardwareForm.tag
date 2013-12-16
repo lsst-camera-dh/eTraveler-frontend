@@ -11,7 +11,7 @@
 <%-- The list of normal or fragment attributes can be specified here: --%>
 <%@attribute name="hardwareTypeId"%>
 
-<sql:query var="typesQ" dataSource="jdbc/rd-lsst-cam">
+<sql:query var="typesQ" >
     select * from HardwareType
     <c:if test="${! empty hardwareTypeId}">
         where id=?<sql:param value="${hardwareTypeId}"/>

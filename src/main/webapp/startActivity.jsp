@@ -14,7 +14,7 @@
         <title>JSP Page</title>
     </head>
     <body>
-        <sql:update dataSource="jdbc/rd-lsst-cam">
+        <sql:update >
             update Activity set
             begin=now()
             where id=?<sql:param value="${param.activityId}"/>

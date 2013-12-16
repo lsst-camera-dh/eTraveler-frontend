@@ -14,7 +14,7 @@
         <title>JSP Page</title>
     </head>
     <body>
-        <sql:update dataSource="jdbc/rd-lsst-cam">
+        <sql:update >
             insert into Site set
             name=?<sql:param value="${param.name}"/>,
             <c:if test="${! empty param.jhVirtualEnv}">jhVirtualEnv=?<sql:param value="${param.jhVirtualEnv}"/>,</c:if>

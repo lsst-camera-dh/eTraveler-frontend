@@ -14,7 +14,7 @@
 
 <c:set var="travelerFailed" value="false" scope="request"/>
 
-<sql:query var="activityQ" dataSource="jdbc/rd-lsst-cam">
+<sql:query var="activityQ" >
     select A.begin, A.end, P.name, P.id as processId, AFS.name as statusName
     from Activity A
     inner join Process P on P.id=A.processId

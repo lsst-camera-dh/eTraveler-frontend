@@ -13,7 +13,7 @@
 <c:set var="message" value="Huh. That wasn't supposed to happen."/>
 
 <c:if test="${allOk}">
-    <sql:query var="activityQ" dataSource="jdbc/rd-lsst-cam">
+    <sql:query var="activityQ" >
         select A.id
         from 
         Activity A
@@ -42,7 +42,7 @@
 </c:if>
 
 <c:if test="${allOk}">
-    <sql:query var="prereqQ" dataSource="jdbc/rd-lsst-cam">
+    <sql:query var="prereqQ" >
         select A.id as activityId, A.hardwareId, A.createdBy, HT.name as hardwareName, P.name as processName, P.userVersionString
         from
         Prerequisite PI
@@ -52,7 +52,7 @@
         where
         PI.activityId=?<sql:param value="${activityRow.id}"/>
     </sql:query>
-    <sql:update dataSource="jdbc/rd-lsst-cam">
+    <sql:update >
         insert into JobStepHistory set
         jobHarnessStepId=(select id from JobHarnessStep where name='registered'),
         activityId=?<sql:param value="${activityRow.id}"/>,

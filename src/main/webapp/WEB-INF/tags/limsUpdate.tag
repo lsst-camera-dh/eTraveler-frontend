@@ -16,7 +16,7 @@
 <%-- check step is correct next one --%>
 
 <c:if test="${allOk}">
-    <sql:query var="activityQ" dataSource="jdbc/rd-lsst-cam">
+    <sql:query var="activityQ" >
         select A.*
         from Activity A
         inner join Process P on P.id=A.processId
@@ -37,7 +37,7 @@
 </c:if>
 
 <c:if test="${allOk}">
-    <sql:query var="stepQ" dataSource="jdbc/rd-lsst-cam">
+    <sql:query var="stepQ" >
         select id from JobHarnessStep where name=?<sql:param value="${inputs.step}"/>
     </sql:query>
     <c:if test="${empty stepQ.rows}">
@@ -49,7 +49,7 @@
 
 <c:if test="${allOk}">
     <c:catch var="updateErr">
-        <sql:update dataSource="jdbc/rd-lsst-cam">
+        <sql:update >
             insert into JobStepHistory set
             jobHarnessStepId=(select id from JobHarnessStep where name=?<sql:param value="${inputs.step}"/>),
             activityId=?<sql:param value="${inputs.jobid}"/>,

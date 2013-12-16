@@ -14,7 +14,7 @@
         <title>JSP Page</title>
     </head>
     <body>
-        <sql:update dataSource="jdbc/rd-lsst-cam">
+        <sql:update >
             insert into Location set
             name=?<sql:param value="${param.name}"/>,
             siteId=?<sql:param value="${param.siteId}"/>,

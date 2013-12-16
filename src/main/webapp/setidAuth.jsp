@@ -15,7 +15,7 @@
     </head>
     <body>
         <c:set var="idAuthId" value="${param.idAuthId}" scope="session"/>
-        <sql:query var="idAuthNameQ" dataSource="jdbc/rd-lsst-cam">
+        <sql:query var="idAuthNameQ" >
             select name from HardwareIdentifierAuthority where id=?;
             <sql:param value="${param.idAuthId}"/>
         </sql:query>

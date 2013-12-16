@@ -15,7 +15,7 @@
         <title>Process <c:out value="${param.processId}"/></title>
     </head>
     <body>
-        <sql:query var="processQ" dataSource="jdbc/rd-lsst-cam">
+        <sql:query var="processQ" >
             select concat(P.name, ' v', P.version) as processName
             from Process P
             where P.id=?<sql:param value="${param.processId}"/>;

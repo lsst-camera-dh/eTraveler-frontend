@@ -19,7 +19,7 @@
     <c:param name="end" value="Any"/>
 </c:url>
 
-<sql:query var="result" dataSource="jdbc/rd-lsst-cam">
+<sql:query var="result" >
     select P.id as processId, P.name as processName, P.version, HT.name as hardwareName, HT.id as hardwareTypeId, 
         count(A.id)-count(A.end) as inProgress, count(A.id) as total, count(A.end) as completed 
     from

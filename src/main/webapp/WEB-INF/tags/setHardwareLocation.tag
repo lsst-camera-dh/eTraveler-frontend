@@ -13,7 +13,7 @@
 <%@attribute name="newLocationId" required="true"%>
 <%@attribute name="hardwareId" required="true"%>
 
-<sql:update dataSource="jdbc/rd-lsst-cam">
+<sql:update >
     insert into HardwareLocationHistory set
     locationId=?<sql:param value="${newLocationId}"/>,
     hardwareId=?<sql:param value="${hardwareId}"/>,
@@ -21,7 +21,7 @@
     creationTS=now();
 </sql:update>
 
-<sql:query var="childrenQ" dataSource="jdbc/rd-lsst-cam">
+<sql:query var="childrenQ" >
     select * from HardwareRelationship
     where hardwareId=?<sql:param value="${hardwareId}"/>
     and end is null;

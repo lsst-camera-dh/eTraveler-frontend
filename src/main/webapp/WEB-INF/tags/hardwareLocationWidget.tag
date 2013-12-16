@@ -12,7 +12,7 @@
 <%-- The list of normal or fragment attributes can be specified here: --%>
 <%@attribute name="hardwareId" required="true"%>
 
-<sql:query dataSource="jdbc/rd-lsst-cam" var="locationHistoryQ">
+<sql:query  var="locationHistoryQ">
     select L.name as locationName, S.name as siteName, HLH.* 
     from
     HardwareLocationHistory HLH
@@ -31,13 +31,13 @@
     <display:column property="createdBy" title="Who"/>
 </display:table>
     
-<sql:query var="parentsQ" dataSource="jdbc/rd-lsst-cam">
+<sql:query var="parentsQ" >
     select * from HardwareRelationship 
     where componentId=?<sql:param value="${hardwareId}"/>
     and end is null;
 </sql:query>
 <c:if test="${empty parentsQ.rows}">
-    <sql:query var="locationsQ" dataSource="jdbc/rd-lsst-cam">
+    <sql:query var="locationsQ" >
         select L.id, L.name as locationName, S.name as siteName
         from
         Location L

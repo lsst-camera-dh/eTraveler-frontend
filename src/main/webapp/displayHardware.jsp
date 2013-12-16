@@ -24,7 +24,7 @@
         <traveler:hardwareLocationWidget hardwareId="${param.hardwareId}"/>
         
         <h2>Nicknames</h2>
-        <sql:query var="identifiersQ" dataSource="jdbc/rd-lsst-cam">
+        <sql:query var="identifiersQ" >
             select HI.identifier, HIA.name
             from HardwareIdentifier HI, HardwareIdentifierAuthority HIA
             where HI.hardwareId=?<sql:param value="${param.hardwareId}"/>
@@ -35,7 +35,7 @@
             <display:column property="name" title="IdAuth"/>
         </display:table>
             
-        <sql:query var="idAuthQ" dataSource="jdbc/rd-lsst-cam">
+        <sql:query var="idAuthQ" >
            select * from HardwareIdentifierAuthority 
            where
            id not in (select HIA.id from 
@@ -64,7 +64,7 @@
         
         <h2>Travelers</h2>
         <traveler:activityList travelersOnly="true" hardwareId="${param.hardwareId}"/>
-        <sql:query var="applicableTTypesQ" dataSource="jdbc/rd-lsst-cam">
+        <sql:query var="applicableTTypesQ" >
             select id, concat(name, ' v', version) as processName
             from Process P
             where 

@@ -13,7 +13,7 @@
 <%-- The list of normal or fragment attributes can be specified here: --%>
 <%@attribute name="hardwareId" required="true"%>
 
-<sql:query dataSource="jdbc/rd-lsst-cam" var="statusHistoryQ">
+<sql:query  var="statusHistoryQ">
     select HS.name, HSH.creationTS, HSH.createdBy
     from HardwareStatus HS
     inner join HardwareStatusHistory HSH on HS.id=HSH.hardwareStatusId

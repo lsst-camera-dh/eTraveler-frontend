@@ -11,7 +11,7 @@
 
 <%@attribute name="activityId" required="true"%>
 
-<sql:query var="unfilledPrereqsQ" dataSource="jdbc/rd-lsst-cam">
+<sql:query var="unfilledPrereqsQ" >
     select A.hardwareId, PP.id as ppid, PP.prereqProcessId, PI.id as piid
     from
     Activity A
@@ -24,7 +24,7 @@
 </sql:query>
 <c:forEach var="prereq" items="${unfilledPrereqsQ.rows}">
     <c:out value="${prereq.prereqProcessId}"/>
-    <sql:query var="activityQ" dataSource="jdbc/rd-lsst-cam">
+    <sql:query var="activityQ" >
         select id from Activity where
         hardwareId=?<sql:param value="${prereq.hardwareId}"/>
         and processId=?<sql:param value="${prereq.prereqProcessId}"/>
@@ -32,7 +32,7 @@
         order by end desc limit 1;
     </sql:query>
     <c:if test="${! empty activityQ.rows}">
-        <sql:update dataSource="jdbc/rd-lsst-cam">
+        <sql:update >
             insert into Prerequisite set
             prerequisitePatternId=?<sql:param value="${prereq.ppid}"/>,
             activityId=?<sql:param value="${activityId}"/>,
@@ -43,7 +43,7 @@
     </c:if>
 </c:forEach>
         
-<sql:query var="filledPrereqsQ" dataSource="jdbc/rd-lsst-cam">
+<sql:query var="filledPrereqsQ" >
     select PP.name as patternName, P.id as processId, P.name as processName, P.userVersionString, Ac.id as activityId, Ac.end
     from
     Activity Ap

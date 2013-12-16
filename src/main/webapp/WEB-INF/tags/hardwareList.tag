@@ -13,7 +13,7 @@
 <%@attribute name="hardwareTypeId"%>
 <%@attribute name="hardwareStatusId"%>
 
-<sql:query var="result" dataSource="jdbc/rd-lsst-cam">
+<sql:query var="result" >
     select H.id, H.creationTS, H.lsstId, H.manufacturer, H.model, H.manufactureDate,
     HT.name as hardwareName, HT.id as hardwareTypeId, 
     HS.name as hardwareStatusName

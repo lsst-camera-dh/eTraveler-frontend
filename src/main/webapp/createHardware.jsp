@@ -14,7 +14,7 @@
         <title>Create Hardware</title>
     </head>
     <body>
-        <sql:transaction dataSource="jdbc/rd-lsst-cam">
+        <sql:transaction >
             <sql:update>
                 insert into Hardware set
                 lsstId=?<sql:param value="${param.lsstId}"/>,
