@@ -24,6 +24,7 @@
 <c:set var="activity" value="${activityQ.rows[0]}"/>
 
 <traveler:activityPrereqWidget activityId="${activityId}"/>
+<traveler:activityInputWidget processId="${activity.processId}" activityId="${activityId}"/>
 <table>
     <tr>
         <td>Started:</td>

@@ -34,5 +34,6 @@
 </c:if>
 <c:if test="${empty param.activityId}">
     <traveler:processPrereqWidget processId="${processId}"/>
+    <traveler:processInputWidget processId="${processId}"/>
 </c:if>
     

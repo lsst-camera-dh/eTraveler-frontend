@@ -23,7 +23,7 @@
         
         <traveler:hardwareLocationWidget hardwareId="${param.hardwareId}"/>
         
-        <h2>Nicknames</h2>
+        <h2>Local Identifiers</h2>
         <sql:query var="identifiersQ" >
             select HI.identifier, HIA.name
             from HardwareIdentifier HI, HardwareIdentifierAuthority HIA
@@ -58,7 +58,7 @@
                 </c:forEach>
                 </select>
 
-                <INPUT TYPE=SUBMIT value="Add Nickname">
+                <INPUT TYPE=SUBMIT value="Add Identifier">
             </form>
         </c:if>
         

@@ -23,7 +23,7 @@
 
     <table>
         <tr>
-            <td>LSST Id:</td>
+            <td>Serial:</td>
             <td><INPUT TYPE=TEXT NAME=lsstId SIZE=50 autofocus></td>
         </tr>
 
