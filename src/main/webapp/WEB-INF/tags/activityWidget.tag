@@ -24,6 +24,7 @@
 <c:set var="activity" value="${activityQ.rows[0]}"/>
 
 <traveler:activityPrereqWidget activityId="${activityId}"/>
+<c:set var="resultsFiled" value="true" scope="request"/> <%-- activityInputWidget will set this to "false" if that's the case --%>
 <traveler:activityInputWidget activityId="${activityId}"/>
 <table>
     <tr>
@@ -41,7 +42,9 @@
     </tr>
     <tr><td>End:</td>
         <td>
-            <traveler:closeoutButton activityId="${activityId}"/>
+            <c:if test="${resultsFiled == 'true'}">
+                <traveler:closeoutButton activityId="${activityId}"/>
+            </c:if>
             <%--<c:if test="${! empty activity.end}">
                 Ended at <c:out value="${activity.end}"/> by <c:out value="${activity.closedBy}"/>
             </c:if>--%>

@@ -32,8 +32,8 @@
                 where 
                 A.parentActivityId=?<sql:param value="${activityId}"/>
                 and (
-                        A.end is not null or 
-                        (A.begin is not null and P.travelerActionMask&(select maskBit from InternalAction where name='harnessedJob')!=0)
+                        A.end is not null
+                        or (A.begin is not null and P.travelerActionMask&(select maskBit from InternalAction where name='harnessedJob')!=0)
                     )
                 ) 
             ) stepsRemaining from dual;

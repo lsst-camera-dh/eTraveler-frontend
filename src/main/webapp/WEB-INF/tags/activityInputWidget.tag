@@ -13,7 +13,7 @@
 <%@attribute name="activityId" required="true"%>
 
 <sql:query var="inputQ" >
-    select IP.*, RM.value, ISm.name as ISName
+    select A.begin, A.end, IP.*, RM.value, ISm.name as ISName
     from Activity A
     inner join InputPattern IP on IP.processId=A.processId
     inner join InputSemantics ISm on ISm.id=IP.inputSemanticsId
@@ -21,7 +21,7 @@
     where A.id=?<sql:param value="${activityId}"/>
     and ISm.name='float'
     union
-    select IP.*, RM.value, ISm.name as ISName
+    select A.begin, A.end, IP.*, RM.value, ISm.name as ISName
     from Activity A
     inner join InputPattern IP on IP.processId=A.processId
     inner join InputSemantics ISm on ISm.id=IP.inputSemanticsId
@@ -29,7 +29,7 @@
     where A.id=?<sql:param value="${activityId}"/>
     and ISm.name='int'
     union
-    select IP.*, RM.value, ISm.name as ISName
+    select A.begin, A.end, IP.*, RM.value, ISm.name as ISName
     from Activity A
     inner join InputPattern IP on IP.processId=A.processId
     inner join InputSemantics ISm on ISm.id=IP.inputSemanticsId
@@ -37,7 +37,7 @@
     where A.id=?<sql:param value="${activityId}"/>
     and ISm.name='string'
     union
-    select IP.*, RM.value, ISm.name as ISName
+    select A.begin, A.end, IP.*, RM.value, ISm.name as ISName
     from Activity A
     inner join InputPattern IP on IP.processId=A.processId
     inner join InputSemantics ISm on ISm.id=IP.inputSemanticsId
@@ -60,7 +60,14 @@
                 <c:when test="${! empty row.value}">
                     ${row.value}
                 </c:when>
+                <c:when test="${empty row.begin}">
+                    Not yet
+                </c:when>
+                <c:when test="${! empty row.end}">
+                    ERROR: no value found
+                </c:when>
                 <c:otherwise>
+                    <c:set var="resultsFiled" value="false" scope="request"/>
                     <c:choose>
                         <c:when test="${row.ISName == 'string'}">
                             <c:set var="inputType" value="text"/>
