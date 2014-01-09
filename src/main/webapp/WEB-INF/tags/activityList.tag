@@ -10,9 +10,9 @@
 <%@taglib prefix="display" uri="http://displaytag.sf.net" %>
 
 <%-- The list of normal or fragment attributes can be specified here: --%>
-<%@attribute name="processId"%>
-<%@attribute name="hardwareId"%>
 <%@attribute name="done"%>
+<%@attribute name="hardwareId"%>
+<%@attribute name="processId"%>
 <%@attribute name="travelersOnly"%>
 
 <sql:query var="result" >

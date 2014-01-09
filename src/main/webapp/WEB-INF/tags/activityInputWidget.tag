@@ -10,45 +10,40 @@
 <%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql" %>
 
 <%-- The list of normal or fragment attributes can be specified here: --%>
-<%@attribute name="processId" required="true"%>
 <%@attribute name="activityId" required="true"%>
 
 <sql:query var="inputQ" >
     select IP.*, RM.value, ISm.name as ISName
-    from InputPattern IP
+    from Activity A
+    inner join InputPattern IP on IP.processId=A.processId
     inner join InputSemantics ISm on ISm.id=IP.inputSemanticsId
-    left join FloatResultManual RM on RM.inputPatternId=IP.id
-    where IP.processId=?<sql:param value="${processId}"/>
+    left join FloatResultManual RM on RM.activityId=A.id and RM.inputPatternId=IP.id
+    where A.id=?<sql:param value="${activityId}"/>
     and ISm.name='float'
-    and (RM.activityId=?<sql:param value="${activityId}"/>
-        or RM.activityId is null)
     union
     select IP.*, RM.value, ISm.name as ISName
-    from InputPattern IP
+    from Activity A
+    inner join InputPattern IP on IP.processId=A.processId
     inner join InputSemantics ISm on ISm.id=IP.inputSemanticsId
-    left join IntResultManual RM on RM.inputPatternId=IP.id
-    where IP.processId=?<sql:param value="${processId}"/>
+    left join IntResultManual RM on RM.activityId=A.id and RM.inputPatternId=IP.id
+    where A.id=?<sql:param value="${activityId}"/>
     and ISm.name='int'
-    and (RM.activityId=?<sql:param value="${activityId}"/>
-        or RM.activityId is null)
     union
     select IP.*, RM.value, ISm.name as ISName
-    from InputPattern IP
+    from Activity A
+    inner join InputPattern IP on IP.processId=A.processId
     inner join InputSemantics ISm on ISm.id=IP.inputSemanticsId
-    left join StringResultManual RM on RM.inputPatternId=IP.id
-    where IP.processId=?<sql:param value="${processId}"/>
+    left join StringResultManual RM on RM.activityId=A.id and RM.inputPatternId=IP.id
+    where A.id=?<sql:param value="${activityId}"/>
     and ISm.name='string'
-    and (RM.activityId=?<sql:param value="${activityId}"/>
-        or RM.activityId is null)
     union
     select IP.*, RM.value, ISm.name as ISName
-    from InputPattern IP
+    from Activity A
+    inner join InputPattern IP on IP.processId=A.processId
     inner join InputSemantics ISm on ISm.id=IP.inputSemanticsId
-    left join FilepathResultManual RM on RM.inputPatternId=IP.id
-    where IP.processId=?<sql:param value="${processId}"/>
+    left join FilepathResultManual RM on RM.activityId=A.id and RM.inputPatternId=IP.id
+    where A.id=?<sql:param value="${activityId}"/>
     and ISm.name='filepath'
-    and (RM.activityId=?<sql:param value="${activityId}"/>
-        or RM.activityId is null)
 </sql:query>
 
 <c:if test="${! empty inputQ.rows}">
@@ -66,11 +61,22 @@
                     ${row.value}
                 </c:when>
                 <c:otherwise>
+                    <c:choose>
+                        <c:when test="${row.ISName == 'string'}">
+                            <c:set var="inputType" value="text"/>
+                        </c:when>
+                        <c:when test="${row.ISName == 'filepath'}">
+                            <c:set var="inputType" value="file"/>
+                        </c:when>
+                        <c:otherwise>
+                            <c:set var="inputType" value="number"/>
+                        </c:otherwise>
+                    </c:choose>
                     <form method="get" action="inputResult.jsp">
                         <input type="hidden" name="activityId" value="${activityId}">
                         <input type="hidden" name="inputPatternId" value="${row.id}">
                         <input type="hidden" name="ISName" value="${row.ISName}">
-                        <input type="text" name="value">
+                        <input type="${inputType}" name="value" required>
                         <input type="submit" value="Submit!">
                     </form>
                 </c:otherwise>
