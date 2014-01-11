@@ -17,7 +17,7 @@
         
         <form method="get" action="addSite.jsp">
             <input type="submit" value="Add Site">
-            Name: <input type="text" name="name">
+            Name: <input type="text" name="name" required>
             jhVirtualEnv: <input type="text" name="jhVirtualEnv">
             jhOutputRoot: <input type="text" name="jhOutputRoot">
         </form>
@@ -27,7 +27,7 @@
         </sql:query>
         <form method="get" action="addLocation.jsp">
             <input type="submit" value="Add Location">
-            Name: <input type="text" name="name">
+            Name: <input type="text" name="name" required>
             Site: <select name="siteId">
                 <c:forEach var="siteRow" items="${sitesQ.rows}">
                     <option value="${siteRow.id}" <c:if test="${! empty sessionScope.siteName and sessionScope.siteName==siteRow.name}">selected</c:if>>${siteRow.name}</option>
@@ -37,8 +37,8 @@
 
         <form method="get" action="addHardwareType.jsp">
             <input type="submit" value="Add Hardware Type">
-            Name: <input type="text" name="name">
-            Drawing: <input type="text" name="drawing">
+            Name: <input type="text" name="name" required>
+            Drawing: <input type="text" name="drawing" required>
         </form>
             
         <sql:query var="hardwareTypesQ" >
@@ -46,7 +46,7 @@
         </sql:query>
         <form method="get" action="addHardwareRelationshipType.jsp">
             <input type="submit" value="Add Hardware Relationship Type">
-            Name: <input type="text" name="name">
+            Name: <input type="text" name="name" required>
             Hardware Type: <select name="hardwareTypeId">
                 <c:forEach var="htRow" items="${hardwareTypesQ.rows}">
                     <option value="${htRow.id}">${htRow.name}</option>
@@ -61,7 +61,7 @@
 
         <form method="get" action="addHardwareIdentifierAuthority.jsp">
             <input type="submit" value="Add Hardware Identifier Authority">
-            Name: <input type="text" name="name">
+            Name: <input type="text" name="name" required>
         </form>
             
     </body>

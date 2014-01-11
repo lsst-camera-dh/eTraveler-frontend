@@ -24,12 +24,12 @@
     <table>
         <tr>
             <td>Serial:</td>
-            <td><INPUT TYPE=TEXT NAME=lsstId SIZE=50 autofocus></td>
+            <td><INPUT TYPE=TEXT NAME=lsstId SIZE=50 autofocus required></td>
         </tr>
 
         <tr>
             <td>Manufacturer:</td>
-            <td><INPUT TYPE=TEXT NAME=manufacturer SIZE=50 autofocus></td>
+            <td><INPUT TYPE=TEXT NAME=manufacturer SIZE=50 autofocus required></td>
         </tr>
 
         <tr>

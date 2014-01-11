@@ -50,7 +50,7 @@
                 <input type="hidden" name="hardwareId" value="${param.hardwareId}">
                 <input type="hidden" name="hardwareTypeId" value="${hardwareTypeId}">
 
-                Identifier: <INPUT TYPE=TEXT NAME=identifier SIZE=20>
+                Identifier: <INPUT TYPE=TEXT NAME=identifier SIZE=20 required>
 
                 Identifier Authority: <select name="authId">
                 <c:forEach var="iaRow" items="${idAuthQ.rows}">
