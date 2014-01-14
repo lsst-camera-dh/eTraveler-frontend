@@ -102,7 +102,6 @@
             <c:url value="displayProcess.jsp" var="childLink">
                 <c:param name="processPath" value="${myProcessPath}"/>
             </c:url>
-            <%--
             <c:url var="contentLink" value="processPane.jsp">
                 <c:param name="processId" value="${childRow.processId}"/>
                 <c:param name="topActivityId" value="${param.activityId}"/>
@@ -113,7 +112,7 @@
                     <c:param name="inNCR" value="${childRow.inNCR}"/>
                  </c:if>
             </c:url>
-            --%>
+            <%--
             <c:choose>
                 <c:when test="${firstUnStarted && noneStartedAndUnFinished}">
                     <c:url var="contentLink" value="createActivity.jsp">
@@ -132,6 +131,7 @@
                     </c:url>                  
                 </c:otherwise>
             </c:choose>
+            --%>
             <tr>
                 <td><a href="${childLink}">${hierStep}</a></td>
                 <td><a href="${contentLink}" target="content">${childRow.name}</a></td> 

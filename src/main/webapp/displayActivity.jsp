@@ -46,7 +46,7 @@
             <tr>
                 <td>
                     <traveler:activityTable activityId="${param.activityId}"/>
-                    <c:if test="${requestScope.startNextStep}"><c:redirect url="${requestScope.currentStepLink}"/></c:if>
+                    <%--<c:if test="${requestScope.startNextStep}"><c:redirect url="${requestScope.currentStepLink}"/></c:if>--%>
                     <a href="${requestScope.currentStepLink}" target="content">Current step</a>
                 </td>
                 <td>
