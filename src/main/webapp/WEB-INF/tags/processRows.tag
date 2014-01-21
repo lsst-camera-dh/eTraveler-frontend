@@ -16,7 +16,7 @@
 
 <sql:query var="childrenQ" >
     select 
-    PE.child, PE.step, P.name, P.id 
+    PE.child, PE.step, P.name, P.id, P.substeps
     from ProcessEdge PE, Process P
     where PE.parent=?<sql:param value="${parentId}"/>
     and
@@ -44,5 +44,7 @@
             <td></td> <td></td>
         </c:if>
     </tr>
-    <traveler:processRows parentId="${row.child}" prefix="${hierStep}" processPath="${myProcessPath}" emptyFields="${emptyFields}"/>
+    <c:if test="${row.substeps != 'NONE'}">
+        <traveler:processRows parentId="${row.child}" prefix="${hierStep}" processPath="${myProcessPath}" emptyFields="${emptyFields}"/>
+    </c:if>
 </c:forEach>

@@ -26,5 +26,7 @@
         <td>&nbsp;</td>
         <td><a href="${contentLink}" target="content">${meQ.rows[0].name}</a></td>
     </tr>
-    <traveler:processRows parentId="${processId}" processPath="${processPath}"/> 
+    <c:if test="${meQ.rows[0].substeps != 'NONE'}">
+        <traveler:processRows parentId="${processId}" processPath="${processPath}"/> 
+    </c:if>
 </table>

@@ -15,7 +15,8 @@
 <c:set var="travelerFailed" value="false" scope="request"/>
 
 <sql:query var="activityQ" >
-    select A.begin, A.end, P.name, P.id as processId, AFS.name as statusName
+    select A.begin, A.end, P.name, P.id as processId, P.substeps,
+    AFS.name as statusName
     from Activity A
     inner join Process P on P.id=A.processId
     left join ActivityFinalStatus AFS on AFS.id=A.activityFinalStatusId
@@ -61,12 +62,12 @@
     </tr>
 
     <c:choose>
-        <c:when test="${empty activity.begin}">
+        <c:when test="${empty activity.begin && childRow.substeps != 'NONE'}">
             <traveler:processRows parentId="${activity.processId}" processPath="${activity.processId}" emptyFields="true"/>
         </c:when>
-        <c:otherwise>
+        <c:when test="${childRow.substeps != 'NONE'}">
             <traveler:activityRowsFull activityId="${activityId}"/>
-        </c:otherwise>
+        </c:when>
     </c:choose>
     
 </table>

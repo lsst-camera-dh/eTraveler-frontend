@@ -15,7 +15,8 @@
 
 <sql:query var="activityQ" >
     select A.*, AFS.name as statusName,
-    P.travelerActionMask&(select maskBit from InternalAction where name='harnessedJob') as isHarnessed
+    P.travelerActionMask&(select maskBit from InternalAction where name='harnessedJob') as isHarnessed,
+    P.substeps
     from Activity A
     inner join Process P on P.id=A.processId
     left join ActivityFinalStatus AFS on AFS.id=A.activityFinalStatusId
@@ -24,6 +25,7 @@
 <c:set var="activity" value="${activityQ.rows[0]}"/>
 
 <traveler:activityPrereqWidget activityId="${activityId}"/>
+<c:if test="${activityQ.rows[0].substeps == 'SELECTION'}"><traveler:selectionWidget activityId="${activityId}"/></c:if>
 <c:set var="resultsFiled" value="true" scope="request"/> <%-- activityInputWidget will set this to "false" if that's the case --%>
 <traveler:activityInputWidget activityId="${activityId}"/>
 <table>

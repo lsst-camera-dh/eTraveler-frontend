@@ -1,10 +1,12 @@
 <%-- 
-    Document   : activityRowsFull
-    Created on : Apr 15, 2013, 10:39:01 AM
+    Document   : selectionRows
+    Created on : Jan 14, 2014, 12:47:35 PM
     Author     : focke
 --%>
 
-<%@tag description="Fills in children of activities for activityTable" pageEncoding="US-ASCII"%>
+<%@tag description="Fills in children of selection activities for activityTable" pageEncoding="UTF-8"%>
+
+<%-- The list of normal or fragment attributes can be specified here: --%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql" %>
 <%@taglib prefix="traveler" tagdir="/WEB-INF/tags"%>
@@ -14,12 +16,11 @@
 <%@attribute name="prefix"%>
 
 <traveler:setPaths activityId="${activityId}"/>
-<c:set var="thisProcessPath" value="${processPath}"/>
 
 <c:if test="${! empty prefix}">
     <c:set var="prefixDot" value="${prefix}."/>
 </c:if>
-    
+
 <sql:query var="childrenQ" >
     select
     Ap.hardwareId, Ap.inNCR,
@@ -32,21 +33,29 @@
     Activity Ap
     inner join ProcessEdge PE on PE.parent=Ap.processId
     inner join Process P on P.id=PE.child
-    left join Activity Ac on Ac.parentActivityId=Ap.id and Ac.processEdgeId=PE.id
+    inner join Activity Ac on Ac.parentActivityId=Ap.id and Ac.processEdgeId=PE.id
     left join ActivityFinalStatus AFS on AFS.id=Ac.activityFinalStatusId
     where
     Ap.id=?<sql:param value="${activityId}"/>
     order by abs(PE.step);
 </sql:query>
     
+<c:if test="${empty childrenQ.rows}">
+    <%-- Handle like process-only children --%>
+    <sql:query var="pidQ">
+        select processId from Activity where id=?<sql:param value="${activityId}"/>
+    </sql:query>
+    <traveler:processRows parentId="${pidQ.rows[0].processId}" prefix="${prefix}" processPath="${processPath}" emptyFields="true"/>                    
+</c:if>
+    
 <c:set var="noneStartedAndUnFinished" value="true"/>
 <c:set var="firstUnStarted" value="true"/>
-<c:forEach var="childRow" items="${childrenQ.rows}">
+<c:forEach var="childRow" items="${childrenQ.rows}"> <%-- Really should only be zero or one --%>
+    <%-- This is copied from activityRowsFull, that's ugly --%>
     <c:set var="hierStep" value="${prefixDot}${childRow.step}"/>
-    <c:set var="myProcessPath" value="${thisProcessPath}.${childRow.processId}"/>
 
     <c:choose>
-        <c:when test="${! empty childRow.activityId}">
+        <c:when test="${! empty childRow.activityId}"> <%-- should always be true --%>
             <c:url value="displayActivity.jsp" var="childLink">
                 <c:param name="activityId" value="${childRow.activityId}"/>
             </c:url>
@@ -101,58 +110,5 @@
                 </c:when>
             </c:choose>
         </c:when>
-                
-        <c:otherwise> 
-            <c:url value="displayProcess.jsp" var="childLink">
-                <c:param name="processPath" value="${myProcessPath}"/>
-            </c:url>
-            <c:url var="contentLink" value="processPane.jsp">
-                <c:param name="processId" value="${childRow.processId}"/>
-                <c:param name="topActivityId" value="${param.activityId}"/>
-                <c:if test="${firstUnStarted && noneStartedAndUnFinished}"> <%-- Supply extra args to create an Activity for the Process --%>
-                    <c:param name="parentActivityId" value="${activityId}"/>
-                    <c:param name="processEdgeId" value="${childRow.processEdgeId}"/>
-                    <c:param name="hardwareId" value="${childRow.hardwareId}"/>       
-                    <c:param name="inNCR" value="${childRow.inNCR}"/>
-                 </c:if>
-            </c:url>
-            <%--
-            <c:choose>
-                <c:when test="${firstUnStarted && noneStartedAndUnFinished}"> Automatically create Activity for Process
-                    <c:url var="contentLink" value="createActivity.jsp">
-                        <c:param name="processId" value="${childRow.processId}"/>
-                        <c:param name="topActivityId" value="${param.activityId}"/>
-                        <c:param name="parentActivityId" value="${activityId}"/>
-                        <c:param name="processEdgeId" value="${childRow.processEdgeId}"/>
-                        <c:param name="hardwareId" value="${childRow.hardwareId}"/>       
-                        <c:param name="inNCR" value="${childRow.inNCR}"/>
-                    </c:url>                    
-                </c:when>
-                <c:otherwise>
-                    <c:url var="contentLink" value="processPane.jsp">
-                        <c:param name="processId" value="${childRow.processId}"/>
-                        <c:param name="topActivityId" value="${param.activityId}"/>
-                    </c:url>                  
-                </c:otherwise>
-            </c:choose>
-            --%>
-            <tr>
-                <td><a href="${childLink}">${hierStep}</a></td>
-                <td><a href="${contentLink}" target="content">${childRow.name}</a></td> 
-                <td>
-                    <c:if test="${(firstUnStarted && noneStartedAndUnFinished) && (not travelerFailed)}">
-                        <c:set var="firstUnStarted" value="false"/>
-                        <c:set var="currentStepLink" value="${contentLink}" scope="request"/>
-                        <%--<c:set var="startNextStep" value="true" scope="request"/>--%>
-                        Needs Prep
-                    </c:if>
-                </td> 
-                <td></td>
-            </tr>
-            <c:if test="${childRow.substeps != 'NONE'}">
-                <traveler:processRows parentId="${childRow.processId}" prefix="${hierStep}" processPath="${myProcessPath}" emptyFields="true"/>
-            </c:if>
-        </c:otherwise>
-            
     </c:choose>
 </c:forEach>
