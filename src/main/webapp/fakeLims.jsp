@@ -26,10 +26,7 @@
         <traveler:limsUpdate/>
     </c:when>
     <c:when test="${fn:endsWith(pageContext.request.requestURI, '/ingest')}">
-        <%-- ??? --%>
-{
-    "acknowledge": "ingest doesn't work yet."        
-}
+        <traveler:limsIngest/>
     </c:when>
     <c:when test="${fn:endsWith(pageContext.request.requestURI, '/status')}">
 {

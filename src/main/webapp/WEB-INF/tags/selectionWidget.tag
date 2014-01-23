@@ -14,15 +14,25 @@
 
 <sql:query var="choicesQ">
     select 
-    A.hardwareId, A.inNCR,
-    PE.child, PE.id as edgeId,
-    P.name
-    from Activity A
+    Ap.hardwareId, Ap.inNCR,
+    PE.child, PE.id as edgeId, PE.step,
+    P.name,
+    Ac.creationTS
+    from Activity Ap
     inner join ProcessEdge PE on PE.parent=A.processId
     inner join Process P on P.id=PE.child
+    left join Activity Ac on Ac.parentActivityId=Ap.id and Ac.processEdgeId=PE.id
     where A.id=?<sql:param value="${activityId}"/>
+    order by abs(PE.step);
 </sql:query>
-    
+
+<c:set var="numChosen" value="0"/>
+<c:forEach items="${choicesQ.rows}" var="childRow">
+    <c:if test="${! empty childRow.creationTS}">
+        <c:set var="numChosen" value="${numChosen + 1}"/>
+    </c:if>
+</c:forEach>
+
 <c:forEach items="${choicesQ.rows}" var="childRow">
     <form method="get" action="createActivity.jsp">
         <input type="hidden" name="parentActivityId" value="${activityId}">

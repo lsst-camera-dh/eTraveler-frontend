@@ -13,7 +13,7 @@
 <c:set var="allOk" value="true"/>
 <c:set var="message" value="Huh. That wasn't supposed to happen."/>
 
-<%-- check step is correct next one --%>
+<%-- TODO: check step is correct next one --%>
 
 <c:if test="${allOk}">
     <sql:query var="activityQ" >
