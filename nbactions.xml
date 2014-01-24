@@ -5,7 +5,7 @@
         <displayName>tomcat LSST deploy (dev)</displayName>
         <goals>
             <goal>package</goal>
-            <goal>tomcat:deploy</goal>
+            <goal>tomcat7:deploy</goal>
         </goals>
         <activatedProfiles>
             <activatedProfile>deploy-dev</activatedProfile>

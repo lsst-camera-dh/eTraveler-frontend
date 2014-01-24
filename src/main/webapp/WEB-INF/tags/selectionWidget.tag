@@ -19,10 +19,10 @@
     P.name,
     Ac.creationTS
     from Activity Ap
-    inner join ProcessEdge PE on PE.parent=A.processId
+    inner join ProcessEdge PE on PE.parent=Ap.processId
     inner join Process P on P.id=PE.child
     left join Activity Ac on Ac.parentActivityId=Ap.id and Ac.processEdgeId=PE.id
-    where A.id=?<sql:param value="${activityId}"/>
+    where Ap.id=?<sql:param value="${activityId}"/>
     order by abs(PE.step);
 </sql:query>
 
