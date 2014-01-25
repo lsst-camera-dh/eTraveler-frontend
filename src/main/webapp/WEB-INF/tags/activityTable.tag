@@ -62,11 +62,14 @@
     </tr>
 
     <c:choose>
-        <c:when test="${empty activity.begin && childRow.substeps != 'NONE'}">
+        <c:when test="${empty activity.begin && activity.substeps != 'NONE'}">
             <traveler:processRows parentId="${activity.processId}" processPath="${activity.processId}" emptyFields="true"/>
         </c:when>
-        <c:when test="${childRow.substeps != 'NONE'}">
+        <c:when test="${activity.substeps == 'SEQUENCE'}">
             <traveler:activityRowsFull activityId="${activityId}"/>
+        </c:when>
+        <c:when test="${activity.substeps == 'SELECTION'}">
+            <traveler:selectionRows activityId="${activityId}"/>
         </c:when>
     </c:choose>
     

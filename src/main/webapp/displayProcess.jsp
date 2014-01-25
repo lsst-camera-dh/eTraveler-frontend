@@ -56,5 +56,6 @@
 
         <h2>Instances</h2>
         <traveler:activityList processId="${processId}"/>
+        Make a new instance: <traveler:newTravelerForm processId="${processId}"/>
     </body>
 </html>
