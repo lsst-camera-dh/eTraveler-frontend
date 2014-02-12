@@ -29,7 +29,7 @@
                 creationTs=now();
             </sql:update>
             
-            <c:if test="${! empty param.componentId}">
+            <c:if test="${! empty param.hardwareRelationshipTypeId}">
                 <sql:update>
                     insert into HardwareRelationship set
                     hardwareId=?<sql:param value="${param.hardwareId}"/>,

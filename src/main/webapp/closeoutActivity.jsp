@@ -25,10 +25,13 @@
                 id=?<sql:param value="${param.activityId}"/>;
             </sql:update>
             <sql:query var="activityQ">
-                select * from Activity where id=?<sql:param value="${param.activityId}"/>;
+                select A.*, P.travelerActionMask&(select maskBit from InternalAction where name='makeHardwareRelationship') as makesRelationship
+                from Activity A
+                inner join Process P on P.id=A.processId
+                where A.id=?<sql:param value="${param.activityId}"/>;
             </sql:query>
             <c:set var="activity" value="${activityQ.rows[0]}"/>
-            <c:if test="${! empty activity.hardwareRelationshipId}">
+            <c:if test="${activity.makesRelationShip != 0}">
                 <sql:update>
                     update HardwareRelationship set 
                     begin=?<sql:param value="${activity.end}"/>

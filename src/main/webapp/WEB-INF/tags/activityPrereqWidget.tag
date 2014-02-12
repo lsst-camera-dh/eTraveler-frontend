@@ -24,14 +24,16 @@
 <traveler:prereqProcesses activityId="${activityId}"/>
 
 <sql:query var="componentQ" >
-    select PP.*, HT.name as hardwareTypeName, H.id as componentId, H.lsstId, PI.creationTS as satisfaction
+    select PP.*, HT.name as hardwareTypeName, H.id as componentId, H.lsstId, PI.creationTS as satisfaction,
+    P.travelerActionMask&(select maskBit from InternalAction where name='makeHardwareRelationship') as makesRelationship
     from PrerequisitePattern PP
+    inner join Process P on P.id=PP.processId
     inner join HardwareType HT on HT.id=PP.hardwareTypeId
-            inner join Activity A on A.processId=PP.processId
-            left join (Prerequisite PI 
-                        inner join Hardware H on H.id=PI.hardwareId)
-                on PI.activityId=A.id and PI.prerequisitePatternId=PP.id
-            where A.id=?<sql:param value="${activityId}"/>
+    inner join Activity A on A.processId=PP.processId
+    left join (Prerequisite PI 
+        inner join Hardware H on H.id=PI.hardwareId)
+        on PI.activityId=A.id and PI.prerequisitePatternId=PP.id
+    where A.id=?<sql:param value="${activityId}"/>
     and PP.prerequisiteTypeId=(select id from PrerequisiteType where name='COMPONENT')
 </sql:query>
 <c:if test="${! empty componentQ.rows}">
@@ -53,7 +55,9 @@
                         <input type="hidden" name="prerequisitePatternId" value="${row.id}">
                         <input type="hidden" name="activityId" value="${activityId}">
                         <input type="hidden" name="hardwareId" value="${activity.hardwareId}">
-                        <input type="hidden" name="hardwareRelationshipTypeId" value="${activity.hardwareRelationshipTypeId}">
+                        <c:if test="${row.makesRelationship != 0}">
+                            <input type="hidden" name="hardwareRelationshipTypeId" value="${activity.hardwareRelationshipTypeId}">
+                        </c:if>
                         <traveler:componentSelector activityId="${activityId}"/>
                 </c:when>
                 <c:otherwise>

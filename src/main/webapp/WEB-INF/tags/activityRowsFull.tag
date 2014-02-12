@@ -36,7 +36,7 @@
     left join ActivityFinalStatus AFS on AFS.id=Ac.activityFinalStatusId
     where
     Ap.id=?<sql:param value="${activityId}"/>
-    order by abs(PE.step);
+    order by abs(PE.step), Ac.iteration;
 </sql:query>
     
 <c:set var="noneStartedAndUnFinished" value="true"/>
