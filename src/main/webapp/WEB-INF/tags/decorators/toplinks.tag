@@ -5,7 +5,7 @@
 <table>
     <tr valign="bottom" align="right">
         <td align="right" valign="bottom">
-            <a href="https://confluence.slac.stanford.edu/display/LSSTCAM/Documentation">Help</a>       
+            <a href="https://confluence.slac.stanford.edu/display/LSSTCAM/eTraveler+frontend+documentation">Help</a>       
         </td>
     </tr>
 </table>

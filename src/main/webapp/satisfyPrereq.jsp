@@ -50,6 +50,14 @@
                     hardwareStatusId=(select id from HardwareStatus where name='USED')
                     where id=?<sql:param value="${param.componentId}"/>;
                 </sql:update>
+                    
+                <sql:update>
+                    insert into HardwareStatusHistory set
+                    hardwareStatusId=(select id from HardwareStatus where name='USED'),
+                    hardwareId=?<sql:param value="${param.componentId}"/>,
+                    createdBy=?<sql:param value="${userName}"/>,
+                    creationTS=now();
+                </sql:update>
             </c:if>
         </sql:transaction>
                 

@@ -33,21 +33,14 @@
             </c:when>
             <c:when test="${activity.substeps == 'SEQUENCE'}">
                 <sql:query var="stepsRemainingQ" >
-                    select (
-                        (select count(*) from ProcessEdge where parent=?<sql:param value="${activity.processId}"/>) 
-                        -
-                        (select count(*) from Activity A 
-                     <%--    inner join Process P on P.id=A.processId --%>
-                        where 
-                        A.parentActivityId=?<sql:param value="${activityId}"/>
-                        and (
-                                A.end is not null
-                           <%--     or (A.begin is not null and P.travelerActionMask&(select maskBit from InternalAction where name='harnessedJob')!=0) --%>
-                            )
-                        ) 
-                    ) stepsRemaining from dual;
+                    select Ac.id
+                    from Activity Ap
+                    inner join ProcessEdge PE on PE.parent=Ap.processId
+                    left join Activity Ac on Ac.processEdgeId=PE.id and Ac.parentActivityId=Ap.id
+                    where Ap.id=?<sql:param value="${activityId}"/>
+                    and Ac.end is null    
                 </sql:query>
-                <c:if test="${stepsRemainingQ.rows[0]['stepsRemaining']==0}">
+                <c:if test="${empty stepsRemainingQ.rows}">
                     <c:set var="readyToClose" value="true"/>
                 </c:if>
             </c:when>
