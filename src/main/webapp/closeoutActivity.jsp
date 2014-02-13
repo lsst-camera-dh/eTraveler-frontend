@@ -41,7 +41,7 @@
                     id=?<sql:param value="${activity.hardwareRelationshipId}"/>;
                 </sql:update>
             </c:if>
-            <c:if test="${activity.breaksRelationShip != 0}">
+            <c:if test="${activity.breaksRelationship != 0}">
                 <sql:update>
                     update HardwareRelationship set 
                     end=?<sql:param value="${activity.end}"/>
