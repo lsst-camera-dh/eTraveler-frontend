@@ -21,7 +21,9 @@
 </sql:update>
     
 <sql:query var="activityQ" >
-    select * from Activity where id=?<sql:param value="${activityId}"/>;
+    select A.*
+    from Activity A
+    where A.id=?<sql:param value="${activityId}"/>;
 </sql:query>
 <c:if test="${! empty activityQ.rows[0].parentActivityId}">
     <traveler:failActivity activityId="${activityQ.rows[0].parentActivityId}"/>

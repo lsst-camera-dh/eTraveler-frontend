@@ -12,7 +12,7 @@
 <%@attribute name="activityId" required="true"%>
 
 <sql:query var="activityQ" >
-    select A.*, P.substeps,
+    select A.*, P.substeps, P.maxIteration,
     P.travelerActionMask&(select maskBit from InternalAction where name='harnessedJob') as isHarnessed 
     from Activity A
     inner join Process P on P.id=A.processId
@@ -67,11 +67,26 @@
 </c:choose>
 <c:choose>
     <c:when test="${readyToClose == 'true'}">
-        <form METHOD=GET ACTION="closeoutActivity.jsp" target="_top">
-            <input type="hidden" name="activityId" value="${activityId}">       
-            <input type="hidden" name="topActivityId" value="${param.topActivityId}">       
-            <INPUT TYPE=SUBMIT value="Closeout">
-        </form>        
+    <table>
+        <tr>
+            <td>
+                <form METHOD=GET ACTION="closeoutActivity.jsp" target="_top">
+                    <input type="hidden" name="activityId" value="${activityId}">       
+                    <input type="hidden" name="topActivityId" value="${param.topActivityId}">       
+                    <INPUT TYPE=SUBMIT value="Closeout">
+                </form>      
+            </td>
+            <c:if test="${activity.iteration < activity.maxIteration}">
+                <td>
+                    <form METHOD=GET ACTION="redoActivity.jsp" target="_top">
+                        <input type="hidden" name="activityId" value="${activityId}">       
+                        <input type="hidden" name="topActivityId" value="${param.topActivityId}">       
+                        <INPUT TYPE=SUBMIT value="Try Again">
+                    </form>      
+                </td>                
+            </c:if>
+        </tr>
+    </table>
     </c:when>
     <c:otherwise>
         <c:out value="${message}"/>

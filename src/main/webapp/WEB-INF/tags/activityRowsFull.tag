@@ -106,7 +106,16 @@
             <c:url value="displayProcess.jsp" var="childLink">
                 <c:param name="processPath" value="${myProcessPath}"/>
             </c:url>
-            <c:url var="contentLink" value="processPane.jsp">
+            <c:set var="autoStart" value="false"/>
+            <c:choose>
+                <c:when test="${autoStart && firstUnStarted && noneStartedAndUnFinished}">
+                    <c:set var="contentUrl" value="createActivity.jsp"/>
+                </c:when>
+                <c:otherwise>
+                    <c:set var="contentUrl" value="processPane.jsp"/>
+                </c:otherwise>
+            </c:choose>
+            <c:url var="contentLink" value="${contentUrl}">
                 <c:param name="processId" value="${childRow.processId}"/>
                 <c:param name="topActivityId" value="${param.activityId}"/>
                 <c:if test="${firstUnStarted && noneStartedAndUnFinished}"> <%-- Supply extra args to create an Activity for the Process --%>
@@ -116,26 +125,6 @@
                     <c:param name="inNCR" value="${childRow.inNCR}"/>
                  </c:if>
             </c:url>
-            <%--
-            <c:choose>
-                <c:when test="${firstUnStarted && noneStartedAndUnFinished}"> Automatically create Activity for Process
-                    <c:url var="contentLink" value="createActivity.jsp">
-                        <c:param name="processId" value="${childRow.processId}"/>
-                        <c:param name="topActivityId" value="${param.activityId}"/>
-                        <c:param name="parentActivityId" value="${activityId}"/>
-                        <c:param name="processEdgeId" value="${childRow.processEdgeId}"/>
-                        <c:param name="hardwareId" value="${childRow.hardwareId}"/>       
-                        <c:param name="inNCR" value="${childRow.inNCR}"/>
-                    </c:url>                    
-                </c:when>
-                <c:otherwise>
-                    <c:url var="contentLink" value="processPane.jsp">
-                        <c:param name="processId" value="${childRow.processId}"/>
-                        <c:param name="topActivityId" value="${param.activityId}"/>
-                    </c:url>                  
-                </c:otherwise>
-            </c:choose>
-            --%>
             <tr>
                 <td><a href="${childLink}">${hierStep}</a></td>
                 <td><a href="${contentLink}" target="content">${childRow.name}</a></td> 
@@ -143,8 +132,14 @@
                     <c:if test="${(firstUnStarted && noneStartedAndUnFinished) && (not travelerFailed)}">
                         <c:set var="firstUnStarted" value="false"/>
                         <c:set var="currentStepLink" value="${contentLink}" scope="request"/>
-                        <%--<c:set var="startNextStep" value="true" scope="request"/>--%>
-                        Needs Prep
+                        <c:choose>
+                            <c:when test="${autoStart}">
+                                <c:set var="startNextStep" value="true" scope="request"/>
+                            </c:when>
+                            <c:otherwise>
+                                Needs Prep
+                            </c:otherwise>
+                        </c:choose>
                     </c:if>
                 </td> 
                 <td></td>
