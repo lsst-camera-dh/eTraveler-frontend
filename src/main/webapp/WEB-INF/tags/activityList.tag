@@ -35,7 +35,7 @@
         and H.id=?<sql:param value="${hardwareId}"/>
     </c:if>
     <c:if test="${! empty done}">
-        and A.end is <c:if test="${done!='false'}">not</c:if> null
+        and A.end is <c:if test="${done}">not</c:if> null
     </c:if>
     order by A.begin desc
 </sql:query>
@@ -60,7 +60,7 @@
     </c:if>
     <display:column property="begin" sortable="true" headerClass="sortable"/>
     <display:column property="createdBy" sortable="true" headerClass="sortable"/>
-    <c:if test="${done!='false'}">
+    <c:if test="${done}"> <%-- Why? --%>
         <display:column property="end" sortable="true" headerClass="sortable"/>
         <display:column property="closedBy" sortable="true" headerClass="sortable"/>
     </c:if>

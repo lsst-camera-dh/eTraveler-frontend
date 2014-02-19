@@ -44,7 +44,7 @@
     </tr>
     <tr><td>End:</td>
         <td>
-            <c:if test="${resultsFiled == 'true'}">
+            <c:if test="${resultsFiled}">
                 <traveler:closeoutButton activityId="${activityId}"/>
             </c:if>
             <%--<c:if test="${! empty activity.end}">

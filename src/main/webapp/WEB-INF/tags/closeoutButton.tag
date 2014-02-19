@@ -66,7 +66,7 @@
     </c:otherwise>
 </c:choose>
 <c:choose>
-    <c:when test="${readyToClose == 'true'}">
+    <c:when test="${readyToClose}">
     <table>
         <tr>
             <td>
