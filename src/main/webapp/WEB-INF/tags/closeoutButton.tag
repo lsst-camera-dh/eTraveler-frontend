@@ -78,7 +78,7 @@
             </td>
             <c:if test="${activity.iteration < activity.maxIteration}">
                 <td>
-                    <form METHOD=GET ACTION="redoActivity.jsp" target="_top">
+                    <form METHOD=GET ACTION="retryActivity.jsp" target="_top">
                         <input type="hidden" name="activityId" value="${activityId}">       
                         <input type="hidden" name="topActivityId" value="${param.topActivityId}">       
                         <INPUT TYPE=SUBMIT value="Try Again">
