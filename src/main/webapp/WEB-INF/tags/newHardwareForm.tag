@@ -46,7 +46,7 @@
             <td>Type: </td>
             <td>
                 <c:choose>
-                    <c:when test="{$! empty hardwareTypeId}">
+                    <c:when test="${! empty hardwareTypeId}">
                         <input type="hidden" name="hardwareTypeId" value="${hardwareTypeId}"/>
                         <c:out value="${typesQ.rows[0].name}"/>
                     </c:when>

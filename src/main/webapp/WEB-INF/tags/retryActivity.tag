@@ -16,7 +16,7 @@
 <sql:transaction>
     <sql:update >
         update Activity set
-        activityFinalStatusId=(select id from ActivityFinalStatus where name='failure'),
+        activityFinalStatusId=(select id from ActivityFinalStatus where name='superseded'),
         end=now(),
         closedBy=?<sql:param value="${userName}"/>
         where id=?<sql:param value="${activityId}"/>;
