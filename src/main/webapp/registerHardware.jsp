@@ -16,7 +16,7 @@
     </head>
     <body>
 
-        <traveler:newHardwareForm/>
+        <traveler:newHardwareForm hardwareTypeId="${param.hardwareTypeId}"/>
             
     </body>
 </html>

@@ -15,9 +15,26 @@
     </head>
     <body>
         <sql:transaction >
+            <c:if test="${empty param.lsstId}">
+                <sql:update>
+                    update HardwareType set autoSequence=LAST_INSERT_ID(autoSequence+1)
+                    where id=?<sql:param value="${param.hardwareTypeId}"/>;
+                </sql:update>
+            </c:if>
             <sql:update>
                 insert into Hardware set
+                <c:choose>
+                    <c:when test="${! empty param.lsstId}">
                 lsstId=?<sql:param value="${param.lsstId}"/>,
+                    </c:when>
+                    <c:otherwise>
+                lsstId=concat(
+                    ?<sql:param value="${param.typeName}"/>,
+                    '-',
+                    LPAD(LAST_INSERT_ID(), ?<sql:param value="${param.autoSequenceWidth}"/>, '0')
+                ),
+                    </c:otherwise>
+                </c:choose>
                 hardwareTypeId=?<sql:param value="${param.hardwareTypeId}"/>,
                 manufacturer=?<sql:param value="${param.manufacturer}"/>,
                 model=?<sql:param value="${param.model}"/>,
