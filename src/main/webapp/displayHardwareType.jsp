@@ -26,6 +26,7 @@
 
         <h2>Applicable Traveler Types</h2>
         <traveler:travelerTypeList hardwareTypeId="${param.hardwareTypeId}"/>
+        <traveler:newTravelerForm hardwareTypeId="${param.hardwareTypeId}"/>
    
         <h2>Instances</h2>
         <traveler:hardwareList  hardwareTypeId="${param.hardwareTypeId}"/>

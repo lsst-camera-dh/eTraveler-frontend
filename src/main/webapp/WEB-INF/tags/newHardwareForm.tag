@@ -15,9 +15,9 @@
     select * from HardwareType
     where id=?<sql:param value="${hardwareTypeId}"/>;
 </sql:query>
-    <c:set var="hType" value="${typeQ.rows[0]}"/>
+<c:set var="hType" value="${typeQ.rows[0]}"/>
 
-    <h2>Register new ${hType.name}</h2>
+<h2>Register new ${hType.name}</h2>
 <form METHOD=GET ACTION="createHardware.jsp">
 
     <table>

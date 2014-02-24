@@ -26,7 +26,9 @@
         <traveler:processCrumbs processPath="${param.processPath}"/>
 
         <sql:query var="processQ" >
-            select * from Process where id=?<sql:param value="${processId}"/>;
+            select P.*
+            from Process P
+            where id=?<sql:param value="${processId}"/>;
         </sql:query>
         <c:set var="process" value="${processQ.rows[0]}"/>
         <traveler:processWidget processId="${processId}"/>
@@ -56,6 +58,6 @@
 
         <h2>Instances</h2>
         <traveler:activityList processId="${processId}"/>
-        Make a new instance: <traveler:newTravelerForm processId="${processId}"/>
+        Make a new instance: <traveler:newTravelerForm processId="${processId}" hardwareTypeId="${process.hardwareTypeId}"/>
     </body>
 </html>

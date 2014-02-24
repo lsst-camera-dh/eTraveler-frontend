@@ -63,31 +63,8 @@
         </c:if>
         
         <h2>Travelers</h2>
+        <traveler:newTravelerForm hardwareTypeId="${hardwareTypeId}" hardwareId="${param.hardwareId}"/>
         <traveler:activityList travelersOnly="true" hardwareId="${param.hardwareId}"/>
-        <sql:query var="applicableTTypesQ" >
-            select id, concat(name, ' v', version) as processName
-            from Process P
-            where 
-            P.id not in (select distinct child from ProcessEdge)
-            and
-            P.hardwareTypeId=?<sql:param value="${hardwareTypeId}"/>;
-        </sql:query>
-        <form method=GET action="createTraveler.jsp">
-            <input type="hidden" name="hardwareId" value="${param.hardwareId}">
-            <input type="hidden" name="inNCR" value="FALSE">
-            Traveler Type: 
-            <select name="processId">
-                <c:forEach var="pRow" items="${applicableTTypesQ.rows}">
-                    <option value="${pRow.id}">${pRow.processName}</option>
-                </c:forEach>
-            </select>
-<%--
-            In NCR?
-            <input type="radio" name="inNCR" value="FALSE" checked="true"/>No
-            <input type="radio" name="inNCR" value="TRUE"/>Yes
---%>
-            <input type="SUBMIT" value="Apply Traveler">
-        </form>
                         
         <h2>Recent Activities</h2>
         <traveler:activityList hardwareId="${param.hardwareId}"/>

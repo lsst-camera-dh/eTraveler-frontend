@@ -22,9 +22,10 @@
     H.id=?<sql:param value="${hardwareId}"/>;
 </sql:query>
 <c:set var="hardware" value="${hardwareQ.rows[0]}"/>
+<c:set var="hardwareTypeId" value="${hardware.hardwareTypeId}" scope="request"/>
 
 <c:url var="hwtLink" value="displayHardwareType.jsp">
-    <c:param name="hardwareTypeId" value="${hardware.hardwareTypeId}"/>
+    <c:param name="hardwareTypeId" value="${hardwareTypeId}"/>
 </c:url>
 <c:url var="hwLink" value="displayHardware.jsp">
     <c:param name="hardwareId" value="${hardware.id}"/>
@@ -45,4 +46,3 @@ Registered at <c:out value="${hardware.creationTS}"/> by <c:out value="${hardwar
     <tr><td>Registered at:</td><td><c:out value="${hardware.creationTS}"/></td></tr>
 </table>
 
-<c:set var="hardwareTypeId" value="${hardware.hardwareTypeId}" scope="request"/>

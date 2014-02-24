@@ -7,6 +7,7 @@
 <%@page contentType="text/html" pageEncoding="US-ASCII"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql" %>
+<%@taglib prefix="traveler" tagdir="/WEB-INF/tags"%>
 <!DOCTYPE html>
 <html>
     <head>
@@ -14,42 +15,18 @@
         <title>Initiate Traveler</title>
     </head>
     <body>
+        <sql:query var="typeQ" >
+            select * from HardwareType
+            where id=?<sql:param value="${param.hardwareTypeId}"/>;
+        </sql:query>
+        <c:set var="hType" value="${typeQ.rows[0]}"/>
 
-        <sql:query var="processQ" >
-            select * from Process where id=?<sql:param value="${param.processId}"/>;
-        </sql:query>
-        <c:set var="process" value="${processQ.rows[0]}"/>
-        <sql:query var="hardwareQ" >
-            select H.*, HT.name as typeName from Hardware H, HardwareType HT
-            where 
-            HT.id=H.hardwareTypeId
-            and
-            H.hardwareTypeId=?<sql:param value="${process.hardwareTypeId}"/>;
-        </sql:query>
        
         <h1>
-        Initiating Traveler type 
-        &lt;<c:out value="${process.name}"/>&gt;
-        for Hardware type
-        &lt;<c:out value="${hardwareQ.rows[0]['typeName']}"/>&gt;
+        Initiating traveler for component type
+        <c:out value="${hType.name}"/>
         </h1>
-        
-        <form METHOD=GET ACTION="createTraveler.jsp">
-            <input type="hidden" name="processId" value="${param.processId}"/>
-            <input type="hidden" name="inNCR" value="FALSE">
-
-            Component: 
-            <select name="hardwareId">
-                <c:forEach var="hRow" items="${hardwareQ.rows}">
-                    <option value="${hRow.id}">${hRow.lsstId}</option>
-                </c:forEach>
-            </select>
-<%--
-            In NCR?
-            <input type="radio" name="inNCR" value="FALSE" checked="true"/>No
-            <input type="radio" name="inNCR" value="TRUE"/>Yes
---%>
-            <INPUT TYPE=SUBMIT value="Begin Process">
-        </form>
+            
+        <traveler:newTravelerForm hardwareTypeId="${param.hardwareTypeId}"/>
     </body>
 </html>
