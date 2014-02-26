@@ -15,21 +15,52 @@
         <title>JSP Page</title>
     </head>
     <body>
-        <sql:query var="parentsQ" >
-            select * from HardwareRelationship 
-            where componentId=?<sql:param value="${param.hardwareId}"/>
-            and end is null;
-        </sql:query>
-        <c:choose>
-            <c:when test="${! empty parentsQ.rows}">
+        <c:set var="allOk" value="true"/>
+        
+        <c:if test="${allOk}">
+            <c:if test="${empty param.newLocationId}">
+                <c:set var="allOk" value="false"/>
+                <c:set var="message" value="Go back and select a location."/>
+            </c:if>
+        </c:if>
+        
+        <c:if test="${allOk}">
+            <sql:query var="locQ">
+                select locationId 
+                from HardwareLocationHistory 
+                where hardwareId=?<sql:param value="${param.hardwareId}"/>
+                order by creationTS desc limit 1;
+            </sql:query>
+            <c:if test="${! empty locQ.rows}">
+                <c:if test="${param.newLocationId == locQ.rows[0].locationId}">
+                    <c:set var="allOk" value="false"/>
+                    <c:set var="message" value="You can't move component to where it already is."/>
+                </c:if>
+            </c:if>
+        </c:if>
+        
+        <c:if test="${allOk}">
+            <sql:query var="parentsQ" >
+                select * from HardwareRelationship 
+                where componentId=?<sql:param value="${param.hardwareId}"/>
+                and end is null;
+            </sql:query>
+            <c:if test="${! empty parentsQ.rows}">
+                <c:set var="allOk" value="false"/>
                 <c:url value="displayHardware.jsp" var="parentLink">
                     <c:param name="hardwareId" value="${parentsQ.rows[0].hardwareId}"/>
                 </c:url>
-                Sorry, this item cannot be moved because it is part of <a href='<c:out value="${parentLink}"/>'>this</a>.
+                <c:set var="message" value="Sorry, this item cannot be moved because it is part of <a href='${parentLink}'>this</a>."/>
+            </c:if>
+        </c:if>
+                
+        <c:choose>
+            <c:when test="${allOk}">
+                <traveler:setHardwareLocation hardwareId="${param.hardwareId}" newLocationId="${param.newLocationId}"/>
+                <c:redirect url="${header.referer}"/>
             </c:when>
             <c:otherwise>
-                <traveler:setHardwareLocation newLocationId="${param.newLocationId}" hardwareId="${param.hardwareId}"/>
-                <c:redirect url="${header.referer}"/>
+                ${message}
             </c:otherwise>
         </c:choose>
     </body>

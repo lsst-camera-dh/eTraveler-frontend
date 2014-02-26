@@ -83,7 +83,7 @@
                         <input type="hidden" name="activityId" value="${activityId}">
                         <input type="hidden" name="inputPatternId" value="${row.id}">
                         <input type="hidden" name="ISName" value="${row.ISName}">
-                        <input type="${inputType}" name="value" required>
+                        *<input type="${inputType}" name="value" required>
                         <input type="submit" value="Submit!">
                     </form>
                 </c:otherwise>

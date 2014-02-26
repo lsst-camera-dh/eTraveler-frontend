@@ -36,18 +36,27 @@
     where componentId=?<sql:param value="${hardwareId}"/>
     and end is null;
 </sql:query>
+
+<sql:query var="locQ">
+    select locationId 
+    from HardwareLocationHistory 
+    where hardwareId=?<sql:param value="${param.hardwareId}"/>
+    order by creationTS desc limit 1;
+</sql:query>
+<c:if test="${! empty locQ.rows}">
+    <c:set var="currentLoc" value="${locQ.rows[0].locationId}"/>
+</c:if>
+
 <c:if test="${empty parentsQ.rows}">
     <sql:query var="locationsQ" >
         select L.id, L.name as locationName, S.name as siteName
         from
         Location L
         inner join Site S on S.id=L.siteId
-<%--
-        where L.id!=(select L.id from Location L 
-                        inner join HardwareLocationHistory HLH on L.id=HLH.locationId 
-                        where HLH.hardwareId=?<sql:param value="${hardwareId}"/> 
-                        order by HLH.creationTS desc limit 1)
---%>
+        where 1
+        <c:if test="${! empty currentLoc}">
+            and L.id!=?<sql:param value="${currentLoc}"/>
+        </c:if>
         <c:if test="${! empty sessionScope.siteId}">
             and S.id=?<sql:param value="${sessionScope.siteId}"/>
         </c:if>
@@ -55,9 +64,13 @@
 
     <form action="setHardwareLocation.jsp" method="GET">
         <input type="hidden" name="hardwareId" value="${hardwareId}"/>
-        <select name="newLocationId">
+        <select name="newLocationId" required>
+            <option value="" selected>Pick a new location</option>
             <c:forEach var="lRow" items="${locationsQ.rows}">
-                <option value="${lRow.id}"><c:if test="${empty sessionScope.siteId}">${lRow.siteName} </c:if>${lRow.locationName}</option>
+                <option value="${lRow.id}">
+                    <c:if test="${empty sessionScope.siteId}">${lRow.siteName} </c:if>
+                    ${lRow.locationName}
+                </option>
             </c:forEach>
         </select>
         <input type="submit" value="Move it!"/>

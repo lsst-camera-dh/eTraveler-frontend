@@ -7,6 +7,7 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql" %>
+<%@taglib prefix="traveler" tagdir="/WEB-INF/tags"%>
 <!DOCTYPE html>
 <html>
     <head>
@@ -14,21 +15,40 @@
         <title>JSP Page</title>
     </head>
     <body>
-        <sql:transaction >
-            <sql:update>
-                update Hardware set 
-                hardwareStatusId=?<sql:param value="${param.hardwareStatusId}"/>
-                where
-                id=?<sql:param value="${param.hardwareId}"/>;
-            </sql:update>
-            <sql:update>
-                insert into HardwareStatusHistory set
-                hardwareStatusId=?<sql:param value="${param.hardwareStatusId}"/>,
-                hardwareId=?<sql:param value="${param.hardwareId}"/>,
-                createdBy=?<sql:param value="${userName}"/>,
-                creationTS=now();
-            </sql:update>
-        </sql:transaction>
-        <c:redirect url="${header.referer}"/>
+        <c:set var="allOk" value="true"/>
+        
+        <c:if test="${allOk}">
+            <c:if test="${empty param.hardwareId}">
+                <c:set var="allOk" value="false"/>
+                <c:set var="message" value="You must specifiy which component to operate on."/>
+            </c:if>
+        </c:if>
+        
+        <c:if test="${allOk}">
+            <c:if test="${empty param.hardwareStatusId}">
+                <c:set var="allOk" value="false"/>
+                <c:set var="message" value="You must specifiy a new component status."/>
+            </c:if>
+        </c:if>
+        
+        <c:if test="${allOk}">
+            <sql:query var="statusQ">
+                select hardwareStatusId from Hardware where id=?<sql:param value="${param.hardwareId}"/>;
+            </sql:query>
+            <c:if test="${statusQ.rows[0].hardwareStatusId == param.hardwareStatusId}">
+                <c:set var="allOk" value="false"/>
+                <c:set var="message" value="You can't set the status to the same thing it already is."/>
+            </c:if>
+        </c:if>
+        
+        <c:choose>
+            <c:when test="${allOk}">
+                <traveler:setHardwareStatus hardwareStatusId="${param.hardwareStatusId}" hardwareId="${param.hardwareId}"/>
+                <c:redirect url="${header.referer}"/>
+            </c:when>
+            <c:otherwise>
+                ${message}
+            </c:otherwise>
+        </c:choose>
     </body>
 </html>

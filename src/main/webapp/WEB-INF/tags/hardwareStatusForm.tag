@@ -12,12 +12,16 @@
 <%@attribute name="hardwareId" required="true"%>
 
 <sql:query var="statesQ" >
-    select * from HardwareStatus
+    select * 
+    from HardwareStatus 
+    where name!='NEW'
+    and id!=(select hardwareStatusId from Hardware where id=?<sql:param value="${hardwareId}"/>);
 </sql:query>
 
 <form action="setHardwareStatus.jsp">
     <input type="hidden" name="hardwareId" value="${hardwareId}">
-    <select name="hardwareStatusId">
+    <select name="hardwareStatusId" required>
+        <option value="" selected>Pick a new status</option>
         <c:forEach var="sRow" items="${statesQ.rows}">
             <option value="${sRow.id}"><c:out value="${sRow.name}"/></option>
         </c:forEach>        
