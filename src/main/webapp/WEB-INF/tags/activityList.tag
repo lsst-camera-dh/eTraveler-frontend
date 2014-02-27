@@ -14,6 +14,7 @@
 <%@attribute name="hardwareId"%>
 <%@attribute name="processId"%>
 <%@attribute name="travelersOnly"%>
+<%@attribute name="userId"%>
 
 <sql:query var="result" >
   select A.id as activityId, A.begin, A.end, A.createdBy, A.closedBy,
@@ -37,7 +38,10 @@
     <c:if test="${! empty done}">
         and A.end is <c:if test="${done}">not</c:if> null
     </c:if>
-    order by A.begin desc
+    <c:if test="${! empty userId}">
+        and (A.createdBy=?<sql:param value="${userId}"/> or A.closedBy=?<sql:param value="${userId}"/>
+    </c:if>
+    order by A.begin desc;
 </sql:query>
 <display:table name="${result.rows}" class="datatable">
 <%--    <display:column property="activityId" sortable="true" headerClass="sortable"
