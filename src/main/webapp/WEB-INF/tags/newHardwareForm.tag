@@ -25,7 +25,7 @@
             <c:when test="${hType.autoSequenceWidth==0}">
                 <tr>
                     <td>Serial:</td>
-                    <td><INPUT TYPE="TEXT" NAME="lsstId" SIZE=50 autofocus required></td>
+                    <td>*<INPUT TYPE="TEXT" NAME="lsstId" SIZE=50 autofocus required></td>
                 </tr>
             </c:when>
             <c:otherwise>
@@ -35,7 +35,7 @@
         </c:choose>
         <tr>
             <td>Manufacturer:</td>
-            <td><INPUT TYPE=TEXT NAME=manufacturer SIZE=50 autofocus required></td>
+            <td>*<INPUT TYPE=TEXT NAME=manufacturer SIZE=50 autofocus required></td>
         </tr>
         <tr>
             <td>Model:</td>

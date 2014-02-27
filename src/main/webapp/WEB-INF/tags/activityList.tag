@@ -17,7 +17,7 @@
 
 <sql:query var="result" >
   select A.id as activityId, A.begin, A.end, A.createdBy, A.closedBy,
-    P.id as processId, P.name as processName, P.version,
+    P.id as processId, concat(P.name, ' v', P.version) as processName,
     H.id as hardwareId, H.lsstId, 
     HT.name as hardwareName, HT.id as hardwareTypeId
     from Activity A
@@ -40,7 +40,7 @@
     order by A.begin desc
 </sql:query>
 <display:table name="${result.rows}" class="datatable">
-    <display:column property="activityId" sortable="true" headerClass="sortable"
+<%--    <display:column property="activityId" sortable="true" headerClass="sortable"
                     href="displayActivity.jsp" paramId="activityId" paramProperty="activityId"/>
     <c:if test="${empty processId}">
         <display:column property="processId" sortable="true" headerClass="sortable"
@@ -49,7 +49,9 @@
                         href="displayProcess.jsp" paramId="processPath" paramProperty="processId"/>
         <display:column property="version" sortable="true" headerClass="sortable"
                         href="displayProcess.jsp" paramId="processPath" paramProperty="processId"/>
-    </c:if>
+    </c:if>--%>
+    <display:column property="processName" title="Name" sortable="true" headerClass="sortable"
+                      href="displayActivity.jsp" paramId="activityId" paramProperty="activityId"/>
     <c:if test="${empty hardwareId}">
         <display:column property="lsstId" title="Component" sortable="true" headerClass="sortable"
                         href="displayHardware.jsp" paramId="hardwareId" paramProperty="hardwareId"/>
@@ -60,8 +62,8 @@
     </c:if>
     <display:column property="begin" sortable="true" headerClass="sortable"/>
     <display:column property="createdBy" sortable="true" headerClass="sortable"/>
-    <c:if test="${done}"> <%-- Why? --%>
+<%--    <c:if test="${done}">  Why? --%>
         <display:column property="end" sortable="true" headerClass="sortable"/>
         <display:column property="closedBy" sortable="true" headerClass="sortable"/>
-    </c:if>
+<%--    </c:if>--%>
 </display:table>        
