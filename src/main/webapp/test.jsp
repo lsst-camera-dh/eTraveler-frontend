@@ -14,10 +14,11 @@
     </head>
     <body>
         <h1>Hello World!</h1>
-        <c:out value="x ${pageScope.javax.servlet.jsp.jspRequest.uri} x"/>
+        [<c:out value="${pageScope.javax.servlet.jsp.jspRequest.uri}"/>]
 <%--        <% request.setAttribute("url", request.getRequestURI()); %>--%>
-        <c:out value="${url}"/> 
-        <c:out value="${pageContext.request.requestURI}"/>
+        [<c:out value="${url}"/>]
+        [<c:out value="${pageContext.request.requestURI}"/>]
+        [${header}]
         <h2>page</h2>
 <c:forEach var="v" items="${pageScope}">
         <c:out value="${v.key} ---- ${v.value}"/><br>
