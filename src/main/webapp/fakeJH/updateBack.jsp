@@ -14,7 +14,7 @@
     </head>
     <body>
         ${param}
-	<form method=post action="http://localhost:8084/LSSTDemo/Results/update">
+	<form method=post action="http://localhost:8084/eTraveler/Dev/Results/update">
             <input type=hidden name="jsonObject" value='{
                    "jobid": "${param.jobid}",
                        "stamp":${param.stamp},

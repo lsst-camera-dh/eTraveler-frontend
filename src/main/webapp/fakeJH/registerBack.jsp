@@ -14,7 +14,7 @@
     </head>
     <body>
         ${param}
-	<form method=post action="http://localhost:8084/LSSTDemo/Results/requestID">
+	<form method=post action="http://localhost:8084/eTraveler/Dev/Results/requestID">
             <input type=hidden name="jsonObject" value='{"jobid":<c:choose>
                        <c:when test="${! empty param.jobid}">${param.jobid}</c:when>
                        <c:otherwise>null</c:otherwise></c:choose>,

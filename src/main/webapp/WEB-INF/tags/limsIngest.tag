@@ -82,7 +82,7 @@ creationTS=NOW();
     end=now(), 
     closedBy=?<sql:param value="${userName}"/>
     where 
-    id=?<sql:param value="${param.activityId}"/>;
+    id=?<sql:param value="${inputs.jobid}"/>;
 </sql:update>
 
 </sql:transaction>

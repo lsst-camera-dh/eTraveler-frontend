@@ -102,7 +102,11 @@
     </servlet>
     <servlet-mapping>
         <servlet-name>fakeLims</servlet-name>
-        <url-pattern>/Results/*</url-pattern>
+        <url-pattern>/Dev/Results/*</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>fakeLims</servlet-name>
+        <url-pattern>/Prod/Results/*</url-pattern>
     </servlet-mapping>
 
     <context-param>
