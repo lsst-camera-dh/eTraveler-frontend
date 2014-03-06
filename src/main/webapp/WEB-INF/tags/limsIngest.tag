@@ -76,6 +76,14 @@ creationTS=NOW();
     createdBy=?<sql:param value="${userName}"/>,
     creationTS=now();
 </sql:update>
+<sql:update >
+    update Activity set 
+    activityFinalStatusId=(select id from ActivityFinalStatus where name='success'),
+    end=now(), 
+    closedBy=?<sql:param value="${userName}"/>
+    where 
+    id=?<sql:param value="${param.activityId}"/>;
+</sql:update>
 
 </sql:transaction>
 </c:catch>

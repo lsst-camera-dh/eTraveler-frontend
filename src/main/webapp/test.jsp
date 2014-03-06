@@ -6,6 +6,7 @@
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@taglib prefix="traveler" tagdir="/WEB-INF/tags"%>
 <!DOCTYPE html>
 <html>
     <head>
@@ -13,12 +14,30 @@
         <title>JSP Page</title>
     </head>
     <body>
+        <traveler:setReturn extra="#foo"/>
         <h1>Hello World!</h1>
-        [<c:out value="${pageScope.javax.servlet.jsp.jspRequest.uri}"/>]
+        [<c:out value="${pageScope.javax.servlet.jsp.jspRequest.uri}"/>]<br>
 <%--        <% request.setAttribute("url", request.getRequestURI()); %>--%>
-        [<c:out value="${url}"/>]
-        [<c:out value="${pageContext.request.requestURI}"/>]
-        [${header}]
+        [<c:out value="${url}"/>]<br>
+        [<c:out value="${pageContext}"/>]<br>
+        [<c:out value="${request}"/>]<br>
+        [<c:out value="${pageContext.request}"/>]<br>
+        [<c:out value="${pageContext.request.requestURI}"/>]<br>
+        [${header}]<br>
+        [${header['Referer']}]<br>
+        [${pageContext.request.getHeader("Referer")}]<br>
+        [${pageContext.request.getRequestURL()}]<br>
+        [${pageContext.request.getQueryString()}]<br>
+        
+        <c:url var="testLink" value="test.jsp">
+            <c:param name="x" value="7"/>
+        </c:url>
+        <c:set var="tlPlusFrag" value="${testLink}#foo"/>
+        <a href="${tlPlusFrag}">test</a>
+        
+        <traveler:test/>
+        [${fnord}]
+        
         <h2>page</h2>
 <c:forEach var="v" items="${pageScope}">
         <c:out value="${v.key} ---- ${v.value}"/><br>

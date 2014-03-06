@@ -44,10 +44,10 @@
         <h2>Steps</h2>
         <table>
             <tr>
-                <td>
+                <td style="vertical-align:top;">
                     <traveler:processTable processPath="${param.processPath}"/>
                 </td>
-                <td>
+                <td style="vertical-align:top;">
                     <c:url var="contentLink" value="processPane.jsp">
                         <c:param name="processId" value="${processId}"/>
                     </c:url>

@@ -16,6 +16,7 @@
         <title>Activity</title>
     </head>
     <body>
+        <traveler:setReturn extra="#belowTheFold"/>
         <traveler:setPaths activityId="${param.activityId}"/>
         
         <sql:query var="activityQ" >
@@ -40,20 +41,20 @@
                 </td>
             </tr>
         </table>
-        
+                <div id="belowTheFold">        
         <h2>Steps</h2>
         <table>
             <tr>
-                <td>
+                <td style="vertical-align:top;">
                     <traveler:activityTable activityId="${param.activityId}"/>
-                    <c:if test="${requestScope.startNextStep}"><c:redirect url="${requestScope.currentStepLink}"/></c:if>
-                    <a href="${requestScope.currentStepLink}" target="content">Current step</a>
+                    <c:if test="${startNextStep}"><c:redirect url="${currentStepLink}"/></c:if>
+                    <a href="${currentStepLink}" target="content">Current step</a>
                 </td>
-                <td>
-                    <iframe name="content" src="${requestScope.currentStepLink}" width="600" height="400"></iframe>
+                <td style="vertical-align:top;">
+                    <iframe name="content" src="${currentStepLink}" width="600" height="400"></iframe>
                 </td>
             </tr>
         </table>
-            
+                </div>
     </body>
 </html>
