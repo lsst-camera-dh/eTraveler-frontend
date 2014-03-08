@@ -63,6 +63,10 @@
             <param-name>requireLogin</param-name>
             <param-value>true</param-value>
         </init-param>
+        <init-param>
+            <param-name>skipPages</param-name>
+            <param-value>fakeLimsBack.jsp</param-value>
+        </init-param>
     </filter>
 
     <filter-mapping>
@@ -98,7 +102,7 @@
     
     <servlet>
         <servlet-name>fakeLims</servlet-name>
-        <jsp-file>/fakeLims.jsp</jsp-file>
+        <jsp-file>/fakeLimsFront.jsp</jsp-file>
     </servlet>
     <servlet-mapping>
         <servlet-name>fakeLims</servlet-name>

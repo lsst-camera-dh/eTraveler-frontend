@@ -8,6 +8,8 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql" %>
 
+<c:set var="allOk" value="true"/>
+
 <%
     java.util.Map<String, String> tables = new java.util.HashMap<String, String>();
     tables.put("java.lang.Double", "FloatResultHarnessed");
@@ -19,6 +21,7 @@
     request.setAttribute("instances", instances);
 %>
 
+<c:if test="${allOk}">
 <c:catch var="didntWork">
 <sql:transaction>
 
@@ -88,8 +91,10 @@ creationTS=NOW();
 </sql:transaction>
 </c:catch>
 
+</c:if>
+    
 <c:choose>
-    <c:when test="${empty didntWork}">
+    <c:when test="${allOk && empty didntWork}">
         {"acknowledge": null}
     </c:when>
     <c:otherwise>

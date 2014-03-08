@@ -29,7 +29,7 @@
         <c:set var="allOk" value="false"/>
         <c:set var="message" value="No Record found."/> 
     </c:if>
-    <c:if test="${empty activityQ.rows[0].begin}">
+    <c:if test="${allOk && empty activityQ.rows[0].begin}">
         <traveler:failActivity activityId="${inputs.jobid}"/>
         <c:set var="allOk" value="false"/>
         <c:set var="message" value="Job not started."/>        
