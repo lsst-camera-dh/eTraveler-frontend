@@ -13,6 +13,8 @@
 <%@attribute name="activityId" required="true"%>
 <%@attribute name="prefix"%>
 
+<c:set var="autoStart" value="true"/>
+
 <traveler:setPaths activityId="${activityId}"/>
 <c:set var="thisProcessPath" value="${processPath}"/>
 
@@ -106,7 +108,6 @@
             <c:url value="displayProcess.jsp" var="childLink">
                 <c:param name="processPath" value="${myProcessPath}"/>
             </c:url>
-            <c:set var="autoStart" value="false"/>
             <c:choose>
                 <c:when test="${autoStart && firstUnStarted && noneStartedAndUnFinished}">
                     <c:set var="contentUrl" value="createActivity.jsp"/>
