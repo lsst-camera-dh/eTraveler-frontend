@@ -112,6 +112,15 @@
         <servlet-name>fakeLims</servlet-name>
         <url-pattern>/Prod/Results/*</url-pattern>
     </servlet-mapping>
+    
+    <servlet>
+        <servlet-name>limsBack</servlet-name>
+        <jsp-file>/fakeLimsBack.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>limsBack</servlet-name>
+        <url-pattern>/limsBack</url-pattern>
+    </servlet-mapping>
 
     <context-param>
         <param-name>org.srs.web.base.datasource.mode</param-name>

@@ -23,7 +23,7 @@
     and PI.id is null;
 </sql:query>
 <c:forEach var="prereq" items="${unfilledPrereqsQ.rows}">
-    <c:out value="${prereq.prereqProcessId}"/>
+
     <sql:query var="activityQ" >
         select id from Activity where
         hardwareId=?<sql:param value="${prereq.hardwareId}"/>

@@ -56,7 +56,7 @@
         insert into JobStepHistory set
         jobHarnessStepId=(select id from JobHarnessStep where name='registered'),
         activityId=?<sql:param value="${activityRow.id}"/>,
-        createdBy=?<sql:param value="${userName}"/>,
+        createdBy=?<sql:param value="${inputs.operator}"/>,
         creationTS=now();
     </sql:update>
 </c:if>
