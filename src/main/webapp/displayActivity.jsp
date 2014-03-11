@@ -16,6 +16,8 @@
         <title>Activity</title>
     </head>
     <body>
+        <traveler:checkId table="Activity" id="${param.activityId}"/>
+
         <traveler:setReturn extra="#belowTheFold"/>
         <traveler:setPaths activityId="${param.activityId}"/>
         

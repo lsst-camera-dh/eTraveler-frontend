@@ -18,6 +18,8 @@
     <body>
         <h1>Hardware!</h1>
 
+        <traveler:checkId table="Hardware" id="${param.hardwareId}"/>
+        
         <traveler:hardwareHeader hardwareId="${param.hardwareId}"/>
         <traveler:hardwareStatusWidget hardwareId="${param.hardwareId}"/>
         

@@ -16,8 +16,8 @@
         <title>Process Dump</title>
     </head>
     <body>
-
         <traveler:lastInPath processPath="${param.processPath}"/>
+        <traveler:checkId table="Process" id="${processId}"/>
 
         <table>
             <tr>

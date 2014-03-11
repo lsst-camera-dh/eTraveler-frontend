@@ -9,6 +9,8 @@
 <%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql" %>
 <%@taglib prefix="traveler" tagdir="/WEB-INF/tags"%>
 <!DOCTYPE html>
+<traveler:checkId table="HardwareType" id="${param.hardwareTypeId}"/>
+        
 <sql:query var="hardwareTypeQ" >
     select * from HardwareType where id=?<sql:param value="${param.hardwareTypeId}"/>;
 </sql:query>
