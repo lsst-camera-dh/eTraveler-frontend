@@ -63,7 +63,12 @@
         from JobStepHistory JSH
         inner join JobHarnessStep JHS on JHS.id=JSH.jobHarnessStepId
         where JSH.activityId=?<sql:param value="${activityId}"/>
-        order by JSH.creationTS desc
+        order by JSH.id desc
     </sql:query>
-    <display:table name="${historyQ.rows}" class="datatable"/>
+    <display:table name="${historyQ.rows}" class="datatable">
+        <display:column property="name" sortable="true" headerClass="sortable"/>
+        <display:column property="errorString" sortable="true" headerClass="sortable"/>
+        <display:column property="createdBy" sortable="true" headerClass="sortable"/>
+        <display:column property="creationTS" sortable="true" headerClass="sortable"/>
+    </display:table>
 </c:if>
