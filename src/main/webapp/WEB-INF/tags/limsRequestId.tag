@@ -43,12 +43,16 @@
 
 <c:if test="${allOk}">
     <sql:query var="prereqQ" >
-        select A.id as activityId, A.hardwareId, A.createdBy, HT.name as hardwareName, P.name as processName, P.userVersionString
+        select A.id as activityId, A.hardwareId, A.createdBy,
+        H.lsstId,
+        HT.name as hardwareTypeName, 
+        P.name as processName, P.userVersionString
         from
         Prerequisite PI
         inner join Activity A on A.id=PI.prerequisiteActivityId
         inner join Process P on P.id=A.processId
         inner join HardwareType HT on HT.id=P.hardwareTypeId
+        inner join Hardware H on H.id=A.hardwareId
         where
         PI.activityId=?<sql:param value="${activityRow.id}"/>
     </sql:query>
@@ -68,8 +72,8 @@
             "prereq": [<c:forEach var="prereqRow" items="${prereqQ.rows}" varStatus="status">
                 {
                     "jobid": "${prereqRow.activityId}",
-                    "unit_type": "${prereqRow.hardwareName}",
-                    "unit_id": "${prereqRow.hardwareId}",
+                    "unit_type": "${prereqRow.hardwareTypeName}",
+                    "unit_id": "${prereqRow.lsstId}",
                     "job": "${prereqRow.processName}",
                     "version": "${prereqRow.userVersionString}",
                     "operator": "${prereqRow.createdBy}"
