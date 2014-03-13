@@ -31,7 +31,8 @@
 <c:if test="${allOk}">
     <c:set var="urlComponents" value="${fn:split(pageContext.request.requestURI, '/')}"/>
     <c:set var="command" value="${urlComponents[fn:length(urlComponents)-1]}" scope="session"/>
-    <c:url var="backendUrl" value="/limsBack" context="/">
+<%--    <c:url var="backendUrl" value="/limsBack" context="/">--%>
+    <c:url var="backendUrl" value="/fakeLimsBack.jsp" context="/">
         <c:param name="dataSourceMode" value="${dataSourceMode}"/>
     </c:url>
     <c:redirect url="${backendUrl}"/>

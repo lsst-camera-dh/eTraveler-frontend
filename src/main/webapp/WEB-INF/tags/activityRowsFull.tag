@@ -29,15 +29,18 @@
     P.travelerActionMask&(select maskBit from InternalAction where name='harnessedJob') as isHarnessed,
     PE.id as processEdgeId, PE.step,
     Ac.id as activityId, Ac.begin, Ac.end,
-    AFS.name as statusName
+    AFS.name as statusName,
+    JSH.id as jobStepId
     from
     Activity Ap
     inner join ProcessEdge PE on PE.parent=Ap.processId
     inner join Process P on P.id=PE.child
     left join Activity Ac on Ac.parentActivityId=Ap.id and Ac.processEdgeId=PE.id
     left join ActivityFinalStatus AFS on AFS.id=Ac.activityFinalStatusId
+    left join JobStepHistory JSH on JSH.activityId=Ac.id
     where
     Ap.id=?<sql:param value="${activityId}"/>
+    group by Ac.id
     order by abs(PE.step), Ac.iteration;
 </sql:query>
     
@@ -78,14 +81,17 @@
                         </c:when>
                         <c:when test="${! empty childRow.begin}">
                             <c:choose>
-                                <c:when test="${(childRow.isHarnessed==0) && (not travelerFailed)}">
+                                <c:when test="${childRow.isHarnessed!=0 && ! empty childRow.jobStepId}">
+                                    JH In Progress
+                                </c:when>
+                                <c:when test="${not travelerFailed}">
                                     <c:set var="noneStartedAndUnFinished" value="false"/>
                                     <c:set var="currentStepLink" value="${contentLink}" scope="request"/>
                                     Needs Work
                                 </c:when>
-                                <c:otherwise>
+<%--                                <c:otherwise>
                                     JH In Progress
-                                </c:otherwise>
+                                </c:otherwise>--%>
                             </c:choose>
                         </c:when>
                     </c:choose>

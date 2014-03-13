@@ -4,7 +4,7 @@
 
     <session-config>
         <session-timeout>
-            30
+            300
         </session-timeout>
     </session-config>
 
@@ -65,7 +65,7 @@
         </init-param>
         <init-param>
             <param-name>skipPages</param-name>
-            <param-value>fakeLimsBack.jsp,fakeLimsFront.jsp</param-value>
+            <param-value>fakeLimsBack.jsp*,fakeLimsFront.jsp</param-value>
         </init-param>
     </filter>
 
@@ -112,7 +112,7 @@
         <servlet-name>fakeLims</servlet-name>
         <url-pattern>/Prod/Results/*</url-pattern>
     </servlet-mapping>
-    
+    <!--
     <servlet>
         <servlet-name>limsBack</servlet-name>
         <jsp-file>/fakeLimsBack.jsp</jsp-file>
@@ -121,7 +121,7 @@
         <servlet-name>limsBack</servlet-name>
         <url-pattern>/limsBack</url-pattern>
     </servlet-mapping>
-
+-->
     <context-param>
         <param-name>org.srs.web.base.datasource.mode</param-name>
         <param-value>dataSourceMode</param-value>
