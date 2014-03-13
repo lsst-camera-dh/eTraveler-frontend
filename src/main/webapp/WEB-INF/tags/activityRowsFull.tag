@@ -40,7 +40,7 @@
     left join JobStepHistory JSH on JSH.activityId=Ac.id
     where
     Ap.id=?<sql:param value="${activityId}"/>
-    group by Ac.id
+    group by P.id, Ac.id
     order by abs(PE.step), Ac.iteration;
 </sql:query>
     

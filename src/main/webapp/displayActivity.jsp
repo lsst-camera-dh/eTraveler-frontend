@@ -50,10 +50,10 @@
                 <td style="vertical-align:top;">
                     <traveler:activityTable activityId="${param.activityId}"/>
                     <c:if test="${startNextStep}"><c:redirect url="${currentStepLink}"/></c:if>
-                    <a href="${currentStepLink}" target="content">Current step</a>
                 </td>
                 <td style="vertical-align:top;">
                     <iframe name="content" src="${currentStepLink}" width="600" height="400"></iframe>
+                    <a href="${currentStepLink}" target="content">Current step</a>
                 </td>
             </tr>
         </table>
