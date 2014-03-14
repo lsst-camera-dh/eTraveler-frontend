@@ -53,6 +53,7 @@
                 </td>
                 <td style="vertical-align:top;">
                     <iframe name="content" src="${currentStepLink}" width="600" height="400"></iframe>
+                    <br>
                     <a href="${currentStepLink}" target="content">Current step</a>
                 </td>
             </tr>
