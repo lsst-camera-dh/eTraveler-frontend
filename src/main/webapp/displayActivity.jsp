@@ -43,11 +43,11 @@
                 </td>
             </tr>
         </table>
+        <h2>Steps</h2>
     <div id="theFold"/>        
         <table>
             <tr>
                 <td style="vertical-align:top;">
-                    <h2>Steps</h2>
                     <traveler:activityTable activityId="${param.activityId}"/>
                     <c:if test="${startNextStep}"><c:redirect url="${currentStepLink}"/></c:if>
                 </td>

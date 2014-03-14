@@ -41,7 +41,7 @@
         <td>
             <c:choose>
                 <c:when test="${empty activity.begin}">
-                    Needs Prep
+                    In Prep
                 </c:when>
                 <c:otherwise>
                     ${activity.begin}
