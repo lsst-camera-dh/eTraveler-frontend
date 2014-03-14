@@ -18,7 +18,7 @@
     <body>
         <traveler:checkId table="Activity" id="${param.activityId}"/>
 
-        <traveler:setReturn extra="#belowTheFold"/>
+        <traveler:setReturn extra="#theFold"/>
         <traveler:setPaths activityId="${param.activityId}"/>
         
         <sql:query var="activityQ" >
@@ -43,11 +43,11 @@
                 </td>
             </tr>
         </table>
-                <div id="belowTheFold">        
-        <h2>Steps</h2>
+    <div id="theFold"/>        
         <table>
             <tr>
                 <td style="vertical-align:top;">
+                    <h2>Steps</h2>
                     <traveler:activityTable activityId="${param.activityId}"/>
                     <c:if test="${startNextStep}"><c:redirect url="${currentStepLink}"/></c:if>
                 </td>
@@ -58,6 +58,5 @@
                 </td>
             </tr>
         </table>
-                </div>
     </body>
 </html>

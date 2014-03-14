@@ -17,9 +17,6 @@
 
         <traveler:retryActivity activityId="${param.activityId}"/>
 
-        <c:redirect url="displayActivity.jsp">
-            <c:param name="activityId" value="${param.topActivityId}"/>
-        </c:redirect>
-<%--        <c:redirect url="${header.referer}"/>--%>
+        <traveler:redirDA/>
     </body>
 </html>

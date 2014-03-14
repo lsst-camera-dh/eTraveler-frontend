@@ -43,8 +43,6 @@
             <traveler:setHardwareStatus hardwareId="${param.hardwareId}" hardwareStatusId="${statQ.rows[0].id}"/>
         </c:if>
 
-        <c:redirect url="displayActivity.jsp">
-            <c:param name="activityId" value="${activity.id}"/>
-        </c:redirect>
+        <traveler:redirDA activityId="${activity.id}"/>
     </body>
 </html>

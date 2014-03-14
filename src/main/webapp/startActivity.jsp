@@ -7,6 +7,7 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql" %>
+<%@taglib prefix="traveler" tagdir="/WEB-INF/tags"%>
 <!DOCTYPE html>
 <html>
     <head>
@@ -19,10 +20,7 @@
             begin=now()
             where id=?<sql:param value="${param.activityId}"/>
         </sql:update>
-            
-        <c:redirect url="displayActivity.jsp">
-            <c:param name="activityId" value="${param.topActivityId}"/>                
-        </c:redirect>
-            
+
+        <traveler:redirDA/>
     </body>
 </html>
