@@ -56,19 +56,6 @@
         </c:if>
 </table>
 
-<c:if test="${activity.isHarnessed != 0}">
-    <h3>Job Harness History</h3>
-    <sql:query var="historyQ" >
-        select JSH.*, JHS.name
-        from JobStepHistory JSH
-        inner join JobHarnessStep JHS on JHS.id=JSH.jobHarnessStepId
-        where JSH.activityId=?<sql:param value="${activityId}"/>
-        order by JSH.id desc
-    </sql:query>
-    <display:table name="${historyQ.rows}" class="datatable">
-        <display:column property="name" sortable="true" headerClass="sortable"/>
-        <display:column property="errorString" sortable="true" headerClass="sortable"/>
-        <display:column property="createdBy" sortable="true" headerClass="sortable"/>
-        <display:column property="creationTS" sortable="true" headerClass="sortable"/>
-    </display:table>
+<c:if test="${! empty activity.begin && activity.isHarnessed != 0}">
+    <traveler:jhWidget activityId="${activityId}"/>
 </c:if>
