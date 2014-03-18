@@ -39,10 +39,10 @@
 <c:if test="${! empty processQ.rows}">
     <h2>Process Steps</h2>
     <display:table name="${processQ.rows}" class="datatable">
-        <display:column property="name"/>
+        <display:column property="name" title="Pattern"/>
         <display:column property="description"/>
-        <display:column property="processName"/>
-        <display:column property="userVersionString"/>
+        <display:column property="processName" title="Job"/>
+        <display:column property="userVersionString" title="Version"/>
     </display:table>
 </c:if>
     

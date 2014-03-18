@@ -11,55 +11,62 @@
 
 <%@attribute name="activityId" required="true"%>
 
-<sql:query var="unfilledPrereqsQ" >
-    select A.hardwareId, PP.id as ppid, PP.prereqProcessId, PI.id as piid
-    from
-    Activity A
-    inner join PrerequisitePattern PP on PP.processId=A.processId
-    left join Prerequisite PI on PI.prerequisitePatternId=PP.id and PI.activityId=A.id
-    where 
-    A.id=?<sql:param value="${activityId}"/>
-    and PP.prerequisiteTypeid=(select id from PrerequisiteType where name='PROCESS_STEP')
-    and PI.id is null;
-</sql:query>
-<c:forEach var="prereq" items="${unfilledPrereqsQ.rows}">
-
-    <sql:query var="activityQ" >
-        select id from Activity where
-        hardwareId=?<sql:param value="${prereq.hardwareId}"/>
-        and processId=?<sql:param value="${prereq.prereqProcessId}"/>
-        and activityFinalStatusId=(select id from ActivityFinalStatus where name='success')
-        order by end desc limit 1;
-    </sql:query>
-    <c:if test="${! empty activityQ.rows}">
-        <sql:update >
-            insert into Prerequisite set
-            prerequisitePatternId=?<sql:param value="${prereq.ppid}"/>,
-            activityId=?<sql:param value="${activityId}"/>,
-            prerequisiteActivityId=?<sql:param value="${activityQ.rows[0].id}"/>,
-            createdBy=?<sql:param value="${userName}"/>,
-            creationTS=now();
-        </sql:update>
-    </c:if>
-</c:forEach>
-        
-<sql:query var="filledPrereqsQ" >
-    select PP.name as patternName, P.id as processId, P.name as processName, P.userVersionString, Ac.id as activityId, Ac.end
+<sql:query var="prereqsQ" >
+    select 
+    Ap.id as activityId, Ap.hardwareId,
+    PP.id as ppId, PP.name as patternName, PP.prereqProcessId, PP.description,
+    P.name as processName, P.userVersionString, 
+    Ac.begin
     from
     Activity Ap
     inner join PrerequisitePattern PP on PP.processId=Ap.processId
-    left join (Prerequisite PI
-    inner join Activity Ac on Ac.id=PI.prerequisiteActivityId
-    inner join Process P on P.id=Ac.processId) on PI.prerequisitePatternId=PP.id and PI.activityId=Ap.id
+    inner join Process P on P.id=PP.prereqProcessId
+    left join (
+        Prerequisite PI
+        inner join Activity Ac on Ac.id=PI.prerequisiteActivityId
+    ) on PI.prerequisitePatternId=PP.id and PI.activityId=Ap.id
     where Ap.id=?<sql:param value="${activityId}"/>
     and PP.prerequisiteTypeid=(select id from PrerequisiteType where name='PROCESS_STEP');
 </sql:query>
-<c:if test="${! empty filledPrereqsQ.rows}">
+<c:if test="${! empty prereqsQ.rows}">
     <h2>Required Steps</h2>
-    <display:table name="${filledPrereqsQ.rows}" id="row" class="datatable">
+    <display:table name="${prereqsQ.rows}" id="row" class="datatable">
         <display:column property="patternName" title="Pattern"/>
+        <display:column property="description"/>
         <display:column property="processName" title="Job"/>
         <display:column property="userVersionString" title="Version"/>
-        <display:column property="end" title="Completion"/>
+        <display:column title="Start">
+            <c:choose>
+                <c:when test="${! empty row.begin}">
+                    ${row.begin}
+                </c:when>
+                <c:otherwise>
+                    <sql:query var="activityQ" >
+                        select id, begin from Activity where
+                        hardwareId=?<sql:param value="${row.hardwareId}"/>
+                        and processId=?<sql:param value="${row.prereqProcessId}"/>
+                        and activityFinalStatusId=(select id from ActivityFinalStatus where name='success')
+                        order by begin desc;
+                    </sql:query>
+                    <c:choose>
+                        <c:when test="${! empty activityQ.rows}">
+                            <form method="GET" action="satisfyPrereq.jsp">
+                                <input type="HIDDEN" name="prerequisitePatternId" value="${row.ppId}">
+                                <input type="HIDDEN" name="activityId" value="${activityId}">
+                                <select name="prerequisiteActivityId">
+                                    <c:forEach var="activity" items="${activityQ.rows}">
+                                        <option value="${activity.id}">${activity.begin}</option>
+                                    </c:forEach>
+                                </select>
+                                <input type="SUBMIT" value="This One">
+                            </form>
+                        </c:when>
+                        <c:otherwise>
+                            No suitable job found.
+                        </c:otherwise>
+                    </c:choose>
+                </c:otherwise>
+            </c:choose>
+        </display:column>
     </display:table>
 </c:if>
