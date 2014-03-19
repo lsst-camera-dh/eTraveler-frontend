@@ -134,4 +134,13 @@
         <listener-class>org.srs.web.base.datasource.DefaultDataSourceSwitcher</listener-class>
     </listener>
 
+    <context-param>
+        <param-name>
+            helpDocumentationUrl
+        </param-name>
+        <param-value>
+https://confluence.slac.stanford.edu/display/LSSTCAM/eTraveler+frontend+documentation
+        </param-value>
+    </context-param>
+
 </web-app>
