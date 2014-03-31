@@ -43,25 +43,25 @@
                     and H.id=?<sql:param value="${param.hardwareId}"/>
                     and HR.end is null;
                 </sql:query>
+                <c:choose>
+                    <c:when test="${fn:length(hrQ.rows) != 1}">
+                        <c:set var="allOk" value="false"/>
+                        <c:set var="message" value="Bug #606136 ${fn:length(hrQ.rows)}"/>
+                    </c:when>
+                    <c:otherwise>
+                        <c:set var="relation" value="${hrQ.rows[0]}"/>
+                        <c:choose>
+                            <c:when test="${empty relation.id}">
+                                <c:set var="allOk" value="false"/>
+                                <c:set var="message" value="Process ${relation.processName} is supposed to break a relationship of type ${relation.name}, but none exists for component ${relation.lsstId}."/>
+                            </c:when>
+                            <c:otherwise>
+                                <c:set var="relationToBreak" value="${relation.id}"/>
+                            </c:otherwise>
+                        </c:choose>
+                    </c:otherwise>
+                </c:choose>
             </c:if>
-            <c:choose>
-                <c:when test="${fn:length(hrQ.rows) != 1}">
-                    <c:set var="allOk" value="false"/>
-                    <c:set var="message" value="Bug #606136"/>
-                </c:when>
-                <c:otherwise>
-                    <c:set var="relation" value="${hrQ.rows[0]}"/>
-                    <c:choose>
-                        <c:when test="${empty relation.id}">
-                            <c:set var="allOk" value="false"/>
-                            <c:set var="message" value="Process ${relation.processName} is supposed to break a relationship of type ${relation.name}, but none exists for component ${relation.lsstId}."/>
-                        </c:when>
-                        <c:otherwise>
-                            <c:set var="relationToBreak" value="${relation.id}"/>
-                        </c:otherwise>
-                    </c:choose>
-                </c:otherwise>
-            </c:choose>
         </c:if>
         
         <c:choose>
