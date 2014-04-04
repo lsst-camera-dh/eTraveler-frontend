@@ -16,7 +16,9 @@
     </head>
     <body>
         <sql:query var="activityQ" >
-            select A.processId, concat(P.name, ' v', P.version) as processName
+            select 
+            A.processId, A.hardwareId,
+            concat(P.name, ' v', P.version) as processName, P.hardwareTypeId
             from Activity A
             inner join Process P on P.id=A.processId
             where A.id=?<sql:param value="${param.activityId}"/>;
@@ -26,5 +28,12 @@
         <h2><c:out value="${activity.processName}"/></h2>
         <traveler:processWidget processId="${activity.processId}"/>
         <traveler:activityWidget activityId="${param.activityId}"/>
+        <traveler:eclForm
+            author="${userName}"
+            hardwareTypeId="${activity.hardwareTypeId}"
+            hardwareId="${activity.hardwareId}"
+            processId="${activity.processId}"
+            activityId="${param.activityId}"
+            />
     </body>
 </html>
