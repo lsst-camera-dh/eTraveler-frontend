@@ -10,6 +10,10 @@ import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.tagext.JspFragment;
 import javax.servlet.jsp.tagext.SimpleTagSupport;
 
+import org.lsst.ccs.elog.ELogConnectionUtils;
+import org.lsst.ccs.elog.ElogEntry;
+import org.lsst.ccs.elog.ElogTransactionResult;
+
 /**
  *
  * @author focke
@@ -21,6 +25,10 @@ public class eclPost extends SimpleTagSupport {
     private int hardwareId;
     private int processId;
     private int activityId;
+    
+    private ELogConnectionUtils conn;
+    private ElogEntry entry;
+    private ElogTransactionResult result;
 
     /**
      * Called by the container to invoke this tag. The implementation of this
@@ -37,13 +45,26 @@ public class eclPost extends SimpleTagSupport {
             //
             // out.println("<strong>" + attribute_1 + "</strong>");
             // out.println("    <blockquote>");
-
+/**
             out.println("Author: " + author + "<br>");
             out.println("Activity: " + activityId + "<br>");
             out.println("Process: " + processId + "<br>");
             out.println("Component: " + hardwareId + "<br>");
             out.println("Component Type: " + hardwareTypeId + "<br>");
             out.println("Text: " + text + "<br>");
+**/
+            conn = new ELogConnectionUtils();
+            entry = new ElogEntry();
+            entry.setAuthor(author);
+            entry.setCategory("Testing");
+            entry.setFormName("eTraveler entry");
+            entry.setFormField("Author", author);
+            entry.setFormField("ActivityId", "" + activityId);
+            entry.setFormField("ProcessId", "" + processId);
+            entry.setFormField("ComponentId", "" + hardwareId);
+            entry.setFormField("HardwareTypeId", "" + hardwareTypeId);
+            entry.setFormField("text", text);
+            result = conn.postEntryToElog(entry, "development");
             
             JspFragment f = getJspBody();
             if (f != null) {

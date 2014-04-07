@@ -40,9 +40,12 @@
         <c:otherwise>
             Bug 098653
         </c:otherwise>
-    </c:choose>
-            
-    <c:url var="displayUrl" value="${page}">
+    </c:choose>        
+    
+    <c:set var="fullContext" 
+           value="${pageContext.request.scheme}://${pageContext.request.serverName}:${pageContext.request.serverPort}${pageContext.request.contextPath}"/>
+
+    <c:url var="displayUrl" value="${fullContext}/${page}">
         <c:param name="${paramName}" value="${paramValue}"/>
     </c:url>
     <c:set var="displayLink" value="<a href='${displayUrl}'>eTraveler</a>"/>
@@ -57,4 +60,6 @@
         activityId="${param.activityId}"
         />
     </body>
+    
+    <c:redirect url="${header.referer}"/>
 </html>

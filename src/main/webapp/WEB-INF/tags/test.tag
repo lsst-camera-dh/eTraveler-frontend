@@ -15,4 +15,11 @@
 <c:set var="fnord" value="eleventy" scope="request"/>
 [${pageContext.request.getHeader("Referer")}]<br>
 [${returnTo}]<br>
+[${pageContext.getRequest().getServerName()}]<br>
+[${pageContext.request.scheme}]<br>
+[${pageContext.request.serverName}]<br>
+[${pageContext.request.serverPort}]<br>
+[${pageContext.request.contextPath}]<br>
+<c:set var="req" value="pageContext.request"/>
+[${request.contextPath}]<br>
 <h2>End Test</h2>
