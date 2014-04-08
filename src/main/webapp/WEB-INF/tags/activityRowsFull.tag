@@ -26,7 +26,7 @@
     select
     Ap.hardwareId, Ap.inNCR,
     P.id as processId, P.name, P.hardwareRelationshipTypeId, P.substeps,
-    P.travelerActionMask&(select maskBit from InternalAction where name='harnessedJob') as isHarnessed,
+    P.travelerActionMask&(select maskBit from InternalAction where name='async') as isAsync,
     PE.id as processEdgeId, PE.step,
     Ac.id as activityId, Ac.begin, Ac.end,
     AFS.name as statusName,
@@ -81,8 +81,8 @@
                         </c:when>
                         <c:when test="${! empty childRow.begin}">
                             <c:choose>
-                                <c:when test="${childRow.isHarnessed!=0 && ! empty childRow.jobStepId}">
-                                    JH In Progress
+                                <c:when test="${childRow.isAsync!=0 && ! empty childRow.jobStepId}">
+                                    Async Job In Progress
                                 </c:when>
                                 <c:when test="${not travelerFailed}">
                                     <c:set var="noneStartedAndUnFinished" value="false"/>

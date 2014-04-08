@@ -24,6 +24,7 @@
         [<c:out value="${pageContext.request}"/>]<br>
         [<c:out value="${pageContext.request.requestURI}"/>]<br>
         [${header}]<br>
+        [${header.referer}]<br>
         [${header['Referer']}]<br>
         [${pageContext.request.getHeader("Referer")}]<br>
         [${pageContext.request.getRequestURL()}]<br>
