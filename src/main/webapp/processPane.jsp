@@ -16,7 +16,7 @@
     </head>
     <body>
         <sql:query var="processQ" >
-            select concat(P.name, ' v', P.version) as processName
+            select concat(P.name, ' v', P.version) as processName, P.hardwareTypeId
             from Process P
             where P.id=?<sql:param value="${param.processId}"/>;
         </sql:query>
@@ -36,5 +36,10 @@
                 <INPUT TYPE=SUBMIT value="Start Prep">
             </form>
         </c:if>
+        <traveler:eclWidget
+            author="${userName}"
+            hardwareTypeId="${process.hardwareTypeId}"
+            processId="${param.processId}"
+            />
     </body>
 </html>

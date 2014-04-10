@@ -48,6 +48,6 @@
         
         <c:set var="command">lcatr-harness --unit-type ${activity.hardwareTypeName} --unit-id ${activity.lsstId} --job ${activity.processName} --version ${activity.userVersionString}</c:set>
 Now enter the following command:<br>
-<c:out value="${command}"/>
+<c:out value="${command}"/><br>
     </c:otherwise>
 </c:choose>

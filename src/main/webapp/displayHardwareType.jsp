@@ -30,6 +30,11 @@
         <traveler:travelerTypeList hardwareTypeId="${param.hardwareTypeId}"/>
         <traveler:newTravelerForm hardwareTypeId="${param.hardwareTypeId}"/>
    
+        <traveler:eclWidget
+            author="${userName}"
+            hardwareTypeId="${param.hardwareTypeId}"
+            />
+
         <h2>Instances</h2>
         <traveler:hardwareList  hardwareTypeId="${param.hardwareTypeId}"/>
         <h3>Register a new one:</h3>

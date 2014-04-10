@@ -28,7 +28,7 @@
         <h2><c:out value="${activity.processName}"/></h2>
         <traveler:processWidget processId="${activity.processId}"/>
         <traveler:activityWidget activityId="${param.activityId}"/>
-        <traveler:eclForm
+        <traveler:eclWidget
             author="${userName}"
             hardwareTypeId="${activity.hardwareTypeId}"
             hardwareId="${activity.hardwareId}"

@@ -40,25 +40,31 @@
         <name>hardwareTypeId</name>
         <required>true</required>
         <rtexprvalue>true</rtexprvalue>
-        <type>java.lang.int</type>
+        <type>java.lang.String</type>
     </attribute>
     <attribute>
         <name>hardwareId</name>
-        <required>false</required>
+        <required>true</required>
         <rtexprvalue>true</rtexprvalue>
-        <type>java.lang.int</type>
+        <type>java.lang.String</type>
     </attribute>
     <attribute>
         <name>processId</name>
-        <required>false</required>
+        <required>true</required>
         <rtexprvalue>true</rtexprvalue>
-        <type>java.lang.int</type>
+        <type>java.lang.String</type>
     </attribute>
     <attribute>
         <name>activityId</name>
-        <required>false</required>
+        <required>true</required>
         <rtexprvalue>true</rtexprvalue>
-        <type>java.lang.int</type>
+        <type>java.lang.String</type>
+    </attribute>
+    <attribute>
+        <name>version</name>
+        <required>true</required>
+        <rtexprvalue>true</rtexprvalue>
+        <type>java.lang.String</type>
     </attribute>
   </tag>
 </taglib>

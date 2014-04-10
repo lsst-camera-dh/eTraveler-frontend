@@ -21,10 +21,11 @@ import org.lsst.ccs.elog.ElogTransactionResult;
 public class eclPost extends SimpleTagSupport {
     private String text;
     private String author;
-    private int hardwareTypeId;
-    private int hardwareId;
-    private int processId;
-    private int activityId;
+    private String hardwareTypeId;
+    private String hardwareId;
+    private String processId;
+    private String activityId;
+    private String version;
     
     private ELogConnectionUtils conn;
     private ElogEntry entry;
@@ -59,13 +60,13 @@ public class eclPost extends SimpleTagSupport {
             entry.setCategory("Testing");
             entry.setFormName("eTraveler entry");
             entry.setFormField("Author", author);
-            entry.setFormField("ActivityId", "" + activityId);
-            entry.setFormField("ProcessId", "" + processId);
-            entry.setFormField("ComponentId", "" + hardwareId);
-            entry.setFormField("HardwareTypeId", "" + hardwareTypeId);
+            entry.setFormField("ActivityId", activityId);
+            entry.setFormField("ProcessId", processId);
+            entry.setFormField("ComponentId", hardwareId);
+            entry.setFormField("HardwareTypeId", hardwareTypeId);
             entry.setFormField("text", text);
-            result = conn.postEntryToElog(entry, "development");
-            
+            result = conn.postEntryToElog(entry, version);
+
             JspFragment f = getJspBody();
             if (f != null) {
                 f.invoke(out);
@@ -86,17 +87,19 @@ public class eclPost extends SimpleTagSupport {
     public void setAuthor(String author) {
         this.author = author;
     }
-    public void setHardwareTypeId(int hardwareTypeId) {
+    public void setHardwareTypeId(String hardwareTypeId) {
         this.hardwareTypeId = hardwareTypeId;
     }
-    public void setHardwareId(int hardwareId) {
+    public void setHardwareId(String hardwareId) {
         this.hardwareId = hardwareId;
     }
-    public void setProcessId(int processId) {
+    public void setProcessId(String processId) {
         this.processId = processId;
     }
-    public void setActivityId(int activityId) {
+    public void setActivityId(String activityId) {
         this.activityId = activityId;
     }
-    
+    public void setVersion(String version) {
+        this.version = version;
+    }
 }

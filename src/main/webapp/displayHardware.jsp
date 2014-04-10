@@ -63,6 +63,12 @@
                 <INPUT TYPE=SUBMIT value="Add Identifier">
             </form>
         </c:if>
+
+        <traveler:eclWidget
+            author="${userName}"
+            hardwareTypeId="${hardwareTypeId}"
+            hardwareId="${param.hardwareId}"
+            />
         
         <h2>Travelers</h2>
         <traveler:newTravelerForm hardwareTypeId="${hardwareTypeId}" hardwareId="${param.hardwareId}"/>
