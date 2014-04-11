@@ -16,7 +16,7 @@
     Ap.id as activityId, Ap.hardwareId,
     PP.id as ppId, PP.name as patternName, PP.prereqProcessId, PP.description,
     P.name as processName, P.userVersionString, 
-    Ac.begin
+    Ac.id as childId, Ac.begin
     from
     Activity Ap
     inner join PrerequisitePattern PP on PP.processId=Ap.processId
@@ -35,10 +35,10 @@
         <display:column property="description"/>
         <display:column property="processName" title="Job"/>
         <display:column property="userVersionString" title="Version"/>
-        <display:column title="Start">
+        <display:column title="Id, Start">
             <c:choose>
                 <c:when test="${! empty row.begin}">
-                    ${row.begin}
+                    ${row.childId}, ${row.begin}
                 </c:when>
                 <c:otherwise>
                     <sql:query var="activityQ" >
@@ -55,7 +55,7 @@
                                 <input type="HIDDEN" name="activityId" value="${activityId}">
                                 <select name="prerequisiteActivityId">
                                     <c:forEach var="activity" items="${activityQ.rows}">
-                                        <option value="${activity.id}">${activity.begin}</option>
+                                        <option value="${activity.id}">${activity.id}, ${activity.begin}</option>
                                     </c:forEach>
                                 </select>
                                 <input type="SUBMIT" value="This One">

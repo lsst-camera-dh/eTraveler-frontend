@@ -17,6 +17,8 @@
 <h2>eLog</h2>
 
 <c:set var="version" value="development"/>
+<c:set var="eLogHome" value="http://dbweb3.fnal.gov:8080/ECL/lsst_camera_dev"/>
+<c:set var="eLogSearchPath" value="E/search"/>
 
 <c:set var="activityField" value="activityId${! empty activityId ? activityId : 0}"/>
 <c:set var="processField" value="processId${! empty processId ? processId : 0}"/>
@@ -60,7 +62,7 @@
 </c:url>
 <c:set var="displayLink" value="<a href='${displayUrl}' target='_blank'>eTraveler</a>"/>
 
-<c:url var="searchLink" value="http://dbweb3.fnal.gov:8080/ECL/lsst_camera_dev/E/search">
+<c:url var="searchLink" value="${eLogHome}/${eLogSearchPath}">
     <c:param name="text" value="${searchField}"/>
 </c:url>
 <a href="${searchLink}" target="_blank">Search eLog</a>
@@ -73,6 +75,6 @@
     <input type="hidden" name="processId" value="${processField}">
     <input type="hidden" name="activityId" value="${activityField}">
     <input type="hidden" name="version" value="${version}">
-    <input type="text" name="text">
+    <textarea name="text"></textarea>
     <input type="SUBMIT" value="Post a comment">
 </form>
