@@ -29,7 +29,9 @@
         [${pageContext.request.getHeader("Referer")}]<br>
         [${pageContext.request.getRequestURL()}]<br>
         [${pageContext.request.getQueryString()}]<br>
-        
+        <br>
+        [${appVariables.etravelerELogVersion}]
+        <br>
         <c:url var="testLink" value="test.jsp">
             <c:param name="x" value="7"/>
         </c:url>

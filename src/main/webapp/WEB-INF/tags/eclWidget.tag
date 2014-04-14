@@ -16,8 +16,8 @@
 
 <h2>eLog</h2>
 
-<c:set var="version" value="development"/>
-<c:set var="eLogHome" value="http://dbweb3.fnal.gov:8080/ECL/lsst_camera_dev"/>
+<c:set var="version" value="${appVariables.etravelerELogVersion}"/>
+<c:set var="eLogHome" value="${appVariables.etravelerELogUrl}"/>
 <c:set var="eLogSearchPath" value="E/search"/>
 
 <c:set var="activityField" value="activityId${! empty activityId ? activityId : 0}"/>
