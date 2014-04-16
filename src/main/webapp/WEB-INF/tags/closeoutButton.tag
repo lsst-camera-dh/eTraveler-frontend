@@ -13,14 +13,17 @@
 
 <sql:query var="activityQ" >
     select A.*, P.substeps, P.maxIteration,
-    P.travelerActionMask&(select maskBit from InternalAction where name='harnessedJob') as isHarnessed 
+    P.travelerActionMask&(select maskBit from InternalAction where name='harnessedJob') as isHarnessed,
+    P.travelerActionMask&(select maskBit from InternalAction where name='async') as isAsync 
     from Activity A
     inner join Process P on P.id=A.processId
     where A.id=?<sql:param value="${activityId}"/>;
 </sql:query>
 <c:set var="activity" value="${activityQ.rows[0]}"/>
 
+<c:set var="message" value="bug 696274"/>
 <c:set var="readyToClose" value="false"/>
+<c:set var="closed" value="false"/>
 <c:choose>
     <c:when test="${empty activity.begin}">
         <c:set var="message" value="Not started"/>
@@ -28,8 +31,8 @@
     <c:when test="${empty activity.end}">
         <c:set var="message" value="Needs work"/>
         <c:choose>
-            <c:when test="${activity.isHarnessed!=0}">
-                <c:set var="message" value="JH in progress"/>
+            <c:when test="${activity.isAsync != 0}">
+                <c:set var="message" value="Async job in progress"/>
             </c:when>
             <c:when test="${activity.substeps == 'SEQUENCE'}">
                 <sql:query var="stepsRemainingQ" >
@@ -63,32 +66,52 @@
     <c:otherwise>
 <%--        Closed out at ${activity.rows[0]['end']} by <c:out value="${activity.rows[0]['closedBy']}"/>--%>
         <c:set var="message" value="${activity.end}"/>
+        <c:set var="closed" value="true"/>
     </c:otherwise>
 </c:choose>
-<c:choose>
-    <c:when test="${readyToClose}">
-    <table>
-        <tr>
-            <td>
-                <form METHOD=GET ACTION="closeoutActivity.jsp" target="_top">
-                    <input type="hidden" name="activityId" value="${activityId}">       
-                    <input type="hidden" name="topActivityId" value="${param.topActivityId}">       
-                    <INPUT TYPE=SUBMIT value="Closeout">
-                </form>      
-            </td>
-            <c:if test="${activity.iteration < activity.maxIteration}">
-                <td>
-                    <form METHOD=GET ACTION="retryActivity.jsp" target="_top">
-                        <input type="hidden" name="activityId" value="${activityId}">       
-                        <input type="hidden" name="topActivityId" value="${param.topActivityId}">       
-                        <INPUT TYPE=SUBMIT value="Try Again">
-                    </form>      
-                </td>                
-            </c:if>
-        </tr>
-    </table>
-    </c:when>
-    <c:otherwise>
-        <c:out value="${message}"/>
-    </c:otherwise>
-</c:choose>
+
+<c:set var="retryable" value="${activity.iteration < activity.maxIteration && readyToClose}"/>
+<c:if test="${readyToClose}">
+    <c:set var="message" value="Ready to close"/>
+</c:if>
+<c:set var="failable" value="${! closed && ! travelerFailed}"/> <%-- Argh. travelerFailed is not set in ActivityPane --%>
+
+<c:out value="${message}"/><br>
+<table>
+    <tr>
+        <td>
+            <form METHOD=GET ACTION="closeoutActivity.jsp" target="_top">
+                <input type="hidden" name="activityId" value="${activityId}">       
+                <input type="hidden" name="topActivityId" value="${param.topActivityId}">       
+                <INPUT TYPE=SUBMIT value="Closeout"
+                       <c:if test="${! readyToClose}">disabled</c:if>>
+            </form>      
+        </td>
+        <td>
+            <form METHOD=GET ACTION="retryActivity.jsp" target="_top">
+                <input type="hidden" name="activityId" value="${activityId}">       
+                <input type="hidden" name="topActivityId" value="${param.topActivityId}">       
+                <INPUT TYPE=SUBMIT value="Try Again"
+                       <c:if test="${! retryable}">disabled</c:if>>
+            </form>
+        </td>
+        <td>
+            <form METHOD=GET ACTION="failActivity.jsp" target="_top">
+                <input type="hidden" name="activityId" value="${activityId}">       
+                <input type="hidden" name="topActivityId" value="${param.topActivityId}">       
+                <input type="hidden" name="status" value="stopped">
+                <INPUT TYPE=SUBMIT value="Stop Work"
+                       <c:if test="${! failable}">disabled</c:if>>
+            </form>                  
+        </td>
+        <td>
+            <form METHOD=GET ACTION="failActivity.jsp" target="_top">
+                <input type="hidden" name="activityId" value="${activityId}">       
+                <input type="hidden" name="topActivityId" value="${param.topActivityId}">
+                <input type="hidden" name="status" value="failed">
+                <INPUT TYPE=SUBMIT value="Fail"
+                       <c:if test="${! failable}">disabled</c:if>>
+            </form>                  
+        </td>
+    </tr>
+</table>

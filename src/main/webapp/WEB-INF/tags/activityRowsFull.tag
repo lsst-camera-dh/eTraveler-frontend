@@ -115,7 +115,7 @@
                 <c:param name="processPath" value="${myProcessPath}"/>
             </c:url>
             <c:choose>
-                <c:when test="${autoStart && firstUnStarted && noneStartedAndUnFinished}">
+                <c:when test="${autoStart && firstUnStarted && noneStartedAndUnFinished && ! travelerFailed}">
                     <c:set var="contentUrl" value="createActivity.jsp"/>
                 </c:when>
                 <c:otherwise>
@@ -125,7 +125,7 @@
             <c:url var="contentLink" value="${contentUrl}">
                 <c:param name="processId" value="${childRow.processId}"/>
                 <c:param name="topActivityId" value="${param.activityId}"/>
-                <c:if test="${firstUnStarted && noneStartedAndUnFinished}"> <%-- Supply extra args to create an Activity for the Process --%>
+                <c:if test="${firstUnStarted && noneStartedAndUnFinished && ! travelerFailed}"> <%-- Supply extra args to create an Activity for the Process --%>
                     <c:param name="parentActivityId" value="${activityId}"/>
                     <c:param name="processEdgeId" value="${childRow.processEdgeId}"/>
                     <c:param name="hardwareId" value="${childRow.hardwareId}"/>       
