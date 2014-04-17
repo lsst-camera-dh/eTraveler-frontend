@@ -35,6 +35,7 @@
         <%-- Try to show the jh command --%>
         <sql:query var="activityQ">
             select
+            A.end,
             P.name as processName, P.userVersionString,
             H.lsstId,
             HT.name as hardwareTypeName
@@ -46,8 +47,10 @@
         </sql:query>
         <c:set var="activity" value="${activityQ.rows[0]}"/>
         
-        <c:set var="command">lcatr-harness --unit-type ${activity.hardwareTypeName} --unit-id ${activity.lsstId} --job ${activity.processName} --version ${activity.userVersionString}</c:set>
+        <c:if test="${empty activity.end}">
+            <c:set var="command">lcatr-harness --unit-type '${activity.hardwareTypeName}' --unit-id '${activity.lsstId}' --job '${activity.processName}' --version '${activity.userVersionString}'</c:set>
 Now enter the following command:<br>
 <c:out value="${command}"/><br>
+        </c:if>
     </c:otherwise>
 </c:choose>
