@@ -87,20 +87,40 @@
 <traveler:prereqTable prereqTypeName="TEST_EQUIPMENT" activityId="${activityId}"/>
 <traveler:prereqTable prereqTypeName="CONSUMABLE" activityId="${activityId}"/>
 
-<c:if test="${empty activity.begin}">
-    <sql:query var="prereqQ" >
-        select count(PP.id)-count(PR.id) as prsRemaining from
-        PrerequisitePattern PP
-        inner join Activity A on A.processId=PP.processId
-        left join Prerequisite PR on PR.activityId=A.id and PR.prerequisitePatternId=PP.id
-        where A.id=?<sql:param value="${activityId}"/>
-    </sql:query>
-    <c:if test="${prereqQ.rows[0]['prsRemaining']==0}">
-        <form method="get" action="startActivity.jsp" target="_top">
-            <input type="hidden" name="activityId" value="${activityId}">       
-            <input type="hidden" name="topActivityId" value="${param.topActivityId}">       
-            <input type="submit" value="Start Work">
-        </form>
-    </c:if>
-</c:if>
-    
+<c:choose>
+    <c:when test="${empty activity.begin}">
+        <sql:query var="prereqQ" >
+            select count(PP.id)-count(PR.id) as prsRemaining from
+            PrerequisitePattern PP
+            inner join Activity A on A.processId=PP.processId
+            left join Prerequisite PR on PR.activityId=A.id and PR.prerequisitePatternId=PP.id
+            where A.id=?<sql:param value="${activityId}"/>
+        </sql:query>
+        <c:set var="readyToStart" value="${prereqQ.rows[0].prsRemaining==0}"/>
+    </c:when>
+    <c:otherwise>
+        <c:set var="readyToStart" value="false"/>
+    </c:otherwise>
+</c:choose>
+
+<table>
+    <tr>
+        <td>
+            <form method="get" action="startActivity.jsp" target="_top">
+                <input type="hidden" name="activityId" value="${activityId}">
+                <input type="hidden" name="topActivityId" value="${param.topActivityId}">
+                <input type="submit" value="Start Work"
+                       <c:if test="${! readyToStart}">disabled</c:if>>
+            </form>                    
+        </td>
+        <td>
+            <traveler:findTraveler var="travelerId" activityId="${activityId}"/>
+            <traveler:isStopped var="isStopped" activityId="${travelerId}"/>
+            <form method="get" action="formHandlers/restartTraveler.jsp" target="_top">
+                <input type="hidden" name="activityId" value="${travelerId}">
+                <input type="submit" value="Restart"
+                       <c:if test="${! isStopped}">disabled</c:if>>
+           </form>
+        </td>
+    </tr>
+</table>
