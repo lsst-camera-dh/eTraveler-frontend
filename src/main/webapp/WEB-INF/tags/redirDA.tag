@@ -21,7 +21,7 @@
     
 <c:choose>
     <c:when test="${! empty destActivityId}">
-        <c:url var="daStub" value="displayActivity.jsp">
+        <c:url var="daStub" value="/displayActivity.jsp" context="/">
             <c:param name="activityId" value="${destActivityId}"/>
         </c:url>
         <c:set var="daLink" value="${daStub}#theFold"/>
