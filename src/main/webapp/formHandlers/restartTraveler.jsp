@@ -5,6 +5,7 @@
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@taglib prefix="traveler" tagdir="/WEB-INF/tags"%>
 <!DOCTYPE html>
 <html>
@@ -13,7 +14,17 @@
         <title>Restart Traveler</title>
     </head>
     <body>
-        <traveler:restartActivity activityId="${param.activityId}"/>
-        <traveler:redirDA/>
+        <traveler:findTraveler var="travelerId" activityId="${param.activityId}"/>
+        <traveler:isStopped var="isStopped" activityId="${travelerId}"/>
+        
+        <c:choose>
+            <c:when test="${isStopped}">
+                <traveler:restartActivity activityId="${travelerId}"/>
+                <traveler:redirDA activityId="${travelerId}"/>
+            </c:when>
+            <c:otherwise>
+You can't restart a traveler that's not stopped.                
+            </c:otherwise>
+        </c:choose>
     </body>
 </html>

@@ -41,6 +41,11 @@
         <traveler:test/>
         [${fnord}]
         
+        <c:if test="${! empty param.activityId}">
+            <traveler:findTraveler activityId="${param.activityId}" var="foof"/>
+            [[ ${foof} ]]
+        </c:if>
+        
         <h2>page</h2>
 <c:forEach var="v" items="${pageScope}">
         <c:out value="${v.key} ---- ${v.value}"/><br>
