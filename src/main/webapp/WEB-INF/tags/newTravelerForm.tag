@@ -44,7 +44,7 @@
     ;
 </sql:query>
    
-<form METHOD=GET ACTION="createTraveler.jsp">
+<form METHOD=GET ACTION="fh/createTraveler.jsp">
     <input type="hidden" name="inNCR" value="FALSE">
     <table>
         <tr>

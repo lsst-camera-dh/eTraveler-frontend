@@ -55,7 +55,7 @@
             </sql:update>
             <c:set var="hardware" value="${hardwareQ.rows[0]}"/>
         </sql:transaction>
-        <c:redirect url="displayHardware.jsp">
+        <c:redirect url="/displayHardware.jsp" context="/eTraveler">
             <c:param name="hardwareId" value="${hardware.id}"/>
         </c:redirect>
     </body>

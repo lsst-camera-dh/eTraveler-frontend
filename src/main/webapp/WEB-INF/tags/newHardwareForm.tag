@@ -18,7 +18,7 @@
 <c:set var="hType" value="${typeQ.rows[0]}"/>
 
 <h2>Register new ${hType.name}</h2>
-<form METHOD=GET ACTION="createHardware.jsp">
+<form METHOD=GET ACTION="fh/createHardware.jsp">
 
     <table>
         <c:choose>
