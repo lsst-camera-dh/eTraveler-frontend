@@ -62,7 +62,7 @@
         </c:if>
     </sql:query>
 
-    <form action="setHardwareLocation.jsp" method="GET">
+    <form action="fh/setHardwareLocation.jsp" method="GET">
         <input type="hidden" name="hardwareId" value="${hardwareId}"/>
         <select name="newLocationId" required>
             <option value="" selected>Pick a new location</option>

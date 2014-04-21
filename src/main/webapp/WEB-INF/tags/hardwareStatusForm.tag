@@ -18,7 +18,7 @@
     and id!=(select hardwareStatusId from Hardware where id=?<sql:param value="${hardwareId}"/>);
 </sql:query>
 
-<form action="setHardwareStatus.jsp">
+<form action="fh/setHardwareStatus.jsp">
     <input type="hidden" name="hardwareId" value="${hardwareId}">
     <select name="hardwareStatusId" required>
         <option value="" selected>Pick a new status</option>
