@@ -48,7 +48,7 @@
                 HIA.id=HI.authorityId);
         </sql:query>
         <c:if test="${not empty idAuthQ.rows}">
-            <form METHOD=GET ACTION="addIdentifier.jsp">
+            <form METHOD=GET ACTION="fh/addIdentifier.jsp">
                 <input type="hidden" name="hardwareId" value="${param.hardwareId}">
                 <input type="hidden" name="hardwareTypeId" value="${hardwareTypeId}">
 

@@ -15,7 +15,7 @@
     </head>
     <body>
         
-        <form method="get" action="addSite.jsp">
+        <form method="get" action="fh/addSite.jsp">
             <input type="submit" value="Add Site">
             Name: <input type="text" name="name" required>
             jhVirtualEnv: <input type="text" name="jhVirtualEnv">
@@ -25,7 +25,7 @@
         <sql:query var="sitesQ" >
             select id, name from Site
         </sql:query>
-        <form method="get" action="addLocation.jsp">
+        <form method="get" action="fh/addLocation.jsp">
             <input type="submit" value="Add Location">
             Name: <input type="text" name="name" required>
             Site: <select name="siteId">
@@ -35,16 +35,16 @@
             </select>
         </form>
 
-        <form method="get" action="addHardwareType.jsp">
+        <form method="get" action="fh/addHardwareType.jsp">
             <input type="submit" value="Add Hardware Type">
             Name: <input type="text" name="name" required>
-            Drawing: <input type="text" name="drawing" required>
+            Drawing: <input type="text" name="drawing">
         </form>
             
         <sql:query var="hardwareTypesQ" >
             select id, name from HardwareType
         </sql:query>
-        <form method="get" action="addHardwareRelationshipType.jsp">
+        <form method="get" action="fh/addHardwareRelationshipType.jsp">
             <input type="submit" value="Add Hardware Relationship Type">
             Name: <input type="text" name="name" required>
             Hardware Type: <select name="hardwareTypeId">
@@ -59,7 +59,7 @@
             </select>
         </form>
 
-        <form method="get" action="addHardwareIdentifierAuthority.jsp">
+        <form method="get" action="fh/addHardwareIdentifierAuthority.jsp">
             <input type="submit" value="Add Hardware Identifier Authority">
             Name: <input type="text" name="name" required>
         </form>
