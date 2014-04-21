@@ -96,7 +96,7 @@
             </form>
         </td>
         <td>
-            <form METHOD=GET ACTION="failActivity.jsp" target="_top">
+            <form METHOD=GET ACTION="fh/failActivity.jsp" target="_top">
                 <input type="hidden" name="activityId" value="${activityId}">       
                 <input type="hidden" name="topActivityId" value="${param.topActivityId}">       
                 <input type="hidden" name="status" value="stopped">
@@ -105,10 +105,10 @@
             </form>                  
         </td>
         <td>
-            <form METHOD=GET ACTION="failActivity.jsp" target="_top">
+            <form METHOD=GET ACTION="fh/failActivity.jsp" target="_top">
                 <input type="hidden" name="activityId" value="${activityId}">       
                 <input type="hidden" name="topActivityId" value="${param.topActivityId}">
-                <input type="hidden" name="status" value="failed">
+                <input type="hidden" name="status" value="failure">
                 <INPUT TYPE=SUBMIT value="Fail"
                        <c:if test="${! failable}">disabled</c:if>>
             </form>                  
