@@ -50,7 +50,7 @@
                     </sql:query>
                     <c:choose>
                         <c:when test="${! empty activityQ.rows}">
-                            <form method="GET" action="satisfyPrereq.jsp">
+                            <form method="GET" action="fh/satisfyPrereq.jsp">
                                 <input type="HIDDEN" name="prerequisitePatternId" value="${row.ppId}">
                                 <input type="HIDDEN" name="activityId" value="${activityId}">
                                 <select name="prerequisiteActivityId">

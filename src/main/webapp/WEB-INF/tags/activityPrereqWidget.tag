@@ -51,7 +51,7 @@
                     <a href="${hwLink}" target="_top"><c:out value="${row.lsstId}"/></a>
                 </c:when>
                 <c:when test="${(empty row.componentId) and (empty row.satisfaction)}">
-                    <form method="get" action="satisfyPrereq.jsp">
+                    <form method="get" action="fh/satisfyPrereq.jsp">
                         <input type="hidden" name="prerequisitePatternId" value="${row.id}">
                         <input type="hidden" name="activityId" value="${activityId}">
                         <input type="hidden" name="hardwareId" value="${activity.hardwareId}">

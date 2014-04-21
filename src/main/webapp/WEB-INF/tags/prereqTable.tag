@@ -42,7 +42,7 @@
                         <c:out value="${row.satisfaction}"/>
                     </c:when>
                     <c:otherwise>
-                        <form method="get" action="satisfyPrereq.jsp">
+                        <form method="get" action="fh/satisfyPrereq.jsp">
                             <input type="hidden" name="prerequisitePatternId" value="${row.id}">
                             <input type="hidden" name="activityId" value="${activityId}">
                             <input type="submit" value="Got it">

@@ -79,7 +79,7 @@
                             <c:set var="inputType" value="number"/>
                         </c:otherwise>
                     </c:choose>
-                    <form method="get" action="inputResult.jsp">
+                    <form method="get" action="fh/inputResult.jsp">
                         <input type="hidden" name="activityId" value="${activityId}">
                         <input type="hidden" name="inputPatternId" value="${row.id}">
                         <input type="hidden" name="ISName" value="${row.ISName}">
