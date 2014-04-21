@@ -14,7 +14,7 @@
             <tr>
                 <td>Role: ${empty sessionScope.role?"Unknown":sessionScope.role}</td>
                 <td>
-                    <form action="setRole.jsp" method="GET">
+                    <form action="fh/setRole.jsp" method="GET">
                         <select name="role">
                             <option value="Admin">Admin</option>
                             <option value="Approver">Approver</option>
@@ -35,7 +35,7 @@
             <tr>
                 <td>Site: ${empty sessionScope.siteName?"Unknown":sessionScope.siteName}</td>
                 <td>
-                    <form action="setSite.jsp" method="GET">
+                    <form action="fh/setSite.jsp" method="GET">
                         <select name="siteId">
                             <c:forEach var="sRow" items="${siteQ.rows}">
                                 <c:if test="${empty sessionScope.siteName or sRow.name!=sessionScope.siteName}">
@@ -56,7 +56,7 @@
             <tr>
                 <td>Default Identifier Authority: ${empty sessionScope.idAuthName?"Unknown":sessionScope.idAuthName}</td>
                 <td>
-                    <form action="setidAuth.jsp" method="GET">
+                    <form action="fh/setIdAuth.jsp" method="GET">
                         <select name="idAuthId">
                             <c:forEach var="iaRow" items="${idAuthQ.rows}">
                                 <option value="${iaRow.id}">${iaRow.name}</option>
