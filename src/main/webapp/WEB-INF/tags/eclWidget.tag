@@ -67,7 +67,7 @@
 </c:url>
 <a href="${searchLink}" target="_blank">Search eLog</a>
 
-<form method="GET" action="eclPost.jsp">
+<form method="GET" action="fh/eclPost.jsp">
     <input type="hidden" name="displayLink" value="${displayLink}">
     <input type="hidden" name="author" value="${author}">
     <input type="hidden" name="hardwareTypeId" value="${hardwareTypeField}">
