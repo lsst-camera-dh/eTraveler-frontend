@@ -80,7 +80,7 @@
 <table>
     <tr>
         <td>
-            <form METHOD=GET ACTION="closeoutActivity.jsp" target="_top">
+            <form METHOD=GET ACTION="fh/closeoutActivity.jsp" target="_top">
                 <input type="hidden" name="activityId" value="${activityId}">       
                 <input type="hidden" name="topActivityId" value="${param.topActivityId}">       
                 <INPUT TYPE=SUBMIT value="Closeout"
@@ -88,7 +88,7 @@
             </form>      
         </td>
         <td>
-            <form METHOD=GET ACTION="retryActivity.jsp" target="_top">
+            <form METHOD=GET ACTION="fh/retryActivity.jsp" target="_top">
                 <input type="hidden" name="activityId" value="${activityId}">       
                 <input type="hidden" name="topActivityId" value="${param.topActivityId}">       
                 <INPUT TYPE=SUBMIT value="Try Again"

@@ -26,7 +26,7 @@
         <traveler:processWidget processId="${param.processId}"/>
         
         <c:if test="${! empty param.parentActivityId}">
-            <form METHOD=GET ACTION="createActivity.jsp" target="_top">
+            <form METHOD=GET ACTION="fh/createActivity.jsp" target="_top">
                 <input type="hidden" name="parentActivityId" value="${param.parentActivityId}">       
                 <input type="hidden" name="processEdgeId" value="${param.processEdgeId}">       
                 <input type="hidden" name="inNCR" value="${param.inNCR}">       

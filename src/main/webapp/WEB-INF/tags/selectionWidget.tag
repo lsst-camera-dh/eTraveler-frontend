@@ -64,7 +64,7 @@ order by abs(PE.step);
         <display:column title="${selectionColumnTitle}">
             <c:choose>
                 <c:when test="${numChosen == 0 && ! empty childRow.begin}">
-                    <form method="get" action="createActivity.jsp" target="_top">
+                    <form method="get" action="fh/createActivity.jsp" target="_top">
                         <input type="hidden" name="parentActivityId" value="${activityId}">
                         <input type="hidden" name="hardwareId" value="${childRow.hardwareId}">
                         <input type="hidden" name="inNCR" value="${childRow.inNCR}">
