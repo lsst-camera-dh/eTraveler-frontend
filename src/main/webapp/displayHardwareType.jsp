@@ -22,7 +22,6 @@
     </head>
     <body>
         <h1>Component type <c:out value="${hardwareType.name}"/></h1>
-        <h2>Drawing <c:out value="${hardwareType.drawing}"/><br>
         Added by <c:out value="${hardwareType.createdBy}"/><br>
         At <c:out value="${hardwareType.creationTS}"/></h2>
 
