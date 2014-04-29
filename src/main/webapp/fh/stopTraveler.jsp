@@ -17,7 +17,8 @@
     </head>
     <body>
         <traveler:findTraveler var="travelerId" activityId="${param.activityId}"/>
-        <ta:stopActivity activityId="${travelerId}" status="${param.status}"/>
+        <%-- TODO: Make an entry in StopWorkHistory --%>
+        <traveler:failActivity activityId="${param.activityId}" status="${param.status}"/>
         <traveler:redirDA activityId="${travelerId}"/>
     </body>
 </html>
