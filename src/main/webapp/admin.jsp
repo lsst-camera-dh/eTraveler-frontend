@@ -21,7 +21,8 @@
             jhVirtualEnv: <input type="text" name="jhVirtualEnv">
             jhOutputRoot: <input type="text" name="jhOutputRoot">
         </form>
-            
+        <hr>
+        
         <sql:query var="sitesQ" >
             select id, name from Site
         </sql:query>
@@ -34,12 +35,22 @@
                 </c:forEach>
             </select>
         </form>
+        <hr>
 
         <form method="get" action="fh/addHardwareType.jsp">
             <input type="submit" value="Add Hardware Type">
-            Name: <input type="text" name="name" required>
-            Drawing: <input type="text" name="drawing">
+            Name or Drawing #: <input type="text" name="name" required>
+            Sequence width - set to zero if not automatic:<select name="width">
+                <option value="0">0</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4" selected>4</option>
+                <option value="5">5</option>
+            </select><br>
+            Description: <input type="text" name="description">
         </form>
+        <hr>
             
         <sql:query var="hardwareTypesQ" >
             select id, name from HardwareType
@@ -58,11 +69,13 @@
                 </c:forEach>
             </select>
         </form>
+        <hr>
 
         <form method="get" action="fh/addHardwareIdentifierAuthority.jsp">
             <input type="submit" value="Add Hardware Identifier Authority">
             Name: <input type="text" name="name" required>
         </form>
+        <hr>
             
     </body>
 </html>

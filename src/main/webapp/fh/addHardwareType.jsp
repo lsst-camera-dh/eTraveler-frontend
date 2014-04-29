@@ -17,7 +17,8 @@
         <sql:update >
             insert into HardwareType set
             name=?<sql:param value="${param.name}"/>,
-            drawing=?<sql:param value="${param.drawing}"/>,
+            autoSequenceWidth=?<sql:param value="${param.width}"/>,
+            description=?<sql:param value="${param.description}"/>,
             createdBy=?<sql:param value="${userName}"/>,
             creationTS=NOW();
         </sql:update>
