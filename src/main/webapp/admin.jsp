@@ -76,6 +76,13 @@
             Name: <input type="text" name="name" required>
         </form>
         <hr>
-            
+
+        <c:set var="backend" value="/eTravelerBackend"/>
+        <c:set var="backendLink" 
+        value="${pageContext.request.scheme}://${pageContext.request.serverName}:${pageContext.request.serverPort}${backend}"/>
+        <c:url var="backendUrl" value="${backendLink}"/>
+        <a href="${backendUrl}">Upload a new Traveler Type or version</a>
+        
+        
     </body>
 </html>
