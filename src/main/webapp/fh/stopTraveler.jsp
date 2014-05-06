@@ -17,8 +17,19 @@
     </head>
     <body>
         <traveler:findTraveler var="travelerId" activityId="${param.activityId}"/>
-        <%-- TODO: Make an entry in StopWorkHistory --%>
-        <traveler:failActivity activityId="${param.activityId}" status="${param.status}"/>
+        
+        <%-- TODO: Add proper fields to entry in StopWorkHistory --%>
+        <sql:update>
+            insert into StopWorkHistory set
+            activityId=?<sql:param value="${param.activityId}"/>,
+            rootActivityId=?<sql:param value="${travelerId}"/>,
+            reason='badness',
+            approvalGroup=15,
+            creationTS=now(),
+            createdBy=?<sql:param value="${userName}"/>;
+        </sql:update>
+        
+        <traveler:failActivity activityId="${param.activityId}" status="stopped"/>
         <traveler:redirDA activityId="${travelerId}"/>
     </body>
 </html>

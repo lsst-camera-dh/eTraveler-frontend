@@ -99,7 +99,7 @@
             <form METHOD=GET ACTION="fh/stopTraveler.jsp" target="_top">
                 <input type="hidden" name="activityId" value="${activityId}">       
                 <input type="hidden" name="topActivityId" value="${param.topActivityId}">       
-                <input type="hidden" name="status" value="stopped">
+                <%--<input type="hidden" name="status" value="stopped">--%>
                 <INPUT TYPE=SUBMIT value="Stop Work"
                        <c:if test="${! failable}">disabled</c:if>>
             </form>                  
