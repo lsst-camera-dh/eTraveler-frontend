@@ -6,6 +6,7 @@
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql" %>
 <%@taglib prefix="traveler" tagdir="/WEB-INF/tags"%>
 <!DOCTYPE html>
 <html>
@@ -19,6 +20,16 @@
         
         <c:choose>
             <c:when test="${isStopped}">
+                <sql:update>
+                    update StopWorkHistory set
+                    resolution='RESUMED',
+                    resolutionTS=now(),
+                    resolvedBy=?<sql:param value="${userName}"/>
+                    where
+                    rootActivityId=?<sql:param value="${travelerId}"/>
+                    and resolutionTS is null;
+                </sql:update>
+                
                 <traveler:restartActivity activityId="${travelerId}"/>
                 <traveler:redirDA activityId="${travelerId}"/>
             </c:when>
