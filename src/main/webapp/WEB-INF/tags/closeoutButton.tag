@@ -96,7 +96,7 @@
             </form>
         </td>
         <td>
-            <form METHOD=GET ACTION="fh/stopTraveler.jsp" target="_top">
+            <form METHOD=GET ACTION="stopWork.jsp" target="_top">
                 <input type="hidden" name="activityId" value="${activityId}">       
                 <input type="hidden" name="topActivityId" value="${param.topActivityId}">       
                 <%--<input type="hidden" name="status" value="stopped">--%>

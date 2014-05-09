@@ -23,7 +23,7 @@
             insert into StopWorkHistory set
             activityId=?<sql:param value="${param.activityId}"/>,
             rootActivityId=?<sql:param value="${travelerId}"/>,
-            reason='badness',
+            reason=?<sql:param value="${param.reason}"/>,
             approvalGroup=15,
             creationTS=now(),
             createdBy=?<sql:param value="${userName}"/>;
