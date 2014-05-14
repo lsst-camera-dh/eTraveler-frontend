@@ -16,6 +16,9 @@
     <body>
         <traveler:setReturn extra="#foo"/>
         <h1>Hello World!</h1>
+        <c:set var="mask" value="0"/>
+        <c:forEach var="group" items="${paramValues.group}"><c:set var="mask" value="${mask + group}"/></c:forEach>
+        ${mask}<br>
         [<c:out value="${pageScope.javax.servlet.jsp.jspRequest.uri}"/>]<br>
 <%--        <% request.setAttribute("url", request.getRequestURI()); %>--%>
         [<c:out value="${url}"/>]<br>

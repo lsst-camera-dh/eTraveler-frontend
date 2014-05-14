@@ -19,12 +19,15 @@
         <traveler:findTraveler var="travelerId" activityId="${param.activityId}"/>
         
         <%-- TODO: Add proper fields to entry in StopWorkHistory --%>
+        <c:set var="mask" value="0"/>
+        <c:forEach var="group" items="${paramValues.group}"><c:set var="mask" value="${mask + group}"/></c:forEach>
+
         <sql:update>
             insert into StopWorkHistory set
             activityId=?<sql:param value="${param.activityId}"/>,
             rootActivityId=?<sql:param value="${travelerId}"/>,
             reason=?<sql:param value="${param.reason}"/>,
-            approvalGroup=15,
+            approvalGroup=?<sql:param value="${mask}"/>,
             creationTS=now(),
             createdBy=?<sql:param value="${userName}"/>;
         </sql:update>
