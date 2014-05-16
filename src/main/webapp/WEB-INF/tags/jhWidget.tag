@@ -8,6 +8,7 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql" %>
 <%@taglib prefix="display" uri="http://displaytag.sf.net" %>
+<%@taglib prefix="traveler" tagdir="/WEB-INF/tags"%>
 
 <%-- The list of normal or fragment attributes can be specified here: --%>
 <%@attribute name="activityId" required="true"%>
@@ -33,22 +34,8 @@
     </c:when>
     <c:otherwise>
         <%-- Try to show the jh command --%>
-        <sql:query var="activityQ">
-            select
-            A.end,
-            P.name as processName, P.userVersionString,
-            H.lsstId,
-            HT.name as hardwareTypeName
-            from Activity A
-            inner join Process P on P.id=A.processId
-            inner join Hardware H on H.id=A.hardwareId
-            inner join HardwareType HT on HT.id=H.hardwareTypeId
-            where A.id=?<sql:param value="${activityId}"/>
-        </sql:query>
-        <c:set var="activity" value="${activityQ.rows[0]}"/>
-        
         <c:if test="${empty activity.end}">
-            <c:set var="command">lcatr-harness --unit-type '${activity.hardwareTypeName}' --unit-id '${activity.lsstId}' --job '${activity.processName}' --version '${activity.userVersionString}'</c:set>
+            <traveler:jhCommand var="command" activityId="${activityId}"/>
 Now enter the following command:<br>
 <c:out value="${command}"/><br>
         </c:if>
