@@ -5,6 +5,7 @@
 --%>
 
 <%@page contentType="text/html" pageEncoding="US-ASCII"%>
+<%@page import = "java.util.Date,java.text.SimpleDateFormat,java.text.ParseException"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql" %>
 <!DOCTYPE html>
@@ -14,6 +15,12 @@
         <title>Create Hardware</title>
     </head>
     <body>
+<%
+String dateStr = request.getParameter("manufactureDate");  
+SimpleDateFormat formater = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+Date result = formater.parse(dateStr);
+request.setAttribute("manufactureDate", result);
+%>
         <sql:transaction >
             <c:if test="${empty param.lsstId}">
                 <sql:update>
@@ -38,7 +45,7 @@
                 hardwareTypeId=?<sql:param value="${param.hardwareTypeId}"/>,
                 manufacturer=?<sql:param value="${param.manufacturer}"/>,
                 model=?<sql:param value="${param.model}"/>,
-                manufactureDate=?<sql:dateParam value="${param.manufactureDate}"/>,
+                manufactureDate=?<sql:dateParam value="${manufactureDate}"/>,
                 hardwareStatusId=(select id from HardwareStatus where name="NEW"),
                 createdBy=?<sql:param value="${userName}"/>,
                 creationTS=NOW();

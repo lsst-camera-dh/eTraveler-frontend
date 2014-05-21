@@ -11,6 +11,10 @@
 <%-- The list of normal or fragment attributes can be specified here: --%>
 <%@attribute name="hardwareTypeId" required="true"%>
 
+    <%--
+    <script language="JavaScript" src="http://srs.slac.stanford.edu/Commons/scripts/FSdateSelect.jsp"></script>
+    <link rel="stylesheet" href="http://srs.slac.stanford.edu/Commons/css/FSdateSelect.css" type="text/css">
+    --%>
 <sql:query var="typeQ" >
     select * from HardwareType
     where id=?<sql:param value="${hardwareTypeId}"/>;
@@ -42,8 +46,14 @@
             <td><INPUT TYPE=TEXT NAME=model SIZE=50 autofocus></td>
         </tr>
         <tr>
-            <td>Manufacture Date:</td>
-            <td><input type="datetime"></td>
+            <td>Manufacture Date<br>(yyyy-mm-dd hh:mm:ss):</td>
+            <td><input type="datetime" name="manufactureDate"></td>
+            <%--<td>
+            <script language="JavaScript">
+                FSfncWriteFieldHTML("DateForm","manufactureDate","${empty date ? 'None' : manufactureDate}",100,
+                "http://srs.slac.stanford.edu/Commons/images/FSdateSelector/","US",false,true);
+            </script>
+            </td>--%>
         </tr>
         <tr>
     </table>    
