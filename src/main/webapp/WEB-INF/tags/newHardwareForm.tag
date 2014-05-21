@@ -11,10 +11,9 @@
 <%-- The list of normal or fragment attributes can be specified here: --%>
 <%@attribute name="hardwareTypeId" required="true"%>
 
-    <%--
-    <script language="JavaScript" src="http://srs.slac.stanford.edu/Commons/scripts/FSdateSelect.jsp"></script>
-    <link rel="stylesheet" href="http://srs.slac.stanford.edu/Commons/css/FSdateSelect.css" type="text/css">
-    --%>
+<script language="JavaScript" src="http://srs.slac.stanford.edu/Commons/scripts/FSdateSelect.jsp"></script>
+<link rel="stylesheet" href="http://srs.slac.stanford.edu/Commons/css/FSdateSelect.css" type="text/css">
+
 <sql:query var="typeQ" >
     select * from HardwareType
     where id=?<sql:param value="${hardwareTypeId}"/>;
@@ -22,7 +21,7 @@
 <c:set var="hType" value="${typeQ.rows[0]}"/>
 
 <h2>Register new ${hType.name}</h2>
-<form METHOD=GET ACTION="fh/createHardware.jsp">
+<form METHOD=GET ACTION="fh/createHardware.jsp" name="hwSpex">
 
     <table>
         <c:choose>
@@ -46,14 +45,15 @@
             <td><INPUT TYPE=TEXT NAME=model SIZE=50 autofocus></td>
         </tr>
         <tr>
-            <td>Manufacture Date<br>(yyyy-mm-dd hh:mm:ss):</td>
-            <td><input type="datetime" name="manufactureDate"></td>
-            <%--<td>
+            <td>Manufacture Date<br>(mm/dd/yyyy):</td>
+            <%--<td><input type="datetime" name="manufactureDate"></td>--%>
+            <td>
             <script language="JavaScript">
-                FSfncWriteFieldHTML("DateForm","manufactureDate","${empty date ? 'None' : manufactureDate}",100,
+                FSfncWriteFieldHTML("hwSpex","manufactureDate",
+                "${empty manufactureDate ? 'None' : manufactureDate}",100,
                 "http://srs.slac.stanford.edu/Commons/images/FSdateSelector/","US",false,true);
             </script>
-            </td>--%>
+            </td>
         </tr>
         <tr>
     </table>    
