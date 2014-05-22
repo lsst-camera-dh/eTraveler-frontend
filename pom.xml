@@ -86,5 +86,6 @@
     </dependencies>
     <properties>
         <netbeans.hint.deploy.server>Tomcat</netbeans.hint.deploy.server>
+        <experiment.name>LSST-CAMERA</experiment.name>
     </properties>
 </project>

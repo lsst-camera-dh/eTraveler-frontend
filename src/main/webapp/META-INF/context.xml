@@ -4,4 +4,6 @@
         <ResourceLink name="jdbc/config-srs" type="javax.sql.DataSource" global="jdbc/config-srs" />
         <ResourceLink name="jdbc/rd-lsst-cam" type="javax.sql.DataSource" global="jdbc/rd-lsst-cam" />
         <ResourceLink name="jdbc/rd-lsst-cam-dev" type="javax.sql.DataSource" global="jdbc/rd-lsst-cam-dev" />
+        <ResourceLink name="jdbc/rd-lsst-cmft" type="javax.sql.DataSource" global="jdbc/rd-lsst-cmft" />
+        <ResourceLink name="jdbc/rd-lsst-camt" type="javax.sql.DataSource" global="jdbc/rd-lsst-camt" />
 </Context>
