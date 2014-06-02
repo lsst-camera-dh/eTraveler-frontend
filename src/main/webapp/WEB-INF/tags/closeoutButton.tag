@@ -34,6 +34,9 @@
             <c:when test="${activity.isAsync != 0}">
                 <c:set var="message" value="Async job in progress"/>
             </c:when>
+            <c:when test="${activity.isHarnessed != 0}">
+                <c:set var="message" value="Harnessed job in progress"/>
+            </c:when>
             <c:when test="${activity.substeps == 'SEQUENCE'}">
                 <sql:query var="stepsRemainingQ" >
                     select Ac.id
