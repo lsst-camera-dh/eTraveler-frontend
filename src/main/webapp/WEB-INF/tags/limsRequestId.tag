@@ -27,8 +27,8 @@
         and P.userVersionString=?<sql:param value="${inputs.version}"/>
         and P.travelerActionMask&(select maskBit from InternalAction where name='harnessedJob')!=0
         and HT.name=?<sql:param value="${inputs.unit_type}"/>
-        and JSH.id is null
- <%--       and A.createdBy=?<sql:param value="${inputs.operator}"/>--%>
+ <%--       and JSH.id is null
+        and A.createdBy=?<sql:param value="${inputs.operator}"/>--%>
         and A.begin is not null
         and A.end is null
         and A.activityFinalStatusId is null
