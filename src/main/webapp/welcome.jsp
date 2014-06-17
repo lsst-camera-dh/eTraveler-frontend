@@ -8,7 +8,7 @@
         <title>Hello LLST</title>
     </head>
     <body>
-        Howdy, ${empty userName?"stranger":userName}.<br>
+        Welcome, ${empty userName?"stranger":userName}.<br>
         
         <table>
             <tr>

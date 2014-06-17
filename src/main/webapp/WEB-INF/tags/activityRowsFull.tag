@@ -87,7 +87,7 @@
                                 <c:when test="${not travelerFailed}">
                                     <c:set var="noneStartedAndUnFinished" value="false"/>
                                     <c:set var="currentStepLink" value="${contentLink}" scope="request"/>
-                                    Needs Work
+                                    In Progress
                                 </c:when>
 <%--                                <c:otherwise>
                                     JH In Progress

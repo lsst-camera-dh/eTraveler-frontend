@@ -18,21 +18,15 @@
     <body>
         <traveler:findTraveler var="travelerId" activityId="${param.activityId}"/>
         
-        <%-- TODO: Add proper fields to entry in StopWorkHistory --%>
-        <c:set var="mask" value="0"/>
-        <c:forEach var="group" items="${paramValues.group}"><c:set var="mask" value="${mask + group}"/></c:forEach>
+        <c:set var="mask" value="15"/>
+<%--        <c:set var="mask" value="0"/>
+        <c:forEach var="group" items="${paramValues.group}">
+            <c:set var="mask" value="${mask + group}"/>
+        </c:forEach>--%>
 
-        <sql:update>
-            insert into StopWorkHistory set
-            activityId=?<sql:param value="${param.activityId}"/>,
-            rootActivityId=?<sql:param value="${travelerId}"/>,
-            reason=?<sql:param value="${param.reason}"/>,
-            approvalGroup=?<sql:param value="${mask}"/>,
-            creationTS=now(),
-            createdBy=?<sql:param value="${userName}"/>;
-        </sql:update>
-        
-        <traveler:failActivity activityId="${param.activityId}" status="stopped"/>
+        <ta:stopTraveler activityId="${param.activityId}" mask="${mask}" 
+                         reason="${param.reason}" travelerId="${travelerId}"/>
+
         <traveler:redirDA activityId="${travelerId}"/>
     </body>
 </html>

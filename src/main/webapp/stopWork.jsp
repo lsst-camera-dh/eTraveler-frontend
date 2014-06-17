@@ -23,12 +23,12 @@
             <input type="hidden" name="topActivityId" value="${param.topActivityId}">
             <table>
                 <tr><td>Why?</td><td><textarea name="reason"></textarea></td>
-                <tr><td>Who can restart?</td>
+<%--                <tr><td>Who can restart?</td>
                     <td>
             <c:forEach var="group" items="${groupsQ.rows}">
                 <input type="checkbox" name="group" value="${group.maskBit}">${group.name}
             </c:forEach>
-                    </td></tr>
+                    </td></tr>--%>
                 </table>
             <input type="submit" value="Yes, really stop">
         </form>

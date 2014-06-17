@@ -50,7 +50,7 @@
             <%--<traveler:closeoutButton activityId="${activityId}"/>--%>
             <c:choose>
                 <c:when test="${empty activity.end}">
-                    Needs Work
+                    In Progress
                 </c:when>
                 <c:otherwise>
                     ${activity.statusName} ${activity.end}

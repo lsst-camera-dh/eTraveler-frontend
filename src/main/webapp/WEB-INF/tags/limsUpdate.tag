@@ -8,13 +8,14 @@
 
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql" %>
+<%@taglib prefix="ta" tagdir="/WEB-INF/tags/actions"%>
 <%@taglib prefix="traveler" tagdir="/WEB-INF/tags"%>
 
 <c:set var="allOk" value="true"/>
-<c:set var="message" value="Huh. That wasn't supposed to happen."/>
+<c:set var="message" value="Huh. That wasn't supposed to happen. 663698"/>
 
 <%-- TODO: check step is correct next one --%>
-
+<traveler:findTraveler var="travelerId" activityId="${inputs.jobid}"/>
 <c:if test="${allOk}">
     <sql:query var="activityQ" >
         select A.*
@@ -30,7 +31,6 @@
         <c:set var="message" value="No Record found."/> 
     </c:if>
     <c:if test="${allOk && empty activityQ.rows[0].begin}">
-        <traveler:failActivity activityId="${inputs.jobid}"/>
         <c:set var="allOk" value="false"/>
         <c:set var="message" value="Job not started."/>        
     </c:if>
@@ -41,7 +41,6 @@
         select id from JobHarnessStep where name=?<sql:param value="${inputs.step}"/>
     </sql:query>
     <c:if test="${empty stepQ.rows}">
-        <traveler:failActivity activityId="${inputs.jobid}"/>
         <c:set var="allOk" value="false"/>
         <c:set var="message" value="Bad Step."/>
     </c:if>
@@ -59,14 +58,12 @@
         </sql:update>
     </c:catch>
     <c:if test="${not empty updateErr}">
-        <traveler:failActivity activityId="${inputs.jobid}"/>
         <c:set var="allOk" value="false"/>
         <c:set var="message" value="Update Failure."/>
     </c:if>
 </c:if>
 
 <c:if test="${allOk && (! empty inputs.status)}">
-    <traveler:failActivity activityId="${inputs.jobid}"/>
     <c:set var="allOk" value="false"/>
     <c:set var="message" value="${inputs.status}"/>    
 </c:if>
@@ -78,6 +75,8 @@
         }
     </c:when>
     <c:otherwise>
+        <ta:stopTraveler activityId="${inputs.jobid}" mask="15"
+                         reason="${message}" travelerId="${travelerId}"/>
         {
             "acknowledge": "${message}"
         }

@@ -58,5 +58,5 @@
         <tr>
     </table>    
     <input type="hidden" name="hardwareTypeId" value="${hardwareTypeId}"/>
-    <INPUT TYPE=SUBMIT value="Do It!">
+    <INPUT TYPE=SUBMIT value="Register Component">
 </form>
