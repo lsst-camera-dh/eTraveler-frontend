@@ -17,10 +17,9 @@
 <sql:query var="childrenQ" >
     select 
     PE.child, PE.step, P.name, P.id, P.substeps
-    from ProcessEdge PE, Process P
+    from ProcessEdge PE
+    inner join Process P on P.id=PE.child
     where PE.parent=?<sql:param value="${parentId}"/>
-    and
-    PE.child=P.id
     order by abs(PE.step);
 </sql:query>
 
