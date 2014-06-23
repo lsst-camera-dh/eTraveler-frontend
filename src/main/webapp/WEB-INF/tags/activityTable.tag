@@ -12,6 +12,7 @@
 <%-- The list of normal or fragment attributes can be specified here: --%>
 <%@attribute name="activityId" required="true"%>
 
+<traveler:isStopped var="isStopped" activityId="${activityId}"/>
 <sql:query var="activityQ" >
     select A.begin, A.end, P.name, P.id as processId, P.substeps,
     AFS.name as statusName
@@ -23,7 +24,7 @@
 <c:set var="activity" value="${activityQ.rows[0]}"/>
 
 <c:set var="travelerFailed" 
-       value="${activity.statusName=='failure' || activity.statusName=='stopped'}" scope="request"/>
+       value="${activity.statusName=='failure'}" scope="request"/>
 
 <c:url var="contentLink" value="activityPane.jsp">
     <c:param name="activityId" value="${activityId}"/>
@@ -39,7 +40,14 @@
         <td>
             <c:choose>
                 <c:when test="${empty activity.begin}">
-                    In Prep
+                    <c:choose>
+                        <c:when test="${isStopped}">
+                            Stopped
+                        </c:when>
+                        <c:otherwise>
+                            In Prep
+                        </c:otherwise>
+                    </c:choose>
                 </c:when>
                 <c:otherwise>
                     ${activity.begin}
@@ -50,7 +58,14 @@
             <%--<traveler:closeoutButton activityId="${activityId}"/>--%>
             <c:choose>
                 <c:when test="${empty activity.end}">
-                    In Progress
+                    <c:choose>
+                        <c:when test="${isStopped}">
+                            Stopped
+                        </c:when>
+                        <c:otherwise>
+                            In Progress
+                        </c:otherwise>
+                    </c:choose>
                 </c:when>
                 <c:otherwise>
                     ${activity.statusName} ${activity.end}

@@ -113,6 +113,7 @@
                        <c:if test="${! readyToStart}">disabled</c:if>>
             </form>                    
         </td>
+        <%--
         <td>
             <traveler:findTraveler var="travelerId" activityId="${activityId}"/>
             <traveler:isStopped var="isStopped" activityId="${travelerId}"/>
@@ -122,5 +123,6 @@
                        <c:if test="${! isStopped}">disabled</c:if>>
            </form>
         </td>
+        --%>
     </tr>
 </table>

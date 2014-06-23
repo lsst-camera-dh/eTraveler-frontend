@@ -7,6 +7,7 @@
 <%@tag description="put the tag description here" pageEncoding="US-ASCII"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql" %>
+<%@taglib prefix="traveler" tagdir="/WEB-INF/tags"%>
 
 <%-- The list of normal or fragment attributes can be specified here: --%>
 <%@attribute name="activityId" required="true"%>
@@ -78,6 +79,7 @@
     <c:set var="message" value="Ready to close"/>
 </c:if>
 <c:set var="failable" value="${! closed && ! travelerFailed}"/> <%-- Argh. travelerFailed is not set in ActivityPane --%>
+<traveler:isStopped var="isStopped" activityId="${activityId}"/>
 
 <c:out value="${message}"/><br>
 <table>
@@ -104,9 +106,10 @@
                 <input type="hidden" name="topActivityId" value="${param.topActivityId}">       
                 <%--<input type="hidden" name="status" value="stopped">--%>
                 <INPUT TYPE=SUBMIT value="Stop Work"
-                       <c:if test="${! failable}">disabled</c:if>>
+                       <c:if test="${(! failable) || isStopped}">disabled</c:if>>
             </form>                  
         </td>
+        <%--
         <td>
             <form METHOD=GET ACTION="fh/failActivity.jsp" target="_top">
                 <input type="hidden" name="activityId" value="${activityId}">       
@@ -115,6 +118,14 @@
                 <INPUT TYPE=SUBMIT value="Fail"
                        <c:if test="${! failable}">disabled</c:if>>
             </form>                  
+        </td>
+        --%>
+        <td>
+            <form METHOD=GET ACTION="resolveStop.jsp" target="_top">
+                <input type="hidden" name="activityId" value="${activityId}">       
+                <INPUT TYPE=SUBMIT value="Resolve Stop Work"
+                       <c:if test="${! isStopped}">disabled</c:if>>
+            </form>                              
         </td>
     </tr>
 </table>

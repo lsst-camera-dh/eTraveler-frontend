@@ -44,6 +44,7 @@
     order by abs(PE.step), Ac.iteration;
 </sql:query>
     
+<traveler:isStopped var="isStopped" activityId="${activityId}"/>
 <c:set var="noneStartedAndUnFinished" value="true"/>
 <c:set var="firstUnStarted" value="true"/>
 <c:forEach var="childRow" items="${childrenQ.rows}">
@@ -52,7 +53,7 @@
 
     <c:choose>
         <c:when test="${! empty childRow.activityId}">
-            <c:url value="displayActivity.jsp" var="childLink">
+            <c:url var="childLink" value="displayActivity.jsp">
                 <c:param name="activityId" value="${childRow.activityId}"/>
             </c:url>
             <c:url var="contentLink" value="activityPane.jsp">
@@ -67,7 +68,14 @@
                         <c:when test="${(empty childRow.begin) && (not travelerFailed)}">
                             <c:set var="noneStartedAndUnFinished" value="false"/>
                             <c:set var="currentStepLink" value="${contentLink}" scope="request"/>
-                            In Prep
+                            <c:choose>
+                                <c:when test="${isStopped}">
+                                    Stopped
+                                </c:when>
+                                <c:otherwise>
+                                    In Prep
+                                </c:otherwise>
+                            </c:choose>
                         </c:when>
                         <c:otherwise>
                             ${childRow.begin}
@@ -87,7 +95,14 @@
                                 <c:when test="${not travelerFailed}">
                                     <c:set var="noneStartedAndUnFinished" value="false"/>
                                     <c:set var="currentStepLink" value="${contentLink}" scope="request"/>
-                                    In Progress
+                                    <c:choose>
+                                        <c:when test="${isStopped}">
+                                            Stopped
+                                        </c:when>
+                                        <c:otherwise>
+                                            In Progress
+                                        </c:otherwise>
+                                    </c:choose>
                                 </c:when>
 <%--                                <c:otherwise>
                                     JH In Progress

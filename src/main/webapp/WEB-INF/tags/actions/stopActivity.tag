@@ -26,10 +26,12 @@
 
 <sql:update>
     update Activity set
-    activityFinalStatusId=(select id from ActivityFinalStatus where name=?<sql:param value="${status}"/>),
-    <c:if test="${empty activity.begin}">begin=now(),</c:if>
+    activityFinalStatusId=(select id from ActivityFinalStatus where name=?<sql:param value="${status}"/>)
+<%--
+    ,<c:if test="${empty activity.begin}">begin=now(),</c:if>
     end=now(),
     closedBy=?<sql:param value="${userName}"/>
+--%>
     where id=?<sql:param value="${activityId}"/>;    
 </sql:update>
 

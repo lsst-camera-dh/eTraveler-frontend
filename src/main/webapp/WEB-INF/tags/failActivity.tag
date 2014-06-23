@@ -31,6 +31,7 @@
         <traveler:retryActivity activityId="${activityId}"/>
     </c:when>
     <c:otherwise>
+        <sql:transaction>
         <sql:update >
             update Activity set
             activityFinalStatusId=(select id from ActivityFinalStatus where name=?<sql:param value="${status}"/>),
@@ -39,6 +40,14 @@
             closedBy=?<sql:param value="${userName}"/>
             where id=?<sql:param value="${activityId}"/>;
         </sql:update>
+        <sql:update>
+            update StopWorkHistory set
+            resolution='QUIT', resolutionTS=now(), resolvedBy=?<sql:param value="${userName}"/>
+            where
+            activityId=?<sql:param value="${activityId}"/>
+            and resolution='NONE' and resolutionTS is null and resolvedBy is null;
+        </sql:update>
+        </sql:transaction>
 
         <sql:query var="activityQ" >
             select A.*
