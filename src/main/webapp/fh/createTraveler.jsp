@@ -7,6 +7,7 @@
 <%@page contentType="text/html" pageEncoding="US-ASCII"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql" %>
+<%@taglib prefix="ta" tagdir="/WEB-INF/tags/actions"%>
 <%@taglib prefix="traveler" tagdir="/WEB-INF/tags"%>
 <!DOCTYPE html>
 <html>
@@ -15,34 +16,10 @@
         <title>Create Traveler</title>
     </head>
     <body>
-        <sql:transaction>
-            <sql:update>
-                insert into Activity set
-                hardwareId=?<sql:param value="${param.hardwareId}"/>,
-                processId=?<sql:param value="${param.processId}"/>,
-                inNCR=?<sql:param value="${param.inNCR}"/>,
-                createdBy=?<sql:param value="${userName}"/>,
-                creationTS=NOW();
-            </sql:update>
-            <sql:query var="activityQ">
-                select * from Activity where id=LAST_INSERT_ID();
-            </sql:query>
-        </sql:transaction>
-        <c:set var="activity" value="${activityQ.rows[0]}"/>
-
-        <sql:query var="hardwareQ">
-            select H.*, HS.name
-            from Hardware H
-            inner join HardwareStatus HS on HS.id=H.hardwareStatusId
-            where H.id=?<sql:param value="${param.hardwareId}"/>;
-        </sql:query>
-        <c:if test="${hardwareQ.rows[0].name == 'NEW'}">
-            <sql:query var="statQ">
-                select id from HardwareStatus where name='IN_PROGRESS';
-            </sql:query>
-            <traveler:setHardwareStatus hardwareId="${param.hardwareId}" hardwareStatusId="${statQ.rows[0].id}"/>
-        </c:if>
-
-        <traveler:redirDA activityId="${activity.id}"/>
+        <ta:createTraveler var="activityId"
+            hardwareId="${param.hardwareId}" 
+            processId="${param.processId}"
+            inNCR="${param.inNCR}"/>
+        <traveler:redirDA activityId="${activityId}"/>
     </body>
 </html>

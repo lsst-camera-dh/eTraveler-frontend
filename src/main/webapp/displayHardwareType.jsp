@@ -34,7 +34,7 @@
             hardwareTypeId="${param.hardwareTypeId}"
             />
 
-        <h2>Instances</h2>
+        <h2>Components</h2>
         <traveler:hardwareList  hardwareTypeId="${param.hardwareTypeId}"/>
         <h3>Register a new one:</h3>
         <traveler:newHardwareForm hardwareTypeId="${param.hardwareTypeId}"/>

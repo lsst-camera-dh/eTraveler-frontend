@@ -5,6 +5,7 @@
 --%>
 
 <%@tag description="put the tag description here" pageEncoding="UTF-8"%>
+<%@taglib prefix="traveler" tagdir="/WEB-INF/tags"%>
 
 <%-- The list of normal or fragment attributes can be specified here: --%>
 <%@attribute name="activityId" required="true"%>
@@ -29,12 +30,14 @@
             </form>
         </td>
         <td>
+            <%--
             <form method="get" action="doNCR.jsp" target="_top">
                 <input type="hidden" name="activityId" value="${activityId}">       
                 <input type="hidden" name="topActivityId" value="${travelerId}">       
                 <INPUT TYPE=SUBMIT value="NCR"
-                       <%--<c:if test="${! retryable}">disabled</c:if>--%>>                
             </form>
+            --%>
+            <traveler:findNCRs activityId="${activityId}"/>
         </td>
         <td>
             <form METHOD=GET ACTION="fh/failActivity.jsp" target="_top">

@@ -47,6 +47,8 @@
         <c:if test="${! empty param.activityId}">
             <traveler:findTraveler activityId="${param.activityId}" var="foof"/>
             [[ ${foof} ]]
+            <traveler:findPath var="edgePath" activityId="${param.activityId}"/>
+            {{ ${edgePath} }}
         </c:if>
         
         <h2>page</h2>

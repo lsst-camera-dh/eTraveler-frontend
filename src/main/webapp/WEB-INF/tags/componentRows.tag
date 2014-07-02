@@ -29,16 +29,17 @@
 </c:choose>
 
 <sql:query var="componentsQ" >
-    select HR.${you} as itemId, HR.begin, HR.end, HRT.name as relationshipName, HT.name as hardwareName, HT.id as hardwareTypeId, H.lsstId
-    from HardwareRelationship HR, HardwareRelationshipType HRT, HardwareType HT, Hardware H
+    select 
+    HR.${you} as itemId, HR.begin, HR.end, 
+    HRT.name as relationshipName, 
+    HT.name as hardwareName, HT.id as hardwareTypeId, 
+    H.lsstId
+    from HardwareRelationship HR
+    inner join HardwareRelationshipType HRT on HRT.id=HR.hardwareRelationshipTypeId
+    inner join Hardware H on H.id=HR.${you}
+    inner join HardwareType HT on HT.id=H.hardwareTypeId
     where 
     HR.${me}=?<sql:param value="${hardwareId}"/>
-    and 
-    HR.hardwareRelationshipTypeId=HRT.id
-    and 
-    HT.id=H.hardwareTypeId
-    and 
-    H.id=HR.${you}
     and 
     HR.end is null;
 </sql:query>
