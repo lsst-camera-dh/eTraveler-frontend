@@ -37,7 +37,7 @@
                 <INPUT TYPE=SUBMIT value="NCR"
             </form>
             --%>
-            <traveler:findNCRs activityId="${activityId}"/>
+            <traveler:selectNCR activityId="${activityId}"/>
         </td>
         <td>
             <form METHOD=GET ACTION="fh/failActivity.jsp" target="_top">

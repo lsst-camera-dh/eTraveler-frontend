@@ -5,7 +5,6 @@
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<%@taglib prefix="ta" tagdir="/WEB-INF/tags/actions"%>
 <%@taglib prefix="traveler" tagdir="/WEB-INF/tags"%>
 <!DOCTYPE html>
 <html>
@@ -15,6 +14,6 @@
     </head>
     <body>
         <traveler:findTraveler var="travelerId" activityId="${param.activityId}"/>
-        <ta:resolveStop activityId="${param.activityId}" travelerId="${travelerId}"/>
+        <traveler:resolveStop activityId="${param.activityId}" travelerId="${travelerId}"/>
         </body>
 </html>

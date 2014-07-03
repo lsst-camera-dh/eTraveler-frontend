@@ -7,7 +7,6 @@
 <%@tag description="put the tag description here" pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql" %>
-<%@taglib prefix="display" uri="http://displaytag.sf.net" %>
 <%@taglib prefix="traveler" tagdir="/WEB-INF/tags"%>
 
 <%-- The list of normal or fragment attributes can be specified here: --%>
@@ -54,6 +53,11 @@
         <c:if test="${! empty activity.statusName}">
         <tr><td>Status:</td><td>${activity.statusName}</td></tr>
         </c:if>
+</table>
+
+<table>
+    <tr><td><traveler:ncrLinks activityId="${activityId}" mode="exit"/></td></tr>
+    <tr><td><traveler:ncrLinks activityId="${activityId}" mode="return"/></td></tr>
 </table>
 
 <c:if test="${! empty activity.begin && activity.isHarnessed != 0}">
