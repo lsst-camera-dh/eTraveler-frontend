@@ -42,3 +42,9 @@
         creationTS=now();
     </sql:update>
 </sql:transaction>
+
+<traveler:findTraveler var="travelerId" activityId="${activityId}"/>
+<traveler:isStopped var="isStopped" activityId="${travelerId}"/>
+<c:if test="${isStopped}">
+    <traveler:restartActivity activityId="${travelerId}"/>
+</c:if>

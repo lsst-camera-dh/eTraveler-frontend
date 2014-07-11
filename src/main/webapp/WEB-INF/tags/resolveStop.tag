@@ -44,7 +44,7 @@
                 <input type="hidden" name="activityId" value="${activityId}">       
                 <input type="hidden" name="topActivityId" value="${travelerId}">
                 <input type="hidden" name="status" value="failure">
-                <INPUT TYPE=SUBMIT value="Fail"
+                <INPUT TYPE=SUBMIT value="Fail Traveler"
                        <%--<c:if test="${! failable}">disabled</c:if>--%>>
             </form>
         </td>
