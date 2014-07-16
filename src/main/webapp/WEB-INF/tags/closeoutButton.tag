@@ -88,7 +88,7 @@
             <form METHOD=GET ACTION="fh/closeoutActivity.jsp" target="_top">
                 <input type="hidden" name="activityId" value="${activityId}">       
                 <input type="hidden" name="topActivityId" value="${param.topActivityId}">       
-                <INPUT TYPE=SUBMIT value="Closeout"
+                <INPUT TYPE=SUBMIT value="Closeout Success"
                        <c:if test="${! readyToClose}">disabled</c:if>>
             </form>      
         </td>
@@ -96,7 +96,7 @@
             <form METHOD=GET ACTION="fh/retryActivity.jsp" target="_top">
                 <input type="hidden" name="activityId" value="${activityId}">       
                 <input type="hidden" name="topActivityId" value="${param.topActivityId}">       
-                <INPUT TYPE=SUBMIT value="Try Again"
+                <INPUT TYPE=SUBMIT value="Retry Step"
                        <c:if test="${! retryable}">disabled</c:if>>
             </form>
         </td>

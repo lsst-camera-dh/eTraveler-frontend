@@ -17,7 +17,7 @@
         <td>
             <form method="get" action="fh/restartTraveler.jsp" target="_top">
                 <input type="hidden" name="activityId" value="${travelerId}">
-                <input type="submit" value="Restart"
+                <input type="submit" value="Resume Work"
                        <%--<c:if test="${! restartable}">disabled</c:if>--%>>
             </form>
         </td>
@@ -25,7 +25,7 @@
             <form METHOD=GET ACTION="fh/retryActivity.jsp" target="_top">
                 <input type="hidden" name="activityId" value="${activityId}">       
                 <input type="hidden" name="topActivityId" value="${travelerId}">       
-                <INPUT TYPE=SUBMIT value="Try Again"
+                <INPUT TYPE=SUBMIT value="Retry Step"
                        <%--<c:if test="${! retryable}">disabled</c:if>--%>>
             </form>
         </td>
