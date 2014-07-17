@@ -7,6 +7,7 @@
 <%@tag description="put the tag description here" pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql" %>
+<%@taglib uri="http://srs.slac.stanford.edu/time" prefix="time" %>
 
 <%-- The list of normal or fragment attributes can be specified here: --%>
 <%@attribute name="hardwareTypeId" required="true"%>
@@ -45,14 +46,19 @@
             <td><INPUT TYPE=TEXT NAME=model SIZE=50 autofocus></td>
         </tr>
         <tr>
-            <td>Manufacture Date<br>(mm/dd/yyyy):</td>
+            <td>Manufacture Date<br>(dd/mm/yyyy):</td>
             <%--<td><input type="datetime" name="manufactureDate"></td>--%>
             <td>
+                <time:dateTimePicker value="${time:now('PST')}" showtime="false" size="18" name="manufactureDate"  timezone="PST"
+shownone="true"/>
+
+<%--
             <script language="JavaScript">
                 FSfncWriteFieldHTML("hwSpex","manufactureDate",
                 "${empty manufactureDate ? 'None' : manufactureDate}",100,
                 "http://srs.slac.stanford.edu/Commons/images/FSdateSelector/","US",false,true);
             </script>
+--%>
             </td>
         </tr>
         <tr>
