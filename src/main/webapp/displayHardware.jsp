@@ -16,7 +16,7 @@
         <title>Hardware</title>
     </head>
     <body>
-        <h1>Hardware!</h1>
+        <h1>View a component</h1>
 
         <traveler:checkId table="Hardware" id="${param.hardwareId}"/>
         
