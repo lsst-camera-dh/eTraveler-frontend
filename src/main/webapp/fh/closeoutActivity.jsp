@@ -51,7 +51,14 @@
                 </sql:update>
             </c:if>
         </sql:transaction>
-
+        
+        <c:if test="${activity.inNCR && empty activity.parentActivityId}">
+            <c:url var="ncrUrl" value="finishNCR.jsp">
+                <c:param name="activityId" value="${param.activityId}"/>
+            </c:url>
+            <c:redirect url="${ncrUrl}"/>
+        </c:if>
+                    
         <traveler:redirDA/>
     </body>
 </html>
