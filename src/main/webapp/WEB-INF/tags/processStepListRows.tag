@@ -11,10 +11,20 @@
 
 <%-- The list of normal or fragment attributes can be specified here: --%>
 <%@attribute name="processId" required="true"%>
+<%@attribute name="stepPrefix"%>
+<%@attribute name="edgePrefix"%>
+<%@attribute name="processPrefix"%>
+
+<traveler:dotOrNot var="myStepPrefix" prefix="${stepPrefix}"/>
+<traveler:dotOrNot var="myEdgePrefix" prefix="${edgePrefix}"/>
+<traveler:dotOrNot var="myProcessPrefix" prefix="${processPrefix}"/>
 
 <sql:query var="childrenQ" >
     select 
-    PE.child, PE.step, P.name, P.id, P.substeps
+    PE.child, PE.step, P.name, P.id as processId, P.substeps,
+    concat('${myStepPrefix}', PE.step) as stepPath,
+    concat('${myEdgePrefix}', PE.id) as edgePath,
+    concat('${myProcessPrefix}', P.id) as processPath
     from ProcessEdge PE
     inner join Process P on P.id=PE.child
     where PE.parent=?<sql:param value="${processId}"/>
@@ -26,5 +36,8 @@
     <%
         ((java.util.List)request.getAttribute("stepList")).add(request.getAttribute("cRowJsp"));
     %>
-    <traveler:processStepListRows processId="${cRow.child}"/>
+    <traveler:processStepListRows processId="${cRow.child}" 
+                                  stepPrefix="${cRow.stepPath}"
+                                  edgePrefix="${cRow.edgePath}"
+                                  processPrefix="${cRow.processPath}"/>
 </c:forEach>

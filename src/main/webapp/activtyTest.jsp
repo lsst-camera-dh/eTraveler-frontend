@@ -19,7 +19,10 @@
         <traveler:activityStepList activityId="${param.activityId}"/>
         <display:table name="${stepList}" class="datatable">
             <display:column property="activityId"/>
-            <display:column property="step"/>
+            <display:column property="processId"/>
+            <display:column property="stepPath"/>
+            <display:column property="edgePath"/>
+            <display:column property="processPath"/>
             <display:column property="name"/>
         </display:table>
     </body>

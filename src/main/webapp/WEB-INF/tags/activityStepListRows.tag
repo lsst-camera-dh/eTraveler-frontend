@@ -11,6 +11,13 @@
 
 <%-- The list of normal or fragment attributes can be specified here: --%>
 <%@attribute name="activityId" required="true"%>
+<%@attribute name="stepPrefix"%>
+<%@attribute name="edgePrefix"%>
+<%@attribute name="processPrefix"%>
+
+<traveler:dotOrNot var="myStepPrefix" prefix="${stepPrefix}"/>
+<traveler:dotOrNot var="myEdgePrefix" prefix="${edgePrefix}"/>
+<traveler:dotOrNot var="myProcessPrefix" prefix="${processPrefix}"/>
 
 <sql:query var="childrenQ" >
     select
@@ -20,7 +27,10 @@
     PE.id as processEdgeId, PE.step,
     Ac.id as activityId, Ac.begin, Ac.end,
     AFS.name as statusName,
-    JSH.id as jobStepId
+    JSH.id as jobStepId,
+    concat('${myStepPrefix}', PE.step) as stepPath,
+    concat('${myEdgePrefix}', PE.id) as edgePath,
+    concat('${myProcessPrefix}', P.id) as processPath
     from
     Activity Ap
     inner join ProcessEdge PE on PE.parent=Ap.processId
@@ -42,10 +52,16 @@
     <c:if test="${cRow.substeps != 'NONE'}">
         <c:choose>
             <c:when test="${empty cRow.activityId or empty cRow.begin}">
-                <traveler:processStepListRows processId="${cRow.processId}"/>
+                <traveler:processStepListRows processId="${cRow.processId}" 
+                                              stepPrefix="${cRow.stepPath}"
+                                              edgePrefix="${cRow.edgePath}"
+                                              processPrefix="${cRow.processPath}"/>
             </c:when>
             <c:otherwise>
-                <traveler:activityStepListRows activityId="${cRow.activityId}"/>
+                <traveler:activityStepListRows activityId="${cRow.activityId}" 
+                                               stepPrefix="${cRow.stepPath}"
+                                               edgePrefix="${cRow.edgePath}"
+                                               processPrefix="${cRow.processPath}"/>
             </c:otherwise>
         </c:choose>
     </c:if>

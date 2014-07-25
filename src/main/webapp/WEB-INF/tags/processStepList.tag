@@ -18,7 +18,7 @@
 %>
 
 <sql:query var="processQ">
-    select P.id, P.name, P.substeps,
+    select P.id as processId, P.name, P.substeps, P.id as processPath,
     null as child
     from Process P
     where id=?<sql:param value="${processId}"/>;
@@ -27,4 +27,4 @@
 <%
     ((java.util.List)request.getAttribute("stepList")).add(request.getAttribute("cRowJsp"));
 %>
-<traveler:processStepListRows processId="${processId}"/>
+<traveler:processStepListRows processId="${processId}" processPrefix="${processId}"/>

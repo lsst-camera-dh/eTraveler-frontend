@@ -19,7 +19,7 @@
 
 <sql:query var="activityQ">
     select A.id as activityId, A.begin, A.end, 
-    P.name, P.id as processId, P.substeps,
+    P.name, P.id as processId, P.substeps, P.id as processPath,
     AFS.name as statusName
     from Activity A
     inner join Process P on P.id=A.processId
@@ -30,4 +30,4 @@
 <%
     ((java.util.List)request.getAttribute("stepList")).add(request.getAttribute("cRowJsp"));
 %>
-<traveler:activityStepListRows activityId="${activityId}"/>
+<traveler:activityStepListRows activityId="${activityId}" processPrefix="${cRowJsp.processId}"/>

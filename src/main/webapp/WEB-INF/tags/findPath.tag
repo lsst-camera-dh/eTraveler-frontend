@@ -24,6 +24,6 @@
 
 <%--<c:set var="prefix" value="${empty parentEdgePath ? '' : parentEdgePath.toString() + ','}"/>--%>
 <c:if test="${! empty parentEdgePath}">
-    <c:set var="prefix" value="${parentEdgePath},"/>
+    <c:set var="prefix" value="${parentEdgePath}."/>
 </c:if>
 <c:set var="edgePath" value="${prefix}${activityQ.rows[0].processEdgeId}"/>

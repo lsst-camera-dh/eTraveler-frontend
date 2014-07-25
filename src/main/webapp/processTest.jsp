@@ -18,8 +18,10 @@
         <h1>Hello World!</h1>
         <traveler:processStepList processId="${param.processId}"/>
         <display:table name="${stepList}" class="datatable">
-            <display:column property="id"/>
-            <display:column property="step"/>
+            <display:column property="processId"/>
+            <display:column property="stepPath"/>
+            <display:column property="edgePath"/>
+            <display:column property="processPath"/>
             <display:column property="name"/>
         </display:table>
     </body>
