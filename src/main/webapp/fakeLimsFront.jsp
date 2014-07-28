@@ -15,11 +15,17 @@
 
 <c:if test="${allOk}">
     <c:choose>
+        <c:when test="${fn:contains(pageContext.request.requestURI, '/Prod/')}">
+            <c:set var="dataSourceMode" value="Prod"/>
+        </c:when>
         <c:when test="${fn:contains(pageContext.request.requestURI, '/Dev/')}">
             <c:set var="dataSourceMode" value="Dev"/>
         </c:when>
-        <c:when test="${fn:contains(pageContext.request.requestURI, '/Prod/')}">
-            <c:set var="dataSourceMode" value="Prod"/>
+        <c:when test="${fn:contains(pageContext.request.requestURI, '/Test/')}">
+            <c:set var="dataSourceMode" value="Test"/>
+        </c:when>
+        <c:when test="${fn:contains(pageContext.request.requestURI, '/Raw/')}">
+            <c:set var="dataSourceMode" value="Raw"/>
         </c:when>
         <c:otherwise>
             <c:set var="allOk" value="false"/>

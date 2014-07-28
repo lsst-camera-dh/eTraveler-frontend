@@ -22,8 +22,5 @@
     <traveler:findPath var="parentEdgePath" activityId="${activityQ.rows[0].parentActivityId}"/>
 </c:if>
 
-<%--<c:set var="prefix" value="${empty parentEdgePath ? '' : parentEdgePath.toString() + ','}"/>--%>
-<c:if test="${! empty parentEdgePath}">
-    <c:set var="prefix" value="${parentEdgePath}."/>
-</c:if>
+<traveler:dotOrNot var="prefix" prefix="${parentEdgePath}"/>
 <c:set var="edgePath" value="${prefix}${activityQ.rows[0].processEdgeId}"/>

@@ -1,0 +1,48 @@
+    select
+    P.id as processId, P.name, P.hardwareRelationshipTypeId, P.substeps
+    ,P.travelerActionMask&(select maskBit from InternalAction where name='async') as isAsync
+    ,PE.id as processEdgeId, PE.step
+    ,concat('${myStepPrefix}', PE.step) as stepPath
+    ,concat('${myEdgePrefix}', PE.id) as edgePath
+    ,concat('${myProcessPrefix}', P.id) as processPath
+<c:if test="${mode == 'activity'}">
+    ,Ap.hardwareId, Ap.inNCR
+    ,Ac.id as activityId, Ac.begin, Ac.end
+    ,AFS.name as statusName
+    ,JSH.id as jobStepId
+</c:if>
+    from
+    Process P
+    inner join ProcessEdge PE on PE.parent=P.id <%-- NO! --%>
+<%-- Down to here. This is a mess --%>
+    inner join Activity Ap on Ap.processId=P.id
+    inner join Process P on P.id=PE.child
+    left join Activity Ac on Ac.parentActivityId=Ap.id and Ac.processEdgeId=PE.id
+    left join ActivityFinalStatus AFS on AFS.id=Ac.activityFinalStatusId
+    left join JobStepHistory JSH on JSH.activityId=Ac.id
+    where
+    Ap.id=?<sql:param value="${activityId}"/>
+    group by PE.id, Ac.id
+    order by abs(PE.step), Ac.iteration;
+
+
+
+
+    select 
+    P.name, P.id as processId, P.substeps, P.id as processPath
+    <c:if test="${mode == 'activity'}">
+        ,A.id as activityId, A.begin, A.end
+        ,AFS.name as statusName
+    </c:if>
+    from Process P
+    <c:choose>
+        <c:when test="${mode == 'activity'}">
+            inner join Activity A on A.processId=P.id
+            left join ActivityFinalStatus AFS on AFS.id=A.activityFinalStatusId
+            where A.id=?<sql:param value="${theId}"/>
+        </c:when>
+        <c:when test="${mode == 'process'}">
+            where P.id=?<sql:param value="${theId}"/>
+        </c:when>
+    </c:choose>
+    ;
