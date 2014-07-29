@@ -11,6 +11,8 @@
 
 <%@attribute name="theId" required="true"%>
 <%@attribute name="mode" required="true"%>
+<%@attribute name="var" required="true" rtexprvalue="false"%>
+<%@variable name-from-attribute="var" alias="theList" scope="AT_BEGIN"%>
 
 <c:if test="${mode != 'activity' && mode != 'process'}">
     <%-- Should redirect to an error page here --%>
@@ -18,8 +20,8 @@
 </c:if>
 
 <%
-    java.util.List stepList = new java.util.LinkedList();
-    request.setAttribute("stepList", stepList);
+    java.util.List theList = new java.util.LinkedList();
+    jspContext.setAttribute("theList", theList);
 %>
 
 <sql:query var="theQ">
@@ -43,8 +45,8 @@ arglebargle #358987
         </c:otherwise>
     </c:choose>
 </sql:query>
-<c:set var="cRowJsp" value="${theQ.rows[0]}" scope="request"/>
+<c:set var="cRow" value="${theQ.rows[0]}"/>
 <%
-    ((java.util.List)request.getAttribute("stepList")).add(request.getAttribute("cRowJsp"));
+    ((java.util.List)jspContext.getAttribute("theList")).add(jspContext.getAttribute("cRow"));
 %>
-<traveler:stepListRows theId="${theId}" mode="${mode}" processPrefix="${theQ.rows[0].processId}"/>
+<traveler:stepListRows theId="${theId}" theList="${theList}" mode="${mode}" processPrefix="${theQ.rows[0].processId}"/>

@@ -23,7 +23,7 @@ select * from Activity where id=?<sql:param value="${param.activityId}"/>
             <table>
                 <tr>
                     <td>
-<traveler:stepList mode="process" theId="${aQ.rows[0].processId}"/>
+<traveler:stepList var="stepList" mode="process" theId="${aQ.rows[0].processId}"/>
 <display:table name="${stepList}" class="datatable">
     <display:column property="processId"/>
     <display:column property="stepPath"/>
@@ -33,7 +33,7 @@ select * from Activity where id=?<sql:param value="${param.activityId}"/>
 </display:table>
                     </td>
                     <td>
-<traveler:stepList mode="activity" theId="${param.activityId}"/>
+<traveler:stepList var="stepList" mode="activity" theId="${param.activityId}"/>
 <display:table name="${stepList}" class="datatable">
     <display:column property="activityId"/>
     <display:column property="processId"/>

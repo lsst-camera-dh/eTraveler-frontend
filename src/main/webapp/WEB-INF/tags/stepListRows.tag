@@ -14,6 +14,7 @@
 <%@attribute name="stepPrefix"%>
 <%@attribute name="edgePrefix"%>
 <%@attribute name="processPrefix" required="true"%>
+<%@attribute name="theList" required="true" type="java.util.List"%>
 
 <c:if test="${mode != 'activity' && mode != 'process'}">
     <%-- Should redirect to an error page here --%>
@@ -68,14 +69,14 @@ arglebargle #606268
 </sql:query>
 
 <c:forEach var="cRow" items="${childrenQ.rows}">
-    <c:set var="cRowJsp" value="${cRow}" scope="request"/>
     <%
-        ((java.util.List)request.getAttribute("stepList")).add(request.getAttribute("cRowJsp"));
+        ((java.util.List)jspContext.getAttribute("theList")).add(jspContext.getAttribute("cRow"));
     %>
     <c:if test="${cRow.substeps != 'NONE'}">
         <c:choose>
             <c:when test="${mode == 'process' || (mode == 'activity' && (empty cRow.activityId or empty cRow.begin))}">
                 <traveler:stepListRows mode="process"
+                    theList="${theList}"
                     theId="${cRow.processId}" 
                     stepPrefix="${cRow.stepPath}"
                     edgePrefix="${cRow.edgePath}"
@@ -83,6 +84,7 @@ arglebargle #606268
             </c:when>
             <c:otherwise>
                 <traveler:stepListRows mode="activity"
+                    theList="${theList}"
                     theId="${cRow.activityId}" 
                     stepPrefix="${cRow.stepPath}"
                     edgePrefix="${cRow.edgePath}"
