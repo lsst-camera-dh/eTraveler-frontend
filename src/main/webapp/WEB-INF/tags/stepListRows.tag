@@ -15,7 +15,7 @@
 <%@attribute name="edgePrefix"%>
 <%@attribute name="processPrefix" required="true"%>
 
-<c:if test="${mode != 'activity' || mode != 'process'}">
+<c:if test="${mode != 'activity' && mode != 'process'}">
     <%-- Should redirect to an error page here --%>
     Programmer error #606268
 </c:if>
@@ -73,21 +73,6 @@ arglebargle #606268
         ((java.util.List)request.getAttribute("stepList")).add(request.getAttribute("cRowJsp"));
     %>
     <c:if test="${cRow.substeps != 'NONE'}">
-<%--
-        <traveler:stepListRows 
-            <c:choose>
-                <c:when test="${mode == 'process' || (mode == 'activity' && (empty cRow.activityId or empty cRow.begin))}">
-                    mode="process" theId="${cRow.processId}"
-                </c:when> 
-                <c:when test="${mode == 'activity'}">
-                    mode="activity" theId="${cRow.activityId}"
-                </c:when> 
-            </c:choose>
-            stepPrefix="${cRow.stepPath}"
-            edgePrefix="${cRow.edgePath}"
-            processPrefix="${cRow.processPath}"/>
---%>
-
         <c:choose>
             <c:when test="${mode == 'process' || (mode == 'activity' && (empty cRow.activityId or empty cRow.begin))}">
                 <traveler:stepListRows mode="process"
@@ -104,6 +89,5 @@ arglebargle #606268
                     processPrefix="${cRow.processPath}"/>
             </c:otherwise>
         </c:choose>
-
     </c:if>
 </c:forEach>

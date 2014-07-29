@@ -12,7 +12,7 @@
 <%@attribute name="theId" required="true"%>
 <%@attribute name="mode" required="true"%>
 
-<c:if test="${mode != 'activity' || mode != 'process'}">
+<c:if test="${mode != 'activity' && mode != 'process'}">
     <%-- Should redirect to an error page here --%>
     Programmer error #358987
 </c:if>
@@ -34,10 +34,9 @@ left join ActivityFinalStatus AFS on AFS.id=A.activityFinalStatusId
 where A.id=?<sql:param value="${theId}"/>;
         </c:when>
         <c:when test="${mode == 'process'}">
-select P.id as processId, P.name, P.substeps, P.id as processPath,
-null as child
+select P.id as processId, P.name, P.substeps, P.id as processPath
 from Process P
-where id=?<sql:param value="$theId}"/>;
+where P.id=?<sql:param value="${theId}"/>;
         </c:when>
         <c:otherwise>
 arglebargle #358987

@@ -20,9 +20,6 @@
             <sql:query var="aQ">
 select * from Activity where id=?<sql:param value="${param.activityId}"/>
             </sql:query>
-            <c:set var="processId" value="${aQ.rows[0].processId}"/>
-            <c:set var="activity" value="${aQ.rows[0]}"/>
-            ${aQ.rows[0].processId} ${processId}
             <table>
                 <tr>
                     <td>
