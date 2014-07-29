@@ -112,6 +112,14 @@
         <servlet-name>fakeLims</servlet-name>
         <url-pattern>/Prod/Results/*</url-pattern>
     </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>fakeLims</servlet-name>
+        <url-pattern>/Test/Results/*</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>fakeLims</servlet-name>
+        <url-pattern>/Raw/Results/*</url-pattern>
+    </servlet-mapping>
     <!--
     <servlet>
         <servlet-name>limsBack</servlet-name>
