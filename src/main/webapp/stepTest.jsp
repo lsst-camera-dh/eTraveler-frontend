@@ -7,7 +7,6 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql" %>
-<%@taglib prefix="display" uri="http://displaytag.sf.net" %>
 <%@taglib prefix="traveler" tagdir="/WEB-INF/tags"%>
 <!DOCTYPE html>
 <html>
@@ -24,24 +23,14 @@ select * from Activity where id=?<sql:param value="${param.activityId}"/>
                 <tr>
                     <td>
 <traveler:stepList var="stepList" mode="process" theId="${aQ.rows[0].processId}"/>
-<display:table name="${stepList}" class="datatable">
-    <display:column property="processId"/>
-    <display:column property="stepPath"/>
-    <display:column property="edgePath"/>
-    <display:column property="processPath"/>
-    <display:column property="name"/>
-</display:table>
+<traveler:showStepsTable stepList="${stepList}" mode="process"/>
                     </td>
                     <td>
 <traveler:stepList var="stepList" mode="activity" theId="${param.activityId}"/>
-<display:table name="${stepList}" class="datatable">
-    <display:column property="activityId"/>
-    <display:column property="processId"/>
-    <display:column property="stepPath"/>
-    <display:column property="edgePath"/>
-    <display:column property="processPath"/>
-    <display:column property="name"/>
-</display:table>
+<traveler:showStepsTable stepList="${stepList}" mode="activity"/>
+                    </td>
+                    <td>
+<iframe name="content"/>
                     </td>
                 </tr>
             </table>
