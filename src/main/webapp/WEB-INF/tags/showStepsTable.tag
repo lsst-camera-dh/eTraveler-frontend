@@ -47,6 +47,6 @@
     <c:if test="${mode == 'activity'}">
         <display:column property="begin"/>
         <display:column property="end"/>
-        <display:column property="statusName"/>
+        <display:column property="statusName" title="Status"/>
     </c:if>
 </display:table>

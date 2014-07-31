@@ -7,6 +7,7 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql" %>
+<%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@taglib prefix="traveler" tagdir="/WEB-INF/tags"%>
 <!DOCTYPE html>
 <html>
@@ -27,6 +28,8 @@ select * from Activity where id=?<sql:param value="${param.activityId}"/>
                     </td>
                     <td>
 <traveler:stepList var="stepList" mode="activity" theId="${param.activityId}"/>
+<traveler:findCurrentStep var="currentStepLink" stepList="${stepList}"/>
+[${currentStepLink}]
 <traveler:showStepsTable stepList="${stepList}" mode="activity"/>
                     </td>
                     <td>
