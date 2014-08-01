@@ -30,10 +30,11 @@ select * from Activity where id=?<sql:param value="${param.activityId}"/>
 <traveler:stepList var="stepList" mode="activity" theId="${param.activityId}"/>
 <traveler:findCurrentStep var="currentStepLink" stepList="${stepList}"/>
 [${currentStepLink}]
+<a href="${currentStepLink}" target="content">current step</a>
 <traveler:showStepsTable stepList="${stepList}" mode="activity"/>
                     </td>
                     <td>
-<iframe name="content"/>
+<iframe name="content" src="${currentStepLink}"/>
                     </td>
                 </tr>
             </table>

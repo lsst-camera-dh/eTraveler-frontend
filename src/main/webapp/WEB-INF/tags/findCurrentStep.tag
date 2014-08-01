@@ -38,7 +38,6 @@
         </c:when>
         <c:otherwise>
             <c:if test="${firstUninstantiated == 0}">
-                <%-- Need more testing to ensure this is a child of lastUnfinished --%>
                 <traveler:isChild var="isChild" childEdgePath="${step.edgePath}" parentEdgePath="${lufEdgePath}"/>
                 <c:if test="${isChild}">
                     <c:set var="firstUninstantiated" value="${step.processId}"/>
@@ -50,22 +49,37 @@
 
 <c:choose>
     <c:when test="${lastStopped != 0}">
-        <c:set var="currentStepLink" value="activity ${lastStopped}"/>
+        <c:set var="mode" value="activity"/>
+        <c:set var="theId" value="${lastStopped}"/>
     </c:when>
     <c:when test="${unstarted != 0}">
-        <c:set var="currentStepLink" value="activity ${unstarted}"/>
+        <c:set var="mode" value="activity"/>
+        <c:set var="theId" value="${unstarted}"/>
     </c:when>
     <c:when test="${lastUnfinished != 0}">
         <c:choose>
             <c:when test="${firstUninstantiated != 0}">
+                <c:set var="mode" value="process"/>
+                <c:set var="theId" value="${firstUninstantiated}"/>
                 <c:set var="currentStepLink" value="process ${firstUninstantiated}"/> 
             </c:when>
             <c:otherwise>
-                <c:set var="currentStepLink" value="activity ${lastUnfinished}"/>
+               <c:set var="mode" value="activity"/>
+               <c:set var="theId" value="${lastUnfinished}"/>
             </c:otherwise>
         </c:choose>
     </c:when>
     <c:otherwise>
-        <c:set var="currentStepLink" value="activity ${stepList[0].activityId}"/>
+        <c:set var="mode" value="activity"/>
+        <c:set var="theId" value="${stepList[0].activityId}"/>
     </c:otherwise>
+</c:choose>
+
+<c:choose>
+    <c:when test="${mode == 'activity'}">
+        <c:url var="currentStepLink" value="activityPane.jsp">
+            <c:param name="activityId" value="${theId}"/>
+            <c:param name="topActivityId" value="${stepList[0].activityId}"/>
+        </c:url>
+    </c:when>
 </c:choose>
