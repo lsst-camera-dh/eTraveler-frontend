@@ -19,7 +19,13 @@
 
 <%-- Need to deal with superceded Activities --%>
 
+<c:set var="traveler" value="${stepList[0]}"/>
+<c:set var="topActivityId" value="${traveler.activityId}"/>
+<c:set var="hardwareId" value="${traveler.hardwareId}"/>
+<c:set var="inNCR" value="${traveler.inNCR}"/>
+
 <c:forEach var="step" varStatus="stepStat" items="${stepList}">
+    ${step}<br>
     <c:choose>
         <c:when test="${! empty step.activityId}">
             <c:if test="${step.statusName == 'stopped'}">
@@ -41,6 +47,7 @@
                 <traveler:isChild var="isChild" childEdgePath="${step.edgePath}" parentEdgePath="${lufEdgePath}"/>
                 <c:if test="${isChild}">
                     <c:set var="firstUninstantiated" value="${step.processId}"/>
+                    <c:set var="processEdgeId" value="${step.processEdgeId}"/>
                 </c:if>
             </c:if>
         </c:otherwise>
@@ -61,7 +68,6 @@
             <c:when test="${firstUninstantiated != 0}">
                 <c:set var="mode" value="process"/>
                 <c:set var="theId" value="${firstUninstantiated}"/>
-                <c:set var="currentStepLink" value="process ${firstUninstantiated}"/> 
             </c:when>
             <c:otherwise>
                <c:set var="mode" value="activity"/>
@@ -71,7 +77,7 @@
     </c:when>
     <c:otherwise>
         <c:set var="mode" value="activity"/>
-        <c:set var="theId" value="${stepList[0].activityId}"/>
+        <c:set var="theId" value="${topActivityId}"/>
     </c:otherwise>
 </c:choose>
 
@@ -79,7 +85,26 @@
     <c:when test="${mode == 'activity'}">
         <c:url var="currentStepLink" value="activityPane.jsp">
             <c:param name="activityId" value="${theId}"/>
-            <c:param name="topActivityId" value="${stepList[0].activityId}"/>
+            <c:param name="topActivityId" value="${topActivityId}"/>
         </c:url>
+    </c:when>
+    <c:when test="${mode == 'process'}">
+        <c:set var="processUrl" value="${autoStart ? 'fh/createActivity.jsp' : 'processPane.jsp'}"/>
+        <c:url var="processLink" value="${processUrl}">
+            <c:param name="processId" value="${theId}"/>
+            <c:param name="topActivityId" value="${topActivityId}"/>
+            <c:param name="harwareId" value="${hardwareId}"/>
+            <c:param name="inNCR" value="${inNCR}"/>
+            <c:param name="parentActivityId" value="${lastUnfinished}"/>
+            <c:param name="processEdgeId" value="${processEdgeId}"/>
+        </c:url>
+        <c:choose>
+            <c:when test="${autoStart}">
+                <c:redirect url="${processLink}"/>
+            </c:when>
+            <c:otherwise>
+                <c:set var="currentStepLink" value="${processLink}"/>
+            </c:otherwise>
+        </c:choose>
     </c:when>
 </c:choose>

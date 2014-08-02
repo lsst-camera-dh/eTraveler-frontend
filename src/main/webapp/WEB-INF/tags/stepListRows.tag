@@ -29,11 +29,11 @@
     <c:choose>
         <c:when test="${mode == 'activity'}">
 select
-Ap.hardwareId, Ap.inNCR,
+Ap.hardwareId, Ap.inNCR, Ap.id as parentActivityId,
 P.id as processId, P.name, P.hardwareRelationshipTypeId, P.substeps,
 P.travelerActionMask&(select maskBit from InternalAction where name='async') as isAsync,
 PE.id as processEdgeId, PE.step,
-Ac.id as activityId, Ac.begin, Ac.end, Ac.parentActivityId, Ac.processEdgeId,
+Ac.id as activityId, Ac.begin, Ac.end,
 AFS.name as statusName,
 JSH.id as jobStepId,
 concat('${myStepPrefix}', abs(PE.step)) as stepPath,
@@ -53,7 +53,8 @@ order by abs(PE.step), Ac.iteration;
         </c:when>
         <c:when test="${mode == 'process'}">
 select 
-PE.child, PE.step, P.name, P.id as processId, P.substeps,
+PE.id as processEdgeId, PE.child, PE.step, 
+P.name, P.id as processId, P.substeps,
 concat('${myStepPrefix}', abs(PE.step)) as stepPath,
 concat('${myEdgePrefix}', PE.id) as edgePath,
 concat('${myProcessPrefix}', P.id) as processPath

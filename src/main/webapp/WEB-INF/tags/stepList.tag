@@ -27,7 +27,7 @@
 <sql:query var="theQ">
     <c:choose>
         <c:when test="${mode == 'activity'}">
-select A.id as activityId, A.begin, A.end, 
+select A.id as activityId, A.begin, A.end, A.hardwareId, A.inNCR,
 P.name, P.id as processId, P.substeps, P.id as processPath,
 AFS.name as statusName
 from Activity A

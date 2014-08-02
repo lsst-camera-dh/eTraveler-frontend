@@ -17,6 +17,7 @@
     </head>
     <body>
         <h1>Hello World!</h1>
+        <c:set var="autoStart" value="false" scope="session"/>
             <sql:query var="aQ">
 select * from Activity where id=?<sql:param value="${param.activityId}"/>
             </sql:query>
@@ -34,7 +35,7 @@ select * from Activity where id=?<sql:param value="${param.activityId}"/>
 <traveler:showStepsTable stepList="${stepList}" mode="activity"/>
                     </td>
                     <td>
-<iframe name="content" src="${currentStepLink}"/>
+<iframe name="content" src="${currentStepLink}" width="600" height="400"/>
                     </td>
                 </tr>
             </table>
