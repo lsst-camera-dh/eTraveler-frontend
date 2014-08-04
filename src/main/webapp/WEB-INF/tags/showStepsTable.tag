@@ -10,6 +10,8 @@
 
 <%@attribute name="stepList" required="true" type="java.util.List"%>
 <%@attribute name="mode" required="true"%>
+<%@attribute name="currentStepLink"%>
+<%@attribute name="currentStepEPath"%>
 
 <display:table id="step" name="${stepList}" class="datatable">
     <display:column title="Step">
@@ -31,6 +33,9 @@
     </display:column>
     <display:column title="Name">
         <c:choose>
+            <c:when test="${! empty currentStepLink && step.edgePath == currentStepEPath}">
+                <c:set var="contentLink" value="${currentStepLink}"/>
+            </c:when>
             <c:when test="${mode == 'activity' && ! empty step.activityId}">
                 <c:url var="contentLink" value="activityPane.jsp">
                     <c:param name="activityId" value="${step.activityId}"/>

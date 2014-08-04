@@ -9,8 +9,10 @@
 <%@taglib prefix="traveler" tagdir="/WEB-INF/tags"%>
 
 <%@attribute name="stepList" required="true" type="java.util.List"%>
-<%@attribute name="var" required="true" rtexprvalue="false"%>
-<%@variable name-from-attribute="var" alias="currentStepLink" scope="AT_BEGIN"%>
+<%@attribute name="varStepLink" required="true" rtexprvalue="false"%>
+<%@variable name-from-attribute="varStepLink" alias="currentStepLink" scope="AT_BEGIN"%>
+<%@attribute name="varStepEPath" required="true" rtexprvalue="false"%>
+<%@variable name-from-attribute="varStepEPath" alias="currentStepEPath" scope="AT_BEGIN"%>
 
 <c:set var="firstUninstantiated" value="0"/>
 <c:set var="lastStopped" value="0"/>
@@ -25,29 +27,30 @@
 <c:set var="inNCR" value="${traveler.inNCR}"/>
 
 <c:forEach var="step" varStatus="stepStat" items="${stepList}">
-    ${step}<br>
     <c:choose>
         <c:when test="${! empty step.activityId}">
             <c:if test="${step.statusName == 'stopped'}">
                 <c:set var="lastStopped" value="${step.activityId}"/>
+                <c:set var="lsPath" value="${step.edgePath}"/>
             </c:if>
             <c:if test="${empty step.begin}">
                 <c:if test="${unstarted != 0}">
                     <c:set var="error" value="Too many unstarted steps"/>
                 </c:if>
                 <c:set var="unstarted" value="${step.activityId}"/>
+                <c:set var="usPath" value="${step.edgePath}"/>
             </c:if>
             <c:if test="${empty step.end}">
                 <c:set var="lastUnfinished" value="${step.activityId}"/>
-                <c:set var="lufEdgePath" value="${step.edgePath}"/>
+                <c:set var="lufPath" value="${step.edgePath}"/>
             </c:if>
         </c:when>
         <c:otherwise>
             <c:if test="${firstUninstantiated == 0}">
-                <traveler:isChild var="isChild" childEdgePath="${step.edgePath}" parentEdgePath="${lufEdgePath}"/>
-                <c:if test="${isChild}">
+                <c:if test="${step.parentActivityId == lastUnfinished}">
                     <c:set var="firstUninstantiated" value="${step.processId}"/>
                     <c:set var="processEdgeId" value="${step.processEdgeId}"/>
+                    <c:set var="fuPath" value="${step.edgePath}"/>
                 </c:if>
             </c:if>
         </c:otherwise>
@@ -58,26 +61,31 @@
     <c:when test="${lastStopped != 0}">
         <c:set var="mode" value="activity"/>
         <c:set var="theId" value="${lastStopped}"/>
+        <c:set var="currentStepEPath" value="${lsPath}"/>
     </c:when>
     <c:when test="${unstarted != 0}">
         <c:set var="mode" value="activity"/>
         <c:set var="theId" value="${unstarted}"/>
+        <c:set var="currentStepEPath" value="${usPath}"/>
     </c:when>
     <c:when test="${lastUnfinished != 0}">
         <c:choose>
             <c:when test="${firstUninstantiated != 0}">
                 <c:set var="mode" value="process"/>
                 <c:set var="theId" value="${firstUninstantiated}"/>
+                <c:set var="currentStepEPath" value="${fuPath}"/>
             </c:when>
             <c:otherwise>
                <c:set var="mode" value="activity"/>
                <c:set var="theId" value="${lastUnfinished}"/>
+               <c:set var="currentStepEPath" value="${lufPath}"/>
             </c:otherwise>
         </c:choose>
     </c:when>
     <c:otherwise>
         <c:set var="mode" value="activity"/>
         <c:set var="theId" value="${topActivityId}"/>
+        <c:set var="currentStepEPath" value=""/>
     </c:otherwise>
 </c:choose>
 
