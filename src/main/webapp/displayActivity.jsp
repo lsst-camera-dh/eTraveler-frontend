@@ -40,7 +40,7 @@
         
         <h2>Activity</h2>
         <traveler:activityCrumbs activityPath="${activityPath}"/>
-        <traveler:activityWidget activityId="${param.activityId}"/>
+        <traveler:activityHeader activityId="${param.activityId}"/>
                 </td>
                 <td>
         <h2>Component</h2>
