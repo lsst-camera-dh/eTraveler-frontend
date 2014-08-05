@@ -97,17 +97,17 @@
         </c:url>
     </c:when>
     <c:when test="${mode == 'process'}">
-        <c:set var="processUrl" value="${autoStart ? 'fh/createActivity.jsp' : 'processPane.jsp'}"/>
+        <c:set var="processUrl" value="${activityAutoCreate ? 'fh/createActivity.jsp' : 'processPane.jsp'}"/>
         <c:url var="processLink" value="${processUrl}">
             <c:param name="processId" value="${theId}"/>
             <c:param name="topActivityId" value="${topActivityId}"/>
-            <c:param name="harwareId" value="${hardwareId}"/>
+            <c:param name="hardwareId" value="${hardwareId}"/>
             <c:param name="inNCR" value="${inNCR}"/>
             <c:param name="parentActivityId" value="${lastUnfinished}"/>
             <c:param name="processEdgeId" value="${processEdgeId}"/>
         </c:url>
         <c:choose>
-            <c:when test="${autoStart}">
+            <c:when test="${activityAutoCreate}">
                 <c:redirect url="${processLink}"/>
             </c:when>
             <c:otherwise>

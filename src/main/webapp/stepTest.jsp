@@ -17,7 +17,7 @@
     </head>
     <body>
         <h1>Hello World!</h1>
-        <c:set var="autoStart" value="false" scope="session"/>
+        <c:set var="activityAutoCreate" value="true" scope="session"/>
             <sql:query var="aQ">
 select * from Activity where id=?<sql:param value="${param.activityId}"/>
             </sql:query>
@@ -31,13 +31,12 @@ select * from Activity where id=?<sql:param value="${param.activityId}"/>
 <traveler:stepList var="stepList" mode="activity" theId="${param.activityId}"/>
 <traveler:findCurrentStep varStepLink="currentStepLink" varStepEPath="currentStepEPath" 
                           stepList="${stepList}"/>
-[${currentStepLink}] [${currentStepEPath}]<br>
-<a href="${currentStepLink}" target="content">current step</a>
 <traveler:showStepsTable stepList="${stepList}" mode="activity"
                          currentStepLink="${currentStepLink}" currentStepEPath="${currentStepEPath}"/>
                     </td>
                     <td>
-<iframe name="content" src="${currentStepLink}" width="600" height="400"/>
+                        <a href="${currentStepLink}" target="content">Go to current step</a><br>
+                        <iframe name="content" src="${currentStepLink}" width="600" height="400"/>
                     </td>
                 </tr>
             </table>

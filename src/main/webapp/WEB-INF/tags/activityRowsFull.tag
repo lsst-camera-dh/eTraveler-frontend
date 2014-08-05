@@ -13,7 +13,7 @@
 <%@attribute name="activityId" required="true"%>
 <%@attribute name="prefix"%>
 
-<c:set var="autoStart" value="false"/>
+<c:set var="autoStart" value="true"/>
 
 <traveler:setPaths activityId="${activityId}"/>
 <c:set var="thisProcessPath" value="${processPath}"/>
