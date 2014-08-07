@@ -9,12 +9,13 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql" %>
+<%@taglib prefix="traveler" tagdir="/WEB-INF/tags"%>
 
 <!DOCTYPE html>
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
-        <title>Closeout Activity</title>
+        <title>Closeout NCR Activity</title>
     </head>
     <body>
 
@@ -25,15 +26,19 @@
             where E.NCRActivityId=?<sql:param value="${param.activityId}"/>;
         </sql:query>
 
-        <c:set var="nEx" value="${fn:length(exceptionQ.rows)}"/>
-
         <c:choose>
-            <c:when test="${nEx != 1}">
+            <c:when test="${fn:length(exceptionQ.rows) != 1}">
                 Inconceivable! #253795
             </c:when>
             <c:otherwise>
-                Uh, sorry.
-                ${exceptionQ.rows[0]}
+                <%--
+                <c:set var="exception" value="${exceptionQ.rows[0]}"/>
+                <traveler:findTraveler var="returnTravelerId" activityId="${param.activityId}"/>
+                <traveler:stepList var="stepList" mode="activity" theId="${returnTravelerId}"/>
+                <traveler:finishNCR stepList="${stepList}" returnEdgePath="${exception.returnEdgePath}"
+                                    ncrActivityId="${param.activityId}"/>
+                --%>
+                Uhm, sorry.
             </c:otherwise>
         </c:choose>
 

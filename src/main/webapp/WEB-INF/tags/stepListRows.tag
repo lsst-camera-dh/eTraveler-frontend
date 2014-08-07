@@ -43,7 +43,9 @@ from
 Activity Ap
 inner join ProcessEdge PE on PE.parent=Ap.processId
 inner join Process P on P.id=PE.child
-left join Activity Ac on Ac.parentActivityId=Ap.id and Ac.processEdgeId=PE.id
+left join (select * from Activity where 
+            activityFinalStatusId != (select id from Activity where name='superceded')) 
+            as Ac on Ac.parentActivityId=Ap.id and Ac.processEdgeId=PE.id
 left join ActivityFinalStatus AFS on AFS.id=Ac.activityFinalStatusId
 left join JobStepHistory JSH on JSH.activityId=Ac.id
 where
@@ -73,7 +75,7 @@ arglebargle #606268
     <%
         ((java.util.List)jspContext.getAttribute("theList")).add(jspContext.getAttribute("cRow"));
     %>
-    <c:if test="${cRow.substeps != 'NONE'}">
+    <c:if test="${cRow.substeps != 'NONE' && cRow.statusName != 'skipped'}">
         <c:choose>
             <c:when test="${mode == 'process' || (mode == 'activity' && (empty cRow.activityId or empty cRow.begin))}">
                 <traveler:stepListRows mode="process"

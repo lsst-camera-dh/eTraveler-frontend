@@ -20,6 +20,8 @@
 <c:set var="unstarted" value="0"/>
 
 <%-- Need to deal with superceded Activities --%>
+<%-- Need to deal with selection steps --%>
+<%-- Both of those need support from stepListRows --%>
 
 <c:set var="traveler" value="${stepList[0]}"/>
 <c:set var="topActivityId" value="${traveler.activityId}"/>
