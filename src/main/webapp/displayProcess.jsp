@@ -42,23 +42,25 @@
         </table>
 
         <h2>Steps</h2>
-            <traveler:stepList var="stepList" mode="process" theId="${processId}"/>
-            <table>
-                <tr>
-                    <td style="vertical-align:top;">
-                        <%--
-                        <traveler:processTable processPath="${param.processPath}"/>
-                        --%>
-                        <traveler:showStepsTable stepList="${stepList}" mode="process"/>
-                    </td>
-                    <td style="vertical-align:top;">
-                        <c:url var="contentLink" value="processPane.jsp">
-                            <c:param name="processId" value="${processId}"/>
-                        </c:url>
-                        <iframe name="content" src="${contentLink}" width="600" height="400"></iframe>
-                    </td>
-                </tr>
-            </table>
+        <%--
+        <traveler:stepList var="stepList" mode="process" theId="${processId}"/>
+        --%>
+        <table>
+            <tr>
+                <td style="vertical-align:top;">
+                    <traveler:processTable processPath="${param.processPath}"/>
+                    <%--
+                    <traveler:showStepsTable stepList="${stepList}" mode="process"/>
+                    --%>
+                </td>
+                <td style="vertical-align:top;">
+                    <c:url var="contentLink" value="processPane.jsp">
+                        <c:param name="processId" value="${processId}"/>
+                    </c:url>
+                    <iframe name="content" src="${contentLink}" width="600" height="400"></iframe>
+                </td>
+            </tr>
+        </table>
 
         <h2>Instances</h2>
         <traveler:activityList processId="${processId}"/>
