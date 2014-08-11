@@ -106,7 +106,7 @@
 <table>
     <tr>
         <td>
-            <form method="get" action="startActivity.jsp" target="_top">
+            <form method="get" action="fh/startActivity.jsp" target="_top">
                 <input type="hidden" name="activityId" value="${activityId}">
                 <input type="hidden" name="topActivityId" value="${param.topActivityId}">
                 <input type="submit" value="Start Work"

@@ -15,6 +15,7 @@
 <sql:query var="activityQ" >
     select A.*, AFS.name as statusName,
     P.travelerActionMask&(select maskBit from InternalAction where name='harnessedJob') as isHarnessed,
+    P.travelerActionMask&(select maskBit from InternalAction where name='automatable') as isAutomatable,
     P.substeps
     from Activity A
     inner join Process P on P.id=A.processId
@@ -62,4 +63,8 @@
 
 <c:if test="${! empty activity.begin && activity.isHarnessed != 0}">
     <traveler:jhWidget activityId="${activityId}"/>
+</c:if>
+
+<c:if test="${! empty activity.begin && activity.isAutomatable != 0}">
+    <traveler:scriptWidget activityId="${activityId}"/>
 </c:if>

@@ -1,0 +1,40 @@
+---------------------------------------------------
+2014-07-31 jrb
+---------------------------------------------------
+I think it would be useful if operator could decide during execution whether a sequence should be run automatically or not,
+so we don't have to maintain two separate travelers or a single rather complicated traveler with a conditional branch.
+
+Would the following work?
+
+* Add another bit to travelerActionMask which, if set, signifies "is automatable".  The yaml ingest program would set this
+bit for any container step whose child sequence consisting entirely of job harness steps.
+
+* During execution, if this bit is set, eTraveler presents operator with option (before or after start-work?) so that
+automated running may be selected.  By default it would be unselected.
+
+* If selected eTraveler would prompt user with appropriate command to invoke the iterator script
+
+* If not selected, execution of sequence would proceed in the usual (not-automated) manner
+
+If we do something along these lines, there needs to be a way to indicate in the container step activity whether or not the
+child steps were executed using the iterator script.
+
+---------------------------------------------------
+2014-08-08 jrb
+---------------------------------------------------
+What I have currently is something which posts to
+
+http://lsst-camera.slac.stanford.edu/eTraveler/Raw/Results/nextJob
+
+(or similar, depending on server and db being used) with json data looking like
+
+{"operator": "jrb", "containerid": "1234"}
+
+Container id is Activity.id for the step with children to be automated.  Expected return data structure has two string
+fields, "status" and "command". (We might want to rename "command" to something more general.)
+
+Recognized values for status are "CMD", "DONE", or "ERROR".  If "CMD", value of "command" should be command string for next
+unexecuted child step - same string as is now written to web page for manual execution. If status is "DONE",   there are no
+more commands. Value of "command" will be ignored.  If "ERROR", second field can be used for an error message.   One
+possible error would be the case where a child step has been started and is not yet complete.  Last I heard, we're only
+supporting synchronous, so the post should only be done after previous step is complete.

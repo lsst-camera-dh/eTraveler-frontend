@@ -9,10 +9,16 @@
 <%@taglib prefix="traveler" tagdir="/WEB-INF/tags"%>
 
 <%@attribute name="stepList" required="true" type="java.util.List"%>
+<%@attribute name="scriptMode"%>
+
 <%@attribute name="varStepLink" required="true" rtexprvalue="false"%>
 <%@variable name-from-attribute="varStepLink" alias="currentStepLink" scope="AT_BEGIN"%>
 <%@attribute name="varStepEPath" required="true" rtexprvalue="false"%>
 <%@variable name-from-attribute="varStepEPath" alias="currentStepEPath" scope="AT_BEGIN"%>
+
+<c:if test="${empty scriptMode}">
+    <c:set var="scriptMode" value="false"/>
+</c:if>
 
 <c:set var="firstUninstantiated" value="0"/>
 <c:set var="lastStopped" value="0"/>
@@ -93,10 +99,17 @@
 
 <c:choose>
     <c:when test="${mode == 'activity'}">
-        <c:url var="currentStepLink" value="activityPane.jsp">
-            <c:param name="activityId" value="${theId}"/>
-            <c:param name="topActivityId" value="${topActivityId}"/>
-        </c:url>
+        <c:choose>
+            <c:when test="${scriptMode}">
+                <c:set var="currentStepLink" value="${theId}"/>
+            </c:when>
+            <c:otherwise>
+                <c:url var="currentStepLink" value="activityPane.jsp">
+                    <c:param name="activityId" value="${theId}"/>
+                    <c:param name="topActivityId" value="${topActivityId}"/>
+                </c:url>
+            </c:otherwise>
+        </c:choose>
     </c:when>
     <c:when test="${mode == 'process'}">
         <c:set var="processUrl" value="${activityAutoCreate ? 'fh/createActivity.jsp' : 'processPane.jsp'}"/>
@@ -109,6 +122,10 @@
             <c:param name="processEdgeId" value="${processEdgeId}"/>
         </c:url>
         <c:choose>
+            <c:when test="${scriptMode}">
+                <traveler:createActivity var="currentStepLink" hardwareId="${hardwareId}" processId="${theId}"
+                    inNCR="${inNCR}" parentActivityId="${lastUnfinished}" processEdgeId="${processEdgeId}"/>
+            </c:when>
             <c:when test="${activityAutoCreate}">
                 <c:redirect url="${processLink}"/>
             </c:when>

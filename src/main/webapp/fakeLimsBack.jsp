@@ -19,8 +19,8 @@
     request.setAttribute("inputs", inputs);
 %>
 
-<%-- for all but requestId: check if jobid matches an active JH Activity --%>
-<c:if test="${allOk && command != 'requestID'}">
+<%-- for all but requestId or nextCommand: check if jobid matches an active JH Activity --%>
+<c:if test="${allOk && command != 'requestID' && command != 'nextCommand'}">
     <sql:query var="creatorQ">
         select createdBy from Activity where id=?<sql:param value="${inputs.jobid}"/>
     </sql:query>
@@ -44,6 +44,10 @@
     </c:when>
     <c:when test="${command == 'ingest'}">
         <traveler:limsIngest/>
+    </c:when>
+    <c:when test="${command == 'nextCommand'}">
+        <c:set var="userName" value="${inputs.operator}" scope="session"/>
+        <traveler:limsScript/>
     </c:when>
     <c:when test="${command == 'status'}">
         <c:set var="allOk" value="false"/>

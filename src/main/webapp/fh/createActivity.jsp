@@ -66,6 +66,11 @@
         
         <c:choose>
             <c:when test="${allOk}">
+                <traveler:createActivity hardwareId="${param.hardwareId}" processId="${param.processId}"
+                    parentActivityId="${param.parentActivityId}" processEdgeId="${param.processEdgeId}"
+                    inNCR="${param.inNCR}" hardwareRelationshipId="${relationToBreak}"
+                    var="newActivityId"/>
+                <%--
                 <sql:update >
                     insert into Activity set
                     hardwareId=?<sql:param value="${param.hardwareId}"/>,
@@ -77,6 +82,7 @@
                     createdBy=?<sql:param value="${userName}"/>,
                     creationTS=NOW();
                 </sql:update>
+                --%>
 
                 <traveler:redirDA/>
             </c:when>

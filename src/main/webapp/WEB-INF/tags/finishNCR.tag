@@ -54,7 +54,8 @@
     <%-- Take action if appropriate --%>
     <c:choose>
         <c:when test="${state == 'skipping'}">
-            <%-- Create Activities, mark skipped if not ancestor of return point --%>
+            <%-- Create Activities, mark skipped if not ancestor of return point 
+            If it is an ancestor, create and start it.--%>
             <%-- Argh, no. Skip the first one, then redirect & start over --%>
             <c:if test="${! fn:startsWith(returnEdgePath, step.edgePath)}">
                 <traveler:skipStep var="activityId"
