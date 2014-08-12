@@ -4,7 +4,7 @@
     Author     : focke
 --%>
 
-<%@tag description="Figure out the current step of a traveler instance" pageEncoding="UTF-8"%>
+<%@tag description="Figure out the current step of a traveler instance, creating the next Activity if that's what needs to happen." pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@taglib prefix="traveler" tagdir="/WEB-INF/tags"%>
 
@@ -17,6 +17,8 @@
 <%@variable name-from-attribute="varStepEPath" alias="currentStepEPath" scope="AT_BEGIN"%>
 
 <c:if test="${empty scriptMode}">
+    <%-- If this is set, we don't redirect on Activity creation,
+    and stuff the current activityId in currentStepLink. --%>
     <c:set var="scriptMode" value="false"/>
 </c:if>
 

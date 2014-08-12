@@ -14,14 +14,11 @@
     </head>
     <body>
         ${param}
-	<form method=post action="http://localhost:8084/eTraveler/Test/Results/update">
+	<form method=post action="http://localhost:8084/eTraveler/Test/Results/nextJob">
             <input type=hidden name="jsonObject" value='{
-                   "jobid": "${param.jobid}",
-                       "stamp":${param.stamp},
-                       "step":"${param.step}",
-                       "status":<c:choose>
-                       <c:when test="${! empty param.status}">${param.status}</c:when>
-                       <c:otherwise>null</c:otherwise></c:choose>}'>
+                   "operator": "${param.operator}",
+                       "containerid":${param.containerid}
+                       }'>
 	  <input type=submit value="do it">
 	</form>
     </body>

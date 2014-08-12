@@ -9,11 +9,55 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@taglib prefix="traveler" tagdir="/WEB-INF/tags"%>
 
-<traveler:stepList var="stepList" mode="activity" theId="${inputs.containerid}"/>
-<traveler:findCurrentStep stepList="${stepList}" scriptMode="true"
-    varStepLink="childActivityId" varStepEPath="edgePath"/>
-<traveler:autoProcessPrereq var="gotAllPrereqs" activityId="${childActivityId}"/>
-<%-- choke if not gotAllPrereqs --%>
-<traveler:startActivity activityId="${childActivityId}"/>
+<c:set var="allOk" value="true"/>
+<c:set var="message" value="Error #681399"/>
 
-<%-- respond with well-formed JSON --%>
+<c:if test="${allOk}">
+    <traveler:startActivity activityId="${inputs.containerid}"/>
+</c:if>
+
+<c:if test="${allOk}">
+    <traveler:stepList var="stepList" mode="activity" theId="${inputs.containerid}"/>
+</c:if>
+
+<c:if test="${allOk}">
+    <traveler:findCurrentStep stepList="${stepList}" scriptMode="true"
+        varStepLink="childActivityId" varStepEPath="edgePath"/>
+    <c:set var="done" value="${childActivityId == inputs.containerid}"/>
+</c:if>
+
+<c:if test="${allOk && ! done}">
+    <traveler:autoProcessPrereq var="gotAllPrereqs" activityId="${childActivityId}"/>
+    <c:if test="${! gotAllPrereqs}">
+        <c:set var="allOk" value="false"/>
+        <c:set var="message" value="Prereqs not satisfied."/>
+    </c:if>
+</c:if>
+
+<c:if test="${allOk && ! done}">
+    <traveler:startActivity activityId="${childActivityId}"/>
+</c:if>
+
+<c:if test="${allOk && ! done}">
+    <traveler:jhCommand var="jhCommand" activityId="${childActivityId}"/>
+</c:if>
+
+<c:choose>
+    <c:when test="${! allOk}">
+        <c:set var="status" value="ERROR"/>
+        <c:set var="command" value="${message}"/>
+    </c:when>
+    <c:when test="${done}">
+        <c:set var="status" value="DONE"/>
+        <c:set var="command" value=""/>
+    </c:when>
+    <c:otherwise>
+        <c:set var="status" value="CMD"/>
+        <c:set var="command" value="${jhCommand}"/>
+    </c:otherwise>
+</c:choose>
+
+{
+    "status": "<c:out value="${status}"/>",
+    "command": "<c:out value="${command}"/>"
+}

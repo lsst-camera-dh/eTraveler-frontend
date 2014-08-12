@@ -20,7 +20,7 @@
 %>
 
 <%-- for all but requestId or nextCommand: check if jobid matches an active JH Activity --%>
-<c:if test="${allOk && command != 'requestID' && command != 'nextCommand'}">
+<c:if test="${allOk && command != 'requestID' && command != 'nextJob'}">
     <sql:query var="creatorQ">
         select createdBy from Activity where id=?<sql:param value="${inputs.jobid}"/>
     </sql:query>
@@ -45,7 +45,7 @@
     <c:when test="${command == 'ingest'}">
         <traveler:limsIngest/>
     </c:when>
-    <c:when test="${command == 'nextCommand'}">
+    <c:when test="${command == 'nextJob'}">
         <c:set var="userName" value="${inputs.operator}" scope="session"/>
         <traveler:limsScript/>
     </c:when>

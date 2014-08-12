@@ -27,4 +27,4 @@
 </sql:query>
 <c:set var="activity" value="${activityQ.rows[0]}"/>
         
-<c:set var="command">lcatr-harness --unit-type '${activity.hardwareTypeName}' --unit-id '${activity.lsstId}' --job '${activity.processName}' --version '${activity.userVersionString}'</c:set>
+<c:set var="command">lcatr-harness --unit-type ${activity.hardwareTypeName} --unit-id ${activity.lsstId} --job ${activity.processName} --version ${activity.userVersionString}</c:set>

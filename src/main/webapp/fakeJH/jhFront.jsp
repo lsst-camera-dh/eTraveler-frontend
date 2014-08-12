@@ -14,6 +14,14 @@
     <body>
         <table border="1"><tr>
                 <td>
+                    <h2>Automate</h2>
+                    <form method="get" action="scriptBack.jsp" target="stuff">
+                        operator: <input type="text" name="operator"/><br>
+                        containerid: <input type="text" name="containerid"/><br>
+                        <input type="submit" value="do it"/>
+                    </form>
+                </td>
+                <td>
                     <h2>Register</h2>
                     <form method="get" action="registerBack.jsp" target="stuff">
                         jobid: <input type="text" name="jobid"/><br>

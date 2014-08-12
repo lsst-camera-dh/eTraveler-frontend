@@ -12,5 +12,6 @@
 <sql:update >
     update Activity set
     begin=now()
-    where id=?<sql:param value="${param.activityId}"/>
+    where id=?<sql:param value="${activityId}"/>
+    and begin is null;
 </sql:update>

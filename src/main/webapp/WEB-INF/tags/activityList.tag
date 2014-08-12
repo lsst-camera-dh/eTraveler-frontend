@@ -18,6 +18,7 @@
 
 <sql:query var="result" >
   select A.id as activityId, A.begin, A.end, A.createdBy, A.closedBy,
+    AFS.name as status,
     P.id as processId, concat(P.name, ' v', P.version) as processName,
     H.id as hardwareId, H.lsstId, 
     HT.name as hardwareName, HT.id as hardwareTypeId
@@ -25,6 +26,7 @@
     inner join Process P on A.processId=P.id
     inner join Hardware H on A.hardwareId=H.id
     inner join HardwareType HT on H.hardwareTypeId=HT.id
+    left join ActivityFinalStatus AFS on AFS.id=A.activityFinalStatusId
     where 1
     <c:if test="${! empty travelersOnly}">
         and A.processEdgeId IS NULL 
@@ -67,6 +69,7 @@
     <display:column property="begin" sortable="true" headerClass="sortable"/>
     <display:column property="createdBy" sortable="true" headerClass="sortable"/>
 <%--    <c:if test="${done}">  Why? --%>
+    <display:column property="status" sortable="true" headerClass="sortable"/>
         <display:column property="end" sortable="true" headerClass="sortable"/>
         <display:column property="closedBy" sortable="true" headerClass="sortable"/>
 <%--    </c:if>--%>

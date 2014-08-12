@@ -65,6 +65,6 @@
     <traveler:jhWidget activityId="${activityId}"/>
 </c:if>
 
-<c:if test="${! empty activity.begin && activity.isAutomatable != 0}">
+<c:if test="${empty activity.end && activity.isAutomatable != 0}">
     <traveler:scriptWidget activityId="${activityId}"/>
 </c:if>

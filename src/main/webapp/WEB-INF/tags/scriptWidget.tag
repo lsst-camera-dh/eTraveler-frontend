@@ -11,5 +11,5 @@
 
 <%@attribute name="activityId" required="true"%>
 
-Now enter the following command:<br>
+Enter the following command to automate this step:<br>
 lcatr-iterator --container-id=${activityId}<br>
