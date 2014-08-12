@@ -7,6 +7,7 @@
 <%@tag description="Supply the next command for scripted sequences." pageEncoding="UTF-8"%>
 
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql" %>
 <%@taglib prefix="traveler" tagdir="/WEB-INF/tags"%>
 
 <c:set var="allOk" value="true"/>
@@ -24,6 +25,16 @@
     <traveler:findCurrentStep stepList="${stepList}" scriptMode="true"
         varStepLink="childActivityId" varStepEPath="edgePath"/>
     <c:set var="done" value="${childActivityId == inputs.containerid}"/>
+</c:if>
+
+<c:if test="${allOk && ! done}">
+    <sql:query var="historyQ">
+select count(id) as count from JobStepHistory where activityId=?<sql:param value="${childActivityId}"/>;
+    </sql:query>
+    <c:if test="${historyQ.rows[0].count != 0}">
+        <c:set var="allOk" value="false"/>
+        <c:set var="message" value="Job Harness already running."/>        
+    </c:if>
 </c:if>
 
 <c:if test="${allOk && ! done}">
