@@ -12,7 +12,7 @@
 <%@attribute name="travelerId" required="true"%>
 
 <%-- any content can be specified here e.g.: --%>
-<table>
+<table border="1">
     <tr>
         <td>
             <form method="get" action="fh/restartTraveler.jsp" target="_top">

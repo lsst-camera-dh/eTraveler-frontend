@@ -8,6 +8,7 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql" %>
 <%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<%@taglib prefix="display" uri="http://displaytag.sf.net" %>
 <%@taglib prefix="traveler" tagdir="/WEB-INF/tags"%>
 <!DOCTYPE html>
 <html>
@@ -21,7 +22,25 @@
             <sql:query var="aQ">
 select * from Activity where id=?<sql:param value="${param.activityId}"/>
             </sql:query>
-            <table>
+            <traveler:expandActivity activityId="${param.activityId}" var="acList"/>
+            <traveler:expandProcess processId="${aQ.rows[0].processId}" var="procList"/>
+            <table border=1">
+                <tr>
+                    <td>
+                        <traveler:showStepsTable stepList="${procList}" mode="process"/>
+                    </td>
+                    <td>
+                        <traveler:findCurrentStep varStepLink="currentStepLink" varStepEPath="currentStepEPath" 
+                          stepList="${acList}"/>
+                        <traveler:showStepsTable stepList="${acList}" mode="activity"
+                         currentStepLink="${currentStepLink}" currentStepEPath="${currentStepEPath}"/>
+                    </td>
+                    <td>
+                        <a href="${currentStepLink}" target="content">Go to current step</a><br>
+                        <iframe name="content" src="${currentStepLink}" width="600" height="400"/>
+                    </td>
+                </tr>
+                <%--
                 <tr>
                     <td>
 <traveler:stepList var="stepList" mode="process" theId="${aQ.rows[0].processId}"/>
@@ -39,6 +58,7 @@ select * from Activity where id=?<sql:param value="${param.activityId}"/>
                         <iframe name="content" src="${currentStepLink}" width="600" height="400"/>
                     </td>
                 </tr>
+                --%>
             </table>
     </body>
 </html>

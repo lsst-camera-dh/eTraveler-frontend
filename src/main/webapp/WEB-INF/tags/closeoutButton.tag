@@ -74,12 +74,17 @@
     </c:otherwise>
 </c:choose>
 
+<traveler:isStopped var="isStopped" activityId="${activityId}"/>
+<c:if test="${isStopped}">
+    <%-- This seems an ugly hack. --%>
+    <c:set var="readyToClose" value="false"/>
+</c:if>
+
 <c:set var="retryable" value="${activity.iteration < activity.maxIteration && readyToClose}"/>
 <c:if test="${readyToClose}">
     <c:set var="message" value="Ready to close"/>
 </c:if>
 <c:set var="failable" value="${! closed && ! travelerFailed}"/> <%-- Argh. travelerFailed is not set in ActivityPane --%>
-<traveler:isStopped var="isStopped" activityId="${activityId}"/>
 
 <c:out value="${message}"/><br>
 <table>
