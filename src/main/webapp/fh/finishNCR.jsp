@@ -34,7 +34,7 @@
                 <%--
                 <c:set var="exception" value="${exceptionQ.rows[0]}"/>
                 <traveler:findTraveler var="returnTravelerId" activityId="${param.activityId}"/>
-                <traveler:stepList var="stepList" mode="activity" theId="${returnTravelerId}"/>
+                <traveler:expandActivity var="stepList" activityId="${returnTravelerId}"/>
                 <traveler:finishNCR stepList="${stepList}" returnEdgePath="${exception.returnEdgePath}"
                                     ncrActivityId="${param.activityId}"/>
                 --%>

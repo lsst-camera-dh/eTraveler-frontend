@@ -21,19 +21,6 @@
 <traveler:dotOrNot var="myProcessPrefix" prefix="${processPrefix}"/>
 
 <sql:query var="childQ">
-    <%--
-    select 
-        A.id as activityId, A.creationTS as activityTS,
-        E.id as exceptionId, E.creationTS as exceptionTS,
-        ET.conditionString
-    from 
-    Activity A
-    left join 
-        (Exception E inner join ExceptionType ET on ET.id=E.exceptionTypeId)
-        on E.exitActivityId=A.id
-    where A.parentActivityId=?<sql:param value="${activityId}"/>
-    order by A.id;
-    --%>
     select
         A.id as activityId, A.begin, A.end, A.hardwareId, A.inNCR,
         P.id as processId, P.name, P.hardwareRelationshipTypeId, P.substeps,

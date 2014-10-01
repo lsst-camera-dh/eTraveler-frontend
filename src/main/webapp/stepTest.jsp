@@ -40,25 +40,6 @@ select * from Activity where id=?<sql:param value="${param.activityId}"/>
                         <iframe name="content" src="${currentStepLink}" width="600" height="400"/>
                     </td>
                 </tr>
-                <%--
-                <tr>
-                    <td>
-<traveler:stepList var="stepList" mode="process" theId="${aQ.rows[0].processId}"/>
-<traveler:showStepsTable stepList="${stepList}" mode="process"/>
-                    </td>
-                    <td>
-<traveler:stepList var="stepList" mode="activity" theId="${param.activityId}"/>
-<traveler:findCurrentStep varStepLink="currentStepLink" varStepEPath="currentStepEPath" 
-                          stepList="${stepList}"/>
-<traveler:showStepsTable stepList="${stepList}" mode="activity"
-                         currentStepLink="${currentStepLink}" currentStepEPath="${currentStepEPath}"/>
-                    </td>
-                    <td>
-                        <a href="${currentStepLink}" target="content">Go to current step</a><br>
-                        <iframe name="content" src="${currentStepLink}" width="600" height="400"/>
-                    </td>
-                </tr>
-                --%>
             </table>
     </body>
 </html>
