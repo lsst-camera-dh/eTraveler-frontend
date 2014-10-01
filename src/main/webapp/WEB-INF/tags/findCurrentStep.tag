@@ -52,12 +52,15 @@
             </c:if>
             <c:if test="${empty step.end}">
                 <c:set var="lastUnfinished" value="${step.activityId}"/>
-                <c:set var="lufPath" value="${step.edgePath}"/>
+                <c:set var="lufPath" value="${empty step.edgePath ? '' : step.edgePath}"/>
+                <c:set var="lufSubSteps" value="${step.subSteps}"/>
             </c:if>
         </c:when>
         <c:otherwise>
             <c:if test="${firstUninstantiated == 0}">
-                <c:if test="${step.parentActivityId == lastUnfinished}">
+                <traveler:trimPath inPath="${step.edgePath}" var="parentPath"/>
+<%--                <c:if test="${step.parentActivityId == lastUnfinished}">--%>
+                <c:if test="${parentPath == lufPath}">
                     <c:set var="firstUninstantiated" value="${step.processId}"/>
                     <c:set var="processEdgeId" value="${step.processEdgeId}"/>
                     <c:set var="fuPath" value="${step.edgePath}"/>
@@ -80,7 +83,7 @@
     </c:when>
     <c:when test="${lastUnfinished != 0}">
         <c:choose>
-            <c:when test="${firstUninstantiated != 0}">
+            <c:when test="${firstUninstantiated != 0 && lufSubSteps != 'SELECTION'}">
                 <c:set var="mode" value="process"/>
                 <c:set var="theId" value="${firstUninstantiated}"/>
                 <c:set var="currentStepEPath" value="${fuPath}"/>

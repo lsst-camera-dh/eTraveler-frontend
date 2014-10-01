@@ -16,12 +16,10 @@
         <title>Activity</title>
     </head>
     <body>
-        <%--
         <c:set var="activityAutoCreate" value="true" scope="session"/>
-        <traveler:stepList var="stepList" mode="activity" theId="${param.activityId}"/>
+        <traveler:expandActivity var="stepList" activityId="${param.activityId}"/>
         <traveler:findCurrentStep varStepLink="currentStepLink" varStepEPath="currentStepEPath" 
                                   stepList="${stepList}"/>
-        --%>
 
         <traveler:checkId table="Activity" id="${param.activityId}"/>
 
@@ -55,12 +53,12 @@
         <table>
             <tr>
                 <td style="vertical-align:top;">
+                    <%--
                     <traveler:activityTable activityId="${param.activityId}"/>
                     <c:if test="${startNextStep}"><c:redirect url="${currentStepLink}"/></c:if>
-                    <%--
+                    --%>
                     <traveler:showStepsTable stepList="${stepList}" mode="activity"
                          currentStepLink="${currentStepLink}" currentStepEPath="${currentStepEPath}"/>
-                    --%>
                 </td>
                 <td style="vertical-align:top;">
                     <iframe name="content" src="${currentStepLink}" width="600" height="400"></iframe>

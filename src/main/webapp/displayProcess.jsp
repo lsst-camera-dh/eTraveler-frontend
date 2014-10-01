@@ -42,16 +42,14 @@
         </table>
 
         <h2>Steps</h2>
-        <%--
-        <traveler:stepList var="stepList" mode="process" theId="${processId}"/>
-        --%>
+        <traveler:expandProcess var="stepList" processId="${processId}"/>
         <table>
             <tr>
                 <td style="vertical-align:top;">
-                    <traveler:processTable processPath="${param.processPath}"/>
                     <%--
-                    <traveler:showStepsTable stepList="${stepList}" mode="process"/>
+                    <traveler:processTable processPath="${param.processPath}"/>
                     --%>
+                    <traveler:showStepsTable stepList="${stepList}" mode="process"/>
                 </td>
                 <td style="vertical-align:top;">
                     <c:url var="contentLink" value="processPane.jsp">
