@@ -22,7 +22,9 @@
     <sql:update >
 insert into Activity set
 hardwareId=?<sql:param value="${hardwareId}"/>,
-hardwareRelationshipId=?<sql:param value="${relationToBreak}"/>,
+<c:if test="${! empty hardwareRelationshipId}">
+    hardwareRelationshipId=?<sql:param value="${hardwareRelationshipId}"/>,
+</c:if>
 processId=?<sql:param value="${processId}"/>,
 parentActivityId=?<sql:param value="${parentActivityId}"/>,
 processEdgeId=?<sql:param value="${processEdgeId}"/>,

@@ -46,5 +46,5 @@
 <traveler:findTraveler var="travelerId" activityId="${activityId}"/>
 <traveler:isStopped var="isStopped" activityId="${travelerId}"/>
 <c:if test="${isStopped}">
-    <traveler:restartActivity activityId="${travelerId}"/>
+    <traveler:resumeActivity activityId="${travelerId}"/>
 </c:if>

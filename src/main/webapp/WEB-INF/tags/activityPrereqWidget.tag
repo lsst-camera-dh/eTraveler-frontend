@@ -117,9 +117,9 @@
         <td>
             <traveler:findTraveler var="travelerId" activityId="${activityId}"/>
             <traveler:isStopped var="isStopped" activityId="${travelerId}"/>
-            <form method="get" action="fh/restartTraveler.jsp" target="_top">
+            <form method="get" action="fh/resumeTraveler.jsp" target="_top">
                 <input type="hidden" name="activityId" value="${travelerId}">
-                <input type="submit" value="Restart"
+                <input type="submit" value="Resume Work"
                        <c:if test="${! isStopped}">disabled</c:if>>
            </form>
         </td>

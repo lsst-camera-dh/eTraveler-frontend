@@ -19,6 +19,9 @@
     jspContext.setAttribute("outList", outList);
 %>
 
+<%-- Once a selection has been made, the unchosen substeps no longer show up in the list. This is intentional.
+     Unless they are at the end of the list. This is not. --%>
+
 <sql:query var="processQ">
     select processId from Activity where id=?<sql:param value="${activityId}"/>
 </sql:query>

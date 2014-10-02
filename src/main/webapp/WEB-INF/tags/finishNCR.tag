@@ -7,72 +7,78 @@
 <%@tag description="Do surgery on a traveler instance so the return step will be current" pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql" %>
 <%@taglib prefix="traveler" tagdir="/WEB-INF/tags"%>
 
-<%@attribute name="stepList" required="true" type="java.util.List"%>
-<%@attribute name="returnEdgePath" required="true"%>
 <%@attribute name="ncrActivityId" required="true"%>
+<%@attribute name="varNew" required="true" rtexprvalue="false"%>
+<%@variable name-from-attribute="varNew" alias="activityId" scope="AT_BEGIN"%>
+<%@attribute name="varTrav" required="true" rtexprvalue="false"%>
+<%@variable name-from-attribute="varTrav" alias="travelerId" scope="AT_BEGIN"%>
 
-<c:set var="state" value="pre"/>
+<sql:query var="exceptionQ">
+    select
+        *,
+        E.id as exceptionId
+    from
+        Exception E
+        inner join ExceptionType ET on ET.id=E.exceptionTypeId
+    where
+        E.NCRActivityId=?<sql:param value="${ncrActivityId}"/>
+    ;
+</sql:query>
+<c:choose>
+    <c:when test="${fn:length(exceptionQ.rows) != 1}">
+        Inconceivable! #253795
+    </c:when>
+    <c:otherwise>
+        <c:set var="exception" value="${exceptionQ.rows[0]}"/>
+    </c:otherwise>
+</c:choose>
 
-<c:forEach var="step" items="${stepList}">
-    <%-- Handle state transitions --%>
+<traveler:findTraveler activityId="${exception.exitActivityId}" var="travelerId"/>
+<sql:query var="activityQ">
+    select * from Activity where id=?<sql:param value="${travelerId}"/>;
+</sql:query>
+<c:set var="traveler" value="${activityQ.rows[0]}"/>
+
+<traveler:expandProcess processId="${traveler.processId}" var="processSteps"/>
+<c:forEach items="${processSteps}" var="step">
+    <c:if test="${step.edgePath == exception.returnProcessPath}">
+        <c:set var="processId" value="${step.processId}"/>
+        <c:set var="processEdgeId" value="${step.processEdgeId}"/>
+    </c:if>
+</c:forEach>
+
+<traveler:childActivities activityId="${travelerId}" varAc="acList" varEx="exList"/>
+<traveler:trimPath inPath="${exception.returnProcessPath}" var="parentEdgePath"/>
+<c:set var="parentEdgePath" value="${empty parentEdgePath ? '' : parentEdgePath}"/>
+<c:forEach items="${acList}" var="step">
+    <c:set var="edgePath" value="${empty step.edgePath ? '' : step.edgePath}"/>
+    <traveler:isStopped activityId="${step.activityId}" var="isStopped"/>
     <c:choose>
-        <%-- If exit and return are the same, do we supercede or reuse? --%>
-        <c:when test="${state == 'pre'}">
-            <c:choose>
-                <c:when test="${step.edgePath == returnEdgePath && empty step.activityId}">
-                    <c:set var="state" value="post"/>
-                </c:when>
-                <c:when test="${step.edgePath == returnEdgePath}">
-                    <c:set var="state" value="superceding"/>
-                </c:when>
-                <c:when test="${empty step.activityId}">
-                    <c:set var="state" value="skipping"/>
-                </c:when>
-            </c:choose>
+        <c:when test="${edgePath == parentEdgePath}">
+            yes<br>
+            <c:set var="parentActivityId" value="${step.activityId}"/>
+            <c:set var="hardwareId" value="${step.hardwareId}"/>
+            <c:set var="inNCR" value="${step.inNCR}"/>
         </c:when>
-        <c:when test="${state == 'skipping'}">
-            <c:if test="${step.edgePath == returnEdgePath}">
-                <c:set var="state" value="post"/>
-            </c:if>
-        </c:when>
-        <c:when test="${state == 'superceding'}">
-            <c:if test="${empty step.activityId}">
-                <c:set var="state" value="post"/>
-            </c:if>
-        </c:when>
-        <c:when test="${state == 'post'}">
-            <%-- nothing --%>
-        </c:when>
-        <c:otherwise>
-            <%-- Should redirect to an error page here --%>
-            Error #300518
-        </c:otherwise>
-    </c:choose>
-            
-    <%-- Take action if appropriate --%>
-    <c:choose>
-        <c:when test="${state == 'skipping'}">
-            <%-- Create Activities, mark skipped if not ancestor of return point 
-            If it is an ancestor, create and start it.--%>
-            <%-- Argh, no. Skip the first one, then redirect & start over --%>
-            <c:if test="${! fn:startsWith(returnEdgePath, step.edgePath)}">
-                <traveler:skipStep var="activityId"
-                    processId="${step.processId}" hardwareId="${step.hardwareId}"
-                    parentActivityId="${step.parentActivityId}" processEdgeId="${step.processEdgeId}"
-                    inNCR="${step.inNCR}"/>
-                <c:url var="ncrUrl" value="finishNCR.jsp">
-                    <c:param name="activityId" value="${ncrActivityId}"/>
-                </c:url>
-                <c:redirect url="${ncrUrl}"/>
-            </c:if>
-        </c:when>
-        <c:when test="${state == 'superceding'}">
-            <%-- Mark all Activities superceded --%>
-            <%-- Or do we? Do children of superceded steps get superceded?
-            If not, do we need to reload again here? would reloading even work then? --%>
-            <traveler:closeActivity activityId="${step.activityId}" status="Superceded"/>
+        <c:when test="${isStopped && fn:startsWith(edgePath, parentEdgePath)}">
+            <traveler:ncrExitActivity activityId="${step.activityId}"/>
         </c:when>
     </c:choose>
 </c:forEach>
+
+<traveler:resumeActivity activityId="${travelerId}"/>
+
+<traveler:createActivity var="activityId"
+    hardwareId="${hardwareId}"
+    processId="${processId}"
+    parentActivityId="${parentActivityId}"
+    processEdgeId="${processEdgeId}"
+    inNCR="${inNCR}"/>
+
+<sql:update>
+    update Exception set returnActivityId=?<sql:param value="${activityId}"/> 
+    where id=?<sql:param value="${exception.exceptionId}"/>
+</sql:update>

@@ -19,28 +19,10 @@
     </head>
     <body>
 
-        <sql:query var="exceptionQ">
-            select *, E.id as exceptionId from 
-            Exception E
-            inner join ExceptionType ET on ET.id=E.exceptionTypeId
-            where E.NCRActivityId=?<sql:param value="${param.activityId}"/>;
-        </sql:query>
+        <traveler:finishNCR ncrActivityId="${param.activityId}"
+                            varNew="newActivityId"
+                            varTrav="travelerId"/>
 
-        <c:choose>
-            <c:when test="${fn:length(exceptionQ.rows) != 1}">
-                Inconceivable! #253795
-            </c:when>
-            <c:otherwise>
-                <%--
-                <c:set var="exception" value="${exceptionQ.rows[0]}"/>
-                <traveler:findTraveler var="returnTravelerId" activityId="${param.activityId}"/>
-                <traveler:expandActivity var="stepList" activityId="${returnTravelerId}"/>
-                <traveler:finishNCR stepList="${stepList}" returnEdgePath="${exception.returnEdgePath}"
-                                    ncrActivityId="${param.activityId}"/>
-                --%>
-                Uhm, sorry.
-            </c:otherwise>
-        </c:choose>
-
+        <traveler:redirDA activityId="${travelerId}"/>
     </body>
 </html>

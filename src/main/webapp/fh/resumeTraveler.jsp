@@ -1,5 +1,5 @@
 <%-- 
-    Document   : restartTraveler
+    Document   : resumeTraveler
     Created on : Apr 17, 2014, 3:34:23 PM
     Author     : focke
 --%>
@@ -30,11 +30,11 @@
                     and resolutionTS is null;
                 </sql:update>
                 
-                <traveler:restartActivity activityId="${travelerId}"/>
+                <traveler:resumeActivity activityId="${travelerId}"/>
                 <traveler:redirDA activityId="${travelerId}"/>
             </c:when>
             <c:otherwise>
-You can't restart a traveler that's not stopped.                
+You can't resume a traveler that's not stopped.                
             </c:otherwise>
         </c:choose>
     </body>

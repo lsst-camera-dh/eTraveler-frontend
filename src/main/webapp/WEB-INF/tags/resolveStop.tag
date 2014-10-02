@@ -15,7 +15,7 @@
 <table border="1">
     <tr>
         <td>
-            <form method="get" action="fh/restartTraveler.jsp" target="_top">
+            <form method="get" action="fh/resumeTraveler.jsp" target="_top">
                 <input type="hidden" name="activityId" value="${travelerId}">
                 <input type="submit" value="Resume Work"
                        <%--<c:if test="${! restartable}">disabled</c:if>--%>>
