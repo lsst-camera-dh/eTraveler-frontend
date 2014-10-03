@@ -60,8 +60,10 @@ where
     <c:set var="lastException" value="${thisException}"/>
 </c:forEach>
 
+<c:set var="trailingActivities" value="false"/>
 <c:forEach items="${acList}" var="acRow">
     <c:if test="${acRow.activityId > lastException}">
+        <c:set var="trailingActivities" value="true"/>
 <%
     outList.add(jspContext.getAttribute("acRow"));
 %>
@@ -73,13 +75,16 @@ where
 <c:set var="lastEdgePath" value="${acList[fn:length(acList)-1].edgePath}"/> <%-- NO! --%>
 <c:set var="appending" value="false"/>
 <c:forEach items="${processSteps}" var="pRow">
+    <c:if test="${! trailingActivities && pRow.edgePath == returnEdgePath}">
+        <c:set var="appending" value="true"/>
+    </c:if>
     <c:choose>
         <c:when test="${appending}">
 <%
     outList.add(jspContext.getAttribute("pRow"));
 %>            
         </c:when>
-        <c:when test="${pRow.edgePath == lastEdgePath}">
+        <c:when test="${trailingActivities && pRow.edgePath == lastEdgePath}">
             <c:set var="appending" value="true"/>
         </c:when>
     </c:choose>
