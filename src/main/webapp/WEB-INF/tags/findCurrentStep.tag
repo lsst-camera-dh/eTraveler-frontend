@@ -15,6 +15,8 @@
 <%@variable name-from-attribute="varStepLink" alias="currentStepLink" scope="AT_BEGIN"%>
 <%@attribute name="varStepEPath" required="true" rtexprvalue="false"%>
 <%@variable name-from-attribute="varStepEPath" alias="currentStepEPath" scope="AT_BEGIN"%>
+<%@attribute name="varStepId" required="true" rtexprvalue="false"%>
+<%@variable name-from-attribute="varStepId" alias="currentStepActivityId"%>
 
 <c:if test="${empty scriptMode}">
     <%-- If this is set, we don't redirect on Activity creation,
@@ -109,6 +111,7 @@
                     <c:param name="activityId" value="${theId}"/>
                     <c:param name="topActivityId" value="${topActivityId}"/>
                 </c:url>
+                <c:set var="currentStepActivityId" value="${theId}"/>
             </c:otherwise>
         </c:choose>
     </c:when>
@@ -132,6 +135,7 @@
             </c:when>
             <c:otherwise>
                 <c:set var="currentStepLink" value="${processLink}"/>
+                <c:set var="currentStepActivityId" value="-1"/>
             </c:otherwise>
         </c:choose>
     </c:when>

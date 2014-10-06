@@ -12,6 +12,7 @@
 <%@attribute name="mode" required="true"%>
 <%@attribute name="currentStepLink"%>
 <%@attribute name="currentStepEPath"%>
+<%@attribute name="currentStepActivityId"%>
 
 <display:table id="step" name="${stepList}" class="datatable">
     <display:column title="Step">
@@ -33,7 +34,7 @@
     </display:column>
     <display:column title="Name">
         <c:choose>
-            <c:when test="${! empty currentStepLink && step.edgePath == currentStepEPath}">
+            <c:when test="${! empty currentStepLink && step.edgePath == currentStepEPath && (step.activityId == currentStepActivityId || (currentStepActivityId == -1 && empty step.activityId))}">
                 <c:set var="contentLink" value="${currentStepLink}"/>
             </c:when>
             <c:when test="${mode == 'activity' && ! empty step.activityId}">
@@ -50,6 +51,7 @@
         <a href="${contentLink}" target="content">${step.name}</a>
     </display:column><
     <c:if test="${mode == 'activity'}">
+        <display:column property="activityId"/>
         <display:column property="begin"/>
         <display:column property="end"/>
         <display:column property="statusName" title="Status"/>
