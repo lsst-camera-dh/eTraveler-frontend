@@ -89,6 +89,7 @@
 
 <c:choose>
     <c:when test="${empty activity.begin}">
+        <traveler:isStopped activityId="${activityId}" var="isStopped"/>
         <sql:query var="prereqQ" >
             select count(PP.id)-count(PR.id) as prsRemaining from
             PrerequisitePattern PP
@@ -96,7 +97,7 @@
             left join Prerequisite PR on PR.activityId=A.id and PR.prerequisitePatternId=PP.id
             where A.id=?<sql:param value="${activityId}"/>
         </sql:query>
-        <c:set var="readyToStart" value="${prereqQ.rows[0].prsRemaining==0}"/>
+        <c:set var="readyToStart" value="${prereqQ.rows[0].prsRemaining==0 && ! isStopped}"/>
     </c:when>
     <c:otherwise>
         <c:set var="readyToStart" value="false"/>

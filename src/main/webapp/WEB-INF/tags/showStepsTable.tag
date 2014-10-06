@@ -51,7 +51,7 @@
         <a href="${contentLink}" target="content">${step.name}</a>
     </display:column><
     <c:if test="${mode == 'activity'}">
-        <display:column property="activityId"/>
+        <%--<display:column property="activityId"/>--%>
         <display:column property="begin"/>
         <display:column property="end"/>
         <display:column property="statusName" title="Status"/>
