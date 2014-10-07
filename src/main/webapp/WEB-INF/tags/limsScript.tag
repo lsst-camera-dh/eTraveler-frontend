@@ -23,7 +23,7 @@
 
 <c:if test="${allOk}">
     <traveler:findCurrentStep stepList="${stepList}" scriptMode="true"
-        varStepLink="childActivityId" varStepEPath="edgePath" varStepId="stepId"/>
+        varStepLink="junk" varStepEPath="edgePath" varStepId="childActivityId"/>
     <c:set var="done" value="${childActivityId == inputs.containerid}"/>
 </c:if>
 

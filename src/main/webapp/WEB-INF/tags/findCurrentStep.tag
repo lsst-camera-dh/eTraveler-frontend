@@ -20,7 +20,7 @@
 
 <c:if test="${empty scriptMode}">
     <%-- If this is set, we don't redirect on Activity creation,
-    and stuff the current activityId in currentStepLink. --%>
+    and stuff the current activityId in currentStepActivityId just like usual. --%>
     <c:set var="scriptMode" value="false"/>
 </c:if>
 
@@ -102,18 +102,18 @@
 
 <c:choose>
     <c:when test="${mode == 'activity'}">
-        <c:choose>
+        <%--<c:choose>
             <c:when test="${scriptMode}">
                 <c:set var="currentStepLink" value="${theId}"/>
             </c:when>
-            <c:otherwise>
+            <c:otherwise>--%>
                 <c:url var="currentStepLink" value="activityPane.jsp">
                     <c:param name="activityId" value="${theId}"/>
                     <c:param name="topActivityId" value="${topActivityId}"/>
                 </c:url>
                 <c:set var="currentStepActivityId" value="${theId}"/>
-            </c:otherwise>
-        </c:choose>
+            <%--</c:otherwise>
+        </c:choose>--%>
     </c:when>
     <c:when test="${mode == 'process'}">
         <c:set var="processUrl" value="${activityAutoCreate ? 'fh/createActivity.jsp' : 'processPane.jsp'}"/>
@@ -127,7 +127,7 @@
         </c:url>
         <c:choose>
             <c:when test="${scriptMode}">
-                <traveler:createActivity var="currentStepLink" hardwareId="${hardwareId}" processId="${theId}"
+                <traveler:createActivity var="currentStepActivityId" hardwareId="${hardwareId}" processId="${theId}"
                     inNCR="${inNCR}" parentActivityId="${lastUnfinished}" processEdgeId="${processEdgeId}"/>
             </c:when>
             <c:when test="${activityAutoCreate}">
