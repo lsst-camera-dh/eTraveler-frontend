@@ -16,7 +16,7 @@
 <%@attribute name="varStepEPath" required="true" rtexprvalue="false"%>
 <%@variable name-from-attribute="varStepEPath" alias="currentStepEPath" scope="AT_BEGIN"%>
 <%@attribute name="varStepId" required="true" rtexprvalue="false"%>
-<%@variable name-from-attribute="varStepId" alias="currentStepActivityId"%>
+<%@variable name-from-attribute="varStepId" alias="currentStepActivityId" scope="AT_BEGIN"%>
 
 <c:if test="${empty scriptMode}">
     <%-- If this is set, we don't redirect on Activity creation,
