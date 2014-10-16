@@ -83,7 +83,11 @@
                         <input type="hidden" name="activityId" value="${activityId}">
                         <input type="hidden" name="inputPatternId" value="${row.id}">
                         <input type="hidden" name="ISName" value="${row.ISName}">
-                        *<input type="${inputType}" name="value" required>
+                        *<input type="${inputType}" name="value" required
+                                <c:if test="${row.ISName=='float'}">step="any"</c:if>
+                                <c:if test="${!empty row.minV}">min="<c:out value="${row.minV}"/>"</c:if>
+                                <c:if test="${!empty row.maxV}">max="<c:out value="${row.maxV}"/>"</c:if>
+                                >
                         <input type="submit" value="Submit!">
                     </form>
                 </c:otherwise>
