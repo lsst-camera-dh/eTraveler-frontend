@@ -70,8 +70,6 @@ where
     </c:if>
 </c:forEach>
 
-<%-- This is wrong if we are currently in an exception and returnPath != exitPath.
-     Then we have to use returnEdgePath somehow. --%>
 <c:set var="lastEdgePath" value="${acList[fn:length(acList)-1].edgePath}"/> <%-- NO! --%>
 <c:set var="appending" value="false"/>
 <c:forEach items="${processSteps}" var="pRow">

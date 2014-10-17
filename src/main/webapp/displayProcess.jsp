@@ -46,9 +46,6 @@
         <table>
             <tr>
                 <td style="vertical-align:top;">
-                    <%--
-                    <traveler:processTable processPath="${param.processPath}"/>
-                    --%>
                     <traveler:showStepsTable stepList="${stepList}" mode="process"/>
                 </td>
                 <td style="vertical-align:top;">

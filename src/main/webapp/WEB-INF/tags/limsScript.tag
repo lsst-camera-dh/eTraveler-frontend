@@ -18,7 +18,6 @@
 </c:if>
 
 <c:if test="${allOk}">
-    <%--<traveler:stepList var="stepList" mode="activity" theId="${inputs.containerid}"/>--%>
     <traveler:expandActivity var="stepList" activityId="${inputs.containerid}"/>
 </c:if>
 

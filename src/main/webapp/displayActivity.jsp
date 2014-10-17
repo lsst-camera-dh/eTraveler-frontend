@@ -53,10 +53,6 @@
         <table>
             <tr>
                 <td style="vertical-align:top;">
-                    <%--
-                    <traveler:activityTable activityId="${param.activityId}"/>
-                    <c:if test="${startNextStep}"><c:redirect url="${currentStepLink}"/></c:if>
-                    --%>
                     <traveler:showStepsTable stepList="${stepList}" mode="activity"
                          currentStepLink="${currentStepLink}" currentStepEPath="${currentStepEPath}"
                          currentStepActivityId="${currentStepActivityId}"/>
