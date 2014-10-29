@@ -55,8 +55,9 @@
     </c:otherwise>
 </c:choose>
 
-<c:set var="fullContext" 
-       value="${pageContext.request.scheme}://${pageContext.request.serverName}:${pageContext.request.serverPort}${pageContext.request.contextPath}"/>
+<%--<c:set var="fullContext" 
+       value="${pageContext.request.scheme}://${pageContext.request.serverName}:${pageContext.request.serverPort}${pageContext.request.contextPath}"/>--%>
+<traveler:fullContext var="fullContext"/>
 <c:url var="displayUrl" value="${fullContext}/${page}">
     <c:param name="${paramName}" value="${paramValue}"/>
 </c:url>

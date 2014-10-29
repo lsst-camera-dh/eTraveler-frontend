@@ -11,5 +11,9 @@
 
 <%@attribute name="activityId" required="true"%>
 
+<traveler:fullContext var="fullContext"/>
+<c:url var="limsUrl" value="${fullContext}/${appVariables.dataSourceMode}"/>
+
+
 Enter the following command to automate this step:<br>
-lcatr-iterator --container-id=${activityId}<br>
+lcatr-iterator --container-id=${activityId} --lims_url=${limsUrl}<br>

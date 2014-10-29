@@ -20,6 +20,7 @@
 [${pageContext.request.serverName}]<br>
 [${pageContext.request.serverPort}]<br>
 [${pageContext.request.contextPath}]<br>
+[[${appVariables.dataSourceMode}]]<br>
 <c:set var="req" value="pageContext.request"/>
 [${request.contextPath}]<br>
 <h2>End Test</h2>
