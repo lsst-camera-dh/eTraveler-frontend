@@ -50,7 +50,7 @@ select count(id) as count from JobStepHistory where activityId=?<sql:param value
 </c:if>
 
 <c:if test="${allOk && ! done}">
-    <traveler:jhCommand var="jhCommand" activityId="${childActivityId}"/>
+    <traveler:jhCommand var="jhCommand" varError="allOk" activityId="${childActivityId}"/>
 </c:if>
 
 <c:choose>

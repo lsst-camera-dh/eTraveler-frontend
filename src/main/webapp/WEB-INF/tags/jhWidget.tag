@@ -35,7 +35,7 @@
     <c:otherwise>
         <%-- Try to show the jh command --%>
         <c:if test="${empty activity.end}">
-            <traveler:jhCommand var="command" activityId="${activityId}"/>
+            <traveler:jhCommand var="command" varError="allOk" activityId="${activityId}"/>
 Now enter the following command:<br>
 <c:out value="${command}"/><br>
         </c:if>
