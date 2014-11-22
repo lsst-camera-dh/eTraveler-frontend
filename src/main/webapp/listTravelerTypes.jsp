@@ -13,6 +13,6 @@
         <title>Traveler Types</title>
     </head>
     <body>
-        <traveler:travelerTypeList hardwareTypeId="${param.hardwareTypeId}"/>
+        <traveler:travelerTypeList hardwareTypeId="${param.hardwareTypeId}" state="${param.state}"/>
     </body>
 </html>

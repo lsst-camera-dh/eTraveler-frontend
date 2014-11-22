@@ -12,10 +12,14 @@
 <%@attribute name="processId"%>
 <%@attribute name="hardwareId"%>
 
+<c:set var="activeTravelerTypesOnly" value="false"/> <%-- should get this from user pref --%>
+
 <sql:query var="processQ" >
-    select P.id, concat(P.name, ' v', P.version) as versionedName
-    from Process P
-    left join ProcessEdge PE on PE.child=P.id
+    select 
+        P.id, concat(P.name, ' v', P.version) as versionedName
+    from 
+        Process P
+        inner join TravelerType TT on TT.rootProcessId=P.id
     where 
     <c:choose>
         <c:when test="${empty processId}">
@@ -25,7 +29,9 @@
     P.id=?<sql:param value="${processId}"/>  
         </c:otherwise>
     </c:choose>
-    and PE.child is null
+    <c:if test="${activeTravelerTypesOnly}">
+        and TT.state='ACTIVE'
+    </c:if>
     ;
 </sql:query>
     

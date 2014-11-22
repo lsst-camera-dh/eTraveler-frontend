@@ -11,6 +11,13 @@
 
 <%-- The list of normal or fragment attributes can be specified here: --%>
 <%@attribute name="hardwareTypeId"%>
+<%@attribute name="state"%>
+
+<c:set var="activeTravelerTypesOnly" value="false"/> <%-- should get this from user pref --%>
+
+<c:if test="${empty state && activeTravelerTypesOnly}">
+    <c:set var="state" value="ACTIVE"/>
+</c:if>
 
 <c:url var="inProgressLink" value="listTravelers.jsp">
     <c:param name="end" value="None"/>
@@ -20,16 +27,21 @@
 </c:url>
 
 <sql:query var="result" >
-    select P.id as processId, concat(P.name, ' v', P.version) as processName, HT.name as hardwareName, HT.id as hardwareTypeId, 
+    select P.id as processId, concat(P.name, ' v', P.version) as processName, 
+        HT.name as hardwareName, HT.id as hardwareTypeId, 
+        TT.state,
         count(A.id)-count(A.end) as inProgress, count(A.id) as total, count(A.end) as completed 
     from
     Process P
     inner join HardwareType HT on HT.id=P.hardwareTypeId
-    left join Activity A on A.processId=P.id
-    left join ProcessEdge PE on PE.child=P.id
-    where PE.id is null
+    inner join TravelerType TT on TT.rootProcessId=P.id
+    left join Activity A on (A.processId=P.id and A.parentActivityId is null)
+    where 1
     <c:if test="${! empty hardwareTypeId}">
         and HT.id=?<sql:param value="${hardwareTypeId}"/>
+    </c:if>
+    <c:if test="${! empty state}">
+        and TT.state=?<sql:param value="${state}"/>
     </c:if>
     group by P.id
 </sql:query>
@@ -43,6 +55,9 @@
     <c:if test="${empty hardwareTypeId}">
         <display:column property="hardwareName" title="Component Type" sortable="true" headerClass="sortable"
                         href="displayHardwareType.jsp" paramId="hardwareTypeId" paramProperty="hardwareTypeId"/>
+    </c:if>
+    <c:if test="${empty state}">
+        <display:column property="state" sortable="true" headerClass="sortable"/>
     </c:if>
     <display:column property="inProgress" sortable="true" headerClass="sortable"
                     href="${inProgressLink}" paramId="processId" paramProperty="processId"/>
