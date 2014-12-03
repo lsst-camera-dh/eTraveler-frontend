@@ -26,9 +26,10 @@
         <traveler:processCrumbs processPath="${param.processPath}"/>
 
         <sql:query var="processQ" >
-            select P.*
+            select P.*, TT.id as travelerTypeId
             from Process P
-            where id=?<sql:param value="${processId}"/>;
+            left join TravelerType TT on TT.rootProcessId=P.id
+            where P.id=?<sql:param value="${processId}"/>;
         </sql:query>
         <c:set var="process" value="${processQ.rows[0]}"/>
         <traveler:processWidget processId="${processId}"/>
@@ -57,8 +58,10 @@
             </tr>
         </table>
 
+        <c:if test="${! empty process.travelerTypeId}">
         <h2>Instances</h2>
         <traveler:activityList processId="${processId}"/>
         Make a new instance: <traveler:newTravelerForm processId="${processId}" hardwareTypeId="${process.hardwareTypeId}"/>
+        </c:if>
     </body>
 </html>

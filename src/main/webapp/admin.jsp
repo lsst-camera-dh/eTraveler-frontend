@@ -76,6 +76,14 @@
             Name: <input type="text" name="name" required>
         </form>
         <hr>
+        
+        <form method="get" action="fh/addTravelerType.jsp">
+            <input type="submit" value="Add Traveler Type">
+            Root Process: <input type="number" name="rootProcessId" required>
+            Owner: <input type="text" name="owner">
+            Reason: <input type="text" name="reason">
+        </form>
+        <hr>
 
         <c:set var="backend" value="/eTravelerBackend"/>
         <c:set var="backendLink" 
