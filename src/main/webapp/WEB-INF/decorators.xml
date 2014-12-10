@@ -5,9 +5,16 @@
        <pattern>/*</pattern>
   </decorator>
 
+<!--
   <decorator name="noDecorator" page="noDecorator.jsp">
        <pattern>*activityPane.jsp*</pattern>
        <pattern>*processPane.jsp*</pattern>
   </decorator>
+-->
+  <exclude>
+       <pattern>*activityPane.jsp*</pattern>
+       <pattern>*processPane.jsp*</pattern>
+  </exclude>
+
 
  </decorators>
