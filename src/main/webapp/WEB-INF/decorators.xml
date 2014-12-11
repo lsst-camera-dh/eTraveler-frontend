@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <decorators defaultdir="/decorators">
 
+  <exclude>
+       <pattern>*activityPane.jsp*</pattern>
+       <pattern>*processPane.jsp*</pattern>
+  </exclude>
+
   <decorator name="basicDecorator" page="basicDecorator.jsp">
        <pattern>/*</pattern>
   </decorator>
@@ -11,10 +16,5 @@
        <pattern>*processPane.jsp*</pattern>
   </decorator>
 -->
-  <exclude>
-       <pattern>*activityPane.jsp*</pattern>
-       <pattern>*processPane.jsp*</pattern>
-  </exclude>
-
 
  </decorators>
