@@ -7,6 +7,6 @@
         <ResourceLink name="jdbc/rd-lsst-cmft" type="javax.sql.DataSource" global="jdbc/rd-lsst-cmft" />
         <ResourceLink name="jdbc/rd-lsst-camt" type="javax.sql.DataSource" global="jdbc/rd-lsst-camt" />
 
-  <ResourceLink global="jdbc/scdms_prod" name="jdbc/scdms_prod" type="javax.sql.DataSource" />
+  <ResourceLink global="jdbc/scdms_test" name="jdbc/scdms_test" type="javax.sql.DataSource" />
   <ResourceLink global="jdbc/scdms_dev" name="jdbc/scdms_dev" type="javax.sql.DataSource" />
 </Context>
