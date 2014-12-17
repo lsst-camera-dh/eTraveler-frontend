@@ -18,7 +18,7 @@
             applicationTitle
         </param-name>
         <param-value>
-            LSST eTraveler
+            eTraveler
         </param-value>
     </context-param>
     
