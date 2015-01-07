@@ -7,6 +7,7 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql" %>
+<%@taglib prefix="traveler" tagdir="/WEB-INF/tags"%>
 <!DOCTYPE html>
 <html>
     <head>
@@ -21,6 +22,8 @@
             jhVirtualEnv: <input type="text" name="jhVirtualEnv">
             jhOutputRoot: <input type="text" name="jhOutputRoot">
         </form>
+        
+        <traveler:siteList/>
         <hr>
         
         <sql:query var="sitesQ" >
@@ -35,6 +38,8 @@
                 </c:forEach>
             </select>
         </form>
+
+        <traveler:locationList/>
         <hr>
 
         <form method="get" action="fh/addHardwareType.jsp">
@@ -69,12 +74,16 @@
                 </c:forEach>
             </select>
         </form>
+
+        <traveler:hardwareRelationshipTypeList/>
         <hr>
 
         <form method="get" action="fh/addHardwareIdentifierAuthority.jsp">
             <input type="submit" value="Add Hardware Identifier Authority">
             Name: <input type="text" name="name" required>
         </form>
+
+        <traveler:hardwareIdentifierAuthorityList/>
         <hr>
         
         <form method="get" action="fh/addTravelerType.jsp">
