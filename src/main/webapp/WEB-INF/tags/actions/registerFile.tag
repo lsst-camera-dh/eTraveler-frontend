@@ -19,7 +19,7 @@
 <c:set var="name" value="${lsstId}"/>
 <c:set var="fileFormat" value="${fileExt}"/>
 <c:set var="dataType" value="LSSTSENSORTEST"/>
-<c:set var="logicalFolderPath" value="/eTravelerTest/T01"/>
+<c:set var="logicalFolderPath" value="/LSST/eTravelerTest/T01"/>
 <c:set var="groupName" value="sensorImages"/>
 <c:set var="site" value="BNL"/>
 <c:set var="location" value="${filePath}"/>
