@@ -5,7 +5,7 @@
 
 <html>
     <head>
-        <title>Hello LLST</title>
+        <title>Hello ${appVariables.experiment}</title>
     </head>
     <body>
         Welcome, ${empty userName?"stranger":userName}.<br>
