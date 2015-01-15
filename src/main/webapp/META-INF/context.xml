@@ -9,4 +9,8 @@
 
   <ResourceLink global="jdbc/scdms_test" name="jdbc/scdms_test" type="javax.sql.DataSource" />
   <ResourceLink global="jdbc/scdms_dev" name="jdbc/scdms_dev" type="javax.sql.DataSource" />
+
+  <ResourceLink name="jdbc/datacat-prod" type="javax.sql.DataSource" global="jdbc/datacat-prod" />
+  <ResourceLink name="jdbc/datacat-dev" type="javax.sql.DataSource" global="jdbc/datacat-dev" />
+  <ResourceLink name="jdbc/datacat-test" type="javax.sql.DataSource" global="jdbc/datacat-test" />
 </Context>

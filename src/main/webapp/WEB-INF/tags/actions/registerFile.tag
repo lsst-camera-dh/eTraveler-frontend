@@ -13,9 +13,12 @@
 <%@attribute name="lsstId" required="true"%>
 
 <c:set var="pathComponents" value="${fn:split(filePath, '/')}"/>
-<c:set var="fnComponents" value="${fn:split(pathComponents[fn:length(pathComponents)], '.')}"/>
-<c:set var="fileExt" value="${fnComponents[fn:length(fnComponents)]}"/>
-
+<c:set var="fnComponents" value="${fn:split(pathComponents[fn:length(pathComponents)-1], '.')}"/>
+<c:set var="fileExt" value="${fnComponents[fn:length(fnComponents)-1]}"/>
+[[${filePath}]]
+[[${pathComponents}]]
+[[${fnComponents}]]
+[[${fileExt}]]
 <c:set var="name" value="${lsstId}"/>
 <c:set var="fileFormat" value="${fileExt}"/>
 <c:set var="dataType" value="LSSTSENSORTEST"/>
@@ -28,3 +31,4 @@
 <dc:dcRegister name="${filePath}" fileFormat="${fileFormat}" dataType="${dataType}"
                logicalFolderPath="${logicalFolderPath}" groupName="${groupName}"
                site="${site}" location="${location}" replaceExisting="${replaceExisting}"/>
+

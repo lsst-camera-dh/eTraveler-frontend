@@ -41,10 +41,13 @@
         </c:url>
         <c:set var="tlPlusFrag" value="${testLink}#foo"/>
         <a href="${tlPlusFrag}">test</a>
-        
+
+        <c:set var="doRegister" value="${empty param.doRegister ? false : param.doRegister}"/>
+        <c:if test="${doRegister}">
         regiter:
-<%--        <ta:registerFile filePath="/u/ek/focke/pix/warren.jpg" lsstId="123"/>--%>
+        <ta:registerFile filePath="/u/ek/focke/pix/warren.jpg" lsstId="123"/>
         i mean register
+        </c:if>
         
         <traveler:test/>
         [${fnord}]
