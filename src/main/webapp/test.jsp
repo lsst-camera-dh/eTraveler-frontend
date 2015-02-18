@@ -45,10 +45,11 @@
         <c:set var="doRegister" value="${empty param.doRegister ? false : param.doRegister}"/>
         <c:if test="${doRegister}">
         regiter:
-        <ta:registerFile filePath="/u/ek/focke/pix/warren.jpg" lsstId="123"/>
+        <ta:registerFile resultId="3" mode="harnessed"/>
+        <ta:registerFile resultId="8" mode="manual"/>
         i mean register
         </c:if>
-        
+        <br>************** ${initParam['applicationTitle']} *******************<br>
         <traveler:test/>
         [${fnord}]
         

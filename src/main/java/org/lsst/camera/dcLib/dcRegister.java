@@ -18,6 +18,7 @@ import org.srs.datacat.client.sql.NewDataset;
  * @author focke
  */
 public class dcRegister extends SimpleTagSupport {
+    private String dataCatalogDb;
     private String name;
     private String fileFormat;
     private String dataType;
@@ -33,7 +34,7 @@ public class dcRegister extends SimpleTagSupport {
         JspWriter out = getJspContext().getOut();
         
         /*String dataCatalogDb = getJspContext().getAttribute("dataCatalogDb").toString();*/
-        String dataCatalogDb = "jdbc/datacat-prod";
+        /*String dataCatalogDb = "jdbc/datacat-prod";*/
         
         try {
             Connection conn = ConnectionManager.getConnection(dataCatalogDb);
@@ -49,6 +50,9 @@ public class dcRegister extends SimpleTagSupport {
         }
     }
     
+    public void setDataCatalogDb(String dataCatalogDb) {
+        this.dataCatalogDb = dataCatalogDb;
+    }
     public void setName(String name) {
         this.name = name;
     }

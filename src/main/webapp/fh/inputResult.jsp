@@ -16,6 +16,30 @@
     <body>
         <c:choose>
             <c:when test="${param.ISName == 'float'}">
+                <c:set var="tableName" value="FloatResultManual"/>
+            </c:when>
+            <c:when test="${param.ISName == 'string'}">
+                <c:set var="tableName" value="StringResultManual"/>
+            </c:when>
+            <c:when test="${param.ISName == 'filepath'}">
+                <c:set var="tableName" value="FilepathResultManual"/>
+            </c:when>                   
+            <c:otherwise>
+                <c:set var="tableName" value="IntResultManual"/>
+            </c:otherwise>
+        </c:choose>
+        <sql:update>
+            insert into ${tableName} set
+            inputPatternId=?<sql:param value="${param.inputPatternId}"/>,
+            value=?<sql:param value="${param.value}"/>,
+            activityId=?<sql:param value="${param.activityId}"/>,
+            createdBy=?<sql:param value="${userName}"/>,
+            creationTS=NOW();
+        </sql:update>
+
+<%--
+        <c:choose>
+            <c:when test="${param.ISName == 'float'}">
                 <sql:update>
                     insert into FloatResultManual set
                     inputPatternId=?<sql:param value="${param.inputPatternId}"/>,
@@ -56,6 +80,7 @@
                 </sql:update>
             </c:otherwise>
         </c:choose>
+--%>
         <c:redirect url="${header.referer}"/>
     </body>
 </html>

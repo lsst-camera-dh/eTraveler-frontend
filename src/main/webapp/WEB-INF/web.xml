@@ -32,7 +32,10 @@
         </param-value>
     </context-param>
 
-    
+    <context-param>
+        <param-name>eTravelerFileStore</param-name>
+        <param-value>/nfs/farm/g/lsst/u1/ET</param-value>
+    </context-param>
 
     <filter>
         <filter-name>ModeSwitcherFilter</filter-name>
