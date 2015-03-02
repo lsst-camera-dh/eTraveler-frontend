@@ -37,23 +37,6 @@
         <param-value>/nfs/farm/g/lsst/u1/ET</param-value>
     </context-param>
 
-    <filter>
-        <filter-name>ModeSwitcherFilter</filter-name>
-        <filter-class>org.srs.web.base.filters.modeswitcher.ModeSwitcherFilter</filter-class>
-        <init-param>
-            <param-name>experiment</param-name>
-            <param-value>${experiment.name}</param-value>
-        </init-param>
-        <init-param>
-            <param-name>configDb</param-name>
-            <param-value>${experiment.configuration.database}</param-value>
-        </init-param>
-    </filter>
-    <filter-mapping>
-        <filter-name>ModeSwitcherFilter</filter-name>
-        <url-pattern>/*</url-pattern>
-    </filter-mapping>
-
     <!-- Login Filter -->
     <filter>
         <filter-name>LoginFilter</filter-name>
@@ -71,24 +54,54 @@
             <param-value>fakeLimsBack.jsp*,fakeLimsFront.jsp</param-value>
         </init-param>
     </filter>
-
     <filter-mapping>
         <filter-name>LoginFilter</filter-name>
         <url-pattern>*.jsp</url-pattern>
     </filter-mapping>
 
-
-    <!-- Adding Sitemesh Filter -->
     <filter>
-        <filter-name>sitemesh</filter-name>
-        <filter-class>com.opensymphony.module.sitemesh.filter.PageFilter</filter-class>
+        <filter-name>ModeSwitcherFilter</filter-name>
+        <filter-class>org.srs.web.base.filters.modeswitcher.ModeSwitcherFilter</filter-class>
+        <init-param>
+            <param-name>experiment</param-name>
+            <param-value>${experiment.name}</param-value>
+        </init-param>
+        <init-param>
+            <param-name>configDb</param-name>
+            <param-value>${experiment.configuration.database}</param-value>
+        </init-param>
     </filter>
-
     <filter-mapping>
-        <filter-name>sitemesh</filter-name>
+        <filter-name>ModeSwitcherFilter</filter-name>
         <url-pattern>/*</url-pattern>
     </filter-mapping>
-    <!-- Done adding Sitemesh Filter -->
+
+  <servlet>
+<servlet-name>ExperimentContextServlet</servlet-name>
+<servlet-class>org.srs.web.base.filters.experimentcontext.ExperimentContextServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+<servlet-name>ExperimentContextServlet</servlet-name>
+      <url-pattern>/exp/*</url-pattern>
+    </servlet-mapping>
+    <filter>
+<filter-name>ExperimentContextFilter</filter-name>
+<filter-class>org.srs.web.base.filters.experimentcontext.ExperimentContextFilter</filter-class>
+    </filter>
+    <filter-mapping>
+<filter-name>ExperimentContextFilter</filter-name>
+      <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
+    <filter>
+<filter-name>BlankLineFilter</filter-name>
+<filter-class>org.srs.web.base.filters.blankline.BlankLineFilter</filter-class>
+    </filter>
+    <filter-mapping>
+<filter-name>BlankLineFilter</filter-name>
+      <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
 
     <!-- Icons for tree tag -->
     <servlet>
@@ -103,23 +116,33 @@
     </servlet-mapping>
     <!-- Done with tree tag icons -->
     
-  <servlet>
-<servlet-name>ExperimentContextServlet</servlet-name>
-<servlet-class>org.srs.web.base.filters.experimentcontext.ExperimentContextServlet</servlet-class>
-    </servlet>
-    <servlet-mapping>
-<servlet-name>ExperimentContextServlet</servlet-name>
-      <url-pattern>/exp/*</url-pattern>
-    </servlet-mapping>
+<!-- preference filter -->
 
-    <filter>
-<filter-name>ExperimentContextFilter</filter-name>
-<filter-class>org.srs.web.base.filters.experimentcontext.ExperimentContextFilter</filter-class>
-    </filter>
-    <filter-mapping>
-<filter-name>ExperimentContextFilter</filter-name>
-      <url-pattern>/*</url-pattern>
-    </filter-mapping>
+     <filter>
+         <filter-name>PreferencesFilter</filter-name>
+<filter-class>org.srs.web.base.preferences.filter.PreferencesFilter</filter-class>
+         <init-param>
+             <param-name>preferencesDatabase</param-name>
+<param-value>${experiment.configuration.database}</param-value>
+         </init-param>
+         <init-param>
+             <param-name>application</param-name>
+<param-value>${build.finalName}</param-value>
+         </init-param>
+         <init-param>
+             <param-name>experiment</param-name>
+<param-value>${build.finalName}</param-value>
+         </init-param>
+         <init-param>
+             <param-name>preferences</param-name>
+             <param-value>org.glast.logging.application.preferences.UserPreferences</param-value>
+         </init-param>
+     </filter>
+     <filter-mapping>
+         <filter-name>PreferencesFilter</filter-name>
+         <url-pattern>*.jsp</url-pattern>
+     </filter-mapping>
+
 
     <servlet>
         <servlet-name>fakeLims</servlet-name>
@@ -171,5 +194,17 @@
 https://confluence.slac.stanford.edu/display/LSSTCAM/eTraveler+frontend+documentation
         </param-value>
     </context-param>
+
+    <!-- Adding Sitemesh Filter -->
+    <filter>
+        <filter-name>sitemesh</filter-name>
+        <filter-class>com.opensymphony.module.sitemesh.filter.PageFilter</filter-class>
+    </filter>
+
+    <filter-mapping>
+        <filter-name>sitemesh</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+    <!-- Done adding Sitemesh Filter -->
 
 </web-app>

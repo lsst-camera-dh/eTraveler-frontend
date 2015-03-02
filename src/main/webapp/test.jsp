@@ -15,13 +15,21 @@
         <title>JSP Page</title>
     </head>
     <body>
-        <traveler:setReturn extra="#foo"/>
         <h1>Hello World!</h1>
+        <br>
+        regiter:<br>
+        <ta:registerFile resultId="3" mode="harnessed"/>
+        <ta:registerFile resultId="8" mode="manual"/>
+        <br>i mean register
+        <br>
+<%--
+        <traveler:setReturn extra="#foo"/>
+
         <c:set var="mask" value="0"/>
         <c:forEach var="group" items="${paramValues.group}"><c:set var="mask" value="${mask + group}"/></c:forEach>
         ${mask}<br>
         [<c:out value="${pageScope.javax.servlet.jsp.jspRequest.uri}"/>]<br>
-<%--        <% request.setAttribute("url", request.getRequestURI()); %>--%>
+        <% request.setAttribute("url", request.getRequestURI()); %>
         [<c:out value="${url}"/>]<br>
         [<c:out value="${pageContext}"/>]<br>
         [<c:out value="${request}"/>]<br>
@@ -41,14 +49,7 @@
         </c:url>
         <c:set var="tlPlusFrag" value="${testLink}#foo"/>
         <a href="${tlPlusFrag}">test</a>
-
-        <c:set var="doRegister" value="${empty param.doRegister ? false : param.doRegister}"/>
-        <c:if test="${doRegister}">
-        regiter:
-        <ta:registerFile resultId="3" mode="harnessed"/>
-        <ta:registerFile resultId="8" mode="manual"/>
-        i mean register
-        </c:if>
+        <br>
         <br>************** ${initParam['applicationTitle']} *******************<br>
         <traveler:test/>
         [${fnord}]
@@ -75,6 +76,7 @@
         <h2>application</h2>
 <c:forEach var="v" items="${applicationScope}">
         <c:out value="${v.key} ---- ${v.value}"/><br>
-</c:forEach>        
+</c:forEach>
+--%>
     </body>
 </html>

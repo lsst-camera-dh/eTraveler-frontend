@@ -13,4 +13,5 @@
   <ResourceLink name="jdbc/datacat-prod" type="javax.sql.DataSource" global="jdbc/datacat-prod" />
   <ResourceLink name="jdbc/datacat-dev" type="javax.sql.DataSource" global="jdbc/datacat-dev" />
   <ResourceLink name="jdbc/datacat-test" type="javax.sql.DataSource" global="jdbc/datacat-test" />
+  <ResourceLink name="jdbc/datacat-raw" type="javax.sql.DataSource" global="jdbc/datacat-raw" />
 </Context>

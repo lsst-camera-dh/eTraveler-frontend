@@ -78,16 +78,23 @@
         <c:set var="jhOutputRoot" value="${site.jhOutputRoot}"/>
     </c:when>
 </c:choose>
-<sql:query var="userSiteQ">
-    select S.jhOutputRoot from Site S where S.name=?<sql:param value="${siteName}"/>
-</sql:query>
-<c:if test="${empty siteName}">
-    <c:set var="siteName" value="broeknSite"/>
-    <c:url var="errorPage" value="error.jsp">
-        <c:param name="message" value="The component has no location and user ${userName} has no site."/>
-    </c:url>
+<c:if test="${empty jhOutputRoot}">
+    <c:choose>
+        <c:when test="${empty siteName}">
+            <c:set var="siteName" value="broeknSite"/>
+            <c:url var="errorPage" value="error.jsp">
+                <c:param name="message" value="The component has no location and user ${userName} has no site."/>
+            </c:url>
+            <c:redirect url="${errorPage}"/>
+        </c:when>
+        <c:otherwise>
+            <sql:query var="userSiteQ">
+                select S.jhOutputRoot from Site S where S.name=?<sql:param value="${siteName}"/>
+            </sql:query>
+            <c:set var="jhOutputRoot" value="userSiteQ.rows[0].jhOutputRoot"/>
+        </c:otherwise>
+    </c:choose>
 </c:if>
-
 <%-- <c:set var="version" value="${empty result.userVersionString ? '' : '/' + result.userVersionString}"/> --%>
 <c:choose>
     <c:when test="${empty result.userVersionString}">
@@ -137,7 +144,8 @@ site: <c:out value="${dcSite}"/><br>
 location: <c:out value="${location}"/><br>
 replaceExisting: <c:out value="${replaceExisting}"/><br>
 </c:if>
-<c:if test="${param.xxx}">
+<c:set var="doRegister" value="${empty param.doRegister ? false : param.doRegister}"/>
+<c:if test="${doRegister}">
 <dc:dcRegister dataCatalogDb="${dataCatalogDb}"
     name="${filePath}" fileFormat="${fileFormat}" dataType="${dataType}"
                logicalFolderPath="${logicalFolderPath}" groupName="${groupName}"
