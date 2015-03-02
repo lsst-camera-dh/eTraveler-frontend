@@ -45,7 +45,7 @@
                         <form method="get" action="fh/satisfyPrereq.jsp">
                             <input type="hidden" name="prerequisitePatternId" value="${row.id}">
                             <input type="hidden" name="activityId" value="${activityId}">
-                            <input type="submit" value="Got it">
+                            <input type="submit" value="Done">
                         </form>
                     </c:otherwise>
                 </c:choose>

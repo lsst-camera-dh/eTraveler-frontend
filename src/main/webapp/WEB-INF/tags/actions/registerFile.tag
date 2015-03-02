@@ -8,6 +8,7 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql" %>
+<%@taglib prefix="traveler" tagdir="/WEB-INF/tags"%>
 <%@taglib uri="/tlds/dcTagLibrary.tld" prefix="dc"%>
 
 <%@attribute name="resultId" required="true"%>
@@ -82,10 +83,7 @@
     <c:choose>
         <c:when test="${empty siteName}">
             <c:set var="siteName" value="broeknSite"/>
-            <c:url var="errorPage" value="error.jsp">
-                <c:param name="message" value="The component has no location and user ${userName} has no site."/>
-            </c:url>
-            <c:redirect url="${errorPage}"/>
+            <traveler:error message="The component has no location and user ${userName} has no site."/>
         </c:when>
         <c:otherwise>
             <sql:query var="userSiteQ">

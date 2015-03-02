@@ -72,7 +72,7 @@
                 </c:when>
                 <c:when test="${(empty row.componentId) and (empty row.satisfaction)}">
                     <c:if test="${gotSomeComponents}">
-                        <input type="submit" value="Got it">
+                        <input type="submit" value="Done">
                     </c:if>
                     </form>
                 </c:when>
