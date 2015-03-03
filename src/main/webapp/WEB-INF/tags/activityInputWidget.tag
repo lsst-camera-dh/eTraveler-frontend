@@ -88,7 +88,7 @@
                                 <c:if test="${!empty row.minV}">min="<c:out value="${row.minV}"/>"</c:if>
                                 <c:if test="${!empty row.maxV}">max="<c:out value="${row.maxV}"/>"</c:if>
                                 >
-                        <input type="submit" value="Submit!">
+                        <input type="submit" value="Record Result">
                     </form>
                 </c:otherwise>
             </c:choose>

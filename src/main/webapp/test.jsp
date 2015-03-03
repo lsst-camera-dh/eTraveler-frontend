@@ -17,11 +17,16 @@
     <body>
         <h1>Hello World!</h1>
         <br>
+<c:set var="doRegister" value="${empty param.xxx ? false : param.xxx}"/>
+<c:if test="${doRegister}">
         regiter:<br>
+        <ta:registerFile resultId="2" mode="harnessed"/>
         <ta:registerFile resultId="3" mode="harnessed"/>
+        <ta:registerFile resultId="9" mode="manual"/>
         <ta:registerFile resultId="8" mode="manual"/>
         <br>i mean register
         <br>
+</c:if>
 <%--
         <traveler:setReturn extra="#foo"/>
 

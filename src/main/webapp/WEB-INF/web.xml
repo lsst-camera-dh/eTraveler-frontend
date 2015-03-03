@@ -36,6 +36,10 @@
         <param-name>eTravelerFileStore</param-name>
         <param-value>/nfs/farm/g/lsst/u1/ET</param-value>
     </context-param>
+    <context-param>
+       <param-name>datacatFolder</param-name>
+        <param-value>/LSST/eTravelerTest</param-value>
+    </context-param>
 
     <!-- Login Filter -->
     <filter>

@@ -23,7 +23,7 @@ public class dcRegister extends SimpleTagSupport {
     private String fileFormat;
     private String dataType;
     private String logicalFolderPath;
-    private String groupName;
+    private String groupName=null;
     private String site;
     private String location;
     private boolean replaceExisting;

@@ -103,7 +103,7 @@
     </c:otherwise>
 </c:choose>
 
-<c:set var="dcHead" value="/LSST/${modePath}/${siteName}"/>
+<c:set var="dcHead" value="${initParam['datacatFolder']}/${modePath}/${siteName}"/>
 
 <c:set var="commonPath" value=
 "${result.hardwareTypeName}/${result.lsstId}/${result.processName}${processVersion}/${result.activityId}"
@@ -122,7 +122,7 @@
     </c:when>
     <c:when test="${mode=='manual'}">
         <c:set var="dcSite" value="SLAC"/>
-        <c:set var="fsHead" value="${initParam['eTravelerFileStore']}/${modePath}/${siteName}"/>
+        <c:set var="fsHead" value="${initParam['eTravelerFileStore']}/${siteName}"/>
     </c:when>
 </c:choose>
 <c:set var="location" value="${fsHead}/${commonPath}/${result.fileName}"/>
@@ -144,9 +144,15 @@ replaceExisting: <c:out value="${replaceExisting}"/><br>
 </c:if>
 <c:set var="doRegister" value="${empty param.doRegister ? false : param.doRegister}"/>
 <c:if test="${doRegister}">
+    <%--
 <dc:dcRegister dataCatalogDb="${dataCatalogDb}"
-    name="${filePath}" fileFormat="${fileFormat}" dataType="${dataType}"
+    name="${name}" fileFormat="${fileFormat}" dataType="${dataType}"
                logicalFolderPath="${logicalFolderPath}" groupName="${groupName}"
+               site="${dcSite}" location="${location}" replaceExisting="${replaceExisting}"/>
+    --%>
+<dc:dcRegister dataCatalogDb="${dataCatalogDb}"
+    name="${name}" fileFormat="${fileFormat}" dataType="${dataType}"
+               logicalFolderPath="${logicalFolderPath}" 
                site="${dcSite}" location="${location}" replaceExisting="${replaceExisting}"/>
 </c:if>
 
