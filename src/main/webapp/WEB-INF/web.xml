@@ -55,7 +55,7 @@
         </init-param>
         <init-param>
             <param-name>skipPages</param-name>
-            <param-value>fakeLimsBack.jsp*,fakeLimsFront.jsp</param-value>
+            <param-value>fakeLimsBack.jsp*,*/fakeLimsBack.jsp*,fakeLimsFront.jsp</param-value>
         </init-param>
     </filter>
     <filter-mapping>
@@ -78,23 +78,6 @@
     <filter-mapping>
         <filter-name>ModeSwitcherFilter</filter-name>
         <url-pattern>/*</url-pattern>
-    </filter-mapping>
-
-  <servlet>
-<servlet-name>ExperimentContextServlet</servlet-name>
-<servlet-class>org.srs.web.base.filters.experimentcontext.ExperimentContextServlet</servlet-class>
-    </servlet>
-    <servlet-mapping>
-<servlet-name>ExperimentContextServlet</servlet-name>
-      <url-pattern>/exp/*</url-pattern>
-    </servlet-mapping>
-    <filter>
-<filter-name>ExperimentContextFilter</filter-name>
-<filter-class>org.srs.web.base.filters.experimentcontext.ExperimentContextFilter</filter-class>
-    </filter>
-    <filter-mapping>
-<filter-name>ExperimentContextFilter</filter-name>
-      <url-pattern>/*</url-pattern>
     </filter-mapping>
 
     <filter>
@@ -189,6 +172,23 @@
     <listener>
         <listener-class>org.srs.web.base.datasource.DefaultDataSourceSwitcher</listener-class>
     </listener>
+
+  <servlet>
+<servlet-name>ExperimentContextServlet</servlet-name>
+<servlet-class>org.srs.web.base.filters.experimentcontext.ExperimentContextServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+<servlet-name>ExperimentContextServlet</servlet-name>
+      <url-pattern>/exp/*</url-pattern>
+    </servlet-mapping>
+    <filter>
+<filter-name>ExperimentContextFilter</filter-name>
+<filter-class>org.srs.web.base.filters.experimentcontext.ExperimentContextFilter</filter-class>
+    </filter>
+    <filter-mapping>
+<filter-name>ExperimentContextFilter</filter-name>
+      <url-pattern>/*</url-pattern>
+    </filter-mapping>
 
     <context-param>
         <param-name>

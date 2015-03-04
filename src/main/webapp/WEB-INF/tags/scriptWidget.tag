@@ -21,5 +21,5 @@
 Enter the following command to automate this step:<br>
 <c:out value="${command}"/>
 <%--
-lcatr-iterator --container-id=${activityId} --lims_url=${limsUrl}<br>
+lcatr-iterator --container-id=${activityId} --lims-url=${limsUrl}<br>
 --%>
