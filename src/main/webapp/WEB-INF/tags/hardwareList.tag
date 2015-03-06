@@ -28,7 +28,7 @@
     </c:if>
 </sql:query>
 <display:table name="${result.rows}" class="datatable">
-    <display:column property="lsstId" title="Component Id" sortable="true" headerClass="sortable"
+    <display:column property="lsstId" title="LSST Serial Number" sortable="true" headerClass="sortable"
                     href="displayHardware.jsp" paramId="hardwareId" paramProperty="id"/>
     <c:if test="${empty hardwareTypeId}">
         <display:column property="hardwareName" title="Type" sortable="true" headerClass="sortable"

@@ -59,7 +59,7 @@
     <display:column property="processName" title="Name" sortable="true" headerClass="sortable"
                       href="displayActivity.jsp" paramId="activityId" paramProperty="activityId"/>
     <c:if test="${empty hardwareId}">
-        <display:column property="lsstId" title="Component" sortable="true" headerClass="sortable"
+        <display:column property="lsstId" title="LSST Serial Number" sortable="true" headerClass="sortable"
                         href="displayHardware.jsp" paramId="hardwareId" paramProperty="hardwareId"/>
     </c:if>
     <c:if test="${(empty processId) and (empty hardwareId)}">

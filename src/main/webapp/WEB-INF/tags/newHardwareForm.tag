@@ -37,7 +37,7 @@
         <c:choose>
             <c:when test="${hType.autoSequenceWidth==0}">
                 <tr>
-                    <td>Serial:</td>
+                    <td>LSST Serial Number:</td>
                     <td>*<INPUT TYPE="TEXT" NAME="lsstId" SIZE=50 autofocus required></td>
                 </tr>
             </c:when>
