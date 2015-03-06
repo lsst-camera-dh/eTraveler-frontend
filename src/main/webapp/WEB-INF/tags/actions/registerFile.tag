@@ -70,7 +70,7 @@
     inner join Location L on L.id=HLH.locationId
     inner join Site S on S.id=L.siteId
     where H.id=?<sql:param value="${result.hardwareId}"/>
-    order by HLH.creationTS desc limit 1;
+    order by HLH.id desc limit 1;
 </sql:query>
 <c:choose>
     <c:when test="${! empty hwSiteQ.rows}">
@@ -78,21 +78,11 @@
         <c:set var="siteName" value="${site.siteName}"/>
         <c:set var="jhOutputRoot" value="${site.jhOutputRoot}"/>
     </c:when>
+    <c:otherwise>
+        <traveler:error message="Component ${result.lsstId} has no location."/>
+    </c:otherwise>
 </c:choose>
-<c:if test="${empty jhOutputRoot}">
-    <c:choose>
-        <c:when test="${empty siteName}">
-            <c:set var="siteName" value="broeknSite"/>
-            <traveler:error message="The component has no location and user ${userName} has no site."/>
-        </c:when>
-        <c:otherwise>
-            <sql:query var="userSiteQ">
-                select S.jhOutputRoot from Site S where S.name=?<sql:param value="${siteName}"/>
-            </sql:query>
-            <c:set var="jhOutputRoot" value="userSiteQ.rows[0].jhOutputRoot"/>
-        </c:otherwise>
-    </c:choose>
-</c:if>
+
 <%-- <c:set var="version" value="${empty result.userVersionString ? '' : '/' + result.userVersionString}"/> --%>
 <c:choose>
     <c:when test="${empty result.userVersionString}">
@@ -103,7 +93,7 @@
     </c:otherwise>
 </c:choose>
 
-<c:set var="dcHead" value="${initParam['datacatFolder']}/${modePath}/${siteName}"/>
+<c:set var="dcHead" value="${initParam['datacatFolder']}/${modePath}/${appVariables.dataSourceMode}/${siteName}"/>
 
 <c:set var="commonPath" value=
 "${result.hardwareTypeName}/${result.lsstId}/${result.processName}${processVersion}/${result.activityId}"
@@ -122,7 +112,7 @@
     </c:when>
     <c:when test="${mode=='manual'}">
         <c:set var="dcSite" value="SLAC"/>
-        <c:set var="fsHead" value="${initParam['eTravelerFileStore']}/${siteName}"/>
+        <c:set var="fsHead" value="${initParam['eTravelerFileStore']}/${appVariables.dataSourceMode}/${siteName}"/>
     </c:when>
 </c:choose>
 <c:set var="location" value="${fsHead}/${commonPath}/${result.fileName}"/>

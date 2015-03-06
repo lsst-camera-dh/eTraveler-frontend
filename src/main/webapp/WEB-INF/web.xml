@@ -38,7 +38,7 @@
     </context-param>
     <context-param>
        <param-name>datacatFolder</param-name>
-        <param-value>/LSST/eTravelerTest</param-value>
+        <param-value>/LSST</param-value>
     </context-param>
 
     <!-- Login Filter -->

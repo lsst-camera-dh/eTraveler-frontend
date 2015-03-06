@@ -21,9 +21,7 @@
 <c:if test="${doRegister}">
         regiter:<br>
         <ta:registerFile resultId="2" mode="harnessed"/>
-        <ta:registerFile resultId="3" mode="harnessed"/>
         <ta:registerFile resultId="9" mode="manual"/>
-        <ta:registerFile resultId="8" mode="manual"/>
         <br>i mean register
         <br>
 </c:if>
