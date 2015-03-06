@@ -37,8 +37,16 @@
         <param-value>/nfs/farm/g/lsst/u1/ET</param-value>
     </context-param>
     <context-param>
-       <param-name>datacatFolder</param-name>
+        <param-name>datacatFolder</param-name>
         <param-value>/LSST</param-value>
+    </context-param>
+    <context-param>
+        <param-name>mirroredSubfolder</param-name>
+        <param-value>mirror</param-value>
+    </context-param>
+    <context-param>
+        <param-name>uploadedSubfolder</param-name>
+        <param-value>eTravelerFiles</param-value>
     </context-param>
 
     <!-- Login Filter -->

@@ -17,11 +17,11 @@
 <c:choose>
     <c:when test="${mode == 'manual'}">
         <c:set var="resultTable" value="FilepathResultManual"/>
-        <c:set var="modePath" value="eTravelerFiles"/>
+        <c:set var="modePath" value="${initParam['uploadedSubfolder']}"/>
     </c:when>
     <c:when test="${mode == 'harnessed'}">
         <c:set var="resultTable" value="FilepathResultHarnessed"/>
-        <c:set var="modePath" value="mirror"/>
+        <c:set var="modePath" value="${initParam['mirroredSubfolder']}"/>
     </c:when>
     <c:otherwise>
         AAAaaack!!!! #220560
@@ -93,7 +93,16 @@
     </c:otherwise>
 </c:choose>
 
-<c:set var="dcHead" value="${initParam['datacatFolder']}/${modePath}/${appVariables.dataSourceMode}/${siteName}"/>
+<c:choose>
+    <c:when test="${'Prod' == appVariables.dataSourceMode}">
+        <c:set var="dataSourceFolder" value=""/>
+    </c:when>
+    <c:otherwise>
+        <c:set var="dataSourceFolder" value="/${appVariables.dataSourceMode}"/>
+    </c:otherwise>
+</c:choose>
+
+<c:set var="dcHead" value="${initParam['datacatFolder']}${dataSourceFolder}/${modePath}/${siteName}"/>
 
 <c:set var="commonPath" value=
 "${result.hardwareTypeName}/${result.lsstId}/${result.processName}${processVersion}/${result.activityId}"
@@ -112,7 +121,7 @@
     </c:when>
     <c:when test="${mode=='manual'}">
         <c:set var="dcSite" value="SLAC"/>
-        <c:set var="fsHead" value="${initParam['eTravelerFileStore']}/${appVariables.dataSourceMode}/${siteName}"/>
+        <c:set var="fsHead" value="${initParam['eTravelerFileStore']}${dataSourceFolder}/${siteName}"/>
     </c:when>
 </c:choose>
 <c:set var="location" value="${fsHead}/${commonPath}/${result.fileName}"/>
