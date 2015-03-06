@@ -153,11 +153,11 @@ replaceExisting: <c:out value="${replaceExisting}"/><br>
     name="${name}" fileFormat="${fileFormat}" dataType="${dataType}"
                logicalFolderPath="${logicalFolderPath}" 
                site="${dcSite}" location="${location}" replaceExisting="${replaceExisting}"/>
-</c:if>
 
 <%-- Now update result record to include data cataloag path. And maybe the dataset pk. --%>
 <sql:update>
     update ${resultTable} set 
-    virtualPath=?<sql:param value="${logicalFolderPath}"/>
+    virtualPath=?<sql:param value="${logicalFolderPath}/${name}"/>
     where id=?<sql:param value="${resultId}"/>;
 </sql:update>
+</c:if>
