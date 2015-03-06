@@ -48,7 +48,7 @@ request.setAttribute("manufactureDate", result);
                 manufactureDate=?<sql:dateParam value="${manufactureDate}"/>,
                 hardwareStatusId=(select id from HardwareStatus where name="NEW"),
                 createdBy=?<sql:param value="${userName}"/>,
-                creationTS=NOW();
+                creationTS=UTC_TIMESTAMP();
             </sql:update>
             <sql:query var="hardwareQ">
                 select id from Hardware where id=LAST_INSERT_ID();
@@ -58,9 +58,16 @@ request.setAttribute("manufactureDate", result);
                 hardwareStatusId=(select id from HardwareStatus where name="NEW"),
                 hardwareId=LAST_INSERT_ID(),
                 createdBy=?<sql:param value="${userName}"/>,
-                creationTS=NOW();
+                creationTS=UTC_TIMESTAMP();
             </sql:update>
             <c:set var="hardware" value="${hardwareQ.rows[0]}"/>
+            <sql:update>
+                insert into HardwareLocationHistory set
+                locationId=?<sql:param value="${param.locationId}"/>,
+                hardwareId=?<sql:param value="${hardware.id}"/>,
+                createdBy=?<sql:param value="${userName}"/>,
+                creationTS=UTC_TIMESTAMP();
+            </sql:update>
         </sql:transaction>
         <c:redirect url="/displayHardware.jsp" context="/eTraveler">
             <c:param name="hardwareId" value="${hardware.id}"/>
