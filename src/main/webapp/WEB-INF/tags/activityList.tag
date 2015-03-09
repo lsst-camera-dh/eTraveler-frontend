@@ -20,7 +20,7 @@
   select A.id as activityId, A.begin, A.end, A.createdBy, A.closedBy,
     AFS.name as status,
     P.id as processId, concat(P.name, ' v', P.version) as processName,
-    H.id as hardwareId, H.lsstId, 
+    H.id as hardwareId, H.lsstId, H.manufacturerId,
     HT.name as hardwareName, HT.id as hardwareTypeId
     from Activity A
     inner join Process P on A.processId=P.id
@@ -60,6 +60,8 @@
                       href="displayActivity.jsp" paramId="activityId" paramProperty="activityId"/>
     <c:if test="${empty hardwareId}">
         <display:column property="lsstId" title="LSST Serial Number" sortable="true" headerClass="sortable"
+                        href="displayHardware.jsp" paramId="hardwareId" paramProperty="hardwareId"/>
+        <display:column property="manufacturerId" title="Manufacturer Serial Number" sortable="true" headerClass="sortable"
                         href="displayHardware.jsp" paramId="hardwareId" paramProperty="hardwareId"/>
     </c:if>
     <c:if test="${(empty processId) and (empty hardwareId)}">
