@@ -14,7 +14,7 @@
 <%@attribute name="hardwareStatusId"%>
 
 <sql:query var="result" >
-    select H.id, H.creationTS, H.lsstId, H.manufacturer, H.model, H.manufactureDate,
+    select H.id, H.creationTS, H.lsstId, H.manufacturer, H.manufacturerId, H.model, H.manufactureDate,
     HT.name as hardwareName, HT.id as hardwareTypeId, 
     HS.name as hardwareStatusName
     from Hardware H, HardwareType HT, HardwareStatus HS
@@ -29,6 +29,8 @@
 </sql:query>
 <display:table name="${result.rows}" class="datatable">
     <display:column property="lsstId" title="LSST Serial Number" sortable="true" headerClass="sortable"
+                    href="displayHardware.jsp" paramId="hardwareId" paramProperty="id"/>
+    <display:column property="manufacturerId" title="Manufacturer Serial Number" sortable="true" headerClass="sortable"
                     href="displayHardware.jsp" paramId="hardwareId" paramProperty="id"/>
     <c:if test="${empty hardwareTypeId}">
         <display:column property="hardwareName" title="Type" sortable="true" headerClass="sortable"

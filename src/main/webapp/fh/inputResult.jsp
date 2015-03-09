@@ -31,7 +31,7 @@
         <sql:update>
             insert into ${tableName} set
             inputPatternId=?<sql:param value="${param.inputPatternId}"/>,
-            name=(select label from InputPattern where id=?<sql:param value="${param.inputPatternId}"/>),
+            <%--name=(select label from InputPattern where id=?<sql:param value="${param.inputPatternId}"/>),--%>
             value=?<sql:param value="${param.value}"/>,
             activityId=?<sql:param value="${param.activityId}"/>,
             createdBy=?<sql:param value="${userName}"/>,

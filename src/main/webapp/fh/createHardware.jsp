@@ -44,6 +44,7 @@ request.setAttribute("manufactureDate", result);
                 </c:choose>
                 hardwareTypeId=?<sql:param value="${param.hardwareTypeId}"/>,
                 manufacturer=?<sql:param value="${param.manufacturer}"/>,
+                manufacturerId=?<sql:param value="${param.manufacturerId}"/>,
                 model=?<sql:param value="${param.model}"/>,
                 manufactureDate=?<sql:dateParam value="${manufactureDate}"/>,
                 hardwareStatusId=(select id from HardwareStatus where name="NEW"),
