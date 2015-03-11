@@ -26,7 +26,7 @@
 </h2>
 --%>
 <c:if test="${! empty process.description}">
-    <c:out value="${process.description}"/>
+    <c:out value="${process.description}" escapeXml="false"/>
     <br>
 </c:if>
 <c:if test="${! empty process.instructionsURL}">
