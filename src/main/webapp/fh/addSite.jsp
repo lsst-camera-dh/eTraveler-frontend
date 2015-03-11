@@ -20,7 +20,7 @@
             <c:if test="${! empty param.jhVirtualEnv}">jhVirtualEnv=?<sql:param value="${param.jhVirtualEnv}"/>,</c:if>
             <c:if test="${! empty param.jhOutputRoot}">jhOutputRoot=?<sql:param value="${param.jhOutputRoot}"/>,</c:if>
             createdBy=?<sql:param value="${userName}"/>,
-            creationTS=NOW();
+            creationTS=UTC_TIMESTAMP();
         </sql:update>
         <c:redirect url="${header.referer}"/>
     </body>

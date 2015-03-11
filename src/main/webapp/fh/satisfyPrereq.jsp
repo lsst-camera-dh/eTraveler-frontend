@@ -26,7 +26,7 @@
                     hardwareId=?<sql:param value="${param.componentId}"/>,
                 </c:if>
                 createdBy=?<sql:param value="${userName}"/>,
-                creationTs=now();
+                creationTs=UTC_TIMESTAMP();
             </sql:update>
             
             <c:if test="${! empty param.hardwareRelationshipTypeId}">
@@ -36,7 +36,7 @@
                     componentId=?<sql:param value="${param.componentId}"/>,
                     hardwareRelationshipTypeId=?<sql:param value="${param.hardwareRelationshipTypeId}"/>,
                     createdBy=?<sql:param value="${userName}"/>,
-                    creationTs=now();
+                    creationTs=UTC_TIMESTAMP();
                 </sql:update>
 
                 <sql:update>
@@ -56,7 +56,7 @@
                     hardwareStatusId=(select id from HardwareStatus where name='USED'),
                     hardwareId=?<sql:param value="${param.componentId}"/>,
                     createdBy=?<sql:param value="${userName}"/>,
-                    creationTS=now();
+                    creationTS=UTC_TIMESTAMP();
                 </sql:update>
             </c:if>
         </sql:transaction>

@@ -26,7 +26,7 @@
     rootActivityId=?<sql:param value="${travelerId}"/>,
     reason=?<sql:param value="${reason}"/>,
     approvalGroup=?<sql:param value="${mask}"/>,
-    creationTS=now(),
+    creationTS=UTC_TIMESTAMP(),
     createdBy=?<sql:param value="${userName}"/>;
 </sql:update>
 

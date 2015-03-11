@@ -17,7 +17,7 @@
     <sql:update >
         update Activity set
         activityFinalStatusId=(select id from ActivityFinalStatus where name='superseded'),
-        end=now(),
+        end=UTC_TIMESTAMP(),
         closedBy=?<sql:param value="${userName}"/>
         where id=?<sql:param value="${activityId}"/>;
     </sql:update>
@@ -39,7 +39,7 @@
         iteration=?<sql:param value="${activity.iteration + 1}"/>,
         inNCR=?<sql:param value="${activity.inNCR}"/>,
         createdBy=?<sql:param value="${userName}"/>,
-        creationTS=now();
+        creationTS=UTC_TIMESTAMP();
     </sql:update>
 </sql:transaction>
 

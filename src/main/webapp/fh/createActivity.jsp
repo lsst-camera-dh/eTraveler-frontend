@@ -80,7 +80,7 @@
                     processEdgeId=?<sql:param value="${param.processEdgeId}"/>,
                     inNCR=?<sql:param value="${param.inNCR}"/>,
                     createdBy=?<sql:param value="${userName}"/>,
-                    creationTS=NOW();
+                    creationTS=UTC_TIMESTAMP();
                 </sql:update>
                 --%>
 

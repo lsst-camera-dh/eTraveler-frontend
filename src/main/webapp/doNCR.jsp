@@ -32,7 +32,7 @@
             exitActivityId=?<sql:param value="${param.activityId}"/>,
             NCRActivityId=?<sql:param value="${NCRActivityId}"/>,
             createdBy=?<sql:param value="${userName}"/>,
-            creationTS=now();
+            creationTS=UTC_TIMESTAMP();
         </sql:update>
         <traveler:redirDA activityId="${NCRActivityId}"/>        
     </body>

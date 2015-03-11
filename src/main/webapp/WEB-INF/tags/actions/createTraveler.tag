@@ -27,7 +27,7 @@
         processId=?<sql:param value="${processId}"/>,
         inNCR=?<sql:param value="${inNCR}"/>,
         createdBy=?<sql:param value="${userName}"/>,
-        creationTS=NOW();
+        creationTS=UTC_TIMESTAMP();
     </sql:update>
     <sql:query var="activityQ">
         select * from Activity where id=LAST_INSERT_ID();

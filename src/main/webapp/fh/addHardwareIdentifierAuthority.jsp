@@ -18,7 +18,7 @@
             insert into HardwareIdentifierAuthority set
             name=?<sql:param value="${param.name}"/>,
             createdBy=?<sql:param value="${userName}"/>,
-            creationTS=NOW();
+            creationTS=UTC_TIMESTAMP();
         </sql:update>
         <c:redirect url="${header.referer}"/>
     </body>

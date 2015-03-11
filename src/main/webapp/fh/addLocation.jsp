@@ -19,7 +19,7 @@
             name=?<sql:param value="${param.name}"/>,
             siteId=?<sql:param value="${param.siteId}"/>,
             createdBy=?<sql:param value="${userName}"/>,
-            creationTS=NOW();
+            creationTS=UTC_TIMESTAMP();
         </sql:update>
         <c:redirect url="${header.referer}"/>
     </body>

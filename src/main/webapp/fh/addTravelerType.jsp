@@ -31,7 +31,7 @@ insert into TravelerType set
     owner=?<sql:param value="${param.owner}"/>,
     reason=?<sql:param value="${param.reason}"/>,
     createdBy=?<sql:param value="${userName}"/>,
-    creationTS=now();
+    creationTS=UTC_TIMESTAMP();
         </sql:update>
         <c:redirect url="${header.referer}"/>
     </c:otherwise>

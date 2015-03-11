@@ -20,7 +20,7 @@
             <sql:update >
                 update Activity set 
                 activityFinalStatusId=(select id from ActivityFinalStatus where name='success'),
-                end=now(), 
+                end=UTC_TIMESTAMP(), 
                 closedBy=?<sql:param value="${userName}"/>
                 where 
                 id=?<sql:param value="${param.activityId}"/>;

@@ -56,7 +56,7 @@
             activityId=?<sql:param value="${inputs.jobid}"/>,
             errorString=?<sql:param value="${inputs.status}"/>,
             createdBy=?<sql:param value="${userName}"/>,
-            creationTS=now();
+            creationTS=UTC_TIMESTAMP();
         </sql:update>
     </c:catch>
     <c:if test="${not empty updateErr}">

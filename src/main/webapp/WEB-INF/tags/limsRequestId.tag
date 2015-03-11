@@ -61,7 +61,7 @@
         jobHarnessStepId=(select id from JobHarnessStep where name='registered'),
         activityId=?<sql:param value="${activityRow.id}"/>,
         createdBy=?<sql:param value="${inputs.operator}"/>,
-        creationTS=now();
+        creationTS=UTC_TIMESTAMP();
     </sql:update>
 </c:if>
 

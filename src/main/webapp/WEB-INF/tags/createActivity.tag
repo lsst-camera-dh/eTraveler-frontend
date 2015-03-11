@@ -30,7 +30,7 @@ parentActivityId=?<sql:param value="${parentActivityId}"/>,
 processEdgeId=?<sql:param value="${processEdgeId}"/>,
 inNCR=?<sql:param value="${inNCR}"/>,
 createdBy=?<sql:param value="${userName}"/>,
-creationTS=NOW();
+creationTS=UTC_TIMESTAMP();
     </sql:update>
     <sql:query var="activityQ">
 select last_insert_id() as activityId;

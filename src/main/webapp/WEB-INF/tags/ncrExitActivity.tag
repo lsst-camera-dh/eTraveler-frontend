@@ -17,8 +17,8 @@
 
 <sql:update>
     update Activity set
-    <c:if test="${notStarted}">begin=now(),</c:if>
-        end=now(),
+    <c:if test="${notStarted}">begin=UTC_TIMESTAMP(),</c:if>
+        end=UTC_TIMESTAMP(),
         activityFinalStatusId=(select id from ActivityFinalStatus where name='ncrExit'),
         closedBy=?<sql:param value="${userName}"/>
     where

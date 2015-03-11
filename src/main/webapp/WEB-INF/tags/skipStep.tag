@@ -24,12 +24,12 @@
         processEdgeId=?<sql:param value="${processEdgeId}"/>,
         parentActivityId=?<sql:param value="${parentActivityId}"/>,
         activityFinalStatusId=(select id from ActivityFinalStatus where name='skipped'),
-        begin=now(),
-        end=now(),
+        begin=UTC_TIMESTAMP(),
+        end=UTC_TIMESTAMP(),
         inNCR=?<sql:param value="${inNCR}"/>,
         createdBy=?<sql:param value="${userName}"/>,
         closedBy=?<sql:param value="${userName}"/>,
-        creationTS=now();
+        creationTS=UTC_TIMESTAMP();
     </sql:update>
     <sql:query var="activityQ">
         select LAST_INSERT_ID() as activityId;

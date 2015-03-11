@@ -23,6 +23,6 @@
         hardwareStatusId=?<sql:param value="${hardwareStatusId}"/>,
         hardwareId=?<sql:param value="${hardwareId}"/>,
         createdBy=?<sql:param value="${userName}"/>,
-        creationTS=now();
+        creationTS=UTC_TIMESTAMP();
     </sql:update>
 </sql:transaction>

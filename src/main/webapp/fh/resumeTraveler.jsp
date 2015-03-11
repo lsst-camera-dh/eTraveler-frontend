@@ -23,7 +23,7 @@
                 <sql:update>
                     update StopWorkHistory set
                     resolution='RESUMED',
-                    resolutionTS=now(),
+                    resolutionTS=UTC_TIMESTAMP(),
                     resolvedBy=?<sql:param value="${userName}"/>
                     where
                     rootActivityId=?<sql:param value="${travelerId}"/>

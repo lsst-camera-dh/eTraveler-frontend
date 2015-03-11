@@ -20,7 +20,7 @@
             autoSequenceWidth=?<sql:param value="${param.width}"/>,
             description=?<sql:param value="${param.description}"/>,
             createdBy=?<sql:param value="${userName}"/>,
-            creationTS=NOW();
+            creationTS=UTC_TIMESTAMP();
         </sql:update>
         <c:redirect url="${header.referer}"/>
     </body>

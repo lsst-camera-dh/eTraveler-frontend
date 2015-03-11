@@ -20,7 +20,7 @@
             hardwareTypeId=?<sql:param value="${param.hardwareTypeId}"/>,
             componentTypeId=?<sql:param value="${param.componentTypeId}"/>,
             createdBy=?<sql:param value="${userName}"/>,
-            creationTS=NOW();
+            creationTS=UTC_TIMESTAMP();
         </sql:update>
         <c:redirect url="${header.referer}"/>
     </body>

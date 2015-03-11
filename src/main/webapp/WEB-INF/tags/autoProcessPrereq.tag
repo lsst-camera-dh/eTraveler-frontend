@@ -42,7 +42,7 @@ prerequisitePatternId=?<sql:param value="${prereq.ppid}"/>,
 activityId=?<sql:param value="${activityId}"/>,
 prerequisiteActivityId=?<sql:param value="${activityQ.rows[0].id}"/>,
 createdBy=?<sql:param value="${userName}"/>,
-creationTS=now();
+creationTS=UTC_TIMESTAMP();
             </sql:update>
         </c:when>
         <c:otherwise>

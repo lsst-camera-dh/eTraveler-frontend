@@ -11,7 +11,7 @@
 
 <sql:update >
     update Activity set
-    begin=now()
+    begin=UTC_TIMESTAMP()
     where id=?<sql:param value="${activityId}"/>
     and begin is null;
 </sql:update>

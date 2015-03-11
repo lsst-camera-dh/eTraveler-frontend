@@ -35,7 +35,7 @@
             value=?<sql:param value="${param.value}"/>,
             activityId=?<sql:param value="${param.activityId}"/>,
             createdBy=?<sql:param value="${userName}"/>,
-            creationTS=NOW();
+            creationTS=UTC_TIMESTAMP();
         </sql:update>
 
 <%--
@@ -47,7 +47,7 @@
                     value=?<sql:param value="${param.value}"/>,
                     activityId=?<sql:param value="${param.activityId}"/>,
                     createdBy=?<sql:param value="${userName}"/>,
-                    creationTS=NOW();
+                    creationTS=UTC_TIMESTAMP();
                 </sql:update>
             </c:when>
             <c:when test="${param.ISName == 'string'}">
@@ -57,7 +57,7 @@
                     value=?<sql:param value="${param.value}"/>,
                     activityId=?<sql:param value="${param.activityId}"/>,
                     createdBy=?<sql:param value="${userName}"/>,
-                    creationTS=NOW();
+                    creationTS=UTC_TIMESTAMP();
                 </sql:update>
             </c:when>
             <c:when test="${param.ISName == 'filepath'}">
@@ -67,7 +67,7 @@
                     value=?<sql:param value="${param.value}"/>,
                     activityId=?<sql:param value="${param.activityId}"/>,
                     createdBy=?<sql:param value="${userName}"/>,
-                    creationTS=NOW();
+                    creationTS=UTC_TIMESTAMP();
                  </sql:update>
             </c:when>                   
             <c:otherwise>
@@ -77,7 +77,7 @@
                     value=?<sql:param value="${param.value}"/>,
                     activityId=?<sql:param value="${param.activityId}"/>,
                     createdBy=?<sql:param value="${userName}"/>,
-                    creationTS=NOW();
+                    creationTS=UTC_TIMESTAMP();
                 </sql:update>
             </c:otherwise>
         </c:choose>

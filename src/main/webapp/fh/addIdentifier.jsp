@@ -22,7 +22,7 @@
             hardwareTypeId=?<sql:param value="${param.hardwareTypeId}"/>,
             identifier=?<sql:param value="${param.identifier}"/>,
             createdBy=?<sql:param value="${userName}"/>,
-            creationTS=NOW();
+            creationTS=UTC_TIMESTAMP();
         </sql:update>
 <%--            
         <c:redirect url="displayHardware.jsp">

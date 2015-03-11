@@ -28,8 +28,8 @@
     update Activity set
     activityFinalStatusId=(select id from ActivityFinalStatus where name=?<sql:param value="${status}"/>)
 <%--
-    ,<c:if test="${empty activity.begin}">begin=now(),</c:if>
-    end=now(),
+    ,<c:if test="${empty activity.begin}">begin=UTC_TIMESTAMP(),</c:if>
+    end=UTC_TIMESTAMP(),
     closedBy=?<sql:param value="${userName}"/>
 --%>
     where id=?<sql:param value="${activityId}"/>;    

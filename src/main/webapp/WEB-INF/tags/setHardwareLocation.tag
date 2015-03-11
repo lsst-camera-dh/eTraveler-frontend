@@ -18,7 +18,7 @@
     locationId=?<sql:param value="${newLocationId}"/>,
     hardwareId=?<sql:param value="${hardwareId}"/>,
     createdBy=?<sql:param value="${userName}"/>,
-    creationTS=now();
+    creationTS=UTC_TIMESTAMP();
 </sql:update>
 
 <sql:query var="childrenQ" >

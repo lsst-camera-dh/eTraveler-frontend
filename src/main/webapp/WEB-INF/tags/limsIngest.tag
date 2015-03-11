@@ -45,7 +45,7 @@ schemaVersion=?<sql:param value="${summary.schema_version}"/>,
 schemaInstance=?<sql:param value="${instances[schemaTag]}"/>,
 activityId=?<sql:param value="${inputs.jobid}"/>,
 createdBy=?<sql:param value="${userName}"/>,
-creationTS=NOW();
+creationTS=UTC_TIMESTAMP();
             </sql:update>
         </c:when>
 
@@ -63,7 +63,7 @@ schemaVersion=?<sql:param value="${summary.schema_version}"/>,
 schemaInstance=?<sql:param value="${instances[schemaTag]}"/>,
 activityId=?<sql:param value="${inputs.jobid}"/>,
 createdBy=?<sql:param value="${userName}"/>,
-creationTS=NOW();
+creationTS=UTC_TIMESTAMP();
                     </sql:update>
                 </c:if>
             </c:forEach> <%-- fieldName --%>
@@ -77,12 +77,12 @@ creationTS=NOW();
     jobHarnessStepId=(select id from JobHarnessStep where name='ingested'),
     activityId=?<sql:param value="${inputs.jobid}"/>,
     createdBy=?<sql:param value="${userName}"/>,
-    creationTS=now();
+    creationTS=UTC_TIMESTAMP();
 </sql:update>
 <sql:update >
     update Activity set 
     activityFinalStatusId=(select id from ActivityFinalStatus where name='success'),
-    end=now(), 
+    end=UTC_TIMESTAMP(), 
     closedBy=?<sql:param value="${userName}"/>
     where 
     id=?<sql:param value="${inputs.jobid}"/>;
