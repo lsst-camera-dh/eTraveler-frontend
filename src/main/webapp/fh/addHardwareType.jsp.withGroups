@@ -24,24 +24,24 @@
                 creationTS=utc_timestamp();
             </sql:update>
             <sql:query var="hwtQ">
-                select last_insert_id() as hardwareTypeId;
+                select id as hardwareTypeId from HardwareType where id=last_insert_id();
             </sql:query>
-            <c:set var="hardwareTypeId" value="${hwtQ.rows[0].hardwareTypeId}"/>
+            <c:set var="hardwareType" value="${hwtQ.rows[0]}"/>
             <sql:update>
                 insert into HardwareGroup set
                 name=?<sql:param value="${param.name}"/>,
-                description='entry copied from HardwareType',
+                description=?<sql:param value="singleton group for htype ${param.name}"/>,
                 createdBy=?<sql:param value="${userName}"/>,
                 creationTS=utc_timestamp();
             </sql:update>
             <sql:query var="hwgQ">
-                select last_insert_id() as hardwareGroupId;
+                select id as hardwareGroupId from HardwareGroup where id=last_insert_id() ;
             </sql:query>
-            <c:set var="hardwareGroupId" value="${hwgQ.rows[0].hardwareGroupId}"/>
+            <c:set var="hardwareGroup" value="${hwgQ.rows[0]}"/>
             <sql:update>
                 insert into HardwareTypeGroupMapping set
-                hardwareTypeId=?<sql:param value="${hardwareTypeId}"/>,
-                hardwareGroupId=?<sql:param value="${hardwareGroupId}"/>,
+                hardwareTypeId=?<sql:param value="${hardwareType.hardwareTypeId}"/>,
+                hardwareGroupId=?<sql:param value="${hardwareGroup.hardwareGroupId}"/>,
                 createdBy=?<sql:param value="${userName}"/>,
                 creationTS=utc_timestamp();
             </sql:update>

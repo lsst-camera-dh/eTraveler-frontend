@@ -73,7 +73,7 @@
                             <c:set var="inputType" value="text"/>
                         </c:when>
                         <c:when test="${row.ISName == 'filepath'}">
-                            <c:set var="inputType" value="text"/>
+                            <c:set var="inputType" value="file"/>
                         </c:when>
                         <c:otherwise>
                             <c:set var="inputType" value="number"/>
