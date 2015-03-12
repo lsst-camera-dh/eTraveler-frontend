@@ -1,5 +1,5 @@
 <%-- 
-    Document   : addLocation
+    Document   : addHardwareType
     Created on : Oct 3, 2013, 3:19:15 PM
     Author     : focke
 --%>
