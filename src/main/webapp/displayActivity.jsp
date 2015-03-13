@@ -7,13 +7,21 @@
 <%@page contentType="text/html" pageEncoding="US-ASCII"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql" %>
-<%@taglib prefix="display" uri="http://displaytag.sf.net" %>
 <%@taglib prefix="traveler" tagdir="/WEB-INF/tags"%>
+
+<traveler:checkId table="Activity" id="${param.activityId}"/>
+<sql:query var="activityQ" >
+    select A.*, P.name
+    from Activity A
+    inner join Process P on P.id=A.processId
+    where A.id=?<sql:param value="${param.activityId}"/>;
+</sql:query>
+<c:set var="activity" value="${activityQ.rows[0]}"/>
 <!DOCTYPE html>
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
-        <title>Activity</title>
+        <title>Activity <c:out value="${activity.name}"/></title>
     </head>
     <body>
         <c:set var="activityAutoCreate" value="true" scope="session"/>
@@ -21,15 +29,8 @@
         <traveler:findCurrentStep varStepLink="currentStepLink" varStepEPath="currentStepEPath" 
                                   varStepId="currentStepActivityId" stepList="${stepList}"/>
 
-        <traveler:checkId table="Activity" id="${param.activityId}"/>
-
         <traveler:setPaths activityVar="activityPath" processVar="processPath" activityId="${param.activityId}"/>
-        
-        <sql:query var="activityQ" >
-            select * from Activity where id=?<sql:param value="${param.activityId}"/>;
-        </sql:query>
-        <c:set var="activity" value="${activityQ.rows[0]}"/>
-          
+                  
         <table>
             <tr>
                 <td>

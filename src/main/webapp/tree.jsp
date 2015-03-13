@@ -10,7 +10,7 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
-        <title>JSP Page</title>
+        <title>Tree demo</title>
     </head>
     <body>
         <%

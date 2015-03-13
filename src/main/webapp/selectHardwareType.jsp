@@ -1,5 +1,5 @@
 <%-- 
-    Document   : startProcess
+    Document   : selectHardwareType
     Created on : Jan 29, 2013, 10:38:59 AM
     Author     : focke
 --%>
@@ -11,7 +11,7 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
-        <title>JSP Page</title>
+        <title>Select HardwareType</title>
     </head>
     <body>
         <h1>Pick a Hardware type.</h1>

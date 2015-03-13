@@ -1,5 +1,5 @@
 <%-- 
-    Document   : addLocation
+    Document   : addHardwareRelationshipType
     Created on : Oct 3, 2013, 3:19:15 PM
     Author     : focke
 --%>
@@ -11,7 +11,7 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>JSP Page</title>
+        <title>Add HardwareRelationshipType</title>
     </head>
     <body>
         <sql:update >

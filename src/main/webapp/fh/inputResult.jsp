@@ -11,7 +11,7 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>JSP Page</title>
+        <title>Input Result</title>
     </head>
     <body>
         <c:choose>
@@ -38,50 +38,6 @@
             creationTS=UTC_TIMESTAMP();
         </sql:update>
 
-<%--
-        <c:choose>
-            <c:when test="${param.ISName == 'float'}">
-                <sql:update>
-                    insert into FloatResultManual set
-                    inputPatternId=?<sql:param value="${param.inputPatternId}"/>,
-                    value=?<sql:param value="${param.value}"/>,
-                    activityId=?<sql:param value="${param.activityId}"/>,
-                    createdBy=?<sql:param value="${userName}"/>,
-                    creationTS=UTC_TIMESTAMP();
-                </sql:update>
-            </c:when>
-            <c:when test="${param.ISName == 'string'}">
-                <sql:update>
-                    insert into StringResultManual set
-                    inputPatternId=?<sql:param value="${param.inputPatternId}"/>,
-                    value=?<sql:param value="${param.value}"/>,
-                    activityId=?<sql:param value="${param.activityId}"/>,
-                    createdBy=?<sql:param value="${userName}"/>,
-                    creationTS=UTC_TIMESTAMP();
-                </sql:update>
-            </c:when>
-            <c:when test="${param.ISName == 'filepath'}">
-                <sql:update>
-                    insert into FilepathResultManual set
-                    inputPatternId=?<sql:param value="${param.inputPatternId}"/>,
-                    value=?<sql:param value="${param.value}"/>,
-                    activityId=?<sql:param value="${param.activityId}"/>,
-                    createdBy=?<sql:param value="${userName}"/>,
-                    creationTS=UTC_TIMESTAMP();
-                 </sql:update>
-            </c:when>                   
-            <c:otherwise>
-                <sql:update>
-                    insert into IntResultManual set
-                    inputPatternId=?<sql:param value="${param.inputPatternId}"/>,
-                    value=?<sql:param value="${param.value}"/>,
-                    activityId=?<sql:param value="${param.activityId}"/>,
-                    createdBy=?<sql:param value="${userName}"/>,
-                    creationTS=UTC_TIMESTAMP();
-                </sql:update>
-            </c:otherwise>
-        </c:choose>
---%>
         <c:redirect url="${header.referer}"/>
     </body>
 </html>

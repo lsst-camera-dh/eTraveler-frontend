@@ -5,7 +5,6 @@
 --%>
 
 <%@page contentType="text/html" pageEncoding="US-ASCII"%>
-<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@taglib prefix="traveler" tagdir="/WEB-INF/tags"%>
 <!DOCTYPE html>
 <html>

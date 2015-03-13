@@ -1,5 +1,5 @@
 <%-- 
-    Document   : createTraveler
+    Document   : createHardware
     Created on : Jan 30, 2013, 2:22:04 PM
     Author     : focke
 --%>

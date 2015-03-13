@@ -5,8 +5,6 @@
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql" %>
 <!DOCTYPE html>
 <html>
     <head>
@@ -15,21 +13,12 @@
     </head>
     <body>
         <h1>Stopping Work for Activity ${param.activityId}</h1>
-        <sql:query var="groupsQ">
-            select * from PermissionGroup order by maskBit desc
-        </sql:query>
         <form method="get" action="fh/stopTraveler.jsp">
             <input type="hidden" name="activityId" value="${param.activityId}">       
             <input type="hidden" name="topActivityId" value="${param.topActivityId}">
             <table>
                 <tr><td>Why?</td><td><textarea name="reason"></textarea></td>
-<%--                <tr><td>Who can restart?</td>
-                    <td>
-            <c:forEach var="group" items="${groupsQ.rows}">
-                <input type="checkbox" name="group" value="${group.maskBit}">${group.name}
-            </c:forEach>
-                    </td></tr>--%>
-                </table>
+            </table>
             <input type="submit" value="Yes, really stop">
         </form>
     </body>

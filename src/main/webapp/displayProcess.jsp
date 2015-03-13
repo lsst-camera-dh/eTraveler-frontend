@@ -13,11 +13,20 @@
 <traveler:lastInPath var="processId" processPath="${param.processPath}"/>
 <traveler:checkId table="Process" id="${processId}"/>
 
+<sql:query var="processQ" >
+    select P.*, TT.id as travelerTypeId, HG.name as hgName
+    from Process P
+    inner join HardwareGroup HG on HG.id=P.hardwareGroupId
+    left join TravelerType TT on TT.rootProcessId=P.id
+    where P.id=?<sql:param value="${processId}"/>;
+</sql:query>
+<c:set var="process" value="${processQ.rows[0]}"/>
+
         <!DOCTYPE html>
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
-        <title>Process Dump</title>
+        <title>Process <c:out value="${process.name}"/></title>
     </head>
     <body>
 
@@ -27,14 +36,6 @@
         <h2>Process</h2>
         <traveler:processCrumbs processPath="${param.processPath}"/>
 
-        <sql:query var="processQ" >
-            select P.*, TT.id as travelerTypeId, HG.name as hgName
-            from Process P
-            inner join HardwareGroup HG on HG.id=P.hardwareGroupId
-            left join TravelerType TT on TT.rootProcessId=P.id
-            where P.id=?<sql:param value="${processId}"/>;
-        </sql:query>
-        <c:set var="process" value="${processQ.rows[0]}"/>
         <traveler:processWidget processId="${processId}"/>
                 </td>
                 <td>

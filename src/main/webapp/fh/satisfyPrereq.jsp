@@ -1,5 +1,5 @@
 <%-- 
-    Document   : satusfyPrereq
+    Document   : satisfyPrereq
     Created on : Aug 1, 2013, 3:14:57 PM
     Author     : focke
 --%>
@@ -11,7 +11,7 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>JSP Page</title>
+        <title>Satisfy prerequisite</title>
     </head>
     <body>
         <sql:transaction >

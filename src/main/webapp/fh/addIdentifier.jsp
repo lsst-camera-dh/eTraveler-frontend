@@ -11,7 +11,7 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
-        <title>JSP Page</title>
+        <title>Add Identifier</title>
     </head>
     <body>
 
@@ -24,11 +24,6 @@
             createdBy=?<sql:param value="${userName}"/>,
             creationTS=UTC_TIMESTAMP();
         </sql:update>
-<%--            
-        <c:redirect url="displayHardware.jsp">
-            <c:param name="hardwareId" value="${param['hardwareId']}"/>
-        </c:redirect>
---%>
         <c:redirect url="${header.referer}"/>
     </body>
 </html>

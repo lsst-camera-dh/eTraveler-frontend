@@ -1,5 +1,5 @@
 <%-- 
-    Document   : fakeLims
+    Document   : fakeLimsFront
     Created on : Oct 2, 2013, 2:40:55 PM
     Author     : focke
 --%>
@@ -7,7 +7,6 @@
 <%@page contentType="application/json" pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
-<%@taglib prefix="traveler" tagdir="/WEB-INF/tags"%>
 
 <c:set var="allOk" value="true"/>
 
@@ -37,7 +36,6 @@
 <c:if test="${allOk}">
     <c:set var="urlComponents" value="${fn:split(pageContext.request.requestURI, '/')}"/>
     <c:set var="command" value="${urlComponents[fn:length(urlComponents)-1]}" scope="session"/>
-<%--    <c:url var="backendUrl" value="/limsBack" context="/">--%>
     <c:url var="backendUrl" value="/fakeLimsBack.jsp" context="/">
         <c:param name="dataSourceMode" value="${dataSourceMode}"/>
     </c:url>
