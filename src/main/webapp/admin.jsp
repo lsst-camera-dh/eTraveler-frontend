@@ -12,7 +12,7 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>JSP Page</title>
+        <title>eTraveler Administration</title>
     </head>
     <body>
         
@@ -34,7 +34,7 @@
             Name: <input type="text" name="name" required>
             Site: <select name="siteId">
                 <c:forEach var="siteRow" items="${sitesQ.rows}">
-                    <option value="${siteRow.id}" <c:if test="${! empty sessionScope.siteName and sessionScope.siteName==siteRow.name}">selected</c:if>>${siteRow.name}</option>
+                    <option value="${siteRow.id}" <c:if test="${preferences.siteName==siteRow.name}">selected</c:if>>${siteRow.name}</option>
                 </c:forEach>
             </select>
         </form>

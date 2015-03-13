@@ -4,12 +4,11 @@
     Author     : focke
 --%>
 
-<%@tag description="put the tag description here" pageEncoding="UTF-8"%>
+<%@tag description="Display various stuff about a component's location" pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql" %>
 <%@taglib prefix="display" uri="http://displaytag.sf.net" %>
 
-<%-- The list of normal or fragment attributes can be specified here: --%>
 <%@attribute name="hardwareId" required="true"%>
 
 <sql:query  var="locationHistoryQ">
@@ -57,9 +56,7 @@
         <c:if test="${! empty currentLoc}">
             and L.id!=?<sql:param value="${currentLoc}"/>
         </c:if>
-        <c:if test="${! empty sessionScope.siteId}">
-            and S.id=?<sql:param value="${sessionScope.siteId}"/>
-        </c:if>
+        and S.name=?<sql:param value="${preferences.siteName}"/>
     </sql:query>
 
     <form action="fh/setHardwareLocation.jsp" method="GET">
@@ -67,10 +64,7 @@
         <select name="newLocationId" required>
             <option value="" selected>Pick a new location</option>
             <c:forEach var="lRow" items="${locationsQ.rows}">
-                <option value="${lRow.id}">
-                    <c:if test="${empty sessionScope.siteId}">${lRow.siteName} </c:if>
-                    ${lRow.locationName}
-                </option>
+                <option value="${lRow.id}">${lRow.siteName} ${lRow.locationName}</option>
             </c:forEach>
         </select>
         <input type="submit" value="Move it!"/>

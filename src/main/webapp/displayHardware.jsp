@@ -56,7 +56,7 @@
 
                 Identifier Authority: <select name="authId">
                 <c:forEach var="iaRow" items="${idAuthQ.rows}">
-                    <option value="${iaRow.id}" <c:if test="${! empty sessionScope.siteName and sessionScope.siteName==iaRow.name}">selected</c:if>>${iaRow.name}</option>
+                    <option value="${iaRow.id}" <c:if test="${preferences.idAuthName==iaRow.name}">selected</c:if>>${iaRow.name}</option>
                 </c:forEach>
                 </select>
 

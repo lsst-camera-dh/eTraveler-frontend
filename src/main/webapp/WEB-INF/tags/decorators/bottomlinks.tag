@@ -19,7 +19,6 @@
                 <c:param name="target" value="initiateTraveler.jsp"/>
             </c:url>
             <srs_utils:conditionalLink name="Initiate&nbsp;Traveler" url="${newTravLink}" /> |
-            <srs_utils:conditionalLink name="User Options" url="options.jsp" /> |
             <srs_utils:conditionalLink name="Preferences" url="preferences.jsp"/> |
             <srs_utils:conditionalLink name="Admin" url="admin.jsp" />
         </td>
