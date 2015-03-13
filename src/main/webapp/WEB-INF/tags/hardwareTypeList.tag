@@ -10,21 +10,23 @@
 <%@taglib prefix="display" uri="http://displaytag.sf.net" %>
 
 <%-- The list of normal or fragment attributes can be specified here: --%>
-<%@attribute name="hardwareTypeId"%>
+<%@attribute name="hardwareGroupId"%>
 
 <sql:query var="result" >
     select HT.id, HT.name, count(H.id) as count
     from
     HardwareType HT
-    left join Hardware H on H.hardwareTypeId=HT.id
-    where 1
-    <c:if test="${! empty hardwareTypeId}">
-        and HT.id=?<sql:param value="${hardwareTypeId}"/>
+    <c:if test="${! empty hardwareGroupId}">
+        inner join HardwareTypeGroupMapping HTGM on HTGM.hardwareTypeId=HT.id
     </c:if>
-    group by HT.id
+    left join Hardware H on H.hardwareTypeId=HT.id
+    <c:if test="${! empty hardwareGroupId}">
+        where HTGM.hardwareGroupId=?<sql:param value="${hardwareGroupId}"/>
+    </c:if>
+    group by HT.id;
 </sql:query>
 <display:table name="${result.rows}" class="datatable">
-    <display:column property="name" title="Type" sortable="true" headerClass="sortable"
+    <display:column property="name" title="Name" sortable="true" headerClass="sortable"
                     href="displayHardwareType.jsp" paramId="hardwareTypeId" paramProperty="id"/>
     <display:column property="count" sortable="true" headerClass="sortable"/>
 </display:table>

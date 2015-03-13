@@ -8,7 +8,8 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql" %>
 
-<%@attribute name="hardwareTypeId" required="true"%>
+<%@attribute name="hardwareTypeId"%>
+<%@attribute name="hardwareGroupId"%>
 <%@attribute name="processId"%>
 <%@attribute name="hardwareId"%>
 
@@ -20,13 +21,28 @@
     from 
         Process P
         inner join TravelerType TT on TT.rootProcessId=P.id
+        <c:if test="${(!empty hardwareTypeId) or (!empty hardwareId)}">
+            inner join HardwareTypeGroupMapping HTGM on HTGM.hardwareGroupId=P.hardwareGroupId
+        </c:if>
+        <c:if test="${(empty hardwareTypeId) and (!empty hardwareId)}">
+            inner join Hardware H on H.hardwareTypeId=HTGM.hardwareTypeId
+        </c:if>
     where 
     <c:choose>
-        <c:when test="${empty processId}">
-    P.hardwareTypeId=?<sql:param value="${hardwareTypeId}"/>
+        <c:when test="${!empty processId}">
+    P.id=?<sql:param value="${processId}"/>           
+        </c:when>
+        <c:when test="${!empty hardwareGroupId}">
+    P.hardwareGroupId=?<sql:param value="${hardwareGroupId}"/>
+        </c:when>
+        <c:when test="${!empty hardwareTypeId}">
+    HTGM.hardwareTypeId=?<sql:param value="${hardwareTypeId}"/>
+        </c:when>
+        <c:when test="${!empty hardwareId}">
+    H.id=?<sql:param value="${hardwareId}"/>
         </c:when>
         <c:otherwise>
-    P.id=?<sql:param value="${processId}"/>  
+    false <%-- otherwise it will list all hardware and procs if called with no attributes --%>
         </c:otherwise>
     </c:choose>
     <c:if test="${activeTravelerTypesOnly}">
@@ -38,13 +54,28 @@
 <sql:query var="hardwareQ" >
     select H.id, H.lsstId
     from Hardware H
+    <c:if test="${(!empty hardwareGroupId) or (!empty processId)}">
+        inner join HardwareTypeGroupMapping HTGM on HTGM.hardwareTypeId=H.hardwareTypeId
+    </c:if>
+    <c:if test="${(empty hardwareGroupId) and (!empty processId)}">
+        inner join Process P on P.hardwareGroupId=HTGM.hardwareGroupId
+    </c:if>
     where 
     <c:choose>
-        <c:when test="${empty hardwareId}">
+        <c:when test="${!empty hardwareId}">
+    H.id=?<sql:param value="${hardwareId}"/>  
+        </c:when>
+        <c:when test="${!empty hardwareTypeId}">
     H.hardwareTypeId=?<sql:param value="${hardwareTypeId}"/>
         </c:when>
+        <c:when test="${!empty hardwareGroupId}">
+    HTGM.hardwareGroupId=?<sql:param value="${hardwareGroupId}"/>
+        </c:when>
+        <c:when test="${!empty processId}">
+    P.id=?<sql:param value="${processId}"/>
+        </c:when>
         <c:otherwise>
-    H.id=?<sql:param value="${hardwareId}"/>  
+    false <%-- otherwise it will list all hardware and procs if called with no attributes --%>
         </c:otherwise>
     </c:choose>
     ;

@@ -4,13 +4,14 @@
     Author     : focke
 --%>
 
-<%@tag description="put the tag description here" pageEncoding="US-ASCII"%>
+<%@tag description="List traveler types" pageEncoding="US-ASCII"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql" %>
 <%@taglib prefix="display" uri="http://displaytag.sf.net" %>
 
 <%-- The list of normal or fragment attributes can be specified here: --%>
 <%@attribute name="hardwareTypeId"%>
+<%@attribute name="hardwareGroupId"%>
 <%@attribute name="state"%>
 
 <c:set var="activeTravelerTypesOnly" value="false"/> <%-- should get this from user pref --%>
@@ -28,18 +29,29 @@
 
 <sql:query var="result" >
     select P.id as processId, concat(P.name, ' v', P.version) as processName, 
-        HT.name as hardwareName, HT.id as hardwareTypeId, 
+        HG.name as hardwareGroupName, HG.id as hardwareGroupId, 
         TT.state,
         count(A.id)-count(A.end) as inProgress, count(A.id) as total, count(A.end) as completed 
     from
     Process P
-    inner join HardwareType HT on HT.id=P.hardwareTypeId
+    inner join HardwareGroup HG on HG.id=P.hardwareGroupId
+    <c:if test="${! empty hardwareTypeId}">
+        inner join HardwareTypeGroupMapping HTGM on HTGM.hardwareGroupId=P.hardwareGroupId
+    </c:if>
     inner join TravelerType TT on TT.rootProcessId=P.id
     left join Activity A on (A.processId=P.id and A.parentActivityId is null)
-    where 1
-    <c:if test="${! empty hardwareTypeId}">
-        and HT.id=?<sql:param value="${hardwareTypeId}"/>
-    </c:if>
+    where
+    <c:choose>
+        <c:when test="${! empty hardwareTypeId}">
+            HTGM.hardwareTypeId=?<sql:param value="${hardwareTypeId}"/>
+        </c:when>
+        <c:when test="${! empty hardwareGroupId}">
+            P.hardwareGroupId=?<sql:param value="${hardwareGroupId}"/>
+        </c:when>
+        <c:otherwise>
+            true
+        </c:otherwise>
+    </c:choose>
     <c:if test="${! empty state}">
         and TT.state=?<sql:param value="${state}"/>
     </c:if>
@@ -52,9 +64,9 @@
                     href="displayProcess.jsp" paramId="processPath" paramProperty="processId"/>
 <%--    <display:column property="version" sortable="true" headerClass="sortable"
                     href="displayProcess.jsp" paramId="processPath" paramProperty="processId"/>--%>
-    <c:if test="${empty hardwareTypeId}">
-        <display:column property="hardwareName" title="Component Type" sortable="true" headerClass="sortable"
-                        href="displayHardwareType.jsp" paramId="hardwareTypeId" paramProperty="hardwareTypeId"/>
+    <c:if test="${empty hardwareGroupId}">
+        <display:column property="hardwareGroupName" title="Component Group" sortable="true" headerClass="sortable"
+                        href="displayHardwareGroup.jsp" paramId="hardwareGroupId" paramProperty="hardwareGroupId"/>
     </c:if>
     <c:if test="${empty state}">
         <display:column property="state" sortable="true" headerClass="sortable"/>

@@ -13,6 +13,7 @@
         <title>Hardware Types</title>
     </head>
     <body>
+        <h1>Hardware Types</h1>
         <traveler:hardwareTypeList/>
     </body>
 </html>

@@ -36,8 +36,8 @@
                 </td>
                 <td>
 
-        <h2>Component type</h2>
-        <traveler:hardwareTypeList hardwareTypeId="${process.hardwareTypeId}"/>
+        <h2>Component types</h2>
+        <traveler:hardwareTypeList hardwareGroupId="${process.hardwareGroupId}"/>
                 </td>
             </tr>
         </table>
@@ -61,7 +61,7 @@
         <c:if test="${! empty process.travelerTypeId}">
         <h2>Instances</h2>
         <traveler:activityList processId="${processId}"/>
-        Make a new instance: <traveler:newTravelerForm processId="${processId}" hardwareTypeId="${process.hardwareTypeId}"/>
+        Make a new instance: <traveler:newTravelerForm processId="${processId}" hardwareGroupId="${process.hardwareGroupId}"/>
         </c:if>
     </body>
 </html>

@@ -1,5 +1,5 @@
 <%-- 
-    Document   : processPane
+    Document   : activityPane
     Created on : May 21, 2013, 12:42:51 PM
     Author     : focke
 --%>

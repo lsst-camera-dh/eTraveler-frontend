@@ -6,6 +6,7 @@
     <tr valign="bottom" align="right">
         <td align="right" valign="bottom">
             <srs_utils:conditionalLink name="Welcome" url="welcome.jsp" iswelcome="true"/> | 
+            <srs_utils:conditionalLink name="List&nbsp;Hardware&nbsp;Groups" url="listHardwareGroups.jsp" /> |
             <srs_utils:conditionalLink name="List&nbsp;Hardware&nbsp;Types" url="listHardwareTypes.jsp" /> |
             <srs_utils:conditionalLink name="List&nbsp;Hardware" url="listHardware.jsp" /> |
             <c:url var="newHwLink" value="selectHardwareType.jsp">

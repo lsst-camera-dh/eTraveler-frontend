@@ -27,6 +27,8 @@
         <traveler:processWidget processId="${param.processId}"/>
         
         <c:if test="${! empty param.parentActivityId}">
+            <%-- This is only set if this process is the current step and is not instantiated
+            which never happens if activities are autocreated --%>
             <form METHOD=GET ACTION="fh/createActivity.jsp" target="_top">
                 <input type="hidden" name="parentActivityId" value="${param.parentActivityId}">       
                 <input type="hidden" name="processEdgeId" value="${param.processEdgeId}">       
