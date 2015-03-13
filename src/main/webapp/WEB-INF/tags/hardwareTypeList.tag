@@ -13,7 +13,7 @@
 <%@attribute name="hardwareGroupId"%>
 
 <sql:query var="result" >
-    select HT.id, HT.name, count(H.id) as count
+    select HT.id, HT.name, HT.description, count(H.id) as count
     from
     HardwareType HT
     <c:if test="${! empty hardwareGroupId}">
@@ -28,5 +28,6 @@
 <display:table name="${result.rows}" class="datatable">
     <display:column property="name" title="Name" sortable="true" headerClass="sortable"
                     href="displayHardwareType.jsp" paramId="hardwareTypeId" paramProperty="id"/>
+    <display:column property="description" sortable="true" headerClass="sortable"/>
     <display:column property="count" sortable="true" headerClass="sortable"/>
 </display:table>

@@ -22,8 +22,9 @@
     </head>
     <body>
         <h1>Component type <c:out value="${hardwareType.name}"/></h1>
+        Description: <c:out value="${hardwareType.description}"/><br>
         Added by <c:out value="${hardwareType.createdBy}"/><br>
-        At <c:out value="${hardwareType.creationTS}"/></h2>
+        At <c:out value="${hardwareType.creationTS}"/><br>
     
     <h2>Member of Hardware Groups</h2>
     <traveler:hardwareGroupList hardwareTypeId="${param.hardwareTypeId}"/>

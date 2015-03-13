@@ -26,8 +26,9 @@
         <traveler:processCrumbs processPath="${param.processPath}"/>
 
         <sql:query var="processQ" >
-            select P.*, TT.id as travelerTypeId
+            select P.*, TT.id as travelerTypeId, HG.name as hgName
             from Process P
+            inner join HardwareGroup HG on HG.id=P.hardwareGroupId
             left join TravelerType TT on TT.rootProcessId=P.id
             where P.id=?<sql:param value="${processId}"/>;
         </sql:query>
@@ -35,7 +36,10 @@
         <traveler:processWidget processId="${processId}"/>
                 </td>
                 <td>
-
+                    <c:url var="hwGroupLink" value="displayHardwareGroup.jsp">
+                        <c:param name="hardwareGroupId" value="${process.hardwareGroupId}"/>
+                    </c:url>
+                    <h2>Component Group <a href="${hwGroupLink}"><c:out value="${process.hgName}"/></a></h2>
         <h2>Component types</h2>
         <traveler:hardwareTypeList hardwareGroupId="${process.hardwareGroupId}"/>
                 </td>

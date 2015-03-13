@@ -12,7 +12,7 @@
 <%@attribute name="hardwareTypeId"%>
 
 <sql:query var="groupsQ">
-    select HG.id as hardwareGroupId, HG.name as hardwareGroupName, count(HTGM.id) as nTypes
+    select HG.id as hardwareGroupId, HG.name as hardwareGroupName, HG.description, count(HTGM.id) as nTypes
     from HardwareGroup HG
     inner join HardwareTypeGroupMapping HTGM on HTGM.hardwareGroupId=HG.id
     <c:if test="${!empty hardwareTypeId}">
@@ -24,5 +24,6 @@
 <display:table name="${groupsQ.rows}" class="datatable">
     <display:column property="hardwareGroupName" title="Name" sortable="true" headerClass="sortable"
                     href="displayHardwareGroup.jsp" paramId="hardwareGroupId" paramProperty="hardwareGroupId"/>
+    <display:column property="description" sortable="true" headerClass="sortable"/>
     <display:column property="nTypes" title="Member Types" sortable="true" headerClass="sortable"/>    
 </display:table>

@@ -23,11 +23,13 @@
     </head>
     <body>
         <h1>Hardware Group <c:out value="${hardwareGroup.name}"/></h1>
+        <h2>Descrription</h2>
+            <c:out value="${hardwareGroup.description}"/>
         <h2>Member Hardware Types</h2>
-        <traveler:hardwareTypeList hardwareGroupId="${param.hardwareGroupId}"/>
+            <traveler:hardwareTypeList hardwareGroupId="${param.hardwareGroupId}"/>
         <h2>Applicable Traveler Types</h2>
-        <traveler:travelerTypeList hardwareGroupId="${param.hardwareGroupId}"/>
+            <traveler:travelerTypeList hardwareGroupId="${param.hardwareGroupId}"/>
         <h2>Start a Traveler:</h2>
-        <traveler:newTravelerForm hardwareGroupId="${param.hardwareGroupId}"/>
+            <traveler:newTravelerForm hardwareGroupId="${param.hardwareGroupId}"/>
     </body>
 </html>
