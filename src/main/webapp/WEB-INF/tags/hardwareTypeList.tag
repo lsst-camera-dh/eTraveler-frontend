@@ -9,7 +9,6 @@
 <%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql" %>
 <%@taglib prefix="display" uri="http://displaytag.sf.net" %>
 
-<%-- The list of normal or fragment attributes can be specified here: --%>
 <%@attribute name="hardwareGroupId"%>
 
 <sql:query var="result" >

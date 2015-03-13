@@ -36,10 +36,10 @@
         <traveler:processWidget processId="${processId}"/>
                 </td>
                 <td>
-                    <c:url var="hwGroupLink" value="displayHardwareGroup.jsp">
-                        <c:param name="hardwareGroupId" value="${process.hardwareGroupId}"/>
-                    </c:url>
-                    <h2>Component Group <a href="${hwGroupLink}"><c:out value="${process.hgName}"/></a></h2>
+        <c:url var="hwGroupLink" value="displayHardwareGroup.jsp">
+            <c:param name="hardwareGroupId" value="${process.hardwareGroupId}"/>
+        </c:url>
+        <h2>Component Group <a href="${hwGroupLink}"><c:out value="${process.hgName}"/></a></h2>
         <h2>Component types</h2>
         <traveler:hardwareTypeList hardwareGroupId="${process.hardwareGroupId}"/>
                 </td>

@@ -7,7 +7,6 @@
 <%@tag description="Redirect to the displayActivity page" pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
-<%-- The list of normal or fragment attributes can be specified here: --%>
 <%@attribute name="activityId"%>
 
 <c:choose>

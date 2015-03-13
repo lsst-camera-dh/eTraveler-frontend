@@ -1,16 +1,15 @@
 <%-- 
-    Document   : prereqWidget
+    Document   : activityPrereqWidget
     Created on : Jul 15, 2013, 2:32:28 PM
     Author     : focke
 --%>
 
-<%@tag description="put the tag description here" pageEncoding="UTF-8"%>
+<%@tag description="Display various stuff about prereqs for an Activity" pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql" %>
 <%@taglib prefix="display" uri="http://displaytag.sf.net" %>
 <%@taglib prefix="traveler" tagdir="/WEB-INF/tags"%>
 
-<%-- The list of normal or fragment attributes can be specified here: --%>
 <%@attribute name="activityId" required="true"%>
 
 <sql:query var="activityQ" >
@@ -104,26 +103,9 @@
     </c:otherwise>
 </c:choose>
 
-<table>
-    <tr>
-        <td>
-            <form method="get" action="fh/startActivity.jsp" target="_top">
-                <input type="hidden" name="activityId" value="${activityId}">
-                <input type="hidden" name="topActivityId" value="${param.topActivityId}">
-                <input type="submit" value="Start Work"
-                       <c:if test="${! readyToStart}">disabled</c:if>>
-            </form>                    
-        </td>
-        <%--
-        <td>
-            <traveler:findTraveler var="travelerId" activityId="${activityId}"/>
-            <traveler:isStopped var="isStopped" activityId="${travelerId}"/>
-            <form method="get" action="fh/resumeTraveler.jsp" target="_top">
-                <input type="hidden" name="activityId" value="${travelerId}">
-                <input type="submit" value="Resume Work"
-                       <c:if test="${! isStopped}">disabled</c:if>>
-           </form>
-        </td>
-        --%>
-    </tr>
-</table>
+<form method="get" action="fh/startActivity.jsp" target="_top">
+    <input type="hidden" name="activityId" value="${activityId}">
+    <input type="hidden" name="topActivityId" value="${param.topActivityId}">
+    <input type="submit" value="Start Work"
+           <c:if test="${! readyToStart}">disabled</c:if>>
+</form>                    

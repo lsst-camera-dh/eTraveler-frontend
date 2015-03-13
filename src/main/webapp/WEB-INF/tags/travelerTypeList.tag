@@ -58,12 +58,8 @@
     group by P.id
 </sql:query>
 <display:table name="${result.rows}" class="datatable">
-<%--    <display:column property="processId" sortable="true" headerClass="sortable"
-                    href="displayProcess.jsp" paramId="processPath" paramProperty="processId"/>--%>
     <display:column property="processName" title="Name" sortable="true" headerClass="sortable"
                     href="displayProcess.jsp" paramId="processPath" paramProperty="processId"/>
-<%--    <display:column property="version" sortable="true" headerClass="sortable"
-                    href="displayProcess.jsp" paramId="processPath" paramProperty="processId"/>--%>
     <c:if test="${empty hardwareGroupId}">
         <display:column property="hardwareGroupName" title="Component Group" sortable="true" headerClass="sortable"
                         href="displayHardwareGroup.jsp" paramId="hardwareGroupId" paramProperty="hardwareGroupId"/>

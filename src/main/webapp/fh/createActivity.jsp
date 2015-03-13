@@ -70,19 +70,6 @@
                     parentActivityId="${param.parentActivityId}" processEdgeId="${param.processEdgeId}"
                     inNCR="${param.inNCR}" hardwareRelationshipId="${relationToBreak}"
                     var="newActivityId"/>
-                <%--
-                <sql:update >
-                    insert into Activity set
-                    hardwareId=?<sql:param value="${param.hardwareId}"/>,
-                    <c:if test="${! empty relationToBreak}">hardwareRelationshipId=?<sql:param value="${relationToBreak}"/>,</c:if>
-                    processId=?<sql:param value="${param.processId}"/>,
-                    parentActivityId=?<sql:param value="${param.parentActivityId}"/>,
-                    processEdgeId=?<sql:param value="${param.processEdgeId}"/>,
-                    inNCR=?<sql:param value="${param.inNCR}"/>,
-                    createdBy=?<sql:param value="${userName}"/>,
-                    creationTS=UTC_TIMESTAMP();
-                </sql:update>
-                --%>
 
                 <traveler:redirDA/>
             </c:when>

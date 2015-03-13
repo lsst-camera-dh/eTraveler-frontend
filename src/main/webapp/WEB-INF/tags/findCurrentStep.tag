@@ -57,7 +57,6 @@
         <c:otherwise>
             <c:if test="${firstUninstantiated == 0}">
                 <traveler:trimPath inPath="${step.edgePath}" var="parentPath"/>
-<%--                <c:if test="${step.parentActivityId == lastUnfinished}">--%>
                 <c:if test="${parentPath == lufPath}">
                     <c:set var="firstUninstantiated" value="${step.processId}"/>
                     <c:set var="processEdgeId" value="${step.processEdgeId}"/>
@@ -102,18 +101,11 @@
 
 <c:choose>
     <c:when test="${mode == 'activity'}">
-        <%--<c:choose>
-            <c:when test="${scriptMode}">
-                <c:set var="currentStepLink" value="${theId}"/>
-            </c:when>
-            <c:otherwise>--%>
-                <c:url var="currentStepLink" value="activityPane.jsp">
-                    <c:param name="activityId" value="${theId}"/>
-                    <c:param name="topActivityId" value="${topActivityId}"/>
-                </c:url>
-                <c:set var="currentStepActivityId" value="${theId}"/>
-            <%--</c:otherwise>
-        </c:choose>--%>
+        <c:url var="currentStepLink" value="activityPane.jsp">
+            <c:param name="activityId" value="${theId}"/>
+            <c:param name="topActivityId" value="${topActivityId}"/>
+        </c:url>
+        <c:set var="currentStepActivityId" value="${theId}"/>
     </c:when>
     <c:when test="${mode == 'process'}">
         <c:set var="processUrl" value="${activityAutoCreate ? 'fh/createActivity.jsp' : 'processPane.jsp'}"/>
