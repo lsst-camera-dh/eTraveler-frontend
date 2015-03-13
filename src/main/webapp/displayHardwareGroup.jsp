@@ -23,9 +23,26 @@
     </head>
     <body>
         <h1>Hardware Group <c:out value="${hardwareGroup.name}"/></h1>
-        <h2>Descrription</h2>
+        <h2>Description</h2>
             <c:out value="${hardwareGroup.description}"/>
         <h2>Member Hardware Types</h2>
+        <sql:query var="hwTypesQ">
+            select id, name 
+            from HardwareType 
+            where id not in (select hardwareTypeId 
+                             from HardwareTypeGroupMapping 
+                             where hardwareGroupId=?<sql:param value="${param.hardwareGroupId}"/>)
+            ;
+        </sql:query>
+            <form method="get" action="fh/addTypeToGroup.jsp">
+                <input type="submit" value="Add Member Type">
+                <input type="hidden" name="hardwareGroupId" value="${param.hardwareGroupId}">
+                <select name="hardwareTypeId">
+                    <c:forEach var="hwType" items="${hwTypesQ.rows}">
+                        <option value="${hwType.id}"><c:out value="${hwType.name}"/></option>
+                    </c:forEach>
+                </select>
+            </form>
             <traveler:hardwareTypeList hardwareGroupId="${param.hardwareGroupId}"/>
         <h2>Applicable Traveler Types</h2>
             <traveler:travelerTypeList hardwareGroupId="${param.hardwareGroupId}"/>

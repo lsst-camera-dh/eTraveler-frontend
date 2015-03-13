@@ -15,33 +15,33 @@
         <title>eTraveler Administration</title>
     </head>
     <body>
-        
-        <form method="get" action="fh/addSite.jsp">
-            <input type="submit" value="Add Site">
-            Name: <input type="text" name="name" required>
-            jhVirtualEnv: <input type="text" name="jhVirtualEnv">
-            jhOutputRoot: <input type="text" name="jhOutputRoot">
-        </form>
-        
-        <traveler:siteList/>
-        <hr>
-        
-        <sql:query var="sitesQ" >
-            select id, name from Site
+<hr> 
+        <c:set var="backend" value="/eTravelerBackend"/>
+        <c:set var="backendLink" 
+        value="${pageContext.request.scheme}://${pageContext.request.serverName}:${pageContext.request.serverPort}${backend}"/>
+        <c:url var="backendUrl" value="${backendLink}"/>
+        <a href="${backendUrl}">Upload a new Traveler Type or version</a>
+<hr>
+        <sql:query var="processesQ">
+            select id, name from Process where id not in (select rootProcessId from TravelerType);
         </sql:query>
-        <form method="get" action="fh/addLocation.jsp">
-            <input type="submit" value="Add Location">
-            Name: <input type="text" name="name" required>
-            Site: <select name="siteId">
-                <c:forEach var="siteRow" items="${sitesQ.rows}">
-                    <option value="${siteRow.id}" <c:if test="${preferences.siteName==siteRow.name}">selected</c:if>>${siteRow.name}</option>
+        <form method="get" action="fh/addTravelerType.jsp">
+            <input type="submit" value="Add Traveler Type">
+            Root Process: <select name="rootProcessId">
+                <c:forEach var="process" items="${processesQ.rows}">
+                    <option value="${process.id}"><c:out value="${process.name}"/></option>
                 </c:forEach>
             </select>
+            Owner: <input type="text" name="owner">
+            Reason: <input type="text" name="reason">
         </form>
-
-        <traveler:locationList/>
-        <hr>
-
+<hr>
+<form method="get" action="fh/addHardwareGroup.jsp">
+    <input type="submit" value="Add Hardware Group">
+    Name: <input name="name" type="text" required>
+    Description: <input name="description" type="text">
+</form>
+<hr>
         <form method="get" action="fh/addHardwareType.jsp">
             <input type="submit" value="Add Hardware Type">
             Name or Drawing #: <input type="text" name="name" required>
@@ -55,7 +55,7 @@
             </select><br>
             Description: <input type="text" name="description">
         </form>
-        <hr>
+<hr>
             
         <sql:query var="hardwareTypesQ" >
             select id, name from HardwareType
@@ -76,7 +76,32 @@
         </form>
 
         <traveler:hardwareRelationshipTypeList/>
-        <hr>
+<hr>
+        <form method="get" action="fh/addSite.jsp">
+            <input type="submit" value="Add Site">
+            Name: <input type="text" name="name" required>
+            jhVirtualEnv: <input type="text" name="jhVirtualEnv">
+            jhOutputRoot: <input type="text" name="jhOutputRoot">
+        </form>
+        
+        <traveler:siteList/>
+<hr>
+        
+        <sql:query var="sitesQ" >
+            select id, name from Site
+        </sql:query>
+        <form method="get" action="fh/addLocation.jsp">
+            <input type="submit" value="Add Location">
+            Name: <input type="text" name="name" required>
+            Site: <select name="siteId">
+                <c:forEach var="siteRow" items="${sitesQ.rows}">
+                    <option value="${siteRow.id}" <c:if test="${preferences.siteName==siteRow.name}">selected</c:if>>${siteRow.name}</option>
+                </c:forEach>
+            </select>
+        </form>
+
+        <traveler:locationList/>
+<hr>
 
         <form method="get" action="fh/addHardwareIdentifierAuthority.jsp">
             <input type="submit" value="Add Hardware Identifier Authority">
@@ -84,22 +109,6 @@
         </form>
 
         <traveler:hardwareIdentifierAuthorityList/>
-        <hr>
-        
-        <form method="get" action="fh/addTravelerType.jsp">
-            <input type="submit" value="Add Traveler Type">
-            Root Process: <input type="number" name="rootProcessId" required>
-            Owner: <input type="text" name="owner">
-            Reason: <input type="text" name="reason">
-        </form>
-        <hr>
-
-        <c:set var="backend" value="/eTravelerBackend"/>
-        <c:set var="backendLink" 
-        value="${pageContext.request.scheme}://${pageContext.request.serverName}:${pageContext.request.serverPort}${backend}"/>
-        <c:url var="backendUrl" value="${backendLink}"/>
-        <a href="${backendUrl}">Upload a new Traveler Type or version</a>
-        
-        
+<hr>
     </body>
 </html>

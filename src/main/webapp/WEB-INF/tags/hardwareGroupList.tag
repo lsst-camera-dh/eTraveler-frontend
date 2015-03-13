@@ -14,7 +14,7 @@
 <sql:query var="groupsQ">
     select HG.id as hardwareGroupId, HG.name as hardwareGroupName, HG.description, count(HTGM.id) as nTypes
     from HardwareGroup HG
-    inner join HardwareTypeGroupMapping HTGM on HTGM.hardwareGroupId=HG.id
+    left join HardwareTypeGroupMapping HTGM on HTGM.hardwareGroupId=HG.id
     <c:if test="${!empty hardwareTypeId}">
         where HTGM.hardwareTypeId=?<sql:param value="${hardwareTypeId}"/>
     </c:if>
