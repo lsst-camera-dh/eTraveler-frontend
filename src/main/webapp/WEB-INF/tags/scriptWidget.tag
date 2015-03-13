@@ -11,15 +11,7 @@
 
 <%@attribute name="activityId" required="true"%>
 
-<%--
-<traveler:fullContext var="fullContext"/>
-<c:url var="limsUrl" value="${fullContext}/${appVariables.dataSourceMode}"/>
---%>
-
 <traveler:jhCommand var="command" varError="allOk" activityId="${activityId}"/>
 
 Enter the following command to automate this step:<br>
 <c:out value="${command}"/>
-<%--
-lcatr-iterator --container-id=${activityId} --lims-url=${limsUrl}<br>
---%>

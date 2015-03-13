@@ -1,15 +1,14 @@
 <%-- 
-    Document   : inputWidget
+    Document   : processInputWidget
     Created on : Dec 12, 2013, 10:53:20 AM
     Author     : focke
 --%>
 
-<%@tag description="put the tag description here" pageEncoding="UTF-8"%>
+<%@tag description="Display InputPatterns for a Process" pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@taglib prefix="display" uri="http://displaytag.sf.net" %>
 <%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql" %>
 
-<%-- The list of normal or fragment attributes can be specified here: --%>
 <%@attribute name="processId" required="true"%>
 
 <sql:query var="inputQ" >

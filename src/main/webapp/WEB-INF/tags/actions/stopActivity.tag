@@ -4,12 +4,11 @@
     Author     : focke
 --%>
 
-<%@tag description="put the tag description here" pageEncoding="UTF-8"%>
+<%@tag description="Stop Work on an Activity" pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql" %>
 <%@taglib prefix="ta" tagdir="/WEB-INF/tags/actions"%>
 
-<%-- The list of normal or fragment attributes can be specified here: --%>
 <%@attribute name="activityId" required="true"%>
 <%@attribute name="status"%>
 
@@ -27,11 +26,6 @@
 <sql:update>
     update Activity set
     activityFinalStatusId=(select id from ActivityFinalStatus where name=?<sql:param value="${status}"/>)
-<%--
-    ,<c:if test="${empty activity.begin}">begin=UTC_TIMESTAMP(),</c:if>
-    end=UTC_TIMESTAMP(),
-    closedBy=?<sql:param value="${userName}"/>
---%>
     where id=?<sql:param value="${activityId}"/>;    
 </sql:update>
 

@@ -9,15 +9,17 @@
 <%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql" %>
 <%@taglib prefix="display" uri="http://displaytag.sf.net" %>
 <%@taglib prefix="traveler" tagdir="/WEB-INF/tags"%>
-<!DOCTYPE html>
+
+<traveler:lastInPath var="processId" processPath="${param.processPath}"/>
+<traveler:checkId table="Process" id="${processId}"/>
+
+        <!DOCTYPE html>
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
         <title>Process Dump</title>
     </head>
     <body>
-        <traveler:lastInPath processPath="${param.processPath}"/>
-        <traveler:checkId table="Process" id="${processId}"/>
 
         <table>
             <tr>

@@ -4,12 +4,11 @@
     Author     : focke
 --%>
 
-<%@tag description="put the tag description here" pageEncoding="UTF-8"%>
+<%@tag description="Handle manual inputs for an Activity" pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@taglib prefix="display" uri="http://displaytag.sf.net" %>
 <%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql" %>
 
-<%-- The list of normal or fragment attributes can be specified here: --%>
 <%@attribute name="activityId" required="true"%>
 
 <sql:query var="inputQ" >

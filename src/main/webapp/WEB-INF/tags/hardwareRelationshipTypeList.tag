@@ -4,7 +4,7 @@
     Author     : focke
 --%>
 
-<%@tag description="put the tag description here" pageEncoding="UTF-8"%>
+<%@tag description="List HardwareRelationshipTypes" pageEncoding="UTF-8"%>
 <%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql" %>
 <%@taglib prefix="display" uri="http://displaytag.sf.net" %>
 

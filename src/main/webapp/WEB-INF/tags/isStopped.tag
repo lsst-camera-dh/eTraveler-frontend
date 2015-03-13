@@ -4,7 +4,7 @@
     Author     : focke
 --%>
 
-<%@tag description="put the tag description here" pageEncoding="UTF-8"%>
+<%@tag description="Figure out if an Activity is in Stop Work" pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql" %>
 

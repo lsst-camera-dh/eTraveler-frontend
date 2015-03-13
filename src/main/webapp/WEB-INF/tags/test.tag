@@ -4,17 +4,14 @@
     Author     : focke
 --%>
 
-<%@tag description="put the tag description here" pageEncoding="UTF-8"%>
+<%@tag description="test varios stuff - dev tool only" pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
-<%-- The list of normal or fragment attributes can be specified here: --%>
 <%@attribute name="message"%>
 
-<%-- any content can be specified here e.g.: --%>
 <h2>Start Test</h2>
 <c:set var="fnord" value="eleventy" scope="request"/>
 [${pageContext.request.getHeader("Referer")}]<br>
-[${returnTo}]<br>
 [${pageContext.getRequest().getServerName()}]<br>
 [${pageContext.request.scheme}]<br>
 [${pageContext.request.serverName}]<br>

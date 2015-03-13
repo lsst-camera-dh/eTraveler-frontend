@@ -4,12 +4,11 @@
     Author     : focke
 --%>
 
-<%@tag description="put the tag description here" pageEncoding="US-ASCII"%>
+<%@tag description="Put rows in componentTable" pageEncoding="US-ASCII"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql" %>
 <%@taglib prefix="traveler" tagdir="/WEB-INF/tags"%>
 
-<%-- The list of normal or fragment attributes can be specified here: --%>
 <%@attribute name="hardwareId" required="true"%>
 <%@attribute name="mode" required="true"%><%-- "p" for parents, "c" for children --%>
 

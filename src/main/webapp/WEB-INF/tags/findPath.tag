@@ -1,15 +1,14 @@
 <%-- 
-    Document   : findTraveler
+    Document   : findPath
     Created on : Apr 18, 2014, 2:14:56 PM
     Author     : focke
 --%>
 
-<%@tag description="put the tag description here" pageEncoding="UTF-8"%>
+<%@tag description="Find the edgePath to reach an Activity" pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql" %>
 <%@taglib prefix="traveler" tagdir="/WEB-INF/tags"%>
 
-<%-- The list of normal or fragment attributes can be specified here: --%>
 <%@attribute name="activityId" required="true"%>
 <%@attribute name="var" required="true" rtexprvalue="false"%>
 <%@variable name-from-attribute="var" alias="edgePath" scope="AT_BEGIN"%>

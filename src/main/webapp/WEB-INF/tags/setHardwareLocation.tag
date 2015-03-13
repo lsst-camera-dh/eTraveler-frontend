@@ -4,12 +4,11 @@
     Author     : focke
 --%>
 
-<%@tag description="put the tag description here" pageEncoding="UTF-8"%>
+<%@tag description="Change the Location of a component" pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql" %>
 <%@taglib prefix="traveler" tagdir="/WEB-INF/tags"%>
 
-<%-- The list of normal or fragment attributes can be specified here: --%>
 <%@attribute name="newLocationId" required="true"%>
 <%@attribute name="hardwareId" required="true"%>
 

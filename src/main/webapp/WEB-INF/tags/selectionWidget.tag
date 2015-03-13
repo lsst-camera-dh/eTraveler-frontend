@@ -9,7 +9,6 @@
 <%@taglib prefix="display" uri="http://displaytag.sf.net" %>
 <%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql" %>
 
-<%-- The list of normal or fragment attributes can be specified here: --%>
 <%@attribute name="activityId" %>
 <%@attribute name="processId" %>
 

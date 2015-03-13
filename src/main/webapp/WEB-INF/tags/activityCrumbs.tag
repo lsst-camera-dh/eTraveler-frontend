@@ -9,7 +9,6 @@
 
 <%@tag description="Leave a trail of links so you can find parent activities." pageEncoding="US-ASCII"%>
 
-<%-- The list of normal or fragment attributes can be specified here: --%>
 <%@attribute name="activityPath" required="true"%>
 
 <table>

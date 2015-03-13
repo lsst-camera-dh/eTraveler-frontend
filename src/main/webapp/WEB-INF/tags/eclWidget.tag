@@ -1,13 +1,13 @@
 <%-- 
-    Document   : eclForm
+    Document   : eclWidget
     Created on : Apr 1, 2014, 3:03:22 PM
     Author     : focke
 --%>
 
-<%@tag description="put the tag description here" pageEncoding="UTF-8"%>
+<%@tag description="eLog stuff" pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@taglib prefix="traveler" tagdir="/WEB-INF/tags"%>
 
-<%-- The list of normal or fragment attributes can be specified here: --%>
 <%@attribute name="author" required="true"%>
 <%@attribute name="hardwareTypeId" required="true"%>
 <%@attribute name="hardwareId"%>
@@ -55,8 +55,6 @@
     </c:otherwise>
 </c:choose>
 
-<%--<c:set var="fullContext" 
-       value="${pageContext.request.scheme}://${pageContext.request.serverName}:${pageContext.request.serverPort}${pageContext.request.contextPath}"/>--%>
 <traveler:fullContext var="fullContext"/>
 <c:url var="displayUrl" value="${fullContext}/${page}">
     <c:param name="${paramName}" value="${paramValue}"/>

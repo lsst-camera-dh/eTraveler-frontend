@@ -4,12 +4,11 @@
     Author     : focke
 --%>
 
-<%@tag description="put the tag description here" pageEncoding="US-ASCII"%>
+<%@tag description="Make a table showing components of an assembly, or the chain of assemblies that a component is in" pageEncoding="US-ASCII"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@taglib prefix="display" uri="http://displaytag.sf.net" %>
 <%@taglib prefix="traveler" tagdir="/WEB-INF/tags"%>
 
-<%-- The list of normal or fragment attributes can be specified here: --%>
 <%@attribute name="hardwareId" required="true"%>
 <%@attribute name="mode" required="true"%>
 

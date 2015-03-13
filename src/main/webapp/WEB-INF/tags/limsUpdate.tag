@@ -4,7 +4,7 @@
     Author     : focke
 --%>
 
-<%@tag description="put the tag description here" pageEncoding="UTF-8"%>
+<%@tag description="Update progress of a job harness step" pageEncoding="UTF-8"%>
 
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql" %>
@@ -64,27 +64,6 @@
         <c:set var="message" value="Update Failure."/>
     </c:if>
 </c:if>
-<%--
-<c:if test="${allOk && (! empty inputs.status)}">
-    <c:set var="allOk" value="false"/>
-    <c:set var="message" value="${inputs.status}"/>    
-</c:if>
-
-<c:choose>
-    <c:when test="${allOk}">
-        {
-            "acknowledge": null
-        }
-    </c:when>
-    <c:otherwise>
-        <ta:stopTraveler activityId="${inputs.jobid}" mask="15"
-                         reason="${message}" travelerId="${travelerId}"/>
-        {
-            "acknowledge": "${message}"
-        }
-    </c:otherwise>
-</c:choose>
---%>
 <c:choose>
     <c:when test="${allOk}">
         {

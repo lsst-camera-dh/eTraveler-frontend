@@ -4,10 +4,9 @@
     Author     : focke
 --%>
 
-<%@tag description="put the tag description here" pageEncoding="UTF-8"%>
+<%@tag description="goofy string-building utility function" pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
-<%-- The list of normal or fragment attributes can be specified here: --%>
 <%@attribute name="prefix"%>
 <%@attribute name="sep"%>
 <%@attribute name="var" required="true" rtexprvalue="false"%>

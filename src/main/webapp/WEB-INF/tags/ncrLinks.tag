@@ -4,12 +4,11 @@
     Author     : focke
 --%>
 
-<%@tag description="put the tag description here" pageEncoding="UTF-8"%>
+<%@tag description="Show NCRs that have exited from or returned to an Activity" pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql" %>
 <%@taglib prefix="display" uri="http://displaytag.sf.net" %>
 
-<%-- The list of normal or fragment attributes can be specified here: --%>
 <%@attribute name="activityId" required="true"%>
 <%@attribute name="mode" required="true"%>
 

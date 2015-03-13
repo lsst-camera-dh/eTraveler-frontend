@@ -1,10 +1,10 @@
 <%-- 
-    Document   : datacatPath
+    Document   : registerFile
     Created on : Jan 26, 2015, 4:15:20 PM
     Author     : focke
 --%>
 
-<%@tag description="put the tag description here" pageEncoding="UTF-8"%>
+<%@tag description="Register a file in the data catalog" pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql" %>
@@ -143,21 +143,15 @@ replaceExisting: <c:out value="${replaceExisting}"/><br>
 </c:if>
 <c:set var="doRegister" value="${empty param.doRegister ? false : param.doRegister}"/>
 <c:if test="${doRegister}">
-    <%--
-<dc:dcRegister dataCatalogDb="${dataCatalogDb}"
-    name="${name}" fileFormat="${fileFormat}" dataType="${dataType}"
-               logicalFolderPath="${logicalFolderPath}" groupName="${groupName}"
-               site="${dcSite}" location="${location}" replaceExisting="${replaceExisting}"/>
-    --%>
-<dc:dcRegister dataCatalogDb="${dataCatalogDb}"
-    name="${name}" fileFormat="${fileFormat}" dataType="${dataType}"
-               logicalFolderPath="${logicalFolderPath}" 
-               site="${dcSite}" location="${location}" replaceExisting="${replaceExisting}"/>
+    <dc:dcRegister dataCatalogDb="${dataCatalogDb}"
+        name="${name}" fileFormat="${fileFormat}" dataType="${dataType}"
+                   logicalFolderPath="${logicalFolderPath}" 
+                   site="${dcSite}" location="${location}" replaceExisting="${replaceExisting}"/>
 
-<%-- Now update result record to include data cataloag path. And maybe the dataset pk. --%>
-<sql:update>
-    update ${resultTable} set 
-    virtualPath=?<sql:param value="${logicalFolderPath}/${name}"/>
-    where id=?<sql:param value="${resultId}"/>;
-</sql:update>
+    <%-- Now update result record to include data cataloag path. And maybe the dataset pk. --%>
+    <sql:update>
+        update ${resultTable} set 
+        virtualPath=?<sql:param value="${logicalFolderPath}/${name}"/>
+        where id=?<sql:param value="${resultId}"/>;
+    </sql:update>
 </c:if>

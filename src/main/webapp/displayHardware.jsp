@@ -25,7 +25,7 @@
         <title><c:out value="${hardware.hardwareTypeName} ${hardware.lsstId}"/></title>
     </head>
     <body>
-        <h1>View a component</h1>
+        <h1>Component <c:out value="${hardware.lsstId}"/></h1>
 
         <traveler:hardwareHeader hardwareId="${param.hardwareId}"/>
         <traveler:hardwareStatusWidget hardwareId="${param.hardwareId}"/>

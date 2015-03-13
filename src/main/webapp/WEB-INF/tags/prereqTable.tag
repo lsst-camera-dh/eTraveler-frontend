@@ -4,12 +4,11 @@
     Author     : focke
 --%>
 
-<%@tag description="put the tag description here" pageEncoding="UTF-8"%>
+<%@tag description="Handle simple prereqs in a generic way, really only works for consumables and untracked test equipment" pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql" %>
 <%@taglib prefix="display" uri="http://displaytag.sf.net" %>
 
-<%-- The list of normal or fragment attributes can be specified here: --%>
 <%@attribute name="prereqTypeName" required="true"%>
 <%@attribute name="activityId"%>
 <%@attribute name="processId"%>

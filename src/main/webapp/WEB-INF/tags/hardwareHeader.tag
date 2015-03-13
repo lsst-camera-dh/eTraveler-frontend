@@ -9,7 +9,6 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql" %>
 
-<%-- The list of normal or fragment attributes can be specified here: --%>
 <%@attribute name="hardwareId" required="true"%>
 
 <sql:query var="hardwareQ" >
@@ -30,11 +29,7 @@
 <c:url var="hwLink" value="displayHardware.jsp">
     <c:param name="hardwareId" value="${hardware.id}"/>
 </c:url>
-<%--
-<a href="${hwtLink}"><c:out value="${hardware.name}"/></a> Id <a href="<c:out value="${hwLink}"/>"><c:out value="${hardware.lsstId}"/></a>
-<br>
-Registered at <c:out value="${hardware.creationTS}"/> by <c:out value="${hardware.createdBy}"/>
---%>
+
 <table>
     <tr><td>Type:</td><td><a href="${hwtLink}"><c:out value="${hardware.name}"/></a></td></tr>
     <tr><td>LSST Serial Number:</td><td><a href="<c:out value="${hwLink}"/>"><c:out value="${hardware.lsstId}"/></a></td></tr>

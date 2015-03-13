@@ -8,10 +8,13 @@
 <%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql" %>
 <%@taglib prefix="traveler" tagdir="/WEB-INF/tags"%>
 
-<%@tag description="put the tag description here" pageEncoding="US-ASCII"%>
+<%@tag description="set process and activity paths to reach an Activity" pageEncoding="US-ASCII"%>
 
-<%-- The list of normal or fragment attributes can be specified here: --%>
 <%@attribute name="activityId" required="true"%>
+<%@attribute name="activityVar" required="true" rtexprvalue="false"%>
+<%@variable name-from-attribute="activityVar" alias="activityPath" scope="AT_BEGIN"%>
+<%@attribute name="processVar" required="true" rtexprvalue="false"%>
+<%@variable name-from-attribute="processVar" alias="processPath" scope="AT_BEGIN"%>
 
 <sql:query var="activityQ" >
     select * from Activity where id=?<sql:param value="${activityId}"/>;
@@ -20,13 +23,13 @@
 
 <c:choose>
     <c:when test="${! empty activity.parentActivityId}">
-        <traveler:setPaths activityId="${activity.parentActivityId}"/>
-        <c:set var="processPath" value="${processPath}.${activity.processId}" scope="request"/>
-        <c:set var="activityPath" value="${activityPath}.${activityId}" scope="request"/>
+        <traveler:setPaths activityVar="paPath" processVar="ppPath" activityId="${activity.parentActivityId}"/>
+        <c:set var="processPath" value="${ppPath}.${activity.processId}"/>
+        <c:set var="activityPath" value="${paPath}.${activityId}"/>
     </c:when>
     <c:otherwise>
-        <c:set var="processPath" value="${activity.processId}" scope="request"/>
-        <c:set var="activityPath" value="${activityId}" scope="request"/>        
+        <c:set var="processPath" value="${activity.processId}"/>
+        <c:set var="activityPath" value="${activityId}"/>        
     </c:otherwise>
 </c:choose>
     

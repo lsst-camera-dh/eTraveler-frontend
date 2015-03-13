@@ -23,8 +23,7 @@
 
         <traveler:checkId table="Activity" id="${param.activityId}"/>
 
-        <traveler:setReturn extra="#theFold"/>
-        <traveler:setPaths activityId="${param.activityId}"/>
+        <traveler:setPaths activityVar="activityPath" processVar="processPath" activityId="${param.activityId}"/>
         
         <sql:query var="activityQ" >
             select * from Activity where id=?<sql:param value="${param.activityId}"/>;

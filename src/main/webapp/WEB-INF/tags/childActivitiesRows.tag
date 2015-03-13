@@ -27,7 +27,6 @@
         P.travelerActionMask&(select maskBit from InternalAction where name='async') as isAsync,
         PE.id as processEdgeId, PE.step,
         AFS.name as statusName,
-<%--        JSH.id as jobStepId,--%>
         concat('${myStepPrefix}', abs(PE.step)) as stepPath,
         concat('${myEdgePrefix}', PE.id) as edgePath,
         concat('${myProcessPrefix}', P.id) as processPath,
@@ -37,7 +36,6 @@
         inner join Process P on P.id=A.processId
         inner join ProcessEdge PE on PE.id=A.processEdgeId
         left join ActivityFinalStatus AFS on AFS.id=A.activityFinalStatusId
-<%--        left join JobStepHistory JSH on JSH.activityId=A.id--%>
         left join Exception E on E.exitActivityId=A.id
     where
         A.parentActivityId=?<sql:param value="${activityId}"/>

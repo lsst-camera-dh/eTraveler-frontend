@@ -4,12 +4,11 @@
     Author     : focke
 --%>
 
-<%@tag description="put the tag description here" pageEncoding="US-ASCII"%>
+<%@tag description="List Activities" pageEncoding="US-ASCII"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql" %>
 <%@taglib prefix="display" uri="http://displaytag.sf.net" %>
 
-<%-- The list of normal or fragment attributes can be specified here: --%>
 <%@attribute name="done"%>
 <%@attribute name="hardwareId"%>
 <%@attribute name="processId"%>
@@ -46,16 +45,6 @@
     order by A.begin desc;
 </sql:query>
 <display:table name="${result.rows}" class="datatable">
-<%--    <display:column property="activityId" sortable="true" headerClass="sortable"
-                    href="displayActivity.jsp" paramId="activityId" paramProperty="activityId"/>
-    <c:if test="${empty processId}">
-        <display:column property="processId" sortable="true" headerClass="sortable"
-                        href="displayProcess.jsp" paramId="processPath" paramProperty="processId"/>
-        <display:column property="processName" sortable="true" headerClass="sortable"
-                        href="displayProcess.jsp" paramId="processPath" paramProperty="processId"/>
-        <display:column property="version" sortable="true" headerClass="sortable"
-                        href="displayProcess.jsp" paramId="processPath" paramProperty="processId"/>
-    </c:if>--%>
     <display:column property="processName" title="Name" sortable="true" headerClass="sortable"
                       href="displayActivity.jsp" paramId="activityId" paramProperty="activityId"/>
     <c:if test="${empty hardwareId}">
@@ -70,9 +59,7 @@
     </c:if>
     <display:column property="begin" sortable="true" headerClass="sortable"/>
     <display:column property="createdBy" sortable="true" headerClass="sortable"/>
-<%--    <c:if test="${done}">  Why? --%>
     <display:column property="status" sortable="true" headerClass="sortable"/>
         <display:column property="end" sortable="true" headerClass="sortable"/>
         <display:column property="closedBy" sortable="true" headerClass="sortable"/>
-<%--    </c:if>--%>
 </display:table>        

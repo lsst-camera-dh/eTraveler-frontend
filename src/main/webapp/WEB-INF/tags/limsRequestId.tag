@@ -4,7 +4,7 @@
     Author     : focke
 --%>
 
-<%@tag description="put the tag description here" pageEncoding="UTF-8"%>
+<%@tag description="Give the job harness an Id for the job" pageEncoding="UTF-8"%>
 
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql" %>
@@ -27,8 +27,6 @@
         and P.userVersionString=?<sql:param value="${inputs.version}"/>
         and P.travelerActionMask&(select maskBit from InternalAction where name='harnessedJob')!=0
         and HT.name=?<sql:param value="${inputs.unit_type}"/>
- <%--       and JSH.id is null
-        and A.createdBy=?<sql:param value="${inputs.operator}"/>--%>
         and A.begin is not null
         and A.end is null
         and A.activityFinalStatusId is null

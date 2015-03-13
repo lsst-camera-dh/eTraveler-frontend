@@ -16,11 +16,6 @@
 <c:set var="activity" value="${activityQ.rows[0]}"/>
 
 <table>
-    <%--
-    <tr>
-        <th>What</th><th>When</th><th>Who</th>
-    </tr>
-    --%>
     <tr>
         <td>Created:</td><td>${activity.creationTS}</td><td>${activity.createdBy}</td>
     </tr>

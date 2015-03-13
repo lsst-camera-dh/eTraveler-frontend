@@ -4,13 +4,12 @@
     Author     : focke
 --%>
 
-<%@tag description="put the tag description here" pageEncoding="UTF-8"%>
+<%@tag description="Stop Work on a process traveler" pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql" %>
 <%@taglib prefix="ta" tagdir="/WEB-INF/tags/actions"%>
 <%@taglib prefix="traveler" tagdir="/WEB-INF/tags"%>
 
-<%-- The list of normal or fragment attributes can be specified here: --%>
 <%@attribute name="activityId" required="true"%>
 <%@attribute name="mask" required="true"%>
 <%@attribute name="reason" required="true"%>
@@ -30,5 +29,4 @@
     createdBy=?<sql:param value="${userName}"/>;
 </sql:update>
 
-<%--<traveler:failActivity activityId="${activityId}" status="stopped"/>--%>
 <ta:stopActivity activityId="${travelerId}"/>

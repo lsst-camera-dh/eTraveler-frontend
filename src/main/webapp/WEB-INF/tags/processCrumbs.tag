@@ -8,7 +8,6 @@
 
 <%@tag description="Leave a trail of links so you can find parent processes." pageEncoding="US-ASCII"%>
 
-<%-- The list of normal or fragment attributes can be specified here: --%>
 <%@attribute name="processPath" required="true"%>
 
 <table>
