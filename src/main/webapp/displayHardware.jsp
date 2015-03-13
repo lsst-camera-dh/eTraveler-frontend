@@ -9,17 +9,24 @@
 <%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql" %>
 <%@taglib prefix="display" uri="http://displaytag.sf.net" %>
 <%@taglib prefix="traveler" tagdir="/WEB-INF/tags"%>
+
+<traveler:checkId table="Hardware" id="${param.hardwareId}"/>
+<sql:query var="hardwareQ">
+    select H.*, HT.name as hardwareTypeName
+    from Hardware H
+    inner join HardwareType HT on HT.id=H.hardwareTypeId
+    where H.id=?<sql:param value="${param.hardwareId}"/>
+</sql:query>
+<c:set var="hardware" value="${hardwareQ.rows[0]}"/>
 <!DOCTYPE html>
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
-        <title>Hardware</title>
+        <title><c:out value="${hardware.hardwareTypeName} ${hardware.lsstId}"/></title>
     </head>
     <body>
         <h1>View a component</h1>
 
-        <traveler:checkId table="Hardware" id="${param.hardwareId}"/>
-        
         <traveler:hardwareHeader hardwareId="${param.hardwareId}"/>
         <traveler:hardwareStatusWidget hardwareId="${param.hardwareId}"/>
         

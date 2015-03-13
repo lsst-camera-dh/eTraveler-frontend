@@ -7,7 +7,7 @@
 
 <html>
     <head>
-        <title>Preferences</title>
+        <title>eTraveler Preferences</title>
     </head>
     
     <body>
