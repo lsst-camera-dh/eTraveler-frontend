@@ -11,16 +11,21 @@
 <%@taglib prefix="traveler" tagdir="/WEB-INF/tags"%>
 <%@taglib uri="/tlds/dcTagLibrary.tld" prefix="dc"%>
 
-<%@attribute name="resultId" required="true"%>
+<%@attribute name="activityId" required="true"%>
+<%@attribute name="name" required="true"%>
 <%@attribute name="mode" required="true"%>
+<%@attribute name="varFsPath" required="true" rtexprvalue="false"%>
+<%@variable name-from-attribute="varFsPath" alias="fullFsPath" scope="AT_BEGIN"%>
+<%@attribute name="varDcPath" required="true" rtexprvalue="false"%>
+<%@variable name-from-attribute="varDcPath" alias="fullVirtualPath" scope="AT_BEGIN"%>
+<%@attribute name="varDcPk" required="true" rtexprvalue="false"%>
+<%@variable name-from-attribute="varDcPk" alias="dcPk" scope="AT_BEGIN"%>
 
 <c:choose>
     <c:when test="${mode == 'manual'}">
-        <c:set var="resultTable" value="FilepathResultManual"/>
         <c:set var="modePath" value="${initParam['uploadedSubfolder']}"/>
     </c:when>
     <c:when test="${mode == 'harnessed'}">
-        <c:set var="resultTable" value="FilepathResultHarnessed"/>
         <c:set var="modePath" value="${initParam['mirroredSubfolder']}"/>
     </c:when>
     <c:otherwise>
@@ -28,30 +33,25 @@
     </c:otherwise>
 </c:choose>
 
-<sql:query var="resultQ">
+<sql:query var="activityQ">
     select
-        R.value as fileName,
         A.id as activityId,
         P.name as processName, P.userVersionString,
         H.id as hardwareId, H.lsstId, 
         HT.name as hardwareTypeName
     from
-        ${resultTable} as R
-        inner join Activity A on A.id=R.activityId
+        Activity A
         inner join Process P on P.id=A.processId
         inner join Hardware H on H.id=A.hardwareId
         inner join HardwareType HT on HT.id=H.hardwareTypeId
     where
-        R.id=?<sql:param value="${resultId}"/>
+        A.id=?<sql:param value="${activityId}"/>
     ;
 </sql:query>
-<c:set var="result" value="${resultQ.rows[0]}"/>
+<c:set var="activity" value="${activityQ.rows[0]}"/>
 
 <%-- dataCatalogDb --%>
 <c:set var="dataCatalogDb" value="${appVariables.dataCatalogDb}"/>
-
-<%-- name --%>
-<c:set var="name" value="${result.fileName}"/>
 
 <%-- fileFormat --%>
 <c:set var="fnComponents" value="${fn:split(name, '.')}"/>
@@ -69,7 +69,7 @@
     inner join HardwareLocationHistory HLH on HLH.hardwareId=H.id
     inner join Location L on L.id=HLH.locationId
     inner join Site S on S.id=L.siteId
-    where H.id=?<sql:param value="${result.hardwareId}"/>
+    where H.id=?<sql:param value="${activity.hardwareId}"/>
     order by HLH.id desc limit 1;
 </sql:query>
 <c:choose>
@@ -79,17 +79,16 @@
         <c:set var="jhOutputRoot" value="${site.jhOutputRoot}"/>
     </c:when>
     <c:otherwise>
-        <traveler:error message="Component ${result.lsstId} has no location."/>
+        <traveler:error message="Component ${activity.lsstId} has no location."/>
     </c:otherwise>
 </c:choose>
 
-<%-- <c:set var="version" value="${empty result.userVersionString ? '' : '/' + result.userVersionString}"/> --%>
 <c:choose>
-    <c:when test="${empty result.userVersionString}">
+    <c:when test="${empty activity.userVersionString}">
         <c:set var="processVersion" value=""/>
     </c:when>
     <c:otherwise>
-        <c:set var="processVersion" value="/${result.userVersionString}"/>
+        <c:set var="processVersion" value="/${activity.userVersionString}"/>
     </c:otherwise>
 </c:choose>
 
@@ -105,7 +104,7 @@
 <c:set var="dcHead" value="${initParam['datacatFolder']}${dataSourceFolder}/${modePath}/${siteName}"/>
 
 <c:set var="commonPath" value=
-"${result.hardwareTypeName}/${result.lsstId}/${result.processName}${processVersion}/${result.activityId}"
+"${activity.hardwareTypeName}/${activity.lsstId}/${activity.processName}${processVersion}/${activityId}"
 />
 
 <c:set var="logicalFolderPath" value="${dcHead}/${commonPath}"/>
@@ -113,7 +112,7 @@
 <%-- groupName --%>
 <c:set var="groupName" value="null"/>
 
-<%-- site, location --%>
+<%-- site, fullFsPath --%>
 <c:choose>
     <c:when test="${mode=='harnessed'}">
         <c:set var="dcSite" value="${siteName}"/>
@@ -124,7 +123,7 @@
         <c:set var="fsHead" value="${initParam['eTravelerFileStore']}${dataSourceFolder}/${siteName}"/>
     </c:when>
 </c:choose>
-<c:set var="location" value="${fsHead}/${commonPath}/${result.fileName}"/>
+<c:set var="fullFsPath" value="${fsHead}/${commonPath}/${name}"/>
 
 <%-- replaceExisting --%>
 <c:set var="replaceExisting" value="false"/>
@@ -138,7 +137,7 @@ dataType: <c:out value="${dataType}"/><br>
 logicalFolderPath: <c:out value="${logicalFolderPath}"/><br>
 groupName: <c:out value="${groupName}"/><br>
 site: <c:out value="${dcSite}"/><br>
-location: <c:out value="${location}"/><br>
+location: <c:out value="${fullFsPath}"/><br>
 replaceExisting: <c:out value="${replaceExisting}"/><br>
 </c:if>
 <c:set var="doRegister" value="${empty param.doRegister ? false : param.doRegister}"/>
@@ -146,15 +145,17 @@ replaceExisting: <c:out value="${replaceExisting}"/><br>
     <dc:dcRegister dataCatalogDb="${dataCatalogDb}"
         name="${name}" fileFormat="${fileFormat}" dataType="${dataType}"
                    logicalFolderPath="${logicalFolderPath}" 
-                   site="${dcSite}" location="${location}" replaceExisting="${replaceExisting}"/>
+                   site="${dcSite}" location="${fullFsPath}" replaceExisting="${replaceExisting}"/>
 
     <%-- Now update result record to include data cataloag path. And maybe the dataset pk. --%>
     <%-- could update value to hold the full path instead of just the filename. Kludgy. --%>
     <%-- instead this should take value (and activityId?) as input, not result
-    pass full path, virtualPath, and dsPk up to the caller --%>
+    pass full path, virtualPath, and dsPk up to the caller
     <sql:update>
         update ${resultTable} set 
         virtualPath=?<sql:param value="${logicalFolderPath}/${name}"/>
         where id=?<sql:param value="${resultId}"/>;
-    </sql:update>
+    </sql:update> --%>
+    <c:set var="fullVirtualPath" value="${logicalFolderPath}/${name}"/>
+    <c:set var="dcPk" value="0"/>
 </c:if>
