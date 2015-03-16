@@ -7,7 +7,7 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql" %>
-<%@taglib prefix="traveler" tagdir="/WEB-INF/tags"%>
+<%@taglib prefix="ta" tagdir="/WEB-INF/tags/actions"%>
 <!DOCTYPE html>
 <html>
     <head>
@@ -24,8 +24,8 @@
             </c:when>
             <c:when test="${param.ISName == 'filepath'}">
                 <c:set var="tableName" value="FilepathResultManual"/>
-                <traveler:registerFile activityId="${param.activityId}" name="${param.value}" mode="manual" 
-                                       varFsPath="fsPath" varDcPath="dcPath" varDcPk="dcPk"/>
+                <ta:registerFile activityId="${param.activityId}" name="${param.value}" mode="manual" 
+                                 varFsPath="fsPath" varDcPath="dcPath" varDcPk="dcPk"/>
                 <%-- Upload it 
                 
                 --%>

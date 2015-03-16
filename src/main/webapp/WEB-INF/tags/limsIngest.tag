@@ -7,6 +7,7 @@
 <%@tag description="Ingest result summarys from the job harness" pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql" %>
+<%@taglib prefix="ta" tagdir="/WEB-INF/tags/actions"%>
 
 <c:set var="allOk" value="true"/>
 
@@ -34,16 +35,16 @@
     <c:choose>
 
         <c:when test="${summary.schema_name == 'fileref'}">
-            <%-- Register it 
-            
-            --%>
+            <ta:registerFile activityId="${inputs.JobId}" name="${summary.path}" mode="harnessed" 
+                             varFsPath="fsPath" varDcPath="dcPath" varDcPk="dcPk"/>            
             <sql:update>
 insert into FilepathResultHarnessed set
 name='path',
-value=?<sql:param value="${summary.path}"/>,
+value=?<sql:param value="${fsPath}"/>,
 size=?<sql:param value="${summary.size}"/>,
 sha1=?<sql:param value="${summary.sha1}"/>,
-<%-- Add proper value, virtualPath, dsPk --%>
+virtualPath=?<sql:param value="${dcPath}"/>,
+catalogKey=?<sql:param value="${dcPk}"/>,
 schemaName='fileref',
 schemaVersion=?<sql:param value="${summary.schema_version}"/>,
 schemaInstance=?<sql:param value="${instances[schemaTag]}"/>,
