@@ -140,22 +140,13 @@ site: <c:out value="${dcSite}"/><br>
 location: <c:out value="${fullFsPath}"/><br>
 replaceExisting: <c:out value="${replaceExisting}"/><br>
 </c:if>
-<c:set var="doRegister" value="${empty param.doRegister ? false : param.doRegister}"/>
+<%--<c:set var="doRegister" value="${empty param.doRegister ? false : param.doRegister}"/>--%>
+<c:set var="doRegister" value="true"/>
 <c:if test="${doRegister}">
     <dc:dcRegister dataCatalogDb="${dataCatalogDb}"
         name="${name}" fileFormat="${fileFormat}" dataType="${dataType}"
                    logicalFolderPath="${logicalFolderPath}" 
                    site="${dcSite}" location="${fullFsPath}" replaceExisting="${replaceExisting}"/>
-
-    <%-- Now update result record to include data cataloag path. And maybe the dataset pk. --%>
-    <%-- could update value to hold the full path instead of just the filename. Kludgy. --%>
-    <%-- instead this should take value (and activityId?) as input, not result
-    pass full path, virtualPath, and dsPk up to the caller
-    <sql:update>
-        update ${resultTable} set 
-        virtualPath=?<sql:param value="${logicalFolderPath}/${name}"/>
-        where id=?<sql:param value="${resultId}"/>;
-    </sql:update> --%>
-    <c:set var="fullVirtualPath" value="${logicalFolderPath}/${name}"/>
-    <c:set var="dcPk" value="0"/>
 </c:if>
+<c:set var="fullVirtualPath" value="${logicalFolderPath}/${name}"/>
+<c:set var="dcPk" value="0"/>
