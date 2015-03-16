@@ -7,6 +7,7 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql" %>
+<%@taglib prefix="traveler" tagdir="/WEB-INF/tags"%>
 <!DOCTYPE html>
 <html>
     <head>
@@ -23,10 +24,9 @@
             </c:when>
             <c:when test="${param.ISName == 'filepath'}">
                 <c:set var="tableName" value="FilepathResultManual"/>
+                <traveler:registerFile activityId="${param.activityId}" name="${param.value}" mode="manual" 
+                                       varFsPath="fsPath" varDcPath="dcPath" varDcPk="dcPk"/>
                 <%-- Upload it 
-                
-                --%>
-                <%-- Register it 
                 
                 --%>
             </c:when>                   
@@ -35,14 +35,21 @@
             </c:otherwise>
         </c:choose>
         <sql:update>
-            insert into ${tableName} set
-            inputPatternId=?<sql:param value="${param.inputPatternId}"/>,
-            <%--name=(select label from InputPattern where id=?<sql:param value="${param.inputPatternId}"/>),--%>
-            value=?<sql:param value="${param.value}"/>,
-            activityId=?<sql:param value="${param.activityId}"/>,
-            <%-- add extra fields (value, virtualPath, dsPk) if file --%>
-            createdBy=?<sql:param value="${userName}"/>,
-            creationTS=UTC_TIMESTAMP();
+insert into ${tableName} set
+inputPatternId=?<sql:param value="${param.inputPatternId}"/>,
+activityId=?<sql:param value="${param.activityId}"/>,
+<c:choose>
+    <c:when test="${param.ISName == 'filepath'}">
+value=?<sql:param value="${fsPath}"/>,
+virtualPath=?<sql:param value="${dcPath}"/>,
+catalogKey=?<sql:param value="${dcPk}"/>,
+    </c:when>
+    <c:otherwise>
+value=?<sql:param value="${param.value}"/>,
+    </c:otherwise>
+</c:choose>
+createdBy=?<sql:param value="${userName}"/>,
+creationTS=UTC_TIMESTAMP();
         </sql:update>
 
         <c:redirect url="${header.referer}"/>
