@@ -149,6 +149,9 @@ replaceExisting: <c:out value="${replaceExisting}"/><br>
                    site="${dcSite}" location="${location}" replaceExisting="${replaceExisting}"/>
 
     <%-- Now update result record to include data cataloag path. And maybe the dataset pk. --%>
+    <%-- could update value to hold the full path instead of just the filename. Kludgy. --%>
+    <%-- instead this should take value (and activityId?) as input, not result
+    pass full path, virtualPath, and dsPk up to the caller --%>
     <sql:update>
         update ${resultTable} set 
         virtualPath=?<sql:param value="${logicalFolderPath}/${name}"/>

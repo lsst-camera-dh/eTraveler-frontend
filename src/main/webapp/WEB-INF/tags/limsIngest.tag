@@ -34,12 +34,16 @@
     <c:choose>
 
         <c:when test="${summary.schema_name == 'fileref'}">
+            <%-- Register it 
+            
+            --%>
             <sql:update>
 insert into FilepathResultHarnessed set
 name='path',
 value=?<sql:param value="${summary.path}"/>,
 size=?<sql:param value="${summary.size}"/>,
 sha1=?<sql:param value="${summary.sha1}"/>,
+<%-- Add proper value, virtualPath, dsPk --%>
 schemaName='fileref',
 schemaVersion=?<sql:param value="${summary.schema_version}"/>,
 schemaInstance=?<sql:param value="${instances[schemaTag]}"/>,

@@ -23,6 +23,12 @@
             </c:when>
             <c:when test="${param.ISName == 'filepath'}">
                 <c:set var="tableName" value="FilepathResultManual"/>
+                <%-- Upload it 
+                
+                --%>
+                <%-- Register it 
+                
+                --%>
             </c:when>                   
             <c:otherwise>
                 <c:set var="tableName" value="IntResultManual"/>
@@ -34,6 +40,7 @@
             <%--name=(select label from InputPattern where id=?<sql:param value="${param.inputPatternId}"/>),--%>
             value=?<sql:param value="${param.value}"/>,
             activityId=?<sql:param value="${param.activityId}"/>,
+            <%-- add extra fields (value, virtualPath, dsPk) if file --%>
             createdBy=?<sql:param value="${userName}"/>,
             creationTS=UTC_TIMESTAMP();
         </sql:update>
