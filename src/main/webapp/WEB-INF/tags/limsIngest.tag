@@ -35,7 +35,7 @@
     <c:choose>
 
         <c:when test="${summary.schema_name == 'fileref'}">
-            <ta:registerFile activityId="${inputs.JobId}" name="${summary.path}" mode="harnessed" 
+            <ta:registerFile activityId="${inputs.jobid}" name="${summary.path}" mode="harnessed" 
                              varFsPath="fsPath" varDcPath="dcPath" varDcPk="dcPk"/>            
             <sql:update>
 insert into FilepathResultHarnessed set

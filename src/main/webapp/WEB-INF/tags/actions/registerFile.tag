@@ -128,7 +128,8 @@
 <%-- replaceExisting --%>
 <c:set var="replaceExisting" value="false"/>
 
-<c:if test="${not param.terse}">
+<%--<c:if test="${not param.terse}">--%>
+<c:if test="false">
 <br>
 dataCatalogDb: <c:out value="${dataCatalogDb}"/><br>
 name: <c:out value="${name}"/><br>
