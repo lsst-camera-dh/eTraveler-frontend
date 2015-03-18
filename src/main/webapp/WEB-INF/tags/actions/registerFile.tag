@@ -147,7 +147,7 @@ replaceExisting: <c:out value="${replaceExisting}"/><br>
     <dc:dcRegister dataCatalogDb="${dataCatalogDb}"
         name="${name}" fileFormat="${fileFormat}" dataType="${dataType}"
                    logicalFolderPath="${logicalFolderPath}" 
-                   site="${dcSite}" location="${fullFsPath}" replaceExisting="${replaceExisting}"/>
+                   site="${dcSite}" location="${fullFsPath}" replaceExisting="${replaceExisting}"
+                   var="dcPk"/>
 </c:if>
 <c:set var="fullVirtualPath" value="${logicalFolderPath}/${name}"/>
-<c:set var="dcPk" value="0"/>

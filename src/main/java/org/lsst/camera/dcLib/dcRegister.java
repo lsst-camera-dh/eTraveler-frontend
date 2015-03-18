@@ -27,6 +27,7 @@ public class dcRegister extends SimpleTagSupport {
     private String site;
     private String location;
     private boolean replaceExisting;
+    private String var;
 
     @Override
     public void doTag() throws JspException {
@@ -45,6 +46,7 @@ public class dcRegister extends SimpleTagSupport {
             dsPk = ret.getPK();
             c.commit();
             conn.close();
+            getJspContext().setAttribute(var, dsPk);
         } catch (Exception ex) {
             throw new JspException("Error in dcRegister tag", ex);
         }
@@ -76,5 +78,8 @@ public class dcRegister extends SimpleTagSupport {
     }
     public void setReplaceExisting(boolean replaceExisting) {
         this.replaceExisting = replaceExisting;
+    }
+    public void setVar(String var) {
+        this.var = var;
     }
 }
