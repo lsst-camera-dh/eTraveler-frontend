@@ -10,6 +10,7 @@
 <%@taglib prefix="traveler" tagdir="/WEB-INF/tags"%>
 
 <%@attribute name="activityId" required="true"%>
+<%@attribute name="resultsFiled" required="true"%>
 
 <sql:query var="activityQ" >
     select A.*, P.substeps, P.maxIteration,
@@ -77,6 +78,8 @@
     <%-- This seems an ugly hack. --%>
     <c:set var="readyToClose" value="false"/>
 </c:if>
+
+<c:set var="readyToClose" value="${readyToClose && resultsFiled}"/>
 
 <c:set var="retryable" value="${activity.iteration < activity.maxIteration && readyToClose}"/>
 <c:if test="${readyToClose}">

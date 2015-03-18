@@ -24,9 +24,10 @@
 <c:set var="activity" value="${activityQ.rows[0]}"/>
 
 <traveler:activityPrereqWidget activityId="${activityId}"/>
+
 <c:if test="${activityQ.rows[0].substeps == 'SELECTION'}"><traveler:selectionWidget activityId="${activityId}"/></c:if>
-<c:set var="resultsFiled" value="true" scope="request"/> <%-- activityInputWidget will set this to "false" if that's the case --%>
-<traveler:activityInputWidget activityId="${activityId}"/>
+
+<traveler:activityInputWidget activityId="${activityId}" var="resultsFiled"/>
 <table>
     <tr>
         <td>Started:</td>
@@ -43,9 +44,7 @@
     </tr>
     <tr><td>End:</td>
         <td>
-            <c:if test="${resultsFiled}">
-                <traveler:closeoutButton activityId="${activityId}"/>
-            </c:if>
+            <traveler:closeoutButton activityId="${activityId}" resultsFiled="${resultsFiled}"/>
         </td></tr>
         <c:if test="${! empty activity.statusName}">
         <tr><td>Status:</td><td>${activity.statusName}</td></tr>

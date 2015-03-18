@@ -10,6 +10,10 @@
 <%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql" %>
 
 <%@attribute name="activityId" required="true"%>
+<%@attribute name="var" required="true" rtexprvalue="false"%>
+<%@variable name-from-attribute="var" alias="resultsFiled" scope="AT_BEGIN"%>
+
+<c:set var="resultsFiled" value="true"/> <%-- will get set to false if any are not --%>
 
 <sql:query var="inputQ" >
     select A.begin, A.end, IP.*, RM.value, ISm.name as ISName
@@ -66,7 +70,7 @@
                     ERROR: no value found
                 </c:when>
                 <c:otherwise>
-                    <c:set var="resultsFiled" value="false" scope="request"/>
+                    <c:set var="resultsFiled" value="false"/>
                     <c:choose>
                         <c:when test="${row.ISName == 'string'}">
                             <c:set var="inputType" value="text"/>
