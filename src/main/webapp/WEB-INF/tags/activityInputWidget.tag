@@ -8,6 +8,7 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@taglib prefix="display" uri="http://displaytag.sf.net" %>
 <%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql" %>
+<%@taglib prefix="traveler" tagdir="/WEB-INF/tags"%>
 
 <%@attribute name="activityId" required="true"%>
 <%@attribute name="var" required="true" rtexprvalue="false"%>
@@ -49,6 +50,8 @@
     and ISm.name='filepath'
 </sql:query>
 
+<traveler:isStopped var="isStopped" activityId="${activityId}"/>
+
 <c:if test="${! empty inputQ.rows}">
     <h2>Results</h2>
     <display:table name="${inputQ.rows}" id="row" class="datatable">
@@ -63,7 +66,7 @@
                 <c:when test="${! empty row.value}">
                     ${row.value}
                 </c:when>
-                <c:when test="${empty row.begin}">
+                <c:when test="${(empty row.begin) || isStopped}">
                     Not yet
                 </c:when>
                 <c:when test="${! empty row.end}">
