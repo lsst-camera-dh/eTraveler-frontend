@@ -20,6 +20,7 @@
 <%@variable name-from-attribute="varDcPath" alias="fullVirtualPath" scope="AT_BEGIN"%>
 <%@attribute name="varDcPk" required="true" rtexprvalue="false"%>
 <%@variable name-from-attribute="varDcPk" alias="dcPk" scope="AT_BEGIN"%>
+<%@attribute name="dataType"%>
 
 <c:choose>
     <c:when test="${mode == 'manual'}">
@@ -59,7 +60,9 @@
 <c:set var="fileFormat" value="${fileExt == name ? 'UNKNOWN' : fileExt}"/>
 
 <%-- dataType --%>
-<c:set var="dataType" value="LSSTSENSORTEST"/>
+<c:if test="${empty dataType}">
+    <c:set var="dataType" value="LSST_TEST_TYPE"/>
+</c:if>
 
 <%-- logicalFolderPath --%>
 
