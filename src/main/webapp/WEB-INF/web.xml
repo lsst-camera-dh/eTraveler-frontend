@@ -48,6 +48,10 @@
         <param-name>uploadedSubfolder</param-name>
         <param-value>eTravelerFiles</param-value>
     </context-param>
+    <context-param>
+        <param-name>defaultDataType</param-name>
+        <param-value>LSST_TEST_TYPE</param-value>
+    </context-param>
 
     <!-- Login Filter -->
     <filter>

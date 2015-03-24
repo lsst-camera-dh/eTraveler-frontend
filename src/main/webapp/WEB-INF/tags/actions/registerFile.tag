@@ -61,7 +61,7 @@
 
 <%-- dataType --%>
 <c:if test="${empty dataType}">
-    <c:set var="dataType" value="LSST_TEST_TYPE"/>
+    <c:set var="dataType" value="${initParam['defaultDataType']}"/>
 </c:if>
 
 <%-- logicalFolderPath --%>
