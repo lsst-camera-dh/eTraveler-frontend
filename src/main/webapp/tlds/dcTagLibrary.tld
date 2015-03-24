@@ -3,23 +3,7 @@
   <tlib-version>1.0</tlib-version>
   <short-name>dctaglibrary</short-name>
   <uri>/tlds/dcTagLibrary</uri>
-  <!-- A validator verifies that the tags are used correctly at JSP
-          translation time. Validator entries look like this: 
-       <validator>
-           <validator-class>com.mycompany.TagLibValidator</validator-class>
-           <init-param>
-              <param-name>parameter</param-name>
-              <param-value>value</param-value>
-           </init-param>
-       </validator>
-    -->
-  <!-- A tag library can register Servlet Context event listeners in
-         case it needs to react to such events. Listener entries look
-         like this: 
-      <listener>
-          <listener-class>com.mycompany.TagLibListener</listener-class> 
-      </listener>
-    -->
+
   <tag>
     <name>dcRegister</name>
     <tag-class>org.lsst.camera.dcLib.dcRegister</tag-class>
@@ -78,5 +62,16 @@
         <rtexprvalue>true</rtexprvalue>
         <type>java.lang.boolean</type>
     </attribute>
+    <attribute>
+        <name>var</name>
+        <required>true</required>
+        <rtexprvalue>false</rtexprvalue>
+        <type>java.lang.String</type>        
+    </attribute>
+    <variable>
+        <name-from-attribute>var</name-from-attribute>
+        <variable-class>java.lang.Long</variable-class>
+        <scope>AT_BEGIN</scope>
+    </variable>
   </tag>
 </taglib>

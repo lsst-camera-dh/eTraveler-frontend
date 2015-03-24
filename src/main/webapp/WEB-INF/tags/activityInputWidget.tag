@@ -1,5 +1,5 @@
 <%-- 
-    Document   : inputWidget
+    Document   : activityInputWidget
     Created on : Dec 12, 2013, 10:53:20 AM
     Author     : focke
 --%>
