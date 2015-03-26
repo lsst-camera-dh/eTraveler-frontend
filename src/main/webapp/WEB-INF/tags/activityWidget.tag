@@ -51,9 +51,10 @@
         </c:if>
 </table>
 
+            <traveler:activityStopWidget activityId="${activityId}"/>
 <table>
-    <tr><td><traveler:ncrLinks activityId="${activityId}" mode="exit"/></td></tr>
     <tr><td><traveler:ncrLinks activityId="${activityId}" mode="return"/></td></tr>
+    <tr><td><traveler:ncrLinks activityId="${activityId}" mode="exit"/></td></tr>
 </table>
 
 <c:if test="${! empty activity.begin && activity.isHarnessed != 0}">
