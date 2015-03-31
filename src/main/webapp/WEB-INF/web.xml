@@ -34,7 +34,7 @@
 
     <context-param>
         <param-name>eTravelerFileStore</param-name>
-        <param-value>/nfs/farm/g/lsst/u1/ET</param-value>
+        <param-value>/nfs/farm/g/lsst/u1/ET/userFiles</param-value>
     </context-param>
     <context-param>
         <param-name>datacatFolder</param-name>
@@ -101,8 +101,17 @@
       <url-pattern>/*</url-pattern>
     </filter-mapping>
 
+    <!-- Load the Multipart Filter -->
+<filter>
+    <filter-name>MultipartFilter</filter-name>
+    <filter-class>org.srs.web.base.filters.multipart.MultipartFilter</filter-class>
+</filter>
+<filter-mapping>
+    <filter-name>MultipartFilter</filter-name>
+    <url-pattern>/*</url-pattern>
+</filter-mapping>
 
-    <!-- Icons for tree tag -->
+<!-- Icons for tree tag -->
     <servlet>
        <servlet-name>fhicon</servlet-name>
        <servlet-class>org.freehep.webutil.tree.IconServlet</servlet-class>

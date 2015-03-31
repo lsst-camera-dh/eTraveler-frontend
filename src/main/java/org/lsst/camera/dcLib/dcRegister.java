@@ -1,7 +1,6 @@
 
 package org.lsst.camera.dcLib;
 
-import javax.servlet.jsp.JspWriter;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.tagext.SimpleTagSupport;
 
@@ -32,23 +31,24 @@ public class dcRegister extends SimpleTagSupport {
     @Override
     public void doTag() throws JspException {
         long dsPk;
-        JspWriter out = getJspContext().getOut();
         
-        /*String dataCatalogDb = getJspContext().getAttribute("dataCatalogDb").toString();*/
-        /*String dataCatalogDb = "jdbc/datacat-prod";*/
-        
+        Connection conn = ConnectionManager.getConnection(dataCatalogDb);
         try {
-            Connection conn = ConnectionManager.getConnection(dataCatalogDb);
             DataCatClient c = new DataCatClient(conn, "WebApp");
             NewDataset nds = c.newDataset(name, fileFormat, dataType, logicalFolderPath, groupName, site, location);
             Map<String,Object> metadata = null;
             Dataset ret = c.registerDataset( nds, metadata, replaceExisting );
             dsPk = ret.getPK();
             c.commit();
-            conn.close();
             getJspContext().setAttribute(var, dsPk);
         } catch (Exception ex) {
             throw new JspException("Error in dcRegister tag", ex);
+        } finally {
+            try {
+                conn.close();
+            } catch (Exception ex) {
+                throw new JspException("Error in dcRegister tag", ex);
+            }
         }
     }
     

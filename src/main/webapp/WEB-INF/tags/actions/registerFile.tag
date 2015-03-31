@@ -10,9 +10,11 @@
 <%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql" %>
 <%@taglib prefix="traveler" tagdir="/WEB-INF/tags"%>
 <%@taglib uri="/tlds/dcTagLibrary.tld" prefix="dc"%>
+<%@taglib prefix="upload" uri="/tlds/uploads.tld"%>
 
 <%@attribute name="activityId" required="true"%>
-<%@attribute name="name" required="true"%>
+<%@attribute name="fileItem" type="org.apache.commons.fileupload.FileItem"%>
+<%@attribute name="name"%>
 <%@attribute name="mode" required="true"%>
 <%@attribute name="varFsPath" required="true" rtexprvalue="false"%>
 <%@variable name-from-attribute="varFsPath" alias="fullFsPath" scope="AT_BEGIN"%>
@@ -54,10 +56,22 @@
 <%-- dataCatalogDb --%>
 <c:set var="dataCatalogDb" value="${appVariables.dataCatalogDb}"/>
 
-<%-- fileFormat --%>
+<%-- file Name, Format --%>
+<c:choose>
+    <c:when test="${mode == 'manual'}">
+<upload:uploadParser fileItem="${fileItem}" varName="name" varFormat="fileFormat" varSize="fs" varSha1="digest"/>
+<c:set var="uploadedFileSize" value="${fs}" scope="request"/>
+<c:set var="uploadDigest" value="${digest}" scope="request"/>
+    </c:when>
+    <c:when test="${mode == 'harnessed'}">
 <c:set var="fnComponents" value="${fn:split(name, '.')}"/>
 <c:set var="fileExt" value="${fnComponents[fn:length(fnComponents)-1]}"/>
 <c:set var="fileFormat" value="${fileExt == name ? 'UNKNOWN' : fileExt}"/>
+    </c:when>
+    <c:otherwise>
+        AAAaaack!!!! #220561
+    </c:otherwise>
+</c:choose>
 
 <%-- dataType --%>
 <c:if test="${empty dataType}">
@@ -131,8 +145,8 @@
 <%-- replaceExisting --%>
 <c:set var="replaceExisting" value="false"/>
 
-<%--<c:if test="${not param.terse}">--%>
-<c:if test="false">
+<c:set var="doRegister" value="true"/>
+<c:if test="${not doRegister}">
 <br>
 dataCatalogDb: <c:out value="${dataCatalogDb}"/><br>
 name: <c:out value="${name}"/><br>
@@ -144,9 +158,10 @@ site: <c:out value="${dcSite}"/><br>
 location: <c:out value="${fullFsPath}"/><br>
 replaceExisting: <c:out value="${replaceExisting}"/><br>
 </c:if>
-<%--<c:set var="doRegister" value="${empty param.doRegister ? false : param.doRegister}"/>--%>
-<c:set var="doRegister" value="true"/>
 <c:if test="${doRegister}">
+    <c:if test="${mode == 'manual'}">
+        <upload:uploadSaver path="${fullFsPath}" fileItem="${fileItem}"/>
+    </c:if>
     <dc:dcRegister dataCatalogDb="${dataCatalogDb}"
         name="${name}" fileFormat="${fileFormat}" dataType="${dataType}"
                    logicalFolderPath="${logicalFolderPath}" 

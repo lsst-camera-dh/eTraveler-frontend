@@ -85,10 +85,10 @@
                             <c:set var="inputType" value="number"/>
                         </c:otherwise>
                     </c:choose>
-                    <form method="get" action="fh/inputResult.jsp">
+                    <form method="post"  action="fh/inputResult.jsp" enctype="multipart/form-data">
                         <input type="hidden" name="activityId" value="${activityId}">
                         <input type="hidden" name="inputPatternId" value="${row.id}">
-                        <input type="hidden" name="ISName" value="${row.ISName}">
+                        <input type="hidden" name="isName" value="${row.ISName}">
                         *<input type="${inputType}" name="value" required
                                 <c:if test="${row.ISName=='float'}">step="any"</c:if>
                                 <c:if test="${!empty row.minV}">min="<c:out value="${row.minV}"/>"</c:if>

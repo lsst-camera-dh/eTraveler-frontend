@@ -8,6 +8,7 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql" %>
 <%@taglib prefix="ta" tagdir="/WEB-INF/tags/actions"%>
+
 <!DOCTYPE html>
 <html>
     <head>
@@ -16,15 +17,16 @@
     </head>
     <body>
         <c:choose>
-            <c:when test="${param.ISName == 'float'}">
+            <c:when test="${param.isName == 'float'}">
                 <c:set var="tableName" value="FloatResultManual"/>
             </c:when>
-            <c:when test="${param.ISName == 'string'}">
+            <c:when test="${param.isName == 'string'}">
                 <c:set var="tableName" value="StringResultManual"/>
             </c:when>
-            <c:when test="${param.ISName == 'filepath'}">
+            <c:when test="${param.isName == 'filepath'}">
                 <c:set var="tableName" value="FilepathResultManual"/>
-                <ta:registerFile activityId="${param.activityId}" name="${param.value}" mode="manual" 
+
+                <ta:registerFile activityId="${param.activityId}" fileItem="${fileItems.value}" mode="manual" 
                                  varFsPath="fsPath" varDcPath="dcPath" varDcPk="dcPk"/>
                 <%-- Upload it 
                 Argh, no. Need to upload before registering so as not to mess up the crawler.
@@ -42,10 +44,12 @@ insert into ${tableName} set
 inputPatternId=?<sql:param value="${param.inputPatternId}"/>,
 activityId=?<sql:param value="${param.activityId}"/>,
 <c:choose>
-    <c:when test="${param.ISName == 'filepath'}">
+    <c:when test="${param.isName == 'filepath'}">
 value=?<sql:param value="${fsPath}"/>,
 virtualPath=?<sql:param value="${dcPath}"/>,
 catalogKey=?<sql:param value="${dcPk}"/>,
+size=?<sql:param value="${uploadedFileSize}"/>,
+sha1=?<sql:param value="${uploadDigest}"/>,
     </c:when>
     <c:otherwise>
 value=?<sql:param value="${param.value}"/>,
