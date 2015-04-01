@@ -42,7 +42,7 @@
     <c:if test="${! empty userId}">
         and (A.createdBy=?<sql:param value="${userId}"/> or A.closedBy=?<sql:param value="${userId}"/>
     </c:if>
-    order by A.begin desc;
+    order by A.id desc;
 </sql:query>
 <display:table name="${result.rows}" class="datatable">
     <display:column property="processName" title="Name" sortable="true" headerClass="sortable"
