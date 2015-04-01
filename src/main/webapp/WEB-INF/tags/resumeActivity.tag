@@ -24,7 +24,7 @@
 </sql:update>
 
 <sql:query var="childrenQ">
-    select  * from Activity where 
+    select  id from Activity where 
     parentActivityId=?<sql:param value="${activityId}"/>
     and activityFinalStatusId=(select id from ActivityFinalStatus where name='stopped')
 </sql:query>
