@@ -75,6 +75,7 @@
                 <option value="${htRow.id}">${htRow.name}</option>
             </c:forEach>
         </select>
+        Slot: <input type="number" name="slot" value="1">
     </form>
 
     <traveler:hardwareRelationshipTypeList/>
