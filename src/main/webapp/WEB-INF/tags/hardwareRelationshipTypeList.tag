@@ -18,7 +18,7 @@
     ;
 </sql:query>
 
-<display:table name="${hrtQ.rows}" class="datatable">
+<display:table name="${hrtQ.rows}" class="datatable" pagesize="${preferences.pageLength}" sort="list">
     <display:column property="name" sortable="true" headerClass="sortable"/>
     <display:column property="assemblyType" sortable="true" headerClass="sortable"
                     href="displayHardwareType.jsp" paramId="hardwareTypeId" paramProperty="hardwareTypeId"/>

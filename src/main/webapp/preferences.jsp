@@ -36,6 +36,7 @@
                 <preferences:value value="${row.name}"/>
             </c:forEach>
         </preferences:preference>
+        <preferences:preference name="pageLength" size="3" title="Page Length: " />
     </preferences:preferences>
             
     </body>

@@ -56,7 +56,7 @@
     </c:if>
     group by P.id
 </sql:query>
-<display:table name="${result.rows}" class="datatable">
+<display:table name="${result.rows}" class="datatable" pagesize="${preferences.pageLength}" sort="list">
     <display:column property="processName" title="Name" sortable="true" headerClass="sortable"
                     href="displayProcess.jsp" paramId="processPath" paramProperty="processId"/>
     <c:if test="${empty hardwareGroupId}">

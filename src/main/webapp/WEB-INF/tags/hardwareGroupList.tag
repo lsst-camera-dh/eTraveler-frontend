@@ -21,7 +21,7 @@
     group by HG.id
 </sql:query>
 
-<display:table name="${groupsQ.rows}" class="datatable">
+<display:table name="${groupsQ.rows}" class="datatable" pagesize="${preferences.pageLength}" sort="list">
     <display:column property="hardwareGroupName" title="Name" sortable="true" headerClass="sortable"
                     href="displayHardwareGroup.jsp" paramId="hardwareGroupId" paramProperty="hardwareGroupId"/>
     <display:column property="description" sortable="true" headerClass="sortable"/>

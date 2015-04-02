@@ -19,7 +19,7 @@
     where HSH.hardwareId=?<sql:param value="${hardwareId}"/>
     order by HSH.creationTS desc limit 10
 </sql:query>
-<display:table name="${statusHistoryQ.rows}" class="datatable">
+<display:table name="${statusHistoryQ.rows}" class="datatable" pagesize="${preferences.pageLength}" sort="list">
     <display:column property="name" title="Staus"/>
     <display:column property="creationTS" title="When"/>
     <display:column property="createdBy" title="Who"/>

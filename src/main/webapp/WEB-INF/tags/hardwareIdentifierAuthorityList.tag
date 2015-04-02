@@ -12,7 +12,7 @@
     select * from HardwareIdentifierAuthority;
 </sql:query>
 
-<display:table name="${hiaQ.rows}" class="datatable">
+<display:table name="${hiaQ.rows}" class="datatable" pagesize="${preferences.pageLength}" sort="list">
     <display:column property="name" sortable="true" headerClass="sortable"/>
     <display:column property="createdBy" title="Creator" sortable="true" headerClass="sortable"/>
     <display:column property="creationTS" title="Date" sortable="true" headerClass="sortable"/>

@@ -44,7 +44,7 @@
     </c:if>
     order by A.id desc;
 </sql:query>
-<display:table name="${result.rows}" class="datatable">
+<display:table name="${result.rows}" class="datatable" pagesize="${preferences.pageLength}" sort="list">
     <display:column property="processName" title="Name" sortable="true" headerClass="sortable"
                       href="displayActivity.jsp" paramId="activityId" paramProperty="activityId"/>
     <c:if test="${empty hardwareId}">

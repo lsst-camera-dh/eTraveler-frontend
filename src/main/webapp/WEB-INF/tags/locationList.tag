@@ -14,7 +14,7 @@
     inner join Site S on S.id=L.siteId;
 </sql:query>
 
-<display:table name="${locationQ.rows}" class="datatable">
+<display:table name="${locationQ.rows}" class="datatable" pagesize="${preferences.pageLength}" sort="list">
     <display:column property="name" sortable="true" headerClass="sortable"/>
     <display:column property="siteName" sortable="true" headerClass="sortable"/>
     <display:column property="createdBy" title="Creator" sortable="true" headerClass="sortable"/>

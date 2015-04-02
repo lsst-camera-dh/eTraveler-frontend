@@ -24,7 +24,7 @@
     </c:if>
     group by HT.id;
 </sql:query>
-<display:table name="${result.rows}" class="datatable">
+<display:table name="${result.rows}" class="datatable" pagesize="${preferences.pageLength}" sort="list">
     <display:column property="name" title="Name" sortable="true" headerClass="sortable"
                     href="displayHardwareType.jsp" paramId="hardwareTypeId" paramProperty="id"/>
     <display:column property="description" sortable="true" headerClass="sortable"/>

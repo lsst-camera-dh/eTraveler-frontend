@@ -26,7 +26,7 @@
         and HS.id=?<sql:param value="${hardwareStatusId}"/>
     </c:if>
 </sql:query>
-<display:table name="${result.rows}" class="datatable">
+<display:table name="${result.rows}" class="datatable" pagesize="${preferences.pageLength}" sort="list">
     <display:column property="lsstId" title="LSST Serial Number" sortable="true" headerClass="sortable"
                     href="displayHardware.jsp" paramId="hardwareId" paramProperty="id"/>
     <display:column property="manufacturerId" title="Manufacturer Serial Number" sortable="true" headerClass="sortable"

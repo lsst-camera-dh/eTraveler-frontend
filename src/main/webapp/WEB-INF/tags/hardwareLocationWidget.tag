@@ -23,7 +23,7 @@
     limit 10
 </sql:query>
     
-<display:table name="${locationHistoryQ.rows}" class="datatable">
+<display:table name="${locationHistoryQ.rows}" class="datatable" pagesize="${preferences.pageLength}" sort="list">
     <display:column property="siteName" title="Site"/>
     <display:column property="locationName" title="Location"/>
     <display:column property="creationTS" title="When"/>

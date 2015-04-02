@@ -27,7 +27,7 @@
     <c:choose>
         <c:when test="${! empty swQ.rows}">
             <h3>Work Stoppages</h3>
-<display:table name="${swQ.rows}" id="row" class="datatable">
+<display:table name="${swQ.rows}" id="row" class="datatable" pagesize="${preferences.pageLength}" sort="list">
     <display:column property="reason" sortable="true" headerClass="sortable"/>
     <display:column property="createdBy" title="Stopped By" sortable="true" headerClass="sortable"/>
     <display:column property="creationTS" title="Stop Time" sortable="true" headerClass="sortable"/>

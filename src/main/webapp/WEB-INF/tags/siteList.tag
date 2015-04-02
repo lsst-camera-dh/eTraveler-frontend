@@ -12,7 +12,7 @@
     select * from Site;
 </sql:query>
 
-<display:table name="${siteQ.rows}" class="datatable">
+<display:table name="${siteQ.rows}" class="datatable" pagesize="${preferences.pageLength}" sort="list">
     <display:column property="name" sortable="true" headerClass="sortable"/>
     <display:column property="jhVirtualEnv" sortable="true" headerClass="sortable"/>
     <display:column property="jhOutputRoot" sortable="true" headerClass="sortable"/>
