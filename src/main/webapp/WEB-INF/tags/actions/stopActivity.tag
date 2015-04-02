@@ -16,13 +16,6 @@
     <c:set var="status" value="stopped"/>
 </c:if>
 
-<sql:query var="activityQ">
-    select *
-    from Activity
-    where id=?<sql:param value="${activityId}"/>
-</sql:query>
-<c:set var="activity" value="${activityQ.rows[0]}"/>
-
 <sql:update>
     update Activity set
     activityFinalStatusId=(select id from ActivityFinalStatus where name=?<sql:param value="${status}"/>),
