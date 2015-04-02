@@ -87,6 +87,8 @@
 </c:if>
 <c:set var="failable" value="${! closed && ! travelerFailed}"/> <%-- Argh. travelerFailed is not set in ActivityPane --%>
 
+<traveler:hasOpenSWH var="hasOpenSWH" activityId="${activityId}"/>
+
 <c:out value="${message}"/><br>
 <table>
     <tr>
@@ -119,7 +121,7 @@
             <form METHOD=GET ACTION="resolveStop.jsp" target="_top">
                 <input type="hidden" name="activityId" value="${activityId}">       
                 <INPUT TYPE=SUBMIT value="Resolve Stop Work"
-                       <c:if test="${! isStopped}">disabled</c:if>>
+                       <c:if test="${! hasOpenSWH}">disabled</c:if>>
             </form>                              
         </td>
     </tr>

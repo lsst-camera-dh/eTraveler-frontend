@@ -13,6 +13,17 @@
 <%@attribute name="activityId" required="true"%>
 
 <sql:transaction>
+    <sql:update>
+update StopWorkHistory set
+    resolutionTS=utc_timestamp(),
+    resolvedBy=?<sql:param value="${userName}"/>,
+    resolution='QUIT'
+where 
+    activityId=?<sql:param value="${activityId}"/>
+    and
+    resolutionTS is null;
+    </sql:update>
+    
     <sql:update >
         update Activity set
         activityFinalStatusId=(select id from ActivityFinalStatus where name='superseded'),
