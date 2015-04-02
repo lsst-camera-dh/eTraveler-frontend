@@ -12,6 +12,8 @@
 
 <%@attribute name="activityId" required="true"%>
 
+<traveler:isStopped var="isStopped" activityId="${activityId}"/>
+
 <sql:query var="activityQ" >
     select A.*, P.hardwareRelationShipTypeId
     from Activity A
@@ -71,7 +73,7 @@
                 </c:when>
                 <c:when test="${(empty row.componentId) and (empty row.satisfaction)}">
                     <c:if test="${gotSomeComponents}">
-                        <input type="submit" value="Done">
+                        <input type="submit" value="Done" <c:if test="${isStopped}">disabled</c:if>>
                     </c:if>
                     </form>
                 </c:when>

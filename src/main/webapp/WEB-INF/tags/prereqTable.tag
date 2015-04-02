@@ -8,10 +8,13 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql" %>
 <%@taglib prefix="display" uri="http://displaytag.sf.net" %>
+<%@taglib prefix="traveler" tagdir="/WEB-INF/tags"%>
 
 <%@attribute name="prereqTypeName" required="true"%>
 <%@attribute name="activityId"%>
 <%@attribute name="processId"%>
+
+<traveler:isStopped var="isStopped" activityId="${activityId}"/>
 
 <sql:query var="prereqQ" >
     select PP.*<c:if test="${! empty activityId}">, PI.creationTS as satisfaction</c:if>
@@ -44,7 +47,7 @@
                         <form method="get" action="fh/satisfyPrereq.jsp">
                             <input type="hidden" name="prerequisitePatternId" value="${row.id}">
                             <input type="hidden" name="activityId" value="${activityId}">
-                            <input type="submit" value="Done">
+                            <input type="submit" value="Done" <c:if test="${isStopped}">disabled</c:if>>
                         </form>
                     </c:otherwise>
                 </c:choose>

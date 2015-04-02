@@ -16,4 +16,12 @@
     select id from StopWorkHistory where activityId=?<sql:param value="${activityId}"/> and resolutionTS is null;
 </sql:query>
 
-<c:set var="hasOpenSWH" value="${! empty shwQ.rows}"/>
+    <c:choose>
+        <c:when test="${empty swhQ.rows}">
+            <c:set var="hasOpenSWH" value="false"/>
+        </c:when>
+        <c:otherwise>
+            <c:set var="hasOpenSWH" value="true"/>
+        </c:otherwise>
+    </c:choose>
+    
