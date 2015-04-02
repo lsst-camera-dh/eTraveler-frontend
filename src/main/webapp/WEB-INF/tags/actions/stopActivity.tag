@@ -25,7 +25,9 @@
 
 <sql:update>
     update Activity set
-    activityFinalStatusId=(select id from ActivityFinalStatus where name=?<sql:param value="${status}"/>)
+    activityFinalStatusId=(select id from ActivityFinalStatus where name=?<sql:param value="${status}"/>),
+    begin=if(begin is null, utc_timestamp(), begin),
+    end=utc_timestamp()
     where id=?<sql:param value="${activityId}"/>;    
 </sql:update>
 
