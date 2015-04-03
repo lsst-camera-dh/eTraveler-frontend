@@ -16,9 +16,9 @@
     select H.id, H.creationTS, H.lsstId, H.manufacturer, H.manufacturerId, H.model, H.manufactureDate,
     HT.name as hardwareName, HT.id as hardwareTypeId, 
     HS.name as hardwareStatusName
-    from Hardware H, HardwareType HT, HardwareStatus HS
-    where HT.id=H.hardwareTypeId 
-    and HS.id=H.hardwareStatusId
+    from Hardware H
+    inner join HardwareType HT on HT.id=H.hardwareTypeId
+    inner join HardwareStatus HS on HS.id=H.hardwareStatusId
     <c:if test="${! empty hardwareTypeId}">
         and HT.id=?<sql:param value="${hardwareTypeId}"/>
     </c:if>
