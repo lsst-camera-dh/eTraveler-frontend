@@ -13,7 +13,8 @@
 </sql:query>
 
 <display:table name="${siteQ.rows}" class="datatable" pagesize="${preferences.pageLength}" sort="list">
-    <display:column property="name" sortable="true" headerClass="sortable"/>
+    <display:column property="name" sortable="true" headerClass="sortable"
+                    href="displaySite.jsp" paramId="siteId" paramProperty="id"/>
     <display:column property="jhVirtualEnv" sortable="true" headerClass="sortable"/>
     <display:column property="jhOutputRoot" sortable="true" headerClass="sortable"/>
     <display:column property="createdBy" title="Creator" sortable="true" headerClass="sortable"/>

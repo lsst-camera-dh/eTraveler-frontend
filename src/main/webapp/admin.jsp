@@ -90,19 +90,7 @@
     <traveler:siteList/>
 <hr>
         
-    <sql:query var="sitesQ" >
-        select id, name from Site
-    </sql:query>
-    <form method="get" action="fh/addLocation.jsp">
-        <input type="submit" value="Add Location">
-        Name: <input type="text" name="name" required>
-        Site: <select name="siteId">
-            <c:forEach var="siteRow" items="${sitesQ.rows}">
-                <option value="${siteRow.id}" <c:if test="${preferences.siteName==siteRow.name}">selected</c:if>>${siteRow.name}</option>
-            </c:forEach>
-        </select>
-    </form>
-
+    <traveler:newLocationForm/>
     <traveler:locationList/>
 <hr>
 
