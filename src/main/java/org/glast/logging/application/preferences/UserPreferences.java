@@ -10,8 +10,8 @@ import org.srs.base.application.preferences.ApplicationPreferences;
 public class UserPreferences implements ApplicationPreferences {
     
     public String role = "spectator";
-    public String siteName = "BNL";
-    public String idAuthName = "SerialNumber";
+    public String siteName = "SLAC";
+    public String idAuthName = "null";
     public int pageLength = 10;
     public int componentHeight = 99;
     public int componentDepth = 1;
