@@ -22,6 +22,8 @@
     </head>
     <body>
         <h1>Hardware Group <c:out value="${hardwareGroup.name}"/></h1>
+        Creator: <c:out value="${hardwareGroup.createdBy}"/><br>
+        Date: <c:out value="${hardwareGroup.creationTS}"/><br>
         <h2>Description</h2>
             <c:out value="${hardwareGroup.description}"/>
         <h2>Member Hardware Types</h2>

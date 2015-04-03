@@ -16,7 +16,8 @@
     from HardwareGroup HG
     left join HardwareTypeGroupMapping HTGM on HTGM.hardwareGroupId=HG.id
     <c:if test="${! empty hardwareTypeId}">
-        where HTGM.hardwareTypeId=?<sql:param value="${hardwareTypeId}"/>
+        inner join HardwareTypeGroupMapping HTGMS on HTGMS.hardwareGroupId=HG.id
+        where HTGMS.hardwareTypeId=?<sql:param value="${hardwareTypeId}"/>
     </c:if>
     group by HG.id
 </sql:query>
