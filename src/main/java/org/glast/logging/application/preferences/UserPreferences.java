@@ -15,7 +15,7 @@ public class UserPreferences implements ApplicationPreferences {
     public int pageLength = 10;
     public int componentHeight = 99;
     public int componentDepth = 1;
-    
+    public String showFilteredColumns = "false";
 
     public String getRole() {
         return role;
@@ -57,6 +57,13 @@ public class UserPreferences implements ApplicationPreferences {
     }
     public void setComponentDepth(int componentDepth) {
         this.componentDepth = componentDepth;
+    }
+
+    public String getShowFilteredColumns() {
+        return showFilteredColumns;
+    }
+    public void setShowFilteredColumns(String showFilteredColumns) {
+        this.showFilteredColumns = showFilteredColumns;
     }
 
     public void synchronizeWithApplication(Application app, ApplicationPreferences oldPreferences) {

@@ -22,7 +22,8 @@
     <c:url var="backendUrl" value="${backendLink}"/>
     <a href="${backendUrl}">Upload a new Traveler Type or version</a>
 <hr>
-    This make a substep of an existing process traveler usable as the entry point to a process traveler in its own right.
+    This makes a substep of an existing process traveler usable as the entry point to a process traveler in its own right.<br>
+    The interface here is terrible, if you have ideas on improving it, please share!
     <br>
     <sql:query var="processesQ">
         select id, name from Process where id not in (select rootProcessId from TravelerType);

@@ -39,6 +39,7 @@
             </preferences:preference>
 
             <preferences:preference name="idAuthName" title="Identifier Authority: ">
+                <preferences:value value="null"/>
                 <c:forEach var="row" items="${idAuthQ.rows}">
                     <preferences:value value="${row.name}"/>
                 </c:forEach>
@@ -49,6 +50,11 @@
             <preferences:preference name="componentHeight" size="2" title="Parent list limit: " />
 
             <preferences:preference name="componentDepth" size="2" title="Component list depth: " />
+
+            <preferences:preference name="showFilteredColumns" title="Show Filtered Columns: ">
+                <preferences:value value="true"/>
+                <preferences:value value="false"/>
+            </preferences:preference>
 
         </preferences:preferences>
             

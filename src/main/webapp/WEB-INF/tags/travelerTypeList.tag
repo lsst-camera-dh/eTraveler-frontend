@@ -59,11 +59,11 @@
 <display:table name="${result.rows}" class="datatable" pagesize="${preferences.pageLength}" sort="list">
     <display:column property="processName" title="Name" sortable="true" headerClass="sortable"
                     href="displayProcess.jsp" paramId="processPath" paramProperty="processId"/>
-    <c:if test="${empty hardwareGroupId}">
+    <c:if test="${empty hardwareGroupId or preferences.showFilteredColumns}">
         <display:column property="hardwareGroupName" title="Component Group" sortable="true" headerClass="sortable"
                         href="displayHardwareGroup.jsp" paramId="hardwareGroupId" paramProperty="hardwareGroupId"/>
     </c:if>
-    <c:if test="${empty state}">
+    <c:if test="${empty state or preferences.showFilteredColumns}">
         <display:column property="state" sortable="true" headerClass="sortable"/>
     </c:if>
     <display:column property="inProgress" sortable="true" headerClass="sortable"

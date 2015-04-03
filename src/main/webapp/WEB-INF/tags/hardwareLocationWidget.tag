@@ -12,7 +12,9 @@
 <%@attribute name="hardwareId" required="true"%>
 
 <sql:query  var="locationHistoryQ">
-    select L.name as locationName, S.name as siteName, HLH.* 
+    select HLH.*,
+    L.id as locationId, L.name as locationName, 
+    S.id as siteId, S.name as siteName
     from
     HardwareLocationHistory HLH
     inner join Location L on L.id=HLH.locationId
@@ -20,12 +22,13 @@
     where
     HLH.hardwareId=?<sql:param value="${hardwareId}"/>
     order by HLH.creationTS desc
-    limit 10
 </sql:query>
     
 <display:table name="${locationHistoryQ.rows}" class="datatable" pagesize="${preferences.pageLength}" sort="list">
-    <display:column property="siteName" title="Site"/>
-    <display:column property="locationName" title="Location"/>
+    <display:column property="siteName" title="Site"
+                    href="displaySite.jsp" paramId="siteId" paramProperty="siteId"/>
+    <display:column property="locationName" title="Location"
+                    href="displayLocation.jsp" paramId="locationId" paramProperty="locationId"/>
     <display:column property="creationTS" title="When"/>
     <display:column property="createdBy" title="Who"/>
 </display:table>

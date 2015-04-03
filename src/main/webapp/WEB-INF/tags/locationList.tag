@@ -23,11 +23,12 @@
 </sql:query>
 
 <display:table name="${locationQ.rows}" class="datatable" pagesize="${preferences.pageLength}" sort="list">
-    <display:column property="name" sortable="true" headerClass="sortable"/>
-    <c:if test="${empty siteId}">
-        <display:column property="siteName" sortable="true" headerClass="sortable"
+    <c:if test="${empty siteId or preferences.showFilteredColumns}">
+        <display:column property="siteName" title="Site" sortable="true" headerClass="sortable"
                         href="displaySite.jsp" paramId="siteId" paramProperty="siteId"/>
     </c:if>
+    <display:column property="name" sortable="true" headerClass="sortable"
+                    href="displayLocation.jsp" paramId="locationId" paramProperty="id"/>
     <display:column property="createdBy" title="Creator" sortable="true" headerClass="sortable"/>
     <display:column property="creationTS" title="Date" sortable="true" headerClass="sortable"/>
 </display:table>

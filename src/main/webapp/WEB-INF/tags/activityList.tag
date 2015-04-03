@@ -47,19 +47,19 @@
 <display:table name="${result.rows}" class="datatable" pagesize="${preferences.pageLength}" sort="list">
     <display:column property="processName" title="Name" sortable="true" headerClass="sortable"
                       href="displayActivity.jsp" paramId="activityId" paramProperty="activityId"/>
-    <c:if test="${empty hardwareId}">
+    <c:if test="${empty hardwareId or preferences.showFilteredColumns}">
         <display:column property="lsstId" title="LSST Serial Number" sortable="true" headerClass="sortable"
                         href="displayHardware.jsp" paramId="hardwareId" paramProperty="hardwareId"/>
         <display:column property="manufacturerId" title="Manufacturer Serial Number" sortable="true" headerClass="sortable"
                         href="displayHardware.jsp" paramId="hardwareId" paramProperty="hardwareId"/>
     </c:if>
-    <c:if test="${(empty processId) and (empty hardwareId)}">
+    <c:if test="${(empty processId and empty hardwareId) or preferences.showFilteredColumns}">
         <display:column property="hardwareName" title="Component Type" sortable="true" headerClass="sortable"
                         href="displayHardwareType.jsp" paramId="hardwareTypeId" paramProperty="hardwareTypeId"/>
     </c:if>
     <display:column property="begin" sortable="true" headerClass="sortable"/>
     <display:column property="createdBy" sortable="true" headerClass="sortable"/>
     <display:column property="status" sortable="true" headerClass="sortable"/>
-        <display:column property="end" sortable="true" headerClass="sortable"/>
-        <display:column property="closedBy" sortable="true" headerClass="sortable"/>
+    <display:column property="end" sortable="true" headerClass="sortable"/>
+    <display:column property="closedBy" sortable="true" headerClass="sortable"/>
 </display:table>        

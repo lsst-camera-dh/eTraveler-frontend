@@ -5,21 +5,34 @@
 <table>
     <tr valign="bottom" align="right">
         <td align="right" valign="bottom">
-            <srs_utils:conditionalLink name="Welcome" url="welcome.jsp" iswelcome="true"/> | 
+            <srs_utils:conditionalLink name="Welcome" url="welcome.jsp" iswelcome="true"/> |
+
             <srs_utils:conditionalLink name="List&nbsp;Hardware&nbsp;Groups" url="listHardwareGroups.jsp" /> |
+
             <srs_utils:conditionalLink name="List&nbsp;Hardware&nbsp;Types" url="listHardwareTypes.jsp" /> |
+
             <srs_utils:conditionalLink name="List&nbsp;Hardware" url="listHardware.jsp" /> |
+
             <c:url var="newHwLink" value="selectHardwareType.jsp">
                 <c:param name="target" value="registerHardware.jsp"/>
             </c:url>
             <srs_utils:conditionalLink name="Register&nbsp;Hardware" url="${newHwLink}" /> |
+
             <srs_utils:conditionalLink name="List&nbsp;Traveler&nbsp;Types" url="listTravelerTypes.jsp" /> |
+
             <srs_utils:conditionalLink name="List&nbsp;Travelers" url="listTravelers.jsp" /> |
+
             <c:url var="newTravLink" value="selectHardwareType.jsp">
                 <c:param name="target" value="initiateTraveler.jsp"/>
             </c:url>
             <srs_utils:conditionalLink name="Initiate&nbsp;Traveler" url="${newTravLink}" /> |
+
+            <srs_utils:conditionalLink name="List&nbsp;Sites" url="listSites.jsp" /> |
+
+            <srs_utils:conditionalLink name="List&nbsp;Locations" url="listLocations.jsp" /> |
+
             <srs_utils:conditionalLink name="Preferences" url="preferences.jsp"/> |
+
             <srs_utils:conditionalLink name="Admin" url="admin.jsp" />
         </td>
     </tr>

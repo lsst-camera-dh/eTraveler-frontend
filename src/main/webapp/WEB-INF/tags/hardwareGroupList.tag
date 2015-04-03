@@ -15,7 +15,7 @@
     select HG.id as hardwareGroupId, HG.name as hardwareGroupName, HG.description, count(HTGM.id) as nTypes
     from HardwareGroup HG
     left join HardwareTypeGroupMapping HTGM on HTGM.hardwareGroupId=HG.id
-    <c:if test="${!empty hardwareTypeId}">
+    <c:if test="${! empty hardwareTypeId}">
         where HTGM.hardwareTypeId=?<sql:param value="${hardwareTypeId}"/>
     </c:if>
     group by HG.id
