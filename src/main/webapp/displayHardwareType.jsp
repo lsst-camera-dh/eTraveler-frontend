@@ -38,6 +38,12 @@
             hardwareTypeId="${param.hardwareTypeId}"
             />
 
+        <h2>Relations</h2>
+        <h3>Parent</h3>
+        <traveler:hardwareRelationshipTypeList assemblyTypeId="${param.hardwareTypeId}"/>
+        <h3>Child</h3>
+        <traveler:hardwareRelationshipTypeList componentTypeId="${param.hardwareTypeId}"/>
+        
         <h2>Components</h2>
         <traveler:hardwareList  hardwareTypeId="${param.hardwareTypeId}"/>
         <h3>Register a new one:</h3>

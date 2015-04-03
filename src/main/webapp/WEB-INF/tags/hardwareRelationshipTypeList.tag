@@ -5,8 +5,12 @@
 --%>
 
 <%@tag description="List HardwareRelationshipTypes" pageEncoding="UTF-8"%>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql" %>
 <%@taglib prefix="display" uri="http://displaytag.sf.net" %>
+
+<%@attribute name="assemblyTypeId"%>
+<%@attribute name="componentTypeId"%>
 
 <sql:query var="hrtQ">
     select HRT.*, 
@@ -15,15 +19,26 @@
     from HardwareRelationshipType HRT
     inner join HardwareType HTP on HTP.id=HRT.hardwareTypeId
     inner join HardwareType HTC on HTC.id=HRT.componentTypeId
+    where true
+    <c:if test="${! empty assemblyTypeId}">
+        and HRT.hardwareTypeId=?<sql:param value="${assemblyTypeId}"/>
+    </c:if>
+    <c:if test="${! empty componentTypeId}">
+        and HRT.componentTypeId=?<sql:param value="${componentTypeId}"/>
+    </c:if>
     ;
 </sql:query>
 
 <display:table name="${hrtQ.rows}" class="datatable" pagesize="${preferences.pageLength}" sort="list">
     <display:column property="name" sortable="true" headerClass="sortable"/>
-    <display:column property="assemblyType" sortable="true" headerClass="sortable"
-                    href="displayHardwareType.jsp" paramId="hardwareTypeId" paramProperty="hardwareTypeId"/>
-    <display:column property="componentType" sortable="true" headerClass="sortable"
-                    href="displayHardwareType.jsp" paramId="hardwareTypeId" paramProperty="componentTypeId"/>
+    <c:if test="${empty assemblyTypeId or preferences.showFilteredColumns}">
+        <display:column property="assemblyType" sortable="true" headerClass="sortable"
+                        href="displayHardwareType.jsp" paramId="hardwareTypeId" paramProperty="hardwareTypeId"/>
+    </c:if>
+    <c:if test="${empty componentTypeId or preferences.showFilteredColumns}">
+        <display:column property="componentType" sortable="true" headerClass="sortable"
+                        href="displayHardwareType.jsp" paramId="hardwareTypeId" paramProperty="componentTypeId"/>
+    </c:if>
     <display:column property="slot" sortable="true" headerClass="sortable"/>
     <display:column property="createdBy" title="Creator" sortable="true" headerClass="sortable"/>
     <display:column property="creationTS" title="Date" sortable="true" headerClass="sortable"/>
