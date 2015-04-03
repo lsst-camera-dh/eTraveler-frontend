@@ -20,13 +20,16 @@
     AFS.name as status,
     P.id as processId, concat(P.name, ' v', P.version) as processName,
     H.id as hardwareId, H.lsstId, H.manufacturerId,
-    HT.name as hardwareName, HT.id as hardwareTypeId
+    HT.name as hardwareName, HT.id as hardwareTypeId,
+    HI.identifier as nickName
     from Activity A
     inner join Process P on A.processId=P.id
     inner join Hardware H on A.hardwareId=H.id
     inner join HardwareType HT on H.hardwareTypeId=HT.id
     left join ActivityFinalStatus AFS on AFS.id=A.activityFinalStatusId
-    where 1
+    left join HardwareIdentifier HI on HI.hardwareId=H.id 
+        and HI.authorityId=(select id from HardwareIdentifierAuthority where name=?<sql:param value="${preferences.idAuthName}"/>)
+    where true
     <c:if test="${! empty travelersOnly}">
         and A.processEdgeId IS NULL 
     </c:if>
@@ -48,10 +51,13 @@
     <display:column property="processName" title="Name" sortable="true" headerClass="sortable"
                       href="displayActivity.jsp" paramId="activityId" paramProperty="activityId"/>
     <c:if test="${empty hardwareId or preferences.showFilteredColumns}">
-        <display:column property="lsstId" title="LSST Serial Number" sortable="true" headerClass="sortable"
+        <display:column property="lsstId" title="${appVariables.experiment} Serial Number" sortable="true" headerClass="sortable"
                         href="displayHardware.jsp" paramId="hardwareId" paramProperty="hardwareId"/>
         <display:column property="manufacturerId" title="Manufacturer Serial Number" sortable="true" headerClass="sortable"
                         href="displayHardware.jsp" paramId="hardwareId" paramProperty="hardwareId"/>
+        <c:if test="${'null' != preferences.idAuthName}">
+            <display:column property="nickName" title="${preferences.idAuthName} Identifier" sortable="true" headerClass="sortable"/>
+        </c:if>
     </c:if>
     <c:if test="${(empty processId and empty hardwareId) or preferences.showFilteredColumns}">
         <display:column property="hardwareName" title="Component Type" sortable="true" headerClass="sortable"
