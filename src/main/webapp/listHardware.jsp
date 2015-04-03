@@ -7,6 +7,7 @@
     </head>
     <body>
         <traveler:hardwareList hardwareTypeId="${param.hardwareTypeId}"
+                               hardwareGroupId="${param.hardwareGroupId}"
                                hardwareStatusId="${param.hardwareStatusId}"
                                siteId="${param.siteId}"
                                locationId="${param.locationId}"/>

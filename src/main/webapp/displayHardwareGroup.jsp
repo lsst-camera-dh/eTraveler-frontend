@@ -49,5 +49,7 @@
             <traveler:travelerTypeList hardwareGroupId="${param.hardwareGroupId}"/>
         <h2>Start a Traveler:</h2>
             <traveler:newTravelerForm hardwareGroupId="${param.hardwareGroupId}"/>
+        <h2>Components</h2>
+        <traveler:hardwareList hardwareGroupId="${param.hardwareGroupId}"/>
     </body>
 </html>

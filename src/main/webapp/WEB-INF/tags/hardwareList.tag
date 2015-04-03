@@ -9,6 +9,7 @@
 <%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql" %>
 <%@taglib prefix="display" uri="http://displaytag.sf.net" %>
 
+<%@attribute name="hardwareGroupId"%>
 <%@attribute name="hardwareTypeId"%>
 <%@attribute name="hardwareStatusId"%>
 <%@attribute name="siteId"%>
@@ -23,13 +24,19 @@
     HI.identifier as nickName
     from Hardware H
     inner join HardwareType HT on HT.id=H.hardwareTypeId
+    <c:if test="${! empty hardwareGroupId}">
+        inner join HardwareTypeGroupMapping HTGM on HTGM.hardwareTypeId=HT.id
+    </c:if>
     inner join HardwareStatus HS on HS.id=H.hardwareStatusId
     inner join HardwareLocationHistory HLH on HLH.hardwareId=H.id and HLH.id=(select max(id) from HardwareLocationHistory where hardwareId=H.id)
     inner join Location L on L.id=HLH.locationId
     inner join Site S on S.id=L.siteId
     left join HardwareIdentifier HI on HI.hardwareId=H.id 
         and HI.authorityId=(select id from HardwareIdentifierAuthority where name=?<sql:param value="${preferences.idAuthName}"/>)
-    where 1
+    where true
+    <c:if test="${! empty hardwareGroupId}">
+        and HTGM.hardwareGroupId=?<sql:param value="${hardwareGroupId}"/>
+    </c:if>
     <c:if test="${! empty hardwareTypeId}">
         and HT.id=?<sql:param value="${hardwareTypeId}"/>
     </c:if>
