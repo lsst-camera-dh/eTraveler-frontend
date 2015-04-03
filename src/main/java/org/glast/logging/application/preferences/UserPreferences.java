@@ -13,6 +13,8 @@ public class UserPreferences implements ApplicationPreferences {
     public String siteName = "BNL";
     public String idAuthName = "SerialNumber";
     public int pageLength = 10;
+    public int componentHeight = 99;
+    public int componentDepth = 1;
     
 
     public String getRole() {
@@ -41,6 +43,20 @@ public class UserPreferences implements ApplicationPreferences {
     }
     public void setPageLength(int pageLength) {
         this.pageLength = pageLength;
+    }
+
+    public int getComponentHeight() {
+        return componentHeight;
+    }
+    public void setComponentHeight(int componentHeight) {
+        this.componentHeight = componentHeight;
+    }
+
+    public int getComponentDepth() {
+        return componentDepth;
+    }
+    public void setComponentDepth(int componentDepth) {
+        this.componentDepth = componentDepth;
     }
 
     public void synchronizeWithApplication(Application app, ApplicationPreferences oldPreferences) {

@@ -11,33 +11,46 @@
     </head>
     
     <body>
+        
         <sql:query var="roleQ">
             select id, name from PermissionGroup
         </sql:query>
+            
         <sql:query var="siteQ" >
             select id, name from Site;
         </sql:query>
+            
         <sql:query var="idAuthQ" >
             select id, name from HardwareIdentifierAuthority;
         </sql:query>
-    <preferences:preferences name="preferences">
-        <preferences:preference name="role" title="Role: ">
-            <c:forEach var="row" items="${roleQ.rows}">
-                <preferences:value value="${row.name}"/>
-            </c:forEach>
-        </preferences:preference>
-        <preferences:preference name="siteName" title="Site: ">
-            <c:forEach var="row" items="${siteQ.rows}">
-                <preferences:value value="${row.name}"/>
-            </c:forEach>
-        </preferences:preference>
-        <preferences:preference name="idAuthName" title="Identifier Authority: ">
-            <c:forEach var="row" items="${idAuthQ.rows}">
-                <preferences:value value="${row.name}"/>
-            </c:forEach>
-        </preferences:preference>
-        <preferences:preference name="pageLength" size="3" title="Page Length: " />
-    </preferences:preferences>
+            
+        <preferences:preferences name="preferences">
+
+            <preferences:preference name="role" title="Role: ">
+                <c:forEach var="row" items="${roleQ.rows}">
+                    <preferences:value value="${row.name}"/>
+                </c:forEach>
+            </preferences:preference>
+
+            <preferences:preference name="siteName" title="Site: ">
+                <c:forEach var="row" items="${siteQ.rows}">
+                    <preferences:value value="${row.name}"/>
+                </c:forEach>
+            </preferences:preference>
+
+            <preferences:preference name="idAuthName" title="Identifier Authority: ">
+                <c:forEach var="row" items="${idAuthQ.rows}">
+                    <preferences:value value="${row.name}"/>
+                </c:forEach>
+            </preferences:preference>
+
+            <preferences:preference name="pageLength" size="3" title="Page Length: " />
+
+            <preferences:preference name="componentHeight" size="2" title="Parent list limit: " />
+
+            <preferences:preference name="componentDepth" size="2" title="Component list depth: " />
+
+        </preferences:preferences>
             
     </body>
 </html>

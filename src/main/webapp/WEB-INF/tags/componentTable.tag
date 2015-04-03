@@ -12,11 +12,25 @@
 <%@attribute name="hardwareId" required="true"%>
 <%@attribute name="mode" required="true"%>
 
+<c:choose>
+    <c:when test="${'p' == mode}">
+        <c:set var="depth" value="${preferences.componentHeight}"/>
+    </c:when>
+    <c:when test="${'c' == mode}">
+        <c:set var="depth" value="${preferences.componentDepth}"/>
+    </c:when>
+    <c:otherwise>
+        <traveler:error message="Bug 785218: Bad component list mode."/>
+    </c:otherwise>
+</c:choose>
+
 <%
     java.util.List components = new java.util.LinkedList();
     request.setAttribute("components", components);
 %>
-<traveler:componentRows hardwareId="${hardwareId}" mode="${mode}"/>
+<c:if test="${depth > 0}">
+    <traveler:componentRows hardwareId="${hardwareId}" mode="${mode}" depth="${depth}"/>
+</c:if>
 
 <display:table name="${components}" class="datatable">
     <display:column property="lsstId" title="Component" sortable="true" headerClass="sortable"

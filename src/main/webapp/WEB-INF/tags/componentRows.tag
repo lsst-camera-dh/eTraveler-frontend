@@ -11,6 +11,7 @@
 
 <%@attribute name="hardwareId" required="true"%>
 <%@attribute name="mode" required="true"%><%-- "p" for parents, "c" for children --%>
+<%@attribute name="depth" required="true"%>
 
 <c:choose>
     <c:when test="${mode=='c'}">
@@ -26,6 +27,8 @@
         <c:set var="you" value="jane"/>        
     </c:otherwise>
 </c:choose>
+
+<c:set var="newDepth" value="${depth - 1}"/>
 
 <sql:query var="componentsQ" >
     select 
@@ -48,5 +51,7 @@
     <%
         ((java.util.List)request.getAttribute("components")).add(request.getAttribute("cRowJsp"));
     %>
-    <traveler:componentRows hardwareId="${cRow.itemId}" mode="${mode}"/>
+    <c:if test="${newDepth > 0}">
+        <traveler:componentRows hardwareId="${cRow.itemId}" mode="${mode}" depth="${newDepth}"/>
+    </c:if>
 </c:forEach>
