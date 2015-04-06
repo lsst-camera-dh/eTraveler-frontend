@@ -9,6 +9,7 @@
 <%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql" %>
 <%@taglib prefix="traveler" tagdir="/WEB-INF/tags"%>
+<%@taglib prefix="ta" tagdir="/WEB-INF/tags/actions"%>
 
 <%@attribute name="ncrActivityId" required="true"%>
 <%@attribute name="varNew" required="true" rtexprvalue="false"%>
@@ -64,14 +65,14 @@
             <c:set var="inNCR" value="${step.inNCR}"/>
         </c:when>
         <c:when test="${isStopped && fn:startsWith(edgePath, parentEdgePath)}">
-            <traveler:ncrExitActivity activityId="${step.activityId}"/>
+            <ta:ncrExitActivity activityId="${step.activityId}"/>
         </c:when>
     </c:choose>
 </c:forEach>
 
-<traveler:resumeActivity activityId="${travelerId}"/>
+<ta:resumeActivity activityId="${travelerId}"/>
 
-<traveler:createActivity var="activityId"
+<ta:createActivity var="activityId"
     hardwareId="${hardwareId}"
     processId="${processId}"
     parentActivityId="${parentActivityId}"

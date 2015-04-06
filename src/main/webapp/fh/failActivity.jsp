@@ -7,6 +7,7 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 
 <%@taglib prefix="traveler" tagdir="/WEB-INF/tags"%>
+<%@taglib prefix="ta" tagdir="/WEB-INF/tags/actions"%>
 
 <!DOCTYPE html>
 <html>
@@ -15,7 +16,7 @@
         <title>Fail Activity</title>
     </head>
     <body>
-        <traveler:failActivity activityId="${param.activityId}" status="${param.status}"/>
+        <ta:failActivity activityId="${param.activityId}" status="${param.status}"/>
         <traveler:redirDA/>
     </body>
 </html>

@@ -6,6 +6,7 @@
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib prefix="traveler" tagdir="/WEB-INF/tags"%>
+<%@taglib prefix="ta" tagdir="/WEB-INF/tags/actions"%>
 <!DOCTYPE html>
 <html>
     <head>
@@ -13,7 +14,7 @@
         <title>Start Activity</title>
     </head>
     <body>
-        <traveler:startActivity activityId="${param.activityId}"/>
+        <ta:startActivity activityId="${param.activityId}"/>
         <traveler:redirDA/>
     </body>
 </html>

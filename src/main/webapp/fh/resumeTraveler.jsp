@@ -8,6 +8,8 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql" %>
 <%@taglib prefix="traveler" tagdir="/WEB-INF/tags"%>
+<%@taglib prefix="ta" tagdir="/WEB-INF/tags/actions"%>
+
 <!DOCTYPE html>
 <html>
     <head>
@@ -30,7 +32,7 @@
                     and resolutionTS is null;
                 </sql:update>
                 
-                <traveler:resumeActivity activityId="${travelerId}"/>
+                <ta:resumeActivity activityId="${travelerId}"/>
                 <traveler:redirDA activityId="${travelerId}"/>
             </c:when>
             <c:otherwise>

@@ -8,6 +8,7 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql" %>
 <%@taglib prefix="traveler" tagdir="/WEB-INF/tags"%>
+<%@taglib prefix="ta" tagdir="/WEB-INF/tags/actions"%>
 
 <%-- The list of normal or fragment attributes can be specified here: --%>
 <%@attribute name="hardwareId" required="true"%>
@@ -46,5 +47,5 @@
     <sql:query var="statQ">
         select id from HardwareStatus where name='IN_PROGRESS';
     </sql:query>
-    <traveler:setHardwareStatus hardwareId="${hardwareId}" hardwareStatusId="${statQ.rows[0].id}"/>
+    <ta:setHardwareStatus hardwareId="${hardwareId}" hardwareStatusId="${statQ.rows[0].id}"/>
 </c:if>

@@ -9,6 +9,7 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql" %>
 <%@taglib prefix="traveler" tagdir="/WEB-INF/tags"%>
+<%@taglib prefix="ta" tagdir="/WEB-INF/tags/actions"%>
 
 <%@attribute name="activityId" required="true"%>
 <%@attribute name="status"%>
@@ -27,7 +28,7 @@
     
 <c:choose>
     <c:when test="${status == 'failure' && activity.iteration < activity.maxIteration}">
-        <traveler:retryActivity activityId="${activityId}"/>
+        <ta:retryActivity activityId="${activityId}"/>
     </c:when>
     <c:otherwise>
         <sql:transaction>
@@ -54,7 +55,7 @@
             where A.id=?<sql:param value="${activityId}"/>;
         </sql:query>
         <c:if test="${! empty activityQ.rows[0].parentActivityId}">
-            <traveler:failActivity activityId="${activityQ.rows[0].parentActivityId}" status="${status}"/>
+            <ta:failActivity activityId="${activityQ.rows[0].parentActivityId}" status="${status}"/>
         </c:if>
     </c:otherwise>
 </c:choose>

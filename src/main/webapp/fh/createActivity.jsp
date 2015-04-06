@@ -9,6 +9,8 @@
 <%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql" %>
 <%@taglib prefix="traveler" tagdir="/WEB-INF/tags"%>
+<%@taglib prefix="ta" tagdir="/WEB-INF/tags/actions"%>
+
 <!DOCTYPE html>
 <html>
     <head>
@@ -66,7 +68,7 @@
         
         <c:choose>
             <c:when test="${allOk}">
-                <traveler:createActivity hardwareId="${param.hardwareId}" processId="${param.processId}"
+                <ta:createActivity hardwareId="${param.hardwareId}" processId="${param.processId}"
                     parentActivityId="${param.parentActivityId}" processEdgeId="${param.processEdgeId}"
                     inNCR="${param.inNCR}" hardwareRelationshipId="${relationToBreak}"
                     var="newActivityId"/>

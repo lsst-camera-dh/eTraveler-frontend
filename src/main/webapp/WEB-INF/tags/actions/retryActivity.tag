@@ -9,6 +9,7 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql" %>
 <%@taglib prefix="traveler" tagdir="/WEB-INF/tags"%>
+<%@taglib prefix="ta" tagdir="/WEB-INF/tags/actions"%>
 
 <%@attribute name="activityId" required="true"%>
 
@@ -57,5 +58,5 @@ where
 <traveler:findTraveler var="travelerId" activityId="${activityId}"/>
 <traveler:isStopped var="isStopped" activityId="${travelerId}"/>
 <c:if test="${isStopped}">
-    <traveler:resumeActivity activityId="${travelerId}"/>
+    <ta:resumeActivity activityId="${travelerId}"/>
 </c:if>

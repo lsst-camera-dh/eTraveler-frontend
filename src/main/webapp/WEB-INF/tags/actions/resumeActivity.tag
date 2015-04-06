@@ -7,7 +7,7 @@
 <%@tag description="Resume work on a stopped traveler." pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql" %>
-<%@taglib prefix="traveler" tagdir="/WEB-INF/tags"%>
+<%@taglib prefix="ta" tagdir="/WEB-INF/tags/actions"%>
 
 <%@attribute name="activityId" required="true"%>
 
@@ -30,5 +30,5 @@
 </sql:query>
 
 <c:forEach var="childRow" items="${childrenQ.rows}">
-    <traveler:resumeActivity activityId="${childRow.id}"/>
+    <ta:resumeActivity activityId="${childRow.id}"/>
 </c:forEach>

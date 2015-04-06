@@ -9,12 +9,13 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql" %>
 <%@taglib prefix="traveler" tagdir="/WEB-INF/tags"%>
+<%@taglib prefix="ta" tagdir="/WEB-INF/tags/actions"%>
 
 <c:set var="allOk" value="true"/>
 <c:set var="message" value="Error #681399"/>
 
 <c:if test="${allOk}">
-    <traveler:startActivity activityId="${inputs.containerid}"/>
+    <ta:startActivity activityId="${inputs.containerid}"/>
 </c:if>
 
 <c:if test="${allOk}">
@@ -46,7 +47,7 @@ select count(id) as count from JobStepHistory where activityId=?<sql:param value
 </c:if>
 
 <c:if test="${allOk && ! done}">
-    <traveler:startActivity activityId="${childActivityId}"/>
+    <ta:startActivity activityId="${childActivityId}"/>
 </c:if>
 
 <c:if test="${allOk && ! done}">

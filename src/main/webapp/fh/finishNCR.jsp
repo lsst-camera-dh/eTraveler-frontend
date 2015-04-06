@@ -10,6 +10,7 @@
 <%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql" %>
 <%@taglib prefix="traveler" tagdir="/WEB-INF/tags"%>
+<%@taglib prefix="ta" tagdir="/WEB-INF/tags/actions"%>
 
 <!DOCTYPE html>
 <html>
@@ -19,7 +20,7 @@
     </head>
     <body>
 
-        <traveler:finishNCR ncrActivityId="${param.activityId}"
+        <ta:finishNCR ncrActivityId="${param.activityId}"
                             varNew="newActivityId"
                             varTrav="travelerId"/>
 

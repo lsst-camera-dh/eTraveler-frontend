@@ -7,6 +7,7 @@
 <%@tag description="Figure out the current step of a traveler instance, creating the next Activity if that's what needs to happen." pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@taglib prefix="traveler" tagdir="/WEB-INF/tags"%>
+<%@taglib prefix="ta" tagdir="/WEB-INF/tags/actions"%>
 
 <%@attribute name="stepList" required="true" type="java.util.List"%>
 <%@attribute name="scriptMode"%>
@@ -119,7 +120,7 @@
         </c:url>
         <c:choose>
             <c:when test="${scriptMode}">
-                <traveler:createActivity var="currentStepActivityId" hardwareId="${hardwareId}" processId="${theId}"
+                <ta:createActivity var="currentStepActivityId" hardwareId="${hardwareId}" processId="${theId}"
                     inNCR="${inNCR}" parentActivityId="${lastUnfinished}" processEdgeId="${processEdgeId}"/>
             </c:when>
             <c:when test="${activityAutoCreate}">
