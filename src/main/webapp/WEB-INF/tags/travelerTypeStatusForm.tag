@@ -5,7 +5,6 @@
 --%>
 
 <%@tag description="A form to change the status of a TravelerType" pageEncoding="UTF-8"%>
-<%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql" %>
 
 <%@attribute name="travelerTypeId"%>
 
