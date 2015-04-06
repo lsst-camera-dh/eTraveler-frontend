@@ -24,7 +24,7 @@
 <c:set var="travelerType" value="${ttQ.rows[0]}"/>
 
 <c:url var="processLink" value="displayProcess.jsp">
-    <c:param name="processId" value="${travelerType.rootProcessId}"/>
+    <c:param name="processPath" value="${travelerType.rootProcessId}"/>
 </c:url>
 
 <html>
