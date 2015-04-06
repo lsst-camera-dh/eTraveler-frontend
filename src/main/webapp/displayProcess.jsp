@@ -35,6 +35,13 @@
                 <td>
         <h2>Process</h2>
         <traveler:processCrumbs processPath="${param.processPath}"/>
+        
+        <c:if test="${! empty process.travelerTypeId}">
+            <c:url var="ttLink" value="displayTravelerType.jsp">
+                <c:param name="travelerTypeId" value="${process.travelerTypeId}"/>
+            </c:url>
+            <a href="${ttLink}">Administer Traveler Type</a><br>
+        </c:if>
 
         <traveler:processWidget processId="${processId}"/>
                 </td>
