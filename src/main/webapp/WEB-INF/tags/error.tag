@@ -9,7 +9,7 @@
 
 <%@attribute name="message"%>
 
-<c:url var="errorPage" value="error.jsp">
+<c:url var="errorPage" value="/error.jsp" context="/">
     <c:param name="message" value="${message}"/>
 </c:url>
 <c:redirect url="${errorPage}"/>

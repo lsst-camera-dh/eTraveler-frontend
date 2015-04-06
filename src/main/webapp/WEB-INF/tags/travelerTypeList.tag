@@ -29,7 +29,7 @@
 <sql:query var="result" >
     select P.id as processId, concat(P.name, ' v', P.version) as processName, 
         HG.name as hardwareGroupName, HG.id as hardwareGroupId, 
-        TT.state,
+        TT.id as travelerTypeId, TT.state,
         count(A.id)-count(A.end) as inProgress, count(A.id) as total, count(A.end) as completed 
     from
     Process P
@@ -64,7 +64,8 @@
                         href="displayHardwareGroup.jsp" paramId="hardwareGroupId" paramProperty="hardwareGroupId"/>
     </c:if>
     <c:if test="${empty state or preferences.showFilteredColumns}">
-        <display:column property="state" sortable="true" headerClass="sortable"/>
+        <display:column property="state" sortable="true" headerClass="sortable"
+                        href="displayTravelerType.jsp" paramId="travelerTypeId" paramProperty="travelerTypeId"/>
     </c:if>
     <display:column property="inProgress" sortable="true" headerClass="sortable"
                     href="${inProgressLink}" paramId="processId" paramProperty="processId"/>
