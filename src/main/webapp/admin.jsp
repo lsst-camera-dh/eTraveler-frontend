@@ -22,22 +22,7 @@
     <c:url var="backendUrl" value="${backendLink}"/>
     <a href="${backendUrl}">Upload a new Traveler Type or version</a>
 <hr>
-    This makes a substep of an existing process traveler usable as the entry point to a process traveler in its own right.<br>
-    The interface here is terrible, if you have ideas on improving it, please share!
-    <br>
-    <sql:query var="processesQ">
-        select id, name from Process where id not in (select rootProcessId from TravelerType);
-    </sql:query>
-    <form method="get" action="fh/addTravelerType.jsp">
-        <input type="submit" value="Add Process Traveler Entry Point">
-        Root Process: <select name="rootProcessId">
-            <c:forEach var="process" items="${processesQ.rows}">
-                <option value="${process.id}"><c:out value="${process.name}"/></option>
-            </c:forEach>
-        </select>
-        Owner: <input type="text" name="owner">
-        Reason: <input type="text" name="reason">
-    </form>
+    <traveler:newTravelerTypeForm/>
 <hr>
     <form method="get" action="fh/addHardwareGroup.jsp">
         <input type="submit" value="Add Hardware Group">

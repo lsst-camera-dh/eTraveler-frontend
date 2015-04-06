@@ -70,5 +70,7 @@
         <traveler:activityList processId="${processId}"/>
         Make a new instance: <traveler:newTravelerForm processId="${processId}" hardwareGroupId="${process.hardwareGroupId}"/>
         </c:if>
+        
+        <traveler:newTravelerTypeForm processId="${processId}"/> 
     </body>
 </html>
