@@ -31,6 +31,7 @@
             </c:if>
         </c:if>
         
+<sql:transaction>
         <c:if test="${allOk}">
             <sql:query var="statusQ">
                 select hardwareStatusId from Hardware where id=?<sql:param value="${param.hardwareId}"/>;
@@ -50,5 +51,6 @@
                 ${message}
             </c:otherwise>
         </c:choose>
-    </body>
+</sql:transaction>
+</body>
 </html>

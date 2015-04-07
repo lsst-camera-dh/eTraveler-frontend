@@ -14,7 +14,7 @@
         <title>Add Identifier</title>
     </head>
     <body>
-
+<sql:transaction>
         <sql:update >
             insert into HardwareIdentifier set
             authorityId=?<sql:param value="${param.authId}"/>,
@@ -24,6 +24,7 @@
             createdBy=?<sql:param value="${userName}"/>,
             creationTS=UTC_TIMESTAMP();
         </sql:update>
+</sql:transaction>
         <c:redirect url="${header.referer}"/>
     </body>
 </html>

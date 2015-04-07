@@ -11,7 +11,6 @@
 <%@attribute name="activityId" required="true"%>
 <%@attribute name="status" required="true"%>
 
-<sql:transaction>
     <sql:query var="statusIdQ">
 select id from ActivityFinalStatus where name=?<sql:param value="${status}"/>;
     </sql:query>
@@ -28,4 +27,3 @@ activityId=?<sql:param value="${activityId}"/>,
 createdBy=?<sql:param value="${userName}"/>,
 creationTS=utc_timestamp();
     </sql:update>
-</sql:transaction>

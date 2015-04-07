@@ -6,6 +6,7 @@
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql" %>
 <%@taglib prefix="traveler" tagdir="/WEB-INF/tags"%>
 <%@taglib prefix="ta" tagdir="/WEB-INF/tags/actions"%>
 <!DOCTYPE html>
@@ -19,9 +20,10 @@
         
         <c:set var="mask" value="15"/>
 
+<sql:transaction>
         <ta:stopTraveler activityId="${param.activityId}" mask="${mask}" 
                          reason="${param.reason}" travelerId="${travelerId}"/>
-
+</sql:transaction>
         <traveler:redirDA activityId="${travelerId}"/>
     </body>
 </html>

@@ -17,6 +17,7 @@
     <body>
         <c:set var="allOk" value="true"/>
         
+<sql:transaction>
         <c:if test="${allOk}">
             <c:if test="${empty param.newLocationId}">
                 <c:set var="allOk" value="false"/>
@@ -63,5 +64,6 @@
                 ${message}
             </c:otherwise>
         </c:choose>
+</sql:transaction>
     </body>
 </html>

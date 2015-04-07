@@ -14,6 +14,7 @@
         <title>Add HardwareType to HardwareGroup</title>
     </head>
     <body>
+<sql:transaction>        
         <sql:update>
             insert into HardwareTypeGroupMapping set
             hardwareGroupId=?<sql:param value="${param.hardwareGroupId}"/>,
@@ -21,6 +22,7 @@
             createdBy=?<sql:param value="${userName}"/>,
             creationTS=UTC_TIMESTAMP();
         </sql:update>
+</sql:transaction>
         <c:redirect url="${header.referer}"/>
     </body>
 </html>

@@ -14,6 +14,7 @@
         <title>Add HardwareRelationshipType</title>
     </head>
     <body>
+        <sql:transaction>
         <sql:update >
             insert into HardwareRelationshipType set
             name=?<sql:param value="${param.name}"/>,
@@ -23,6 +24,7 @@
             createdBy=?<sql:param value="${userName}"/>,
             creationTS=UTC_TIMESTAMP();
         </sql:update>
+        </sql:transaction>
         <c:redirect url="${header.referer}"/>
     </body>
 </html>

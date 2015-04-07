@@ -11,18 +11,16 @@
 <%@attribute name="hardwareId" required="true"%>
 <%@attribute name="hardwareStatusId" required="true"%>
 
-<sql:transaction >
-    <sql:update>
-        update Hardware set 
-        hardwareStatusId=?<sql:param value="${hardwareStatusId}"/>
-        where
-        id=?<sql:param value="${param.hardwareId}"/>;
-    </sql:update>
-    <sql:update>
-        insert into HardwareStatusHistory set
-        hardwareStatusId=?<sql:param value="${hardwareStatusId}"/>,
-        hardwareId=?<sql:param value="${hardwareId}"/>,
-        createdBy=?<sql:param value="${userName}"/>,
-        creationTS=UTC_TIMESTAMP();
-    </sql:update>
-</sql:transaction>
+<sql:update>
+    update Hardware set 
+    hardwareStatusId=?<sql:param value="${hardwareStatusId}"/>
+    where
+    id=?<sql:param value="${param.hardwareId}"/>;
+</sql:update>
+<sql:update>
+    insert into HardwareStatusHistory set
+    hardwareStatusId=?<sql:param value="${hardwareStatusId}"/>,
+    hardwareId=?<sql:param value="${hardwareId}"/>,
+    createdBy=?<sql:param value="${userName}"/>,
+    creationTS=UTC_TIMESTAMP();
+</sql:update>

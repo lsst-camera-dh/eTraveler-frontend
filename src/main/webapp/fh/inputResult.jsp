@@ -16,6 +16,7 @@
         <title>Input Result</title>
     </head>
     <body>
+<sql:transaction>
         <c:choose>
             <c:when test="${param.isName == 'float'}">
                 <c:set var="tableName" value="FloatResultManual"/>
@@ -55,7 +56,7 @@ value=?<sql:param value="${param.value}"/>,
 createdBy=?<sql:param value="${userName}"/>,
 creationTS=UTC_TIMESTAMP();
         </sql:update>
-
+</sql:transaction>
         <c:redirect url="${header.referer}"/>
     </body>
 </html>

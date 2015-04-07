@@ -18,6 +18,7 @@
     <body>
         
         
+<sql:transaction>
         <sql:query var="ttQ">
 select id from TravelerType where id=?<sql:param value="${param.travelerTypeId}"/>;
         </sql:query>
@@ -31,5 +32,6 @@ select id from TravelerType where id=?<sql:param value="${param.travelerTypeId}"
                 <c:redirect url="${header.referer}"/> 
             </c:otherwise>
         </c:choose>
+</sql:transaction>
     </body>
 </html>

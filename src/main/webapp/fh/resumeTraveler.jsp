@@ -20,6 +20,7 @@
         <traveler:findTraveler var="travelerId" activityId="${param.activityId}"/>
         <traveler:isStopped var="isStopped" activityId="${travelerId}"/>
         
+<sql:transaction>
         <c:choose>
             <c:when test="${isStopped}">
                 <sql:update>
@@ -39,5 +40,6 @@
 You can't resume a traveler that's not stopped.                
             </c:otherwise>
         </c:choose>
+</sql:transaction>
     </body>
 </html>

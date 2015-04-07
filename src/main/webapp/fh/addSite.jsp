@@ -14,6 +14,7 @@
         <title>Add Site</title>
     </head>
     <body>
+<sql:transaction>
         <sql:update >
             insert into Site set
             name=?<sql:param value="${param.name}"/>,
@@ -22,6 +23,7 @@
             createdBy=?<sql:param value="${userName}"/>,
             creationTS=UTC_TIMESTAMP();
         </sql:update>
+</sql:transaction>
         <c:redirect url="${header.referer}"/>
     </body>
 </html>
