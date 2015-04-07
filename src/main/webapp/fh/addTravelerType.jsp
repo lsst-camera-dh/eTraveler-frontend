@@ -26,12 +26,12 @@ Error: Process <c:out value="${param.rootProcessId}"/> does not exist!
     <c:otherwise>
         <sql:update>
 insert into TravelerType set
-    rootProcessId=?<sql:param value="${param.rootProcessId}"/>,
-    state='NEW',
-    owner=?<sql:param value="${param.owner}"/>,
-    reason=?<sql:param value="${param.reason}"/>,
-    createdBy=?<sql:param value="${userName}"/>,
-    creationTS=UTC_TIMESTAMP();
+rootProcessId=?<sql:param value="${param.rootProcessId}"/>,
+state='NEW',
+owner=?<sql:param value="${param.owner}"/>,
+reason=?<sql:param value="${param.reason}"/>,
+createdBy=?<sql:param value="${userName}"/>,
+creationTS=UTC_TIMESTAMP();
         </sql:update>
         <c:redirect url="${header.referer}"/>
     </c:otherwise>
