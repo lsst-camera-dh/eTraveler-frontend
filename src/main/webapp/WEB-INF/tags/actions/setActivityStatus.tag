@@ -10,6 +10,11 @@
 
 <%@attribute name="activityId" required="true"%>
 <%@attribute name="status" required="true"%>
+<%@attribute name="setEnd"%>
+
+<c:if test="${empty setEnd}">
+    <c:set var="setEnd" value="false"/>
+</c:if>
 
     <sql:query var="statusIdQ">
 select id from ActivityFinalStatus where name=?<sql:param value="${status}"/>;

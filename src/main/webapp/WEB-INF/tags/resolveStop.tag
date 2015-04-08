@@ -26,6 +26,13 @@
             </form>
         </td>
         <td>
+            <form METHOD=GET ACTION="fh/skipStep.jsp" target="_top">
+                <input type="hidden" name="activityId" value="${activityId}">       
+                <input type="hidden" name="topActivityId" value="${travelerId}">       
+                <INPUT TYPE=SUBMIT value="Skip Step">
+            </form>            
+        </td>
+        <td>
             <traveler:selectNCR activityId="${activityId}"/>
         </td>
         <td>
