@@ -17,7 +17,6 @@
     <body>
         <c:set var="allOk" value="true"/>
         
-<sql:transaction>
         <c:if test="${allOk}">
             <c:if test="${empty param.newLocationId}">
                 <c:set var="allOk" value="false"/>
@@ -57,13 +56,14 @@
                 
         <c:choose>
             <c:when test="${allOk}">
+<sql:transaction>
                 <ta:setHardwareLocation hardwareId="${param.hardwareId}" newLocationId="${param.newLocationId}"/>
+</sql:transaction>
                 <c:redirect url="${header.referer}"/>
             </c:when>
             <c:otherwise>
                 ${message}
             </c:otherwise>
         </c:choose>
-</sql:transaction>
     </body>
 </html>

@@ -33,7 +33,7 @@
     select * from Activity where id=LAST_INSERT_ID();
 </sql:query>
 
-        <c:set var="activity" value="${activityQ.rows[0]}"/>
+<c:set var="activity" value="${activityQ.rows[0]}"/>
 <c:set var="activityId" value="${activity.id}"/>
 
 <sql:query var="hardwareQ">

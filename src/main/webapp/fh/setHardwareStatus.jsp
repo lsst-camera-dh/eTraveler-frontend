@@ -31,7 +31,6 @@
             </c:if>
         </c:if>
         
-<sql:transaction>
         <c:if test="${allOk}">
             <sql:query var="statusQ">
                 select hardwareStatusId from Hardware where id=?<sql:param value="${param.hardwareId}"/>;
@@ -44,13 +43,14 @@
         
         <c:choose>
             <c:when test="${allOk}">
+<sql:transaction>
                 <ta:setHardwareStatus hardwareStatusId="${param.hardwareStatusId}" hardwareId="${param.hardwareId}"/>
+</sql:transaction>
                 <c:redirect url="${header.referer}"/>
             </c:when>
             <c:otherwise>
                 ${message}
             </c:otherwise>
         </c:choose>
-</sql:transaction>
 </body>
 </html>

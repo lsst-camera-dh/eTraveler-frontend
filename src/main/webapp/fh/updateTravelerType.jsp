@@ -18,7 +18,6 @@
     <body>
         
         
-<sql:transaction>
         <sql:query var="ttQ">
 select id from TravelerType where id=?<sql:param value="${param.travelerTypeId}"/>;
         </sql:query>
@@ -28,10 +27,11 @@ select id from TravelerType where id=?<sql:param value="${param.travelerTypeId}"
                 <traveler:error message="TravelerType ${param.travelerTypeId} does not exist!"/>
             </c:when>
             <c:otherwise>
+<sql:transaction>
                 <ta:setTravelerTypeStatus travelerTypeId="${param.travelerTypeId}" status="${param.status}"/>
+</sql:transaction>
                 <c:redirect url="${header.referer}"/> 
             </c:otherwise>
         </c:choose>
-</sql:transaction>
     </body>
 </html>

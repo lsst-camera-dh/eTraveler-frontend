@@ -22,7 +22,6 @@
         <c:set var="message" value="Tell the developers you ran into bug #282805"/>
         
         <%-- If this process uninstalls a component, find the relationship to break --%>
-<sql:transaction>
         <c:if test="${allOk}">
             <sql:query var="breakHRQ">
                 select P.travelerActionMask&(select maskBit from InternalAction where name='breakHardwareRelationship') as breaksRelationship
@@ -69,10 +68,12 @@
         
         <c:choose>
             <c:when test="${allOk}">
+<sql:transaction>
                 <ta:createActivity hardwareId="${param.hardwareId}" processId="${param.processId}"
                     parentActivityId="${param.parentActivityId}" processEdgeId="${param.processEdgeId}"
                     inNCR="${param.inNCR}" hardwareRelationshipId="${relationToBreak}"
                     var="newActivityId"/>
+</sql:transaction>
 
                 <traveler:redirDA/>
             </c:when>
@@ -80,6 +81,5 @@
                 <c:out value="${message}"/>
             </c:otherwise>
         </c:choose>
-</sql:transaction>
     </body>
 </html>
