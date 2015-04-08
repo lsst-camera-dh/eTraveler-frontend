@@ -5,7 +5,7 @@
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-
+<%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql" %>
 <%@taglib prefix="traveler" tagdir="/WEB-INF/tags"%>
 <%@taglib prefix="ta" tagdir="/WEB-INF/tags/actions"%>
 
@@ -16,7 +16,9 @@
         <title>Fail Activity</title>
     </head>
     <body>
+<sql:transaction>
         <ta:failActivity activityId="${param.activityId}" status="${param.status}"/>
+</sql:transaction>
         <traveler:redirDA/>
     </body>
 </html>

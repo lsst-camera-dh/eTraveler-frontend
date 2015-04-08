@@ -56,7 +56,9 @@
                 
         <c:choose>
             <c:when test="${allOk}">
+<sql:transaction>
                 <ta:setHardwareLocation hardwareId="${param.hardwareId}" newLocationId="${param.newLocationId}"/>
+</sql:transaction>
                 <c:redirect url="${header.referer}"/>
             </c:when>
             <c:otherwise>

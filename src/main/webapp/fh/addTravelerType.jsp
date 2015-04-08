@@ -14,7 +14,6 @@
         <title>Add Traveler Type</title>
     </head>
     <body>
-        
         <sql:query var="processQ">
 select id from Process where id=?<sql:param value="${param.rootProcessId}"/>;
         </sql:query>
@@ -24,6 +23,7 @@ select id from Process where id=?<sql:param value="${param.rootProcessId}"/>;
 Error: Process <c:out value="${param.rootProcessId}"/> does not exist!
     </c:when>
     <c:otherwise>
+<sql:transaction>        
         <sql:update>
 insert into TravelerType set
 rootProcessId=?<sql:param value="${param.rootProcessId}"/>,
@@ -33,9 +33,9 @@ reason=?<sql:param value="${param.reason}"/>,
 createdBy=?<sql:param value="${userName}"/>,
 creationTS=UTC_TIMESTAMP();
         </sql:update>
+</sql:transaction>
         <c:redirect url="${header.referer}"/>
     </c:otherwise>
 </c:choose>
-
     </body>
 </html>

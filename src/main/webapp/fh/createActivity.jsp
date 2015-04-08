@@ -68,10 +68,12 @@
         
         <c:choose>
             <c:when test="${allOk}">
+<sql:transaction>
                 <ta:createActivity hardwareId="${param.hardwareId}" processId="${param.processId}"
                     parentActivityId="${param.parentActivityId}" processEdgeId="${param.processEdgeId}"
                     inNCR="${param.inNCR}" hardwareRelationshipId="${relationToBreak}"
                     var="newActivityId"/>
+</sql:transaction>
 
                 <traveler:redirDA/>
             </c:when>

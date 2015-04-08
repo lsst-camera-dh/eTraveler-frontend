@@ -22,6 +22,7 @@
         
         <c:choose>
             <c:when test="${isStopped}">
+<sql:transaction>
                 <sql:update>
                     update StopWorkHistory set
                     resolution='RESUMED',
@@ -33,6 +34,7 @@
                 </sql:update>
                 
                 <ta:resumeActivity activityId="${travelerId}"/>
+</sql:transaction>
                 <traveler:redirDA activityId="${travelerId}"/>
             </c:when>
             <c:otherwise>

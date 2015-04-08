@@ -16,10 +16,12 @@
         <title>Create Traveler</title>
     </head>
     <body>
+        <sql:transaction>
         <ta:createTraveler var="activityId"
             hardwareId="${param.hardwareId}" 
             processId="${param.processId}"
             inNCR="${param.inNCR}"/>
+        </sql:transaction>
         <traveler:redirDA activityId="${activityId}"/>
     </body>
 </html>

@@ -43,12 +43,14 @@
         
         <c:choose>
             <c:when test="${allOk}">
+<sql:transaction>
                 <ta:setHardwareStatus hardwareStatusId="${param.hardwareStatusId}" hardwareId="${param.hardwareId}"/>
+</sql:transaction>
                 <c:redirect url="${header.referer}"/>
             </c:when>
             <c:otherwise>
                 ${message}
             </c:otherwise>
         </c:choose>
-    </body>
+</body>
 </html>
