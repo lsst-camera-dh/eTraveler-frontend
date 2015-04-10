@@ -56,7 +56,7 @@
             </preferences:preference>
         <tr>
             <td>This will be preselected on some forms.<br>
-            If not null, The selected identifier will appear in component list.</td>
+            If not null, The selected identifier will appear in component and activity lists.</td>
             <td>Current Value: <c:out value="${preferences.idAuthName}"/></td>
         </tr>
 
