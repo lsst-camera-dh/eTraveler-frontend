@@ -51,7 +51,7 @@
     <display:column property="processName" title="Name" sortable="true" headerClass="sortable"
                       href="displayActivity.jsp" paramId="activityId" paramProperty="activityId"/>
     <c:if test="${empty hardwareId or preferences.showFilteredColumns}">
-        <display:column property="lsstId" title="${appVariables.experiment} Serial Number" sortable="true" headerClass="sortable"
+        <display:column property="lsstId" title="Primary Identifier" sortable="true" headerClass="sortable"
                         href="displayHardware.jsp" paramId="hardwareId" paramProperty="hardwareId"/>
         <display:column property="manufacturerId" title="Manufacturer Serial Number" sortable="true" headerClass="sortable"
                         href="displayHardware.jsp" paramId="hardwareId" paramProperty="hardwareId"/>

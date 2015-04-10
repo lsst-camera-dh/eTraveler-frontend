@@ -52,7 +52,7 @@
     ;
 </sql:query>
 <display:table name="${result.rows}" class="datatable" pagesize="${preferences.pageLength}" sort="list">
-    <display:column property="lsstId" title="${appVariables.experiment} Serial Number" sortable="true" headerClass="sortable"
+    <display:column property="lsstId" title="Primary Identifier" sortable="true" headerClass="sortable"
                     href="displayHardware.jsp" paramId="hardwareId" paramProperty="id"/>
     <display:column property="manufacturerId" title="Manufacturer Serial Number" sortable="true" headerClass="sortable"
                     href="displayHardware.jsp" paramId="hardwareId" paramProperty="id"/>
