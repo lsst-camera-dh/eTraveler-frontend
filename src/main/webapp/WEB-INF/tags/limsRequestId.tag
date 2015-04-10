@@ -19,7 +19,7 @@
         Activity A
         inner join Hardware H on A.hardwareId=H.id
         inner join Process P on A.processId=P.id
-        inner join HardwareGroup HG on HT.id=P.hardwareGroupId
+        inner join HardwareGroup HG on HG.id=P.hardwareGroupId
         where
         H.lsstId=?<sql:param value="${inputs.unit_id}"/>
         and P.name=?<sql:param value="${inputs.job}"/>
