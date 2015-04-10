@@ -16,6 +16,8 @@
     </head>
     <body>
         <sql:transaction>
+            <traveler:findTraveler var="travelerId" activityId="${param.activityId}"/>
+            <ta:resumeActivity activityId="${travelerId}"/>
             <ta:skipStep activityId="${param.activityId}"/>
         </sql:transaction>
     <%--    <traveler:redirDA/>--%>
