@@ -5,9 +5,10 @@
 --%>
 
 <%@tag description="List traveler types" pageEncoding="US-ASCII"%>
-<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql" %>
-<%@taglib prefix="display" uri="http://displaytag.sf.net" %>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql"%>
+<%@taglib prefix="display" uri="http://displaytag.sf.net"%>
+<%@taglib prefix="traveler" tagdir="/WEB-INF/tags"%>
 
 <%@attribute name="hardwareTypeId"%>
 <%@attribute name="hardwareGroupId"%>
@@ -56,7 +57,7 @@
     </c:if>
     group by P.id
 </sql:query>
-<display:table name="${result.rows}" class="datatable" pagesize="${preferences.pageLength}" sort="list">
+<display:table name="${result.rows}" class="datatable" pagesize="${preferences.pageLength}" sort="list" id="ttRow">
     <display:column property="processName" title="Name" sortable="true" headerClass="sortable"
                     href="displayProcess.jsp" paramId="processPath" paramProperty="processId"/>
     <c:if test="${empty hardwareGroupId or preferences.showFilteredColumns}">
@@ -67,6 +68,10 @@
         <display:column property="state" sortable="true" headerClass="sortable"
                         href="displayTravelerType.jsp" paramId="travelerTypeId" paramProperty="travelerTypeId"/>
     </c:if>
+    <display:column title="Steps" sortable="true" headerClass="sortable">
+        <traveler:countSteps var="nSteps" processId="${ttRow.processId}"/>
+        ${nSteps}
+    </display:column>
     <display:column property="inProgress" sortable="true" headerClass="sortable"
                     href="${inProgressLink}" paramId="processId" paramProperty="processId"/>
     <display:column property="completed" sortable="true" headerClass="sortable"

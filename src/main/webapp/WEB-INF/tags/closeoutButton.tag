@@ -5,8 +5,8 @@
 --%>
 
 <%@tag description="Provide buttons to finish an Activity" pageEncoding="US-ASCII"%>
-<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql" %>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql"%>
 <%@taglib prefix="traveler" tagdir="/WEB-INF/tags"%>
 
 <%@attribute name="activityId" required="true"%>
@@ -123,6 +123,14 @@
                 <INPUT TYPE=SUBMIT value="Resolve Stop Work"
                        <c:if test="${! hasOpenSWH}">disabled</c:if>>
             </form>                              
+        </td>
+        <td>
+            <form METHOD=GET ACTION="fh/skipStep.jsp" target="_top">
+                <input type="hidden" name="activityId" value="${activityId}">       
+                <input type="hidden" name="topActivityId" value="${travelerId}">       
+                <INPUT TYPE=SUBMIT value="Skip Step"
+                       <c:if test="${closed}">disabled</c:if>>
+            </form>            
         </td>
     </tr>
 </table>

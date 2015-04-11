@@ -5,9 +5,9 @@
 --%>
 
 <%@page contentType="text/html" pageEncoding="US-ASCII"%>
-<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql" %>
-<%@taglib prefix="display" uri="http://displaytag.sf.net" %>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql"%>
+<%@taglib prefix="display" uri="http://displaytag.sf.net"%>
 <%@taglib prefix="traveler" tagdir="/WEB-INF/tags"%>
 
 <traveler:lastInPath var="processId" processPath="${param.processPath}"/>
@@ -35,6 +35,9 @@
                 <td>
         <h2>Process</h2>
         <traveler:processCrumbs processPath="${param.processPath}"/>
+        
+        <traveler:countSteps var="nSteps" processId="${processId}"/>
+        ${nSteps} steps <br>
         
         <c:if test="${! empty process.travelerTypeId}">
             <c:url var="ttLink" value="displayTravelerType.jsp">
