@@ -127,7 +127,7 @@
         <td>
             <form METHOD=GET ACTION="fh/skipStep.jsp" target="_top">
                 <input type="hidden" name="activityId" value="${activityId}">       
-                <input type="hidden" name="topActivityId" value="${travelerId}">       
+                <input type="hidden" name="topActivityId" value="${param.topActivityId}">       
                 <INPUT TYPE=SUBMIT value="Skip Step"
                        <c:if test="${closed}">disabled</c:if>>
             </form>            

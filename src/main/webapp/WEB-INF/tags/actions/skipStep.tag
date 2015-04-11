@@ -11,7 +11,7 @@
 
 <%@attribute name="activityId" required="true"%>
 
-${activityId}
+<ta:setActivityStatus activityId="${activityId}" status="skipped"/>
 
 <sql:query var="childrenQ">
     select id from Activity 

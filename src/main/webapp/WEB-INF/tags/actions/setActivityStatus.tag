@@ -10,24 +10,34 @@
 
 <%@attribute name="activityId" required="true"%>
 <%@attribute name="status" required="true"%>
-<%@attribute name="setEnd"%>
-
-<c:if test="${empty setEnd}">
-    <c:set var="setEnd" value="false"/>
-</c:if>
 
     <sql:query var="statusIdQ">
-select id from ActivityFinalStatus where name=?<sql:param value="${status}"/>;
+select * from ActivityFinalStatus where name=?<sql:param value="${status}"/>;
     </sql:query>
-    <c:set var="activityStatusId" value="${statusIdQ.rows[0].id}"/>
+<c:set var="activityStatus" value="${statusIdQ.rows[0]}"/>
+<c:set var="statusId" value="${activityStatus.id}"/>
+<c:set var="isFinal" value="${activityStatus.isFinal}"/>
+
+    <sql:query var="activityQ">
+select * from Activity where id=?<sql:param value="${activityId}"/>;
+    </sql:query>
+<c:set var="activity" value="${activityQ.rows[0]}"/>
+<c:set var="started" value="${! empty activity.begin}"/>
+
     <sql:update>
 update Activity set 
-activityFinalStatusId=?<sql:param value="${activityStatusId}"/> 
+<c:if test="${isFinal}">
+    <c:if test="${! started}">begin=utc_timestamp(),</c:if>
+    end=utc_timestamp(),
+    closedBy=?<sql:param value="${userName}"/>,
+</c:if>
+activityFinalStatusId=?<sql:param value="${statusId}"/> 
 where id=?<sql:param value="${activityId}"/>;
     </sql:update>
+
     <sql:update>
 insert into ActivityStatusHistory set
-activityStatusId=?<sql:param value="${activityStatusId}"/>,
+activityStatusId=?<sql:param value="${statusId}"/>,
 activityId=?<sql:param value="${activityId}"/>,
 createdBy=?<sql:param value="${userName}"/>,
 creationTS=utc_timestamp();

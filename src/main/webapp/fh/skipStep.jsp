@@ -20,6 +20,6 @@
             <ta:resumeActivity activityId="${travelerId}"/>
             <ta:skipStep activityId="${param.activityId}"/>
         </sql:transaction>
-    <%--    <traveler:redirDA/>--%>
+        <traveler:redirDA/>
     </body>
 </html>
