@@ -26,7 +26,7 @@
             
         <preferences:preferences name="preferences">
 
-            <preferences:preference name="role" title="Role: ">
+            <preferences:preference name="role" title="<b>Role:</b> ">
                 <c:forEach var="row" items="${roleQ.rows}">
                     <preferences:value value="${row.name}"/>
                 </c:forEach>
@@ -36,7 +36,7 @@
             <td>Current Value: <c:out value="${preferences.role}"/></td>
         </tr>
 
-        <preferences:preference name="siteName" title="Site: ">
+        <preferences:preference name="siteName" title="<b>Site:</b> ">
                 <c:forEach var="row" items="${siteQ.rows}">
                     <preferences:value value="${row.name}"/>
                 </c:forEach>
@@ -48,7 +48,7 @@
         </tr>
 
 
-            <preferences:preference name="idAuthName" title="Identifier Authority: ">
+            <preferences:preference name="idAuthName" title="<b>Identifier Authority:</b> ">
                 <preferences:value value="null"/>
                 <c:forEach var="row" items="${idAuthQ.rows}">
                     <preferences:value value="${row.name}"/>
@@ -61,25 +61,25 @@
         </tr>
 
 
-            <preferences:preference name="pageLength" size="3" title="Page Length: " />
+            <preferences:preference name="pageLength" size="3" title="<b>Page Length:</b> " />
         <tr>
             <td>This is the number of rows to show in paginated tables.</td>
             <td>Current Value: <c:out value="${preferences.pageLength}"/></td>
         </tr>
 
-            <preferences:preference name="componentHeight" size="2" title="Parent list limit: " />
+            <preferences:preference name="componentHeight" size="2" title="<b>Parent list limit:</b> " />
         <tr>
             <td>When listing what assembly the current component is part of, go up the tree this many lavels.</td>
             <td>Current Value: <c:out value="${preferences.componentHeight}"/></td>
         </tr>
 
-            <preferences:preference name="componentDepth" size="2" title="Component list depth: " />
+            <preferences:preference name="componentDepth" size="2" title="<b>Component list depth:</b> " />
         <tr>
             <td>When listing the subassemblies or components of an assembly, this sets how many levels into the tree it goes.</td>
             <td>Current Value: <c:out value="${preferences.componentDepth}"/></td>
         </tr>
 
-            <preferences:preference name="showFilteredColumns" title="Show Filtered Columns: ">
+            <preferences:preference name="showFilteredColumns" title="<b>Show Filtered Columns:</b> ">
                 <preferences:value value="true"/>
                 <preferences:value value="false"/>
             </preferences:preference>
