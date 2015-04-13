@@ -58,6 +58,7 @@
 <traveler:fullContext var="fullContext"/>
 <c:url var="displayUrl" value="${fullContext}/${page}">
     <c:param name="${paramName}" value="${paramValue}"/>
+    <c:param name="dataSourceMode" value="${appVariables.dataSourceMode}"/>
 </c:url>
 <c:set var="displayLink" value="<a href='${displayUrl}' target='_blank'>eTraveler</a>"/>
 
