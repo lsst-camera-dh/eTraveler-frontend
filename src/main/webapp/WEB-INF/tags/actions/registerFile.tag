@@ -60,13 +60,14 @@
 <c:choose>
     <c:when test="${mode == 'manual'}">
 <upload:uploadParser fileItem="${fileItem}" varName="name" varFormat="fileFormat" varSize="fs" varSha1="digest"/>
+<c:if test="${empty fileFormat}"><c:set var="fileFormat" value="unspecified"/></c:if>
 <c:set var="uploadedFileSize" value="${fs}" scope="request"/>
 <c:set var="uploadDigest" value="${digest}" scope="request"/>
     </c:when>
     <c:when test="${mode == 'harnessed'}">
 <c:set var="fnComponents" value="${fn:split(name, '.')}"/>
 <c:set var="fileExt" value="${fnComponents[fn:length(fnComponents)-1]}"/>
-<c:set var="fileFormat" value="${fileExt == name ? 'UNKNOWN' : fileExt}"/>
+<c:set var="fileFormat" value="${fileExt == name ? 'unspecified' : fileExt}"/>
     </c:when>
     <c:otherwise>
         AAAaaack!!!! #220561
