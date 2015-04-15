@@ -6,8 +6,8 @@
 
 <%@tag description="Supply the next command for scripted sequences." pageEncoding="UTF-8"%>
 
-<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql" %>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql"%>
 <%@taglib prefix="traveler" tagdir="/WEB-INF/tags"%>
 <%@taglib prefix="ta" tagdir="/WEB-INF/tags/actions"%>
 
@@ -28,31 +28,40 @@
     <c:set var="done" value="${childActivityId == inputs.containerid}"/>
 </c:if>
 
-<c:if test="${allOk && ! done}">
-    <sql:query var="historyQ">
+<c:if test="${allOk}"><c:choose>
+    <c:when test="${done}">
+        <ta:closeoutActivity activityId="${inputs.containerid}"/>
+    </c:when>
+    <c:otherwise>
+
+        <c:if test="${allOk}">
+            <sql:query var="historyQ">
 select count(id) as count from JobStepHistory where activityId=?<sql:param value="${childActivityId}"/>;
-    </sql:query>
-    <c:if test="${historyQ.rows[0].count != 0}">
-        <c:set var="allOk" value="false"/>
-        <c:set var="message" value="Job Harness already running."/>        
-    </c:if>
-</c:if>
+            </sql:query>
+            <c:if test="${historyQ.rows[0].count != 0}">
+                <c:set var="allOk" value="false"/>
+                <c:set var="message" value="Job Harness already running."/>        
+            </c:if>
+        </c:if>
 
-<c:if test="${allOk && ! done}">
-    <traveler:autoProcessPrereq var="gotAllPrereqs" activityId="${childActivityId}"/>
-    <c:if test="${! gotAllPrereqs}">
-        <c:set var="allOk" value="false"/>
-        <c:set var="message" value="Prereqs not satisfied."/>
-    </c:if>
-</c:if>
+        <c:if test="${allOk}">
+            <traveler:autoProcessPrereq var="gotAllPrereqs" activityId="${childActivityId}"/>
+            <c:if test="${! gotAllPrereqs}">
+                <c:set var="allOk" value="false"/>
+                <c:set var="message" value="Prereqs not satisfied."/>
+            </c:if>
+        </c:if>
 
-<c:if test="${allOk && ! done}">
-    <ta:startActivity activityId="${childActivityId}"/>
-</c:if>
+        <c:if test="${allOk}">
+            <ta:startActivity activityId="${childActivityId}"/>
+        </c:if>
 
-<c:if test="${allOk && ! done}">
-    <traveler:jhCommand var="jhCommand" varError="allOk" activityId="${childActivityId}"/>
-</c:if>
+        <c:if test="${allOk}">
+            <traveler:jhCommand var="jhCommand" varError="allOk" activityId="${childActivityId}"/>
+        </c:if>
+
+    </c:otherwise>
+</c:choose></c:if>
 
 <c:choose>
     <c:when test="${! allOk}">
