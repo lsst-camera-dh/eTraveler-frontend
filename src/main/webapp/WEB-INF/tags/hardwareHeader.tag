@@ -32,7 +32,7 @@
 
 <table>
     <tr><td>Type:</td><td><a href="${hwtLink}"><c:out value="${hardware.name}"/></a></td></tr>
-    <tr><td>Primary Identifier:</td><td><a href="<c:out value="${hwLink}"/>"><c:out value="${hardware.lsstId}"/></a></td></tr>
+    <tr><td>${appVariables.experiment} Serial Number:</td><td><a href="<c:out value="${hwLink}"/>"><c:out value="${hardware.lsstId}"/></a></td></tr>
     <tr><td>Manufacturer:</td><td><c:out value="${hardware.manufacturer}"/></td></tr>
     <tr><td>Manufacturer Serial Number:</td><td><a href="<c:out value="${hwLink}"/>"><c:out value="${hardware.manufacturerId}"/></a></td></tr>
     <tr><td>Model:</td><td><c:out value="${hardware.model}"/></td></tr>
