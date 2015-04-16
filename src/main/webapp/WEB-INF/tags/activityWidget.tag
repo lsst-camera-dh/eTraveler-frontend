@@ -64,3 +64,5 @@
 <c:if test="${empty activity.end && activity.isAutomatable != 0}">
     <traveler:scriptWidget activityId="${activityId}"/>
 </c:if>
+
+<traveler:activityStatusWidget activityId="${activityId}"/>
