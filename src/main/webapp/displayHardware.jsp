@@ -28,10 +28,17 @@
         <h1>Component <c:out value="${hardware.lsstId}"/></h1>
 
         <traveler:hardwareHeader hardwareId="${param.hardwareId}"/>
+        
+        <h2>Status</h2>
         <traveler:hardwareStatusWidget hardwareId="${param.hardwareId}"/>
         
+        <h2>Location</h2>
         <traveler:hardwareLocationWidget hardwareId="${param.hardwareId}"/>
         
+        <h2>Travelers</h2>
+        <traveler:newTravelerForm hardwareTypeId="${hardwareTypeId}" hardwareId="${param.hardwareId}"/>
+        <traveler:activityList travelersOnly="true" hardwareId="${param.hardwareId}"/>
+
         <h2>Local Identifiers</h2>
         <sql:query var="identifiersQ" >
             select HI.identifier, HIA.name
@@ -77,10 +84,6 @@
             hardwareId="${param.hardwareId}"
             />
         
-        <h2>Travelers</h2>
-        <traveler:newTravelerForm hardwareTypeId="${hardwareTypeId}" hardwareId="${param.hardwareId}"/>
-        <traveler:activityList travelersOnly="true" hardwareId="${param.hardwareId}"/>
-                        
         <h2>Recent Activities</h2>
         <traveler:activityList hardwareId="${param.hardwareId}"/>
         

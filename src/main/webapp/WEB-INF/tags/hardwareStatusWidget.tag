@@ -17,7 +17,7 @@
     from HardwareStatus HS
     inner join HardwareStatusHistory HSH on HS.id=HSH.hardwareStatusId
     where HSH.hardwareId=?<sql:param value="${hardwareId}"/>
-    order by HSH.creationTS desc limit 10
+    order by HSH.creationTS desc;
 </sql:query>
 <display:table name="${statusHistoryQ.rows}" class="datatable" pagesize="${preferences.pageLength}" sort="list">
     <display:column property="name" title="Staus"/>
