@@ -23,7 +23,6 @@
 
 <ta:createActivity var="activityId"
     hardwareId="${hardwareId}" processId="${processId}" inNCR="${inNCR}" 
-    parentActivityId="" processEdgeId="" hardwareRelationshipId=""
 />
 
 <sql:query var="hardwareQ">

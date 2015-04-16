@@ -10,10 +10,11 @@
 
 <%@attribute name="hardwareId" required="true"%>
 <%@attribute name="processId" required="true"%>
-<%@attribute name="parentActivityId" required="true"%>
-<%@attribute name="processEdgeId" required="true"%>
 <%@attribute name="inNCR" required="true"%>
+<%@attribute name="parentActivityId"%>
+<%@attribute name="processEdgeId"%>
 <%@attribute name="hardwareRelationshipId"%>
+<%@attribute name="iteration"%>
 
 <%@attribute name="var" required="true" rtexprvalue="false"%>
 <%@variable name-from-attribute="var" alias="activityId" scope="AT_BEGIN"%>
