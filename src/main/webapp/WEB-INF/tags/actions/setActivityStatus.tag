@@ -24,6 +24,24 @@ select * from Activity where id=?<sql:param value="${activityId}"/>;
 <c:set var="activity" value="${activityQ.rows[0]}"/>
 <c:set var="started" value="${! empty activity.begin}"/>
 
+<c:choose>
+    <c:when test="${(isFinal && ! started) || (oldStatus = 'new' && status = 'inProgress')}">
+        <c:set var="setStart" value="true"/>
+    </c:when>
+    <c:otherwise>
+        <c:set var="setStart" value="false"/>
+    </c:otherwise>
+</c:choose>
+
+<c:choose>
+    <c:when test="${isFinal}">
+        <c:set var="setEnd" value="true"/>
+    </c:when>
+    <c:otherwise>
+        <c:set var="setEnd" value="false"/>
+    </c:otherwise>
+</c:choose>
+
     <sql:update>
 update Activity set 
 <c:if test="${isFinal}">
