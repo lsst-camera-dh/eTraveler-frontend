@@ -21,6 +21,10 @@
     from 
         Process P
         inner join TravelerType TT on TT.rootProcessId=P.id
+        inner join TravelerTypeStateHistory TTSH on 
+            TTSH.travelerTypeId=TT.id 
+            and TTSH.id=(select max(id) from TravelerTypeStateHistory where travelerTypeId=TT.id)
+        inner join TravelerTypeState TTS on TTS.id=TTSH.travelerTypeStateId
         <c:if test="${(!empty hardwareTypeId) or (!empty hardwareId)}">
             inner join HardwareTypeGroupMapping HTGM on HTGM.hardwareGroupId=P.hardwareGroupId
         </c:if>
@@ -46,7 +50,7 @@
         </c:otherwise>
     </c:choose>
     <c:if test="${activeTravelerTypesOnly}">
-        and TT.state='ACTIVE'
+        and TTS.name='active'
     </c:if>
     ;
 </sql:query>

@@ -13,9 +13,14 @@
 <sql:query var="ttQ">
     select 
         TT.*,
+        TTS.name as state,
         P.id as processId, P.name
     from
         TravelerType TT
+        inner join TravelerTypeStateHistory TTSH on 
+            TTSH.travelerTypeId=TT.id 
+            and TTSH.id=(select max(id) from TravelerTypeStateHistory where travelerTypeId=TT.id)
+        inner join TravelerTypeState TTS on TTS.id=TTSH.travelerTypeStateId
         inner join Process P on P.id=TT.rootProcessId
     where
         TT.id=?<sql:param value="${param.travelerTypeId}"/>
@@ -44,6 +49,7 @@
         Creator: <c:out value="${travelerType.createdBy}"/><br>
         Date: <c:out value="${travelerType.creationTS}"/><br>
 
+        <traveler:travelerTypeHistory travelerTypeId="${param.travelerTypeId}"/>
         <traveler:travelerTypeStatusForm travelerTypeId="${param.travelerTypeId}"/>
     </body>
 </html>

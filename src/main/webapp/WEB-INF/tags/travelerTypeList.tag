@@ -18,7 +18,7 @@
 <c:set var="activeTravelerTypesOnly" value="false"/> <%-- should get this from user pref --%>
 
 <c:if test="${empty state && activeTravelerTypesOnly}">
-    <c:set var="state" value="ACTIVE"/>
+    <c:set var="state" value="active"/>
 </c:if>
 
 <c:url var="inProgressLink" value="listTravelers.jsp">
@@ -31,7 +31,8 @@
 <sql:query var="result" >
     select P.id as processId, concat(P.name, ' v', P.version) as processName, 
         HG.name as hardwareGroupName, HG.id as hardwareGroupId, 
-        TT.id as travelerTypeId, TT.state,
+        TT.id as travelerTypeId,
+        TTS.name as state,
         count(A.id)-count(A.end) as inProgress, count(A.id) as total, count(A.end) as completed 
     from
     Process P
@@ -40,6 +41,10 @@
         inner join HardwareTypeGroupMapping HTGM on HTGM.hardwareGroupId=P.hardwareGroupId
     </c:if>
     inner join TravelerType TT on TT.rootProcessId=P.id
+    inner join TravelerTypeStateHistory TTSH on 
+        TTSH.travelerTypeId=TT.id 
+        and TTSH.id=(select max(id) from TravelerTypeStateHistory where travelerTypeId=TT.id)
+    inner join TravelerTypeState TTS on TTS.id=TTSH.travelerTypeStateId
     left join Activity A on (A.processId=P.id and A.parentActivityId is null)
     where
     <c:choose>
@@ -54,7 +59,7 @@
         </c:otherwise>
     </c:choose>
     <c:if test="${! empty state}">
-        and TT.state=?<sql:param value="${state}"/>
+        and TTS.name=?<sql:param value="${state}"/>
     </c:if>
     group by P.id
 </sql:query>
