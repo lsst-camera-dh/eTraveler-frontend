@@ -75,7 +75,7 @@
 
             <preferences:preference name="componentDepth" size="2" title="<b>Component list depth:</b> " />
         <tr>
-            <td>When listing the subassemblies or components of an assembly, this sets how many levels into the tree it goes.</td>
+            <td>When listing the subassemblies or components of an assembly, go down the tree this many lavels.</td>
             <td>Current Value: <c:out value="${preferences.componentDepth}"/></td>
         </tr>
 
