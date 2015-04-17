@@ -5,7 +5,7 @@
 --%>
 
 <%@tag description="remove the last element from a path" pageEncoding="UTF-8"%>
-<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
 <%@attribute name="inPath" required="true"%>
 <%@attribute name="var" required="true" rtexprvalue="false"%>

@@ -6,8 +6,9 @@
 
 <%@page contentType="text/html" pageEncoding="US-ASCII"%>
 <%@page import = "java.util.Date,java.text.SimpleDateFormat,java.text.ParseException"%>
-<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql" %>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql"%>
+
 <!DOCTYPE html>
 <html>
     <head>

@@ -5,8 +5,8 @@
 --%>
 
 <%@page contentType="text/html" pageEncoding="US-ASCII"%>
-<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql" %>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql"%>
 <%@taglib prefix="traveler" tagdir="/WEB-INF/tags"%>
 
 <traveler:checkId table="Activity" id="${param.activityId}"/>
@@ -17,6 +17,7 @@
     where A.id=?<sql:param value="${param.activityId}"/>;
 </sql:query>
 <c:set var="activity" value="${activityQ.rows[0]}"/>
+
 <!DOCTYPE html>
 <html>
     <head>

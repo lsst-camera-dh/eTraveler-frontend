@@ -5,9 +5,8 @@
 --%>
 
 <%@tag description="Give the job harness an Id for the job" pageEncoding="UTF-8"%>
-
-<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql" %>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql"%>
 
 <c:set var="allOk" value="true"/>
 <c:set var="message" value="Huh. That wasn't supposed to happen."/>

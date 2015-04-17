@@ -5,8 +5,9 @@
 --%>
 
 <%@page contentType="text/html" pageEncoding="US-ASCII"%>
-<%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql" %>
-<%@taglib prefix="display" uri="http://displaytag.sf.net" %>
+<%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql"%>
+<%@taglib prefix="display" uri="http://displaytag.sf.net"%>
+
 <!DOCTYPE html>
 <html>
     <head>
