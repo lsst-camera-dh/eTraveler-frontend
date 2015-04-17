@@ -24,18 +24,34 @@ select id from Process where id=?<sql:param value="${param.rootProcessId}"/>;
 Error: Process <c:out value="${param.rootProcessId}"/> does not exist!
     </c:when>
     <c:otherwise>
+        
 <sql:transaction>        
-        <sql:update>
+    <sql:update>
 insert into TravelerType set
 rootProcessId=?<sql:param value="${param.rootProcessId}"/>,
-state='NEW',
 owner=?<sql:param value="${param.owner}"/>,
 reason=?<sql:param value="${param.reason}"/>,
 createdBy=?<sql:param value="${userName}"/>,
 creationTS=UTC_TIMESTAMP();
-        </sql:update>
+    </sql:update>
+    <sql:query var="ttQ">
+        select last_insert_id() as id;
+    </sql:query>
+    <c:set var="travelerTypeId" value="${ttQ.rows[0].id}"/>
+    <sql:update>
+insert into TravelerTypeStateHistory set
+reason='New Traveler Type',
+travelerTypeId=?<sql:param value="${travelerTypeId}"/>,
+travelerTypeStateId=(select id from TravelerTypeState where name='new'),
+createdBy=?<sql:param value="${userName}"/>,
+creationTS=utc_timestamp();
+    </sql:update>
+
+<c:url var="ttLink" value="/displayTravelerType.jsp" context="/">
+    <c:param name="travelerTypeId" value="${travelerTypeId}"/>
+</c:url>
 </sql:transaction>
-        <c:redirect url="${header.referer}"/>
+        <c:redirect url="${ttLink}"/>
     </c:otherwise>
 </c:choose>
     </body>
