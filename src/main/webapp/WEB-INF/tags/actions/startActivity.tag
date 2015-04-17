@@ -5,13 +5,8 @@
 --%>
 
 <%@tag description="Start an existing Activity" pageEncoding="UTF-8"%>
-<%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql"%>
+<%@taglib prefix="ta" tagdir="/WEB-INF/tags/actions"%>
 
 <%@attribute name="activityId" required="true"%>
 
-<sql:update >
-    update Activity set
-    begin=UTC_TIMESTAMP()
-    where id=?<sql:param value="${activityId}"/>
-    and begin is null;
-</sql:update>
+<ta:setActivityStatus activityId="${activityId}" status="inProgress"/>
