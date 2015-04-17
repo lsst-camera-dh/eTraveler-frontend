@@ -23,6 +23,6 @@
         </title>
     </head>
     <body>
-        <traveler:activityList travelersOnly="true" processId="${param.processId}" done="${param.done}"/>
+        <traveler:activityList travelersOnly="true" processId="${param.processId}" done="${param.done}" hardwareId="${param.hardwareId}"/>
     </body>
 </html>

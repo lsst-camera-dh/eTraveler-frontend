@@ -22,7 +22,8 @@
     HS.name as hardwareStatusName,
     L.id as locationId, L.name as locationName,
     S.id as siteId, S.name as siteName,
-    HI.identifier as nickName
+    HI.identifier as nickName,
+    count(A.id) as nTravelers
     from Hardware H
     inner join HardwareType HT on HT.id=H.hardwareTypeId
     <c:if test="${! empty hardwareGroupId}">
@@ -34,7 +35,8 @@
     inner join Site S on S.id=L.siteId
     left join HardwareIdentifier HI on HI.hardwareId=H.id 
         and HI.authorityId=(select id from HardwareIdentifierAuthority where name=?<sql:param value="${preferences.idAuthName}"/>)
-    where true
+    left join Activity A on A.hardwareId=H.id
+    where A.parentActivityId is null
     <c:if test="${! empty hardwareGroupId}">
         and HTGM.hardwareGroupId=?<sql:param value="${hardwareGroupId}"/>
     </c:if>
@@ -50,6 +52,7 @@
     <c:if test="${! empty locationId}">
         and locationId=?<sql:param value="${locationId}"/>
     </c:if>
+    group by H.id
     ;
 </sql:query>
 <display:table name="${result.rows}" class="datatable" sort="list"
@@ -68,6 +71,8 @@
     <c:if test="${empty hardwareStatusId or preferences.showFilteredColumns}">
         <display:column property="hardwareStatusName" title="Status" sortable="true" headerClass="sortable"/>
     </c:if>
+    <display:column property="nTravelers" title="# Travelers" sortable="true" headerClass="sortable"
+                    href="listTravelers.jsp" paramId="hardwareId" paramProperty="id"/>
     <c:if test="${(empty siteId and empty locationId) or preferences.showFilteredColumns}">
         <display:column property="siteName" title="Site" sortable="true" headerClass="sortable"
                         href="displaySite.jsp" paramId="siteId" paramProperty="siteId"/>
