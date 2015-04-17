@@ -6,6 +6,7 @@
 
 <%@tag description="Display various stuff about a component's location" pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql" %>
 <%@taglib prefix="display" uri="http://displaytag.sf.net" %>
 
@@ -24,7 +25,8 @@
     order by HLH.creationTS desc
 </sql:query>
     
-<display:table name="${locationHistoryQ.rows}" class="datatable" pagesize="${preferences.pageLength}" sort="list">
+<display:table name="${locationHistoryQ.rows}" class="datatable" sort="list"
+               pagesize="${fn:length(locationHistoryQ.rows) > preferences.pageLength ? preferences.pageLength : 0}">
     <display:column property="siteName" title="Site"
                     href="displaySite.jsp" paramId="siteId" paramProperty="siteId"/>
     <display:column property="locationName" title="Location"

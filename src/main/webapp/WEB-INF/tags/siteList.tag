@@ -5,14 +5,16 @@
 --%>
 
 <%@tag description="List Sites" pageEncoding="UTF-8"%>
-<%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql" %>
-<%@taglib prefix="display" uri="http://displaytag.sf.net" %>
+<%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+<%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql"%>
+<%@taglib prefix="display" uri="http://displaytag.sf.net"%>
 
 <sql:query var="siteQ">
     select * from Site;
 </sql:query>
 
-<display:table name="${siteQ.rows}" class="datatable" pagesize="${preferences.pageLength}" sort="list">
+<display:table name="${siteQ.rows}" class="datatable" sort="list"
+               pagesize="${fn:length(siteQ.rows) > preferences.pageLength ? preferences.pageLength : 0}">
     <display:column property="name" sortable="true" headerClass="sortable"
                     href="displaySite.jsp" paramId="siteId" paramProperty="id"/>
     <display:column property="jhVirtualEnv" sortable="true" headerClass="sortable"/>

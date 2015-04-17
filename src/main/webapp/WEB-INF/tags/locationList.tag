@@ -5,9 +5,10 @@
 --%>
 
 <%@tag description="List Locations" pageEncoding="UTF-8"%>
-<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql" %>
-<%@taglib prefix="display" uri="http://displaytag.sf.net" %>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+<%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql"%>
+<%@taglib prefix="display" uri="http://displaytag.sf.net"%>
 
 <%@attribute name="siteId"%>
 
@@ -22,7 +23,8 @@
     ;
 </sql:query>
 
-<display:table name="${locationQ.rows}" class="datatable" pagesize="${preferences.pageLength}" sort="list">
+<display:table name="${locationQ.rows}" class="datatable" sort="list"
+               pagesize="${fn:length(locationQ.rows) > preferences.pageLength ? preferences.pageLength : 0}">
     <c:if test="${empty siteId or preferences.showFilteredColumns}">
         <display:column property="siteName" title="Site" sortable="true" headerClass="sortable"
                         href="displaySite.jsp" paramId="siteId" paramProperty="siteId"/>

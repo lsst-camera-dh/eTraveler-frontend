@@ -7,6 +7,7 @@
 <%@tag description="Display info about work stoppages for an Activity" pageEncoding="UTF-8"%>
 
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql" %>
 <%@taglib prefix="display" uri="http://displaytag.sf.net" %>
 <%@taglib prefix="traveler" tagdir="/WEB-INF/tags"%>
@@ -27,7 +28,8 @@
     <c:choose>
         <c:when test="${! empty swQ.rows}">
             <h3>Work Stoppages</h3>
-<display:table name="${swQ.rows}" id="row" class="datatable" pagesize="${preferences.pageLength}" sort="list">
+<display:table name="${swQ.rows}" id="row" class="datatable" sort="list"
+               pagesize="${fn:length(swQ.rows) > preferences.pageLength ? preferences.pageLength : 0}">
     <display:column property="reason" sortable="true" headerClass="sortable"/>
     <display:column property="createdBy" title="Stopped By" sortable="true" headerClass="sortable"/>
     <display:column property="creationTS" title="Stop Time" sortable="true" headerClass="sortable"/>

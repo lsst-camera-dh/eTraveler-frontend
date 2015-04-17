@@ -1,13 +1,14 @@
 <%-- 
-    Document   : travelerList
+    Document   : activityList
     Created on : May 3, 2013, 3:49:57 PM
     Author     : focke
 --%>
 
 <%@tag description="List Activities" pageEncoding="US-ASCII"%>
-<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql" %>
-<%@taglib prefix="display" uri="http://displaytag.sf.net" %>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+<%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql"%>
+<%@taglib prefix="display" uri="http://displaytag.sf.net"%>
 
 <%@attribute name="done"%>
 <%@attribute name="hardwareId"%>
@@ -47,7 +48,8 @@
     </c:if>
     order by A.id desc;
 </sql:query>
-<display:table name="${result.rows}" class="datatable" pagesize="${preferences.pageLength}" sort="list">
+<display:table name="${result.rows}" class="datatable" sort="list"
+               pagesize="${fn:length(result.rows) > preferences.pageLength ? preferences.pageLength : 0}">
     <display:column property="processName" title="Name" sortable="true" headerClass="sortable"
                       href="displayActivity.jsp" paramId="activityId" paramProperty="activityId"/>
     <c:if test="${empty hardwareId or preferences.showFilteredColumns}">

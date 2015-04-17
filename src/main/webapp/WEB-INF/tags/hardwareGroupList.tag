@@ -5,9 +5,10 @@
 --%>
 
 <%@tag description="List hardware groups" pageEncoding="UTF-8"%>
-<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql" %>
-<%@taglib prefix="display" uri="http://displaytag.sf.net" %>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+<%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql"%>
+<%@taglib prefix="display" uri="http://displaytag.sf.net"%>
 
 <%@attribute name="hardwareTypeId"%>
 
@@ -22,7 +23,8 @@
     group by HG.id
 </sql:query>
 
-<display:table name="${groupsQ.rows}" class="datatable" pagesize="${preferences.pageLength}" sort="list">
+<display:table name="${groupsQ.rows}" class="datatable" sort="list"
+               pagesize="${fn:length(groupsQ.rows) > preferences.pageLength ? preferences.pageLength : 0}">
     <display:column property="hardwareGroupName" title="Name" sortable="true" headerClass="sortable"
                     href="displayHardwareGroup.jsp" paramId="hardwareGroupId" paramProperty="hardwareGroupId"/>
     <display:column property="description" sortable="true" headerClass="sortable"/>
