@@ -77,21 +77,21 @@
                 <INPUT TYPE=SUBMIT value="Add Identifier">
             </form>
         </c:if>
-
-        <traveler:eclWidget
-            author="${userName}"
-            hardwareTypeId="${hardwareTypeId}"
-            hardwareId="${param.hardwareId}"
-            />
-        
-        <h2>Recent Activities</h2>
-        <traveler:activityList hardwareId="${param.hardwareId}"/>
         
         <h2>Component of</h2>
         <traveler:componentTable hardwareId="${param.hardwareId}" mode="p"/>
                 
         <h2>Components</h2>
         <traveler:componentTable hardwareId="${param.hardwareId}" mode="c"/>
+
+        <h2>Recent Activities</h2>
+        <traveler:activityList hardwareId="${param.hardwareId}"/>
+        
+        <traveler:eclWidget
+            author="${userName}"
+            hardwareTypeId="${hardwareTypeId}"
+            hardwareId="${param.hardwareId}"
+            />
         
     </body>
 </html>
