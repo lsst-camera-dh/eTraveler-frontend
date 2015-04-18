@@ -47,7 +47,7 @@ The interface here is terrible, if you have ideas on improving it, please share!
         </c:otherwise>
     </c:choose>
     Owner: <input type="text" name="owner">
-    Reason: <input type="text" name="reason">
+    Reason: <textarea name="reason"></textarea>
 </form>
 
 </c:if>

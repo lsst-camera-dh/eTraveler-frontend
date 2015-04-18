@@ -31,5 +31,5 @@
             <option value="${newState.id}"><c:out value="${newState.name}"/></option>
         </c:forEach>
     </select>
-    Reason:<input type='text' name='reason'>
+    Reason:<textarea name='reason'></textarea>
 </form>
