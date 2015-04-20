@@ -15,7 +15,7 @@
     update Hardware set 
     hardwareStatusId=?<sql:param value="${hardwareStatusId}"/>
     where
-    id=?<sql:param value="${param.hardwareId}"/>;
+    id=?<sql:param value="${hardwareId}"/>;
 </sql:update>
 <sql:update>
     insert into HardwareStatusHistory set
