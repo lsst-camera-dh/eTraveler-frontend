@@ -12,12 +12,6 @@
 <%@attribute name="hardwareStatusId" required="true"%>
 
 <sql:update>
-    update Hardware set 
-    hardwareStatusId=?<sql:param value="${hardwareStatusId}"/>
-    where
-    id=?<sql:param value="${hardwareId}"/>;
-</sql:update>
-<sql:update>
     insert into HardwareStatusHistory set
     hardwareStatusId=?<sql:param value="${hardwareStatusId}"/>,
     hardwareId=?<sql:param value="${hardwareId}"/>,
