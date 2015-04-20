@@ -33,7 +33,10 @@
         
         <c:if test="${allOk}">
             <sql:query var="statusQ">
-                select hardwareStatusId from Hardware where id=?<sql:param value="${param.hardwareId}"/>;
+select hardwareStatusId 
+from HardwareStatusHistory 
+where hardwareId=?<sql:param value="${param.hardwareId}"/>
+order by id desc limit 1;
             </sql:query>
             <c:if test="${statusQ.rows[0].hardwareStatusId == param.hardwareStatusId}">
                 <c:set var="allOk" value="false"/>
