@@ -15,11 +15,14 @@
 <%@attribute name="processId"%>
 <%@attribute name="travelersOnly"%>
 <%@attribute name="userId"%>
+<%@attribute name="version"%> 
+
 
 <sql:query var="result" >
   select A.id as activityId, A.begin, A.end, A.createdBy, A.closedBy,
     AFS.name as status,
-    P.id as processId, concat(P.name, ' v', P.version) as processName,
+    P.id as processId, 
+    concat(P.name, ' v', P.version) as processName,
     H.id as hardwareId, H.lsstId, H.manufacturerId,
     HT.name as hardwareName, HT.id as hardwareTypeId,
     HI.identifier as nickName
@@ -45,6 +48,9 @@
     </c:if>
     <c:if test="${! empty userId}">
         and (A.createdBy=?<sql:param value="${userId}"/> or A.closedBy=?<sql:param value="${userId}"/>
+    </c:if>
+    <c:if test="${version=='latest'}">
+        and P.version=(select max(version) from Process where name=P.name)
     </c:if>
     order by A.id desc;
 </sql:query>

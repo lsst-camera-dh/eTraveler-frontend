@@ -8,6 +8,8 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql"%>
 <%@taglib prefix="traveler" tagdir="/WEB-INF/tags"%>
+<%@taglib uri="http://srs.slac.stanford.edu/filter" prefix="filter"%>
+
 
 <!DOCTYPE html>
 <html>
@@ -23,6 +25,12 @@
         </title>
     </head>
     <body>
-        <traveler:activityList travelersOnly="true" processId="${param.processId}" done="${param.done}" hardwareId="${param.hardwareId}"/>
+        <filter:filterTable>
+            <filter:filterSelection title="Version" var="version" defaultValue='latest'>
+                <filter:filterOption value="latest">Latest</filter:filterOption>
+                <filter:filterOption value="all">All</filter:filterOption>
+            </filter:filterSelection>
+        </filter:filterTable>
+        <traveler:activityList travelersOnly="true" version="${version}" processId="${param.processId}" done="${param.done}" hardwareId="${param.hardwareId}"/>
     </body>
 </html>
