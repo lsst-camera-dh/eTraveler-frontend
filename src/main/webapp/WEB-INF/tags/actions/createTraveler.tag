@@ -44,8 +44,5 @@
     where H.id=?<sql:param value="${hardwareId}"/>;
 </sql:query>
 <c:if test="${hardwareQ.rows[0].name == 'NEW'}">
-    <sql:query var="statQ">
-        select id from HardwareStatus where name='IN_PROGRESS';
-    </sql:query>
-    <ta:setHardwareStatus hardwareId="${hardwareId}" hardwareStatusId="${statQ.rows[0].id}"/>
+    <ta:setHardwareStatus hardwareId="${hardwareId}" hardwareStatusName="IN_PROGRESS"/>
 </c:if>

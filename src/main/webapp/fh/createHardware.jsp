@@ -8,6 +8,7 @@
 <%@page import = "java.util.Date,java.text.SimpleDateFormat,java.text.ParseException"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql"%>
+<%@taglib prefix="ta" tagdir="/WEB-INF/tags/actions"%>
 
 <!DOCTYPE html>
 <html>
@@ -48,28 +49,15 @@ request.setAttribute("manufactureDate", result);
                 manufacturerId=?<sql:param value="${param.manufacturerId}"/>,
                 model=?<sql:param value="${param.model}"/>,
                 manufactureDate=?<sql:dateParam value="${manufactureDate}"/>,
-                hardwareStatusId=(select id from HardwareStatus where name="NEW"),
                 createdBy=?<sql:param value="${userName}"/>,
                 creationTS=UTC_TIMESTAMP();
             </sql:update>
             <sql:query var="hardwareQ">
                 select id from Hardware where id=LAST_INSERT_ID();
             </sql:query>
-            <sql:update>
-                insert into HardwareStatusHistory set
-                hardwareStatusId=(select id from HardwareStatus where name="NEW"),
-                hardwareId=LAST_INSERT_ID(),
-                createdBy=?<sql:param value="${userName}"/>,
-                creationTS=UTC_TIMESTAMP();
-            </sql:update>
             <c:set var="hardware" value="${hardwareQ.rows[0]}"/>
-            <sql:update>
-                insert into HardwareLocationHistory set
-                locationId=?<sql:param value="${param.locationId}"/>,
-                hardwareId=?<sql:param value="${hardware.id}"/>,
-                createdBy=?<sql:param value="${userName}"/>,
-                creationTS=UTC_TIMESTAMP();
-            </sql:update>
+            <ta:setHardwareStatus hardwareId="${hardware.id}" hardwareStatusName="NEW"/>
+            <ta:setHardwareLocation hardwareId="${hardware.id}" newLocationId="${param.locationId}"/>
         </sql:transaction>
         <c:redirect url="/displayHardware.jsp" context="/eTraveler">
             <c:param name="hardwareId" value="${hardware.id}"/>
