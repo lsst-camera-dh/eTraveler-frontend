@@ -17,7 +17,6 @@
 <%@attribute name="userId"%>
 <%@attribute name="version"%> 
 
-
 <sql:query var="result" >
   select A.id as activityId, A.begin, A.end, A.createdBy, A.closedBy,
     AFS.name as status,

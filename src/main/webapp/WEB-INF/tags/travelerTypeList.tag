@@ -14,6 +14,7 @@
 <%@attribute name="hardwareTypeId"%>
 <%@attribute name="hardwareGroupId"%>
 <%@attribute name="state"%>
+<%@attribute name="version"%> 
 
 <c:set var="activeTravelerTypesOnly" value="false"/> <%-- should get this from user pref --%>
 
@@ -60,6 +61,9 @@
     </c:choose>
     <c:if test="${! empty state}">
         and TTS.name=?<sql:param value="${state}"/>
+    </c:if>
+    <c:if test="${version=='latest'}">
+        and P.version=(select max(version) from Process where name=P.name)
     </c:if>
     group by P.id
 </sql:query>
