@@ -9,6 +9,7 @@
 <%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql"%>
 <%@taglib prefix="display" uri="http://displaytag.sf.net"%>
+<%@taglib prefix="traveler" tagdir="/WEB-INF/tags"%>
 
 <%@attribute name="hardwareGroupId"%>
 <%@attribute name="hardwareTypeId"%>
@@ -29,7 +30,8 @@
     <c:if test="${! empty hardwareGroupId}">
         inner join HardwareTypeGroupMapping HTGM on HTGM.hardwareTypeId=HT.id
     </c:if>
-    inner join HardwareStatus HS on HS.id=H.hardwareStatusId
+    inner join HardwareStatusHistory HSH on HSH.hardwareId=H.id and HSH.id=(select max(id) from HardwareStatusHistory where hardwareId=H.id)
+    inner join HardwareStatus HS on HS.id=HSH.hardwareStatusId
     inner join HardwareLocationHistory HLH on HLH.hardwareId=H.id and HLH.id=(select max(id) from HardwareLocationHistory where hardwareId=H.id)
     inner join Location L on L.id=HLH.locationId
     inner join Site S on S.id=L.siteId
@@ -55,7 +57,7 @@
     group by H.id
     ;
 </sql:query>
-<display:table name="${result.rows}" class="datatable" sort="list"
+<display:table name="${result.rows}" id="row" class="datatable" sort="list"
                pagesize="${fn:length(result.rows) > preferences.pageLength ? preferences.pageLength : 0}">
     <display:column property="lsstId" title="${appVariables.experiment} Serial Number" sortable="true" headerClass="sortable"
                     href="displayHardware.jsp" paramId="hardwareId" paramProperty="id"/>
@@ -73,6 +75,10 @@
     </c:if>
     <display:column property="nTravelers" title="# Travelers" sortable="true" headerClass="sortable"
                     href="listTravelers.jsp" paramId="hardwareId" paramProperty="id"/>
+    <display:column title="# Components" sortable="true" headerClass="sortable">
+        <traveler:countComponents var="nComps" hardwareId="${row.id}"/>
+        <c:out value="${nComps}"/>
+    </display:column>
     <c:if test="${(empty siteId and empty locationId) or preferences.showFilteredColumns}">
         <display:column property="siteName" title="Site" sortable="true" headerClass="sortable"
                         href="displaySite.jsp" paramId="siteId" paramProperty="siteId"/>

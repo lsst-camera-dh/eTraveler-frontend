@@ -9,6 +9,11 @@
 <%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql"%>
 
 <%@attribute name="activityId" required="true"%>
+<%@attribute name="status"%>
+
+<c:if test="${empty status}">
+    <c:set var="status" value="READY"/>
+</c:if>
 
 <sql:query var="potentialComponentsQ" >
     select H.id, H.lsstId, HT.name 
@@ -17,8 +22,9 @@
     inner join HardwareRelationshipType HRT on HRT.id=P.hardwareRelationshipTypeId
     inner join HardwareType HT on HT.id=HRT.componentTypeId
     inner join Hardware H on H.hardwareTypeId=HT.id
+    inner join HardwareStatusHistory HSH on HSH.hardwareId=H.id and HSH.id=(select max(id) from HardwareStatusHistory where hardwareId=H.id)
     left join HardwareRelationship HR on HR.componentId=H.id
-    where H.hardwareStatusId=(select id from HardwareStatus where name='READY')
+    where HSH.hardwareStatusId=(select id from HardwareStatus where name=?<sql:param value="${status}"/>)
     and (HR.end is not null or HR.id is null)
     and A.id=?<sql:param value="${activityId}"/>;
 </sql:query>

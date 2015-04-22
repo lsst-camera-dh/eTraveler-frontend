@@ -7,6 +7,8 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql"%>
+<%@taglib prefix="ta" tagdir="/WEB-INF/tags/actions"%>
+
 <!DOCTYPE html>
 <html>
     <head>
@@ -45,19 +47,7 @@
                     where id=?<sql:param value="${param.activityId}"/>;
                 </sql:update>
 
-                <sql:update>
-                    update Hardware set
-                    hardwareStatusId=(select id from HardwareStatus where name='USED')
-                    where id=?<sql:param value="${param.componentId}"/>;
-                </sql:update>
-                    
-                <sql:update>
-                    insert into HardwareStatusHistory set
-                    hardwareStatusId=(select id from HardwareStatus where name='USED'),
-                    hardwareId=?<sql:param value="${param.componentId}"/>,
-                    createdBy=?<sql:param value="${userName}"/>,
-                    creationTS=UTC_TIMESTAMP();
-                </sql:update>
+                <ta:setHardwareStatus hardwareId="${param.componentId}" hardwareStatusName="USED"/>
             </c:if>
         </sql:transaction>
                 

@@ -14,7 +14,7 @@
     select * 
     from HardwareStatus 
     where name!='NEW'
-    and id!=(select hardwareStatusId from Hardware where id=?<sql:param value="${hardwareId}"/>);
+    and id!=(select hardwareStatusId from HardwareStatusHistory where hardwareId=?<sql:param value="${hardwareId}"/> order by id desc limit 1);
 </sql:query>
 
 <form action="fh/setHardwareStatus.jsp">

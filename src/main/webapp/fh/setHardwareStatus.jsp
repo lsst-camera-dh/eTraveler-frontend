@@ -7,7 +7,9 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql"%>
+<%@taglib prefix="traveler" tagdir="/WEB-INF/tags"%>
 <%@taglib prefix="ta" tagdir="/WEB-INF/tags/actions"%>
+
 <!DOCTYPE html>
 <html>
     <head>
@@ -33,7 +35,10 @@
         
         <c:if test="${allOk}">
             <sql:query var="statusQ">
-                select hardwareStatusId from Hardware where id=?<sql:param value="${param.hardwareId}"/>;
+select hardwareStatusId 
+from HardwareStatusHistory 
+where hardwareId=?<sql:param value="${param.hardwareId}"/>
+order by id desc limit 1;
             </sql:query>
             <c:if test="${statusQ.rows[0].hardwareStatusId == param.hardwareStatusId}">
                 <c:set var="allOk" value="false"/>
@@ -49,7 +54,7 @@
                 <c:redirect url="${header.referer}"/>
             </c:when>
             <c:otherwise>
-                ${message}
+                <traveler:error message="${message}"/>
             </c:otherwise>
         </c:choose>
 </body>

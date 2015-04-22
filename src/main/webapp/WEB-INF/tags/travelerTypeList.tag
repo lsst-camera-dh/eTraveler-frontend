@@ -77,7 +77,7 @@
     </c:if>
     <display:column title="Steps" sortable="true" headerClass="sortable">
         <traveler:countSteps var="nSteps" processId="${ttRow.processId}"/>
-        ${nSteps}
+        <c:out value="${nSteps}"/>
     </display:column>
     <display:column property="inProgress" sortable="true" headerClass="sortable"
                     href="${inProgressLink}" paramId="processId" paramProperty="processId"/>

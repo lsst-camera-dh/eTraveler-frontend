@@ -39,12 +39,10 @@
 <sql:query var="hardwareQ">
     select H.*, HS.name
     from Hardware H
-    inner join HardwareStatus HS on HS.id=H.hardwareStatusId
+    inner join HardwareStatusHistory HSH on HSH.hardwareId=H.id and HSH.id=(select max(id) from HardwareStatusHistory where hardwareId=H.id)
+    inner join HardwareStatus HS on HS.id=HSH.hardwareStatusId
     where H.id=?<sql:param value="${hardwareId}"/>;
 </sql:query>
 <c:if test="${hardwareQ.rows[0].name == 'NEW'}">
-    <sql:query var="statQ">
-        select id from HardwareStatus where name='IN_PROGRESS';
-    </sql:query>
-    <ta:setHardwareStatus hardwareId="${hardwareId}" hardwareStatusId="${statQ.rows[0].id}"/>
+    <ta:setHardwareStatus hardwareId="${hardwareId}" hardwareStatusName="IN_PROGRESS"/>
 </c:if>

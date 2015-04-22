@@ -28,4 +28,4 @@
     <display:column property="createdBy" title="Who"/>
 </display:table>
 
-<traveler:hardwareStatusForm hardwareId="${param.hardwareId}"/>
+<traveler:hardwareStatusForm hardwareId="${hardwareId}"/>
