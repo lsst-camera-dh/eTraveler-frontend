@@ -20,6 +20,15 @@
 
 <traveler:getActivityStatus var="status" activityId="${activityId}"/>
 
+<sql:query var="lastStatusQ">
+    select AFS.id, AFS.name
+    from ActivityFinalStatus AFS
+    inner join ActivityStatusHistory ASH on ASH.activityStatusId=AFS.id
+    where ASH.activityId=?<sql:param value="${activityId}"/>
+    and AFS.name!=?<sql:param value="${status}"/>
+    order by ASH.id desc limit 1;
+</sql:query>
+
 <c:if test="${'stopped' == status || 'paused' == status}">
     <sql:update>
 update 
