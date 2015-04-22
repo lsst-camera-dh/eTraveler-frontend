@@ -1,9 +1,9 @@
-<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql" %>
-<%@taglib prefix="preferences" uri="http://srs.slac.stanford.edu/preferences" %>
-<%@ page import="java.util.*" %>
-<%@ page isELIgnored="false" %>
-<%@ page contentType="text/html" %>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql"%>
+<%@taglib prefix="preferences" uri="http://srs.slac.stanford.edu/preferences"%>
+<%@page import="java.util.*"%>
+<%@page isELIgnored="false"%>
+<%@page contentType="text/html"%>
 
 <html>
     <head>
@@ -75,7 +75,7 @@
 
             <preferences:preference name="componentDepth" size="2" title="<b>Component list depth:</b> " />
         <tr>
-            <td>When listing the subassemblies or components of an assembly, this sets how many levels into the tree it goes.</td>
+            <td>When listing the subassemblies or components of an assembly, go down the tree this many lavels.</td>
             <td>Current Value: <c:out value="${preferences.componentDepth}"/></td>
         </tr>
 

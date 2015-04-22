@@ -5,8 +5,8 @@
 --%>
 
 <%@tag description="Display traveler steps using a table" pageEncoding="UTF-8"%>
-<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@taglib prefix="display" uri="http://displaytag.sf.net" %>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@taglib prefix="display" uri="http://displaytag.sf.net"%>
 
 <%@attribute name="stepList" required="true" type="java.util.List"%>
 <%@attribute name="mode" required="true"%>

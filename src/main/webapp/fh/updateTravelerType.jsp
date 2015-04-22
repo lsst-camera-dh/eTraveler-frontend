@@ -9,11 +9,12 @@
 <%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql"%>
 <%@taglib prefix="ta" tagdir="/WEB-INF/tags/actions"%>
 <%@taglib prefix="traveler" tagdir="/WEB-INF/tags"%>
+
 <!DOCTYPE html>
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Update tt${param.travelerTypeId} status ${param.status}</title>
+        <title>Update tt${param.travelerTypeId} status ${param.stateId}</title>
     </head>
     <body>
         
@@ -28,7 +29,7 @@ select id from TravelerType where id=?<sql:param value="${param.travelerTypeId}"
             </c:when>
             <c:otherwise>
 <sql:transaction>
-                <ta:setTravelerTypeStatus travelerTypeId="${param.travelerTypeId}" status="${param.status}"/>
+                <ta:setTravelerTypeStatus travelerTypeId="${param.travelerTypeId}" stateId="${param.stateId}" reason="${param.reason}"/>
 </sql:transaction>
                 <c:redirect url="${header.referer}"/> 
             </c:otherwise>

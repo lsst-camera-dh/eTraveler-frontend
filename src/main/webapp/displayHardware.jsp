@@ -5,9 +5,9 @@
 --%>
 
 <%@page contentType="text/html" pageEncoding="US-ASCII"%>
-<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql" %>
-<%@taglib prefix="display" uri="http://displaytag.sf.net" %>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql"%>
+<%@taglib prefix="display" uri="http://displaytag.sf.net"%>
 <%@taglib prefix="traveler" tagdir="/WEB-INF/tags"%>
 
 <traveler:checkId table="Hardware" id="${param.hardwareId}"/>
@@ -28,10 +28,17 @@
         <h1>Component <c:out value="${hardware.lsstId}"/></h1>
 
         <traveler:hardwareHeader hardwareId="${param.hardwareId}"/>
+        
+        <h2>Status</h2>
         <traveler:hardwareStatusWidget hardwareId="${param.hardwareId}"/>
         
+        <h2>Location</h2>
         <traveler:hardwareLocationWidget hardwareId="${param.hardwareId}"/>
         
+        <h2>Travelers</h2>
+        <traveler:newTravelerForm hardwareTypeId="${hardwareTypeId}" hardwareId="${param.hardwareId}"/>
+        <traveler:activityList travelersOnly="true" hardwareId="${param.hardwareId}"/>
+
         <h2>Local Identifiers</h2>
         <sql:query var="identifiersQ" >
             select HI.identifier, HIA.name
@@ -70,25 +77,21 @@
                 <INPUT TYPE=SUBMIT value="Add Identifier">
             </form>
         </c:if>
-
-        <traveler:eclWidget
-            author="${userName}"
-            hardwareTypeId="${hardwareTypeId}"
-            hardwareId="${param.hardwareId}"
-            />
-        
-        <h2>Travelers</h2>
-        <traveler:newTravelerForm hardwareTypeId="${hardwareTypeId}" hardwareId="${param.hardwareId}"/>
-        <traveler:activityList travelersOnly="true" hardwareId="${param.hardwareId}"/>
-                        
-        <h2>Recent Activities</h2>
-        <traveler:activityList hardwareId="${param.hardwareId}"/>
         
         <h2>Component of</h2>
         <traveler:componentTable hardwareId="${param.hardwareId}" mode="p"/>
                 
         <h2>Components</h2>
         <traveler:componentTable hardwareId="${param.hardwareId}" mode="c"/>
+
+        <h2>Recent Activities</h2>
+        <traveler:activityList hardwareId="${param.hardwareId}"/>
+        
+        <traveler:eclWidget
+            author="${userName}"
+            hardwareTypeId="${hardwareTypeId}"
+            hardwareId="${param.hardwareId}"
+            />
         
     </body>
 </html>

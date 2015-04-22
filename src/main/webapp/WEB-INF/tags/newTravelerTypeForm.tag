@@ -5,8 +5,8 @@
 --%>
 
 <%@tag description="A form to make a new TravelerType" pageEncoding="UTF-8"%>
-<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql" %>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql"%>
 
 <%@attribute name="processId"%>
 
@@ -47,7 +47,7 @@ The interface here is terrible, if you have ideas on improving it, please share!
         </c:otherwise>
     </c:choose>
     Owner: <input type="text" name="owner">
-    Reason: <input type="text" name="reason">
+    Reason: <textarea name="reason"></textarea>
 </form>
 
 </c:if>

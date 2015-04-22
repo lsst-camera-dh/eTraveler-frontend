@@ -5,19 +5,22 @@
 --%>
 
 <%@tag description="Displays a little info about a component" pageEncoding="US-ASCII"%>
-
-<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql" %>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql"%>
 
 <%@attribute name="hardwareId" required="true"%>
 
 <sql:query var="hardwareQ" >
-    select H.*, HT.name, HT.id as hardwareTypeId, HS.name as hardwareStatusName from Hardware H, HardwareType HT, HardwareStatus HS
-    where 
-    HT.id=H.hardwareTypeId
-    and
-    HS.id=H.hardwareStatusId
-    and
+    select 
+    H.*, 
+    HT.name, HT.id as hardwareTypeId, 
+    HS.name as hardwareStatusName
+    from 
+    Hardware H
+    inner join HardwareType HT on HT.id=H.hardwareTypeId
+    inner join HardwareStatusHistory HSH on HSH.hardwareId=H.id and HSH.id=(select max(id) from HardwareStatusHistory where hardwareId=H.id)
+    inner join HardwareStatus HS on HS.id=HSH.hardwareStatusId
+    where
     H.id=?<sql:param value="${hardwareId}"/>;
 </sql:query>
 <c:set var="hardware" value="${hardwareQ.rows[0]}"/>
@@ -41,4 +44,3 @@
     <tr><td>Registered by:</td><td><c:out value="${hardware.createdBy}"/></td></tr>
     <tr><td>Registered at:</td><td><c:out value="${hardware.creationTS}"/></td></tr>
 </table>
-

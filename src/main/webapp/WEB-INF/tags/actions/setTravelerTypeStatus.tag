@@ -8,9 +8,14 @@
 <%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql"%>
 
 <%@attribute name="travelerTypeId" required="true"%>
-<%@attribute name="status" required="true"%>
+<%@attribute name="stateId" required="true"%>
+<%@attribute name="reason"%>
 
-<sql:update>
-    update TravelerType set state=?<sql:param value="${status}"/> where id=?<sql:param value="${travelerTypeId}"/>;
-</sql:update>
-
+    <sql:update>
+insert into TravelerTypeStateHistory set
+reason=?<sql:param value="${reason}"/>,
+travelerTypeId=?<sql:param value="${travelerTypeId}"/>,
+travelerTypeStateId=?<sql:param value="${stateId}"/>,
+createdBy=?<sql:param value="${userName}"/>,
+creationTS=utc_timestamp();
+    </sql:update>

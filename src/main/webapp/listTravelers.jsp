@@ -5,9 +5,10 @@
 --%>
 
 <%@page contentType="text/html" pageEncoding="US-ASCII"%>
-<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql" %>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql"%>
 <%@taglib prefix="traveler" tagdir="/WEB-INF/tags"%>
+
 <!DOCTYPE html>
 <html>
     <head>
@@ -22,6 +23,6 @@
         </title>
     </head>
     <body>
-        <traveler:activityList travelersOnly="true" processId="${param.processId}" done="${param.done}"/>
+        <traveler:activityList travelersOnly="true" processId="${param.processId}" done="${param.done}" hardwareId="${param.hardwareId}"/>
     </body>
 </html>

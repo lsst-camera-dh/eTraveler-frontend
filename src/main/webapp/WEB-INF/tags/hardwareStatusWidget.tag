@@ -5,9 +5,10 @@
 --%>
 
 <%@tag description="Display various stuff about a component's status" pageEncoding="UTF-8"%>
-<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql" %>
-<%@taglib prefix="display" uri="http://displaytag.sf.net" %>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+<%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql"%>
+<%@taglib prefix="display" uri="http://displaytag.sf.net"%>
 <%@taglib prefix="traveler" tagdir="/WEB-INF/tags"%>
 
 <%@attribute name="hardwareId" required="true"%>
@@ -17,13 +18,14 @@
     from HardwareStatus HS
     inner join HardwareStatusHistory HSH on HS.id=HSH.hardwareStatusId
     where HSH.hardwareId=?<sql:param value="${hardwareId}"/>
-    order by HSH.creationTS desc limit 10
+    order by HSH.creationTS desc;
 </sql:query>
-<display:table name="${statusHistoryQ.rows}" class="datatable" pagesize="${preferences.pageLength}" sort="list">
+    
+<display:table name="${statusHistoryQ.rows}" class="datatable" sort="list"
+               pagesize="${fn:length(statusHistoryQ.rows) > preferences.pageLength ? preferences.pageLength : 0}">
     <display:column property="name" title="Staus"/>
     <display:column property="creationTS" title="When"/>
     <display:column property="createdBy" title="Who"/>
 </display:table>
 
-
-<traveler:hardwareStatusForm hardwareId="${param.hardwareId}"/>
+<traveler:hardwareStatusForm hardwareId="${hardwareId}"/>

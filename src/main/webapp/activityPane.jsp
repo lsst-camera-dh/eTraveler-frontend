@@ -5,8 +5,8 @@
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql" %>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql"%>
 <%@taglib prefix="traveler" tagdir="/WEB-INF/tags"%>
 <!DOCTYPE html>
 <html>
@@ -27,8 +27,8 @@
         <c:set var="activity" value="${activityQ.rows[0]}"/>
           
         <h2><c:out value="${activity.processName}"/></h2>
-        <traveler:processWidget processId="${activity.processId}"/>
         <traveler:activityWidget activityId="${param.activityId}"/>
+        <traveler:processWidget processId="${activity.processId}"/>
         <traveler:eclWidget
             author="${userName}"
             hardwareTypeId="${activity.hardwareTypeId}"

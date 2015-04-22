@@ -5,9 +5,10 @@
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql" %>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql"%>
 <%@taglib prefix="traveler" tagdir="/WEB-INF/tags"%>
+
 <!DOCTYPE html>
 <html>
     <head>
@@ -15,21 +16,31 @@
         <title>eTraveler Administration</title>
     </head>
     <body>
+
 <hr> 
+<h2>Backend</h2>
     <c:set var="backend" value="/eTravelerBackend"/>
     <c:set var="backendLink" 
     value="${pageContext.request.scheme}://${pageContext.request.serverName}:${pageContext.request.serverPort}${backend}"/>
-    <c:url var="backendUrl" value="${backendLink}"/>
+    <c:url var="backendUrl" value="${backendLink}">
+        <c:param name="dataSoucreMode" value="${appVariables.dataSourceMode}"/>
+    </c:url>
     <a href="${backendUrl}">Upload a new Traveler Type or version</a>
+
 <hr>
+<h2>Traveler Types</h2>
     <traveler:newTravelerTypeForm/>
+
 <hr>
+<h2>Hardware Groups</h2>
     <form method="get" action="fh/addHardwareGroup.jsp">
         <input type="submit" value="Add Hardware Group">
         Name: <input name="name" type="text" required>
         Description: <input name="description" type="text">
     </form>
+
 <hr>
+<h2>Hardware Types</h2>
     <form method="get" action="fh/addHardwareType.jsp">
         <input type="submit" value="Add Hardware Type">
         Name or Drawing #: <input type="text" name="name" required>
@@ -43,8 +54,9 @@
         </select><br>
         Description: <input type="text" name="description">
     </form>
+
 <hr>
-            
+<h2>Hardware Relationship Types</h2>
     <sql:query var="hardwareTypesQ" >
         select id, name from HardwareType
     </sql:query>
@@ -63,9 +75,10 @@
         </select>
         Slot: <input type="number" name="slot" value="1">
     </form>
-
     <traveler:hardwareRelationshipTypeList/>
+
 <hr>
+<h2>Sites</h2>
     <form method="get" action="fh/addSite.jsp">
         <input type="submit" value="Add Site">
         Name: <input type="text" name="name" required>
@@ -73,18 +86,16 @@
         jhOutputRoot: <input type="text" name="jhOutputRoot">
     </form>
 
-    <traveler:siteList/>
 <hr>
-        
+<h2>Locations</h2>
     <traveler:newLocationForm/>
-    <traveler:locationList/>
-<hr>
 
+<hr>
+<h2>Hardware Identifier Authorities</h2>
     <form method="get" action="fh/addHardwareIdentifierAuthority.jsp">
         <input type="submit" value="Add Hardware Identifier Authority">
         Name: <input type="text" name="name" required>
     </form>
-
     <traveler:hardwareIdentifierAuthorityList/>
 <hr>
     </body>

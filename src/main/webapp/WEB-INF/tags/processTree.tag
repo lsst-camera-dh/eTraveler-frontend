@@ -3,11 +3,11 @@
     Created on : Mar 27, 2013, 12:28:50 PM
     Author     : focke
 --%>
-<%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql" %>
-<%@taglib prefix="tree" uri="http://java.freehep.org/tree-taglib" %>
-<%@taglib prefix="traveler" tagdir="/WEB-INF/tags"%>
 
 <%@tag description="A tree showing a process and all its children" pageEncoding="US-ASCII"%>
+<%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql"%>
+<%@taglib prefix="tree" uri="http://java.freehep.org/tree-taglib"%>
+<%@taglib prefix="traveler" tagdir="/WEB-INF/tags"%>
 
 <%@attribute name="processId" required="true"%>
 
@@ -22,4 +22,3 @@
     request.setAttribute("root", root);
 %>
 <tree:tree model="${root}"/>
-

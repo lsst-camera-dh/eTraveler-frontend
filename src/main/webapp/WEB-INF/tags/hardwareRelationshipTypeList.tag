@@ -5,9 +5,10 @@
 --%>
 
 <%@tag description="List HardwareRelationshipTypes" pageEncoding="UTF-8"%>
-<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql" %>
-<%@taglib prefix="display" uri="http://displaytag.sf.net" %>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+<%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql"%>
+<%@taglib prefix="display" uri="http://displaytag.sf.net"%>
 
 <%@attribute name="assemblyTypeId"%>
 <%@attribute name="componentTypeId"%>
@@ -29,7 +30,8 @@
     ;
 </sql:query>
 
-<display:table name="${hrtQ.rows}" class="datatable" pagesize="${preferences.pageLength}" sort="list">
+<display:table name="${hrtQ.rows}" class="datatable" sort="list"
+               pagesize="${fn:length(hrtQ.rows) > preferences.pageLength ? preferences.pageLength : 0}">
     <display:column property="name" sortable="true" headerClass="sortable"/>
     <c:if test="${empty assemblyTypeId or preferences.showFilteredColumns}">
         <display:column property="assemblyType" sortable="true" headerClass="sortable"

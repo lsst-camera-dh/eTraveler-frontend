@@ -3,10 +3,10 @@
     Created on : Apr 2, 2013, 2:39:23 PM
     Author     : focke
 --%>
-<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql" %>
 
 <%@tag description="Leave a trail of links so you can find parent processes." pageEncoding="US-ASCII"%>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql"%>
 
 <%@attribute name="processPath" required="true"%>
 

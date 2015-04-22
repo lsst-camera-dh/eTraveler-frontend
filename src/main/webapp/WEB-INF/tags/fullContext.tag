@@ -5,7 +5,7 @@
 --%>
 
 <%@tag description="Figure out the context of the current page" pageEncoding="UTF-8"%>
-<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
 <%@attribute name="var" required="true" rtexprvalue="false"%>
 <%@variable name-from-attribute="var" alias="fullContext" scope="AT_BEGIN"%>
