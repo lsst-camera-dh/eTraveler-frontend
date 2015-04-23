@@ -17,9 +17,12 @@
         AFS.name
     from 
         Activity A
-        inner join ActivityFinalStatus AFS on AFS.id=A.activityFinalStatusId
+        inner join ActivityStatusHistory ASH on ASH.activityId=A.id
+        inner join ActivityFinalStatus AFS on AFS.id=ASH.activityStatusId
     where 
         A.id=?<sql:param value="${activityId}"/>
+    order by
+        ASH.id desc limit 1
     ;
 </sql:query>
 <c:set var="status" value="${statusQ.rows[0].name}"/>

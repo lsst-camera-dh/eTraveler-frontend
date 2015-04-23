@@ -67,7 +67,7 @@
         </init-param>
         <init-param>
             <param-name>skipPages</param-name>
-            <param-value>fakeLimsBack.jsp*,*/fakeLimsBack.jsp*,fakeLimsFront.jsp</param-value>
+            <param-value>fakeLimsBack.jsp*,*/fakeLimsBack.jsp*,fakeLimsFront.jsp,*inputResult.jsp*</param-value>
         </init-param>
     </filter>
     <filter-mapping>
