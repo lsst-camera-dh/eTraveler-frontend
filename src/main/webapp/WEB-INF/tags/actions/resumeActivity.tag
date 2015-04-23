@@ -30,25 +30,18 @@
 </sql:query>
 
 <c:if test="${'stopped' == status || 'paused' == status}">
-    <sql:update>
-update 
-    Activity 
-set
-    <c:if test="${neverStarted}">begin=null,</c:if>
-    activityFinalStatusId=null, end=null, closedBy=null
-where 
-    id=?<sql:param value="${activityId}"/>
-;
-    </sql:update>
+    <ta:setActivityStatus activityId="${activityId}" status="${lastStatusQ.rows[0].name}"/>
 
     <sql:query var="childrenQ">
 select
-    id 
+    A.id 
 from
-    Activity
+    Activity A
+    inner join ActivityStatusHistory ASH on ASH.activityId=A.id and ASH.id=(select max(id) from ActivityStatusHistory where activityId=A.id)
+    inner join ActivityFinalStatus AFS on AFS.id=ASH.activityStatusId
 where 
-    parentActivityId=?<sql:param value="${activityId}"/>
-    and activityFinalStatusId=(select id from ActivityFinalStatus where name='stopped')
+    A.parentActivityId=?<sql:param value="${activityId}"/>
+    and AFS.id=(select id from ActivityFinalStatus where name='stopped')
 ;
     </sql:query>
 
