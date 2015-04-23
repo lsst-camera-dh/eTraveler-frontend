@@ -19,6 +19,8 @@
         inner join Hardware H on A.hardwareId=H.id
         inner join Process P on A.processId=P.id
         inner join HardwareGroup HG on HG.id=P.hardwareGroupId
+        inner join ActivityStatusHistory ASH on ASH.activityId=A.id and ASH.id=(select max(id) from ActivityStatusHistory where activityId=A.id)
+        inner join ActivityFinalStatus AFS on AFS.id=ASH.activityStatusId
         where
         H.lsstId=?<sql:param value="${inputs.unit_id}"/>
         and P.name=?<sql:param value="${inputs.job}"/>
@@ -27,7 +29,7 @@
         and HG.name=?<sql:param value="${inputs.unit_type}"/>
         and A.begin is not null
         and A.end is null
-        and A.activityFinalStatusId is null
+        and AFS.name='inProgress'
         order by A.id desc limit 1;
     </sql:query>
     <c:if test="${empty activityQ.rows}">

@@ -17,15 +17,17 @@
 <traveler:findTraveler var="travelerId" activityId="${inputs.jobid}"/>
 <c:if test="${allOk}">
     <sql:query var="activityQ" >
-        select A.*
-        from Activity A
-        inner join Process P on P.id=A.processId
-        where A.id=?<sql:param value="${inputs.jobid}"/>
-        <c:if test="${inputs.step != 'purged'}">
-          and A.end is null
-          and A.activityFinalStatusId is null
-        </c:if>
-        and P.travelerActionMask&(select maskBit from InternalAction where name='harnessedJob')!=0;
+select A.*
+from Activity A
+inner join ActivityStatusHistory ASH on ASH.activityId=A.id and ASH.id=(select max(id) from ActivityStatusHistory where activityId=A.id)
+inner join ActivityFinalStatus AFS on AFS.id=ASH.activityStatusId
+inner join Process P on P.id=A.processId
+where A.id=?<sql:param value="${inputs.jobid}"/>
+<c:if test="${inputs.step != 'purged'}">
+    and A.end is null
+    and AFS.name='inProgress'
+</c:if>
+and P.travelerActionMask&(select maskBit from InternalAction where name='harnessedJob')!=0;
     </sql:query>
     <c:if test="${empty activityQ.rows}">
         <c:set var="allOk" value="false"/>

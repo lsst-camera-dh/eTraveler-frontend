@@ -27,11 +27,15 @@
 <c:forEach var="prereq" items="${unfilledPrereqsQ.rows}">
 
     <sql:query var="activityQ" >
-select id from Activity where
-hardwareId=?<sql:param value="${prereq.hardwareId}"/>
-and processId=?<sql:param value="${prereq.prereqProcessId}"/>
-and activityFinalStatusId=(select id from ActivityFinalStatus where name='success')
-order by end desc limit 1;
+select A.id 
+from Activity A
+inner join ActivityStatusHistory ASH on ASH.activityId=A.id and ASH.id=(select max(id) from ActivityStatusHistory where activityId=A.id)
+inner join ActivityFinalStatus AFS on AFS.id=ASH.activityStatusId
+where
+A.hardwareId=?<sql:param value="${prereq.hardwareId}"/>
+and A.processId=?<sql:param value="${prereq.prereqProcessId}"/>
+and ASH.activityStatusId=(select id from ActivityFinalStatus where name='success')
+order by A.end desc limit 1;
     </sql:query>
     <c:choose>
         <c:when test="${! empty activityQ.rows}">
