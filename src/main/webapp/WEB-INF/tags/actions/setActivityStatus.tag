@@ -45,19 +45,6 @@ select * from Activity where id=?<sql:param value="${activityId}"/>;
 </c:choose>
 
     <sql:update>
-update Activity set 
-<c:if test="${setStart}">
-    begin=utc_timestamp(),
-</c:if>
-<c:if test="${setEnd}">
-    end=utc_timestamp(),
-    closedBy=?<sql:param value="${userName}"/>,
-</c:if>
-activityFinalStatusId=?<sql:param value="${statusId}"/> 
-where id=?<sql:param value="${activityId}"/>;
-    </sql:update>
-
-    <sql:update>
 insert into ActivityStatusHistory set
 activityStatusId=?<sql:param value="${statusId}"/>,
 activityId=?<sql:param value="${activityId}"/>,
