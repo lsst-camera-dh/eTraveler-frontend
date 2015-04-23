@@ -16,11 +16,10 @@
     select 
         AFS.name
     from 
-        Activity A
-        inner join ActivityStatusHistory ASH on ASH.activityId=A.id
-        inner join ActivityFinalStatus AFS on AFS.id=ASH.activityStatusId
+        ActivityFinalStatus AFS
+        inner join ActivityStatusHistory ASH on ASH.activityStatusId=AFS.id
     where 
-        A.id=?<sql:param value="${activityId}"/>
+        ASH.activityId=?<sql:param value="${activityId}"/>
     order by
         ASH.id desc limit 1
     ;

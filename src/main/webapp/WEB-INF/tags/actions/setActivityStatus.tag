@@ -26,23 +26,23 @@ select * from Activity where id=?<sql:param value="${activityId}"/>;
 <c:set var="started" value="${! empty activity.begin}"/>
 
 <traveler:getActivityStatus var="oldStatus" activityId="${activityId}"/>
-<c:choose>
-    <c:when test="${(isFinal && ! started) || (oldStatus == 'new' && status == 'inProgress')}">
-        <c:set var="setStart" value="true"/>
-    </c:when>
-    <c:otherwise>
-        <c:set var="setStart" value="false"/>
-    </c:otherwise>
-</c:choose>
 
-<c:choose>
-    <c:when test="${isFinal}">
-        <c:set var="setEnd" value="true"/>
-    </c:when>
-    <c:otherwise>
-        <c:set var="setEnd" value="false"/>
-    </c:otherwise>
-</c:choose>
+<c:if test="${(isFinal && ! started) || (oldStatus == 'new' && status == 'inProgress')}">
+    <sql:update>
+update Activity set
+begin=utc_timestamp()
+where id=?<sql:param value="${activityId}"/>;
+    </sql:update>
+</c:if>
+
+<c:if test="${isFinal}">
+    <sql:update>
+update Activity set
+end=utc_timestamp(),
+closedBy=?<sql:param value="${userName}"/>
+where id=?<sql:param value="${activityId}"/>;
+    </sql:update>
+</c:if>
 
     <sql:update>
 insert into ActivityStatusHistory set
