@@ -14,7 +14,7 @@
 <%@attribute name="status"%>
 
 <c:if test="${empty status}">
-    <c:set var="status" value="failed"/>
+    <c:set var="status" value="failure"/>
 </c:if>
 
 <sql:query var="activityQ">
@@ -30,14 +30,7 @@
         <ta:retryActivity activityId="${activityId}"/>
     </c:when>
     <c:otherwise>
-        <sql:update >
-            update Activity set
-            activityFinalStatusId=(select id from ActivityFinalStatus where name=?<sql:param value="${status}"/>),
-            <c:if test="${empty activity.begin}">begin=UTC_TIMESTAMP(),</c:if>
-            end=UTC_TIMESTAMP(),
-            closedBy=?<sql:param value="${userName}"/>
-            where id=?<sql:param value="${activityId}"/>;
-        </sql:update>
+        <ta:setActivityStatus activityId="${activityId}" status="${status}"/>
         <sql:update>
             update StopWorkHistory set
             resolution='QUIT', resolutionTS=UTC_TIMESTAMP(), resolvedBy=?<sql:param value="${userName}"/>
@@ -46,13 +39,8 @@
             and resolution='NONE' and resolutionTS is null and resolvedBy is null;
         </sql:update>
 
-        <sql:query var="activityQ" >
-            select A.*
-            from Activity A
-            where A.id=?<sql:param value="${activityId}"/>;
-        </sql:query>
-        <c:if test="${! empty activityQ.rows[0].parentActivityId}">
-            <ta:failActivity activityId="${activityQ.rows[0].parentActivityId}" status="${status}"/>
+        <c:if test="${! empty activity.parentActivityId}">
+            <ta:failActivity activityId="${activity.parentActivityId}" status="${status}"/>
         </c:if>
     </c:otherwise>
 </c:choose>
