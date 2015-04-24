@@ -23,7 +23,12 @@
             createdBy=?<sql:param value="${userName}"/>,
             creationTS=UTC_TIMESTAMP();
         </sql:update>
+        <sql:query var="idQ">
+            select last_insert_id() as id;
+        </sql:query>
 </sql:transaction>
-        <c:redirect url="${header.referer}"/>
+        <c:redirect url="/displayLocation.jsp" context="/eTraveler">
+            <c:param name="locationId" value="${idQ.rows[0].id}"/>
+        </c:redirect>
     </body>
 </html>

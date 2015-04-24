@@ -47,6 +47,8 @@
                 creationTS=utc_timestamp();
             </sql:update>
         </sql:transaction>
-        <c:redirect url="${header.referer}"/>
+        <c:redirect url="/displayHardwareType.jsp" context="/eTraveler">
+            <c:param name="hardwareTypeId" value="${hardwareType.hardwareTypeId}"/>
+        </c:redirect>
     </body>
 </html>
