@@ -9,9 +9,4 @@
 
 <%@attribute name="activityId" required="true"%>
 
-<sql:update >
-    update Activity set
-    begin=UTC_TIMESTAMP()
-    where id=?<sql:param value="${activityId}"/>
-    and begin is null;
-</sql:update>
+<ta:setActivityStatus activityId="${activityId}" status="inProgress"/>

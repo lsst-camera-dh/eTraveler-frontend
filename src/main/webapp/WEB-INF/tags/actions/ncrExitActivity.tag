@@ -5,22 +5,8 @@
 --%>
 
 <%@tag description="put an Activity in ncrExit state" pageEncoding="UTF-8"%>
-<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql"%>
+<%@taglib prefix="ta" tagdir="/WEB-INF/tags/actions"%>
 
 <%@attribute name="activityId" required="true"%>
 
-<sql:query var="activityQ">
-    select * from Activity where id=?<sql:param value="${activityId}"/>;
-</sql:query>
-<c:set var="notStarted" value="${empty activityQ.rows[0].begin}"/>
-
-<sql:update>
-    update Activity set
-    <c:if test="${notStarted}">begin=UTC_TIMESTAMP(),</c:if>
-        end=UTC_TIMESTAMP(),
-        activityFinalStatusId=(select id from ActivityFinalStatus where name='ncrExit'),
-        closedBy=?<sql:param value="${userName}"/>
-    where
-        id=?<sql:param value="${activityId}"/>;
-</sql:update>
+<ta:setActivityStatus activityId="${activityId}" status="ncrExit"/>

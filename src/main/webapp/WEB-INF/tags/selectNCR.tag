@@ -19,7 +19,7 @@
     and status='ENABLED';
 </sql:query>
 
-<form method="get" action="doNCR.jsp" target="_top">
+<form method="get" action="fh/doNCR.jsp" target="_top">
     <input type="hidden" name="activityId" value="${activityId}">
     <select name="exceptionTypeId">
         <c:forEach var="et" items="${ncrQ.rows}">
@@ -35,5 +35,5 @@
                value="No NCRs defined" disabled
            </c:otherwise>
         </c:choose>
-               >
+    >
 </form>

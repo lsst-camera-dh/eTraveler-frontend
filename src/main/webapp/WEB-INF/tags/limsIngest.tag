@@ -85,14 +85,8 @@ creationTS=UTC_TIMESTAMP();
     createdBy=?<sql:param value="${userName}"/>,
     creationTS=UTC_TIMESTAMP();
 </sql:update>
-<sql:update >
-    update Activity set 
-    activityFinalStatusId=(select id from ActivityFinalStatus where name='success'),
-    end=UTC_TIMESTAMP(), 
-    closedBy=?<sql:param value="${userName}"/>
-    where 
-    id=?<sql:param value="${inputs.jobid}"/>;
-</sql:update>
+
+<ta:setActivityStatus activityId="${inputs.jobid}" status="success"/>
 
 </sql:transaction>
 </c:catch>

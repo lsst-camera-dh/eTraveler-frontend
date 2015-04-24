@@ -18,7 +18,8 @@
     P.substeps
     from Activity A
     inner join Process P on P.id=A.processId
-    left join ActivityFinalStatus AFS on AFS.id=A.activityFinalStatusId
+    inner join ActivityStatusHistory ASH on ASH.activityId=A.id and ASH.id=(select max(id) from ActivityStatusHistory where activityId=A.id)
+    inner join ActivityFinalStatus AFS on AFS.id=ASH.activityStatusId
     where A.id=?<sql:param value="${activityId}"/>;
 </sql:query>
 <c:set var="activity" value="${activityQ.rows[0]}"/>
@@ -64,3 +65,5 @@
 <c:if test="${empty activity.end && activity.isAutomatable != 0}">
     <traveler:scriptWidget activityId="${activityId}"/>
 </c:if>
+
+<traveler:activityStatusWidget activityId="${activityId}"/>

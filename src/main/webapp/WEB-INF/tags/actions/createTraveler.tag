@@ -21,20 +21,9 @@
     <c:set var="inNCR" value="false"/>
 </c:if>
 
-<sql:update>
-    insert into Activity set
-    hardwareId=?<sql:param value="${hardwareId}"/>,
-    processId=?<sql:param value="${processId}"/>,
-    inNCR=?<sql:param value="${inNCR}"/>,
-    createdBy=?<sql:param value="${userName}"/>,
-    creationTS=UTC_TIMESTAMP();
-</sql:update>
-<sql:query var="activityQ">
-    select * from Activity where id=LAST_INSERT_ID();
-</sql:query>
-
-<c:set var="activity" value="${activityQ.rows[0]}"/>
-<c:set var="activityId" value="${activity.id}"/>
+<ta:createActivity var="activityId"
+    hardwareId="${hardwareId}" processId="${processId}" inNCR="${inNCR}" 
+/>
 
 <sql:query var="hardwareQ">
     select H.*, HS.name

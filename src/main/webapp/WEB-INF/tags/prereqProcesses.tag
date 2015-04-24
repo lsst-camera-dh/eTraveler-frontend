@@ -45,11 +45,15 @@
                 </c:when>
                 <c:otherwise>
                     <sql:query var="activityQ" >
-                        select id, begin from Activity where
-                        hardwareId=?<sql:param value="${row.hardwareId}"/>
-                        and processId=?<sql:param value="${row.prereqProcessId}"/>
-                        and activityFinalStatusId=(select id from ActivityFinalStatus where name='success')
-                        order by begin desc;
+select A.id, A.begin 
+from Activity A
+inner join ActivityStatusHistory ASH on ASH.activityId=A.id and ASH.id=(select max(id) from ActivityStatusHistory where activityId=A.id)
+inner join ActivityFinalStatus AFS on AFS.id=ASH.activityStatusId
+where
+A.hardwareId=?<sql:param value="${row.hardwareId}"/>
+and A.processId=?<sql:param value="${row.prereqProcessId}"/>
+and AFS.activityStatusId=(select id from ActivityFinalStatus where name='success')
+order by A.begin desc;
                     </sql:query>
                     <c:choose>
                         <c:when test="${! empty activityQ.rows}">

@@ -24,13 +24,13 @@
             <c:when test="${isStopped}">
 <sql:transaction>
                 <sql:update>
-                    update StopWorkHistory set
-                    resolution='RESUMED',
-                    resolutionTS=UTC_TIMESTAMP(),
-                    resolvedBy=?<sql:param value="${userName}"/>
-                    where
-                    rootActivityId=?<sql:param value="${travelerId}"/>
-                    and resolutionTS is null;
+update StopWorkHistory set
+resolution='RESUMED',
+resolutionTS=UTC_TIMESTAMP(),
+resolvedBy=?<sql:param value="${userName}"/>
+where
+rootActivityId=?<sql:param value="${travelerId}"/>
+and resolutionTS is null;
                 </sql:update>
                 
                 <ta:resumeActivity activityId="${travelerId}"/>
@@ -38,7 +38,7 @@
                 <traveler:redirDA activityId="${travelerId}"/>
             </c:when>
             <c:otherwise>
-You can't resume a traveler that's not stopped.                
+                <traveler:error message="You can't resume a traveler that's not stopped."/>
             </c:otherwise>
         </c:choose>
     </body>

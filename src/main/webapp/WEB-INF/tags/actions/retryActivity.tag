@@ -23,14 +23,7 @@
     resolutionTS is null;
 </sql:update>
 
-<sql:update >
-    update Activity set
-    activityFinalStatusId=(select id from ActivityFinalStatus where name='superseded'),
-    begin=if(begin is null, utc_timestamp(), begin),
-    end=UTC_TIMESTAMP(),
-    closedBy=?<sql:param value="${userName}"/>
-    where id=?<sql:param value="${activityId}"/>;
-</sql:update>
+<ta:setActivityStatus activityId="${activityId}" status="superseded"/>
 
 <sql:query var="activityQ" >
     select A.*
@@ -39,18 +32,15 @@
 </sql:query>
 <c:set var="activity" value="${activityQ.rows[0]}"/>
 
-<sql:update>
-    insert into Activity set
-    hardwareId=?<sql:param value="${activity.hardwareId}"/>,
-    hardwareRelationshipId=?<sql:param value="${activity.hardwareRelationshipId}"/>,
-    processId=?<sql:param value="${activity.processId}"/>,
-    processEdgeId=?<sql:param value="${activity.processEdgeId}"/>,
-    parentActivityId=?<sql:param value="${activity.parentActivityId}"/>,
-    iteration=?<sql:param value="${activity.iteration + 1}"/>,
-    inNCR=?<sql:param value="${activity.inNCR}"/>,
-    createdBy=?<sql:param value="${userName}"/>,
-    creationTS=UTC_TIMESTAMP();
-</sql:update>
+<ta:createActivity var="newActivityId"
+    hardwareId="${activity.hardwareId}"
+    hardwareRelationshipId="${activity.hardwareRelationshipId}"
+    processId="${activity.processId}"
+    processEdgeId="${activity.processEdgeId}"
+    parentActivityId="${activity.parentActivityId}"
+    iteration="${activity.iteration + 1}"
+    inNCR="${activity.inNCR}"
+/>
 
 <traveler:findTraveler var="travelerId" activityId="${activityId}"/>
 <traveler:isStopped var="isStopped" activityId="${travelerId}"/>

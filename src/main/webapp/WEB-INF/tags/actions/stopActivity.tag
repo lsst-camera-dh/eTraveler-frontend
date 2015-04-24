@@ -16,13 +16,7 @@
     <c:set var="status" value="stopped"/>
 </c:if>
 
-<sql:update>
-    update Activity set
-    activityFinalStatusId=(select id from ActivityFinalStatus where name=?<sql:param value="${status}"/>),
-    begin=if(begin is null, utc_timestamp(), begin),
-    end=utc_timestamp()
-    where id=?<sql:param value="${activityId}"/>;    
-</sql:update>
+<ta:setActivityStatus activityId="${activityId}" status="stopped"/>
 
 <sql:query var="childrenQ">
     select id 
@@ -32,5 +26,5 @@
 </sql:query>
 
 <c:forEach var="child" items="${childrenQ.rows}">
-    <ta:stopActivity activityId="${child.id}"/>
+    <ta:stopActivity activityId="${child.id}" status="${status}"/>
 </c:forEach>
