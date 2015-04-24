@@ -29,7 +29,7 @@ select id from TravelerType where id=?<sql:param value="${param.travelerTypeId}"
             </c:when>
             <c:otherwise>
 <sql:transaction>
-                <ta:setTravelerTypeStatus travelerTypeId="${param.travelerTypeId}" stateId="${param.stateId}" reason="${param.reason}"/>
+                <ta:setTravelerTypeState travelerTypeId="${param.travelerTypeId}" stateId="${param.stateId}" reason="${param.reason}"/>
 </sql:transaction>
                 <c:redirect url="${header.referer}"/> 
             </c:otherwise>

@@ -14,7 +14,7 @@
     select 
         TT.*,
         TTS.name as state,
-        P.id as processId, P.name
+        P.id as processId, concat(P.name, ' v', P.version) as name
     from
         TravelerType TT
         inner join TravelerTypeStateHistory TTSH on 
