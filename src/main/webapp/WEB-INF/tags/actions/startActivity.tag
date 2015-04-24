@@ -5,7 +5,7 @@
 --%>
 
 <%@tag description="Start an existing Activity" pageEncoding="UTF-8"%>
-<%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql"%>
+<%@taglib prefix="ta" tagdir="/WEB-INF/tags/actions"%>
 
 <%@attribute name="activityId" required="true"%>
 
