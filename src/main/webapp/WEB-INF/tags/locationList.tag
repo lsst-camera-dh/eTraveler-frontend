@@ -12,16 +12,23 @@
 
 <%@attribute name="siteId"%>
 
-<sql:query var="locationQ">
-    select L.*, S.name as siteName, S.id as siteId
-    from Location L
-    inner join Site S on S.id=L.siteId
-    where 1
-    <c:if test="${! empty siteId}">
-        and S.id=?<sql:param value="${siteId}"/>
-    </c:if>
-    ;
-</sql:query>
+    <sql:query var="locationQ">
+select 
+    L.*, 
+    S.name as siteName, S.id as siteId,
+    count(distinct H.id) as nComponents
+from Location L
+inner join Site S on S.id=L.siteId
+left join (Hardware H inner join HardwareLocationHistory HLH on HLH.hardwareId=H.id 
+            and HLH.id=(select max(id) from HardwareLocationHistory where hardwareId=H.id))
+            on HLH.locationId=L.id
+where 1
+<c:if test="${! empty siteId}">
+    and S.id=?<sql:param value="${siteId}"/>
+</c:if>
+group by L.id
+;
+    </sql:query>
 
 <display:table name="${locationQ.rows}" class="datatable" sort="list"
                pagesize="${fn:length(locationQ.rows) > preferences.pageLength ? preferences.pageLength : 0}">
@@ -31,6 +38,7 @@
     </c:if>
     <display:column property="name" sortable="true" headerClass="sortable"
                     href="displayLocation.jsp" paramId="locationId" paramProperty="id"/>
+    <display:column property="nComponents" title="# Components" sortable="true" headerClass="sortable"/>
     <display:column property="createdBy" title="Creator" sortable="true" headerClass="sortable"/>
     <display:column property="creationTS" title="Date" sortable="true" headerClass="sortable"/>
 </display:table>
