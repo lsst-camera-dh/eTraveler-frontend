@@ -23,10 +23,10 @@
 </c:if>
 
 <c:url var="inProgressLink" value="listTravelers.jsp">
-    <c:param name="end" value="None"/>
+    <c:param name="done" value="false"/>
 </c:url>
 <c:url var="completeLink" value="listTravelers.jsp">
-    <c:param name="end" value="Any"/>
+    <c:param name="done" value="true"/>
 </c:url>
 
 <sql:query var="result" >
