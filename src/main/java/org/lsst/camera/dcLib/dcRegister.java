@@ -37,7 +37,7 @@ public class dcRegister extends SimpleTagSupport {
             DataCatClient c = new DataCatClient(conn, "WebApp");
             NewDataset nds = c.newDataset(name, fileFormat, dataType, logicalFolderPath, groupName, site, location);
             Map<String,Object> metadata = null;
-            Dataset ret = c.registerDataset( nds, metadata, replaceExisting );
+            Dataset ret = c.registerDataset(nds, metadata, replaceExisting );
             dsPk = ret.getPK();
             c.commit();
             getJspContext().setAttribute(var, dsPk);
