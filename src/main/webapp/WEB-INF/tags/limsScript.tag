@@ -15,7 +15,16 @@
 <c:set var="message" value="Error #681399"/>
 
 <c:if test="${allOk}">
-    <ta:startActivity activityId="${inputs.containerid}"/>
+    <traveler:getActivityStatus var="status" activityId="${inputs.containerid}"/>
+    <c:choose>
+        <c:when test="${status == 'new'}">
+            <ta:startActivity activityId="${inputs.containerid}"/>
+        </c:when>
+        <c:when test="${status == 'inProgress'}"></c:when>
+        <c:otherwise>
+            <traveler:error message="Bad iterator status. 550581"/>
+        </c:otherwise>
+    </c:choose>
 </c:if>
 
 <c:if test="${allOk}">
