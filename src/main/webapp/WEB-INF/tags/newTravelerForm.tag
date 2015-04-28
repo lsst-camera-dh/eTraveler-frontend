@@ -13,7 +13,7 @@
 <%@attribute name="processId"%>
 <%@attribute name="hardwareId"%>
 
-<c:set var="activeTravelerTypesOnly" value="false"/> <%-- should get this from user pref --%>
+<c:set var="activeTravelerTypesOnly" value="true"/> <%-- should get this from user pref? --%>
 
 <sql:query var="processQ" >
     select 
@@ -52,6 +52,7 @@
     <c:if test="${activeTravelerTypesOnly}">
         and TTS.name='active'
     </c:if>
+    order by P.name
     ;
 </sql:query>
     
@@ -64,7 +65,11 @@
     <c:if test="${(empty hardwareGroupId) and (!empty processId)}">
         inner join Process P on P.hardwareGroupId=HTGM.hardwareGroupId
     </c:if>
+    inner join HardwareStatusHistory HSH on HSH.hardwareId=H.id and HSH.id=(select max(id) from HardwareStatusHistory where hardwareId=H.id)
+    inner join HardwareStatus HS on HS.id=HSH.hardwareStatusId
     where 
+    HS.name not in ('REJECTED', 'USED', 'PENDING')
+    and
     <c:choose>
         <c:when test="${!empty hardwareId}">
     H.id=?<sql:param value="${hardwareId}"/>  
@@ -82,6 +87,7 @@
     false <%-- otherwise it will list all hardware and procs if called with no attributes --%>
         </c:otherwise>
     </c:choose>
+    order by H.lsstId
     ;
 </sql:query>
    
