@@ -15,6 +15,7 @@
     from Process 
     where id not in (select rootProcessId from TravelerType)
     <c:if test="${! empty processId}">and id=?<sql:param value="${processId}"/></c:if>
+    order by name
     ;
 </sql:query>
 

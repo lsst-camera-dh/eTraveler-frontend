@@ -13,6 +13,7 @@
 <sql:query var="sitesQ" >
     select id, name from Site
     <c:if test="${! empty siteId}">where id=?<sql:param value="${siteId}"/></c:if>
+    order by name;
 </sql:query>
     
 <form method="get" action="fh/addLocation.jsp">

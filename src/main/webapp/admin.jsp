@@ -58,7 +58,7 @@
 <hr>
 <h2>Hardware Relationship Types</h2>
     <sql:query var="hardwareTypesQ" >
-        select id, name from HardwareType
+        select id, name from HardwareType order by name;
     </sql:query>
     <form method="get" action="fh/addHardwareRelationshipType.jsp">
         <input type="submit" value="Add Hardware Relationship Type">

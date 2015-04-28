@@ -59,7 +59,8 @@
                 where
                 HI.hardwareId=?<sql:param value="${param.hardwareId}"/>
                 and
-                HIA.id=HI.authorityId);
+                HIA.id=HI.authorityId)
+            order by name;
         </sql:query>
         <c:if test="${not empty idAuthQ.rows}">
             <form METHOD=GET ACTION="fh/addIdentifier.jsp">

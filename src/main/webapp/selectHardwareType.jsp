@@ -18,7 +18,7 @@
         <h1>Pick a Hardware type.</h1>
         
         <sql:query var="hwTypesQ" >
-           select id, name from HardwareType;
+           select id, name from HardwareType order by name;
         </sql:query>
 
         <form METHOD=GET ACTION="${param.target}">

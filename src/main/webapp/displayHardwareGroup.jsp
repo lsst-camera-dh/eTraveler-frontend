@@ -34,6 +34,7 @@
             where id not in (select hardwareTypeId 
                              from HardwareTypeGroupMapping 
                              where hardwareGroupId=?<sql:param value="${param.hardwareGroupId}"/>)
+            order by name
             ;
         </sql:query>
             <form method="get" action="fh/addTypeToGroup.jsp">

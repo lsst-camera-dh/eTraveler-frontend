@@ -24,6 +24,8 @@
         Location L
         inner join Site S on L.siteId=S.id
         where S.name=?<sql:param value="${preferences.siteName}"/>
+    order by
+        S.name, L.name
     ;
 </sql:query>
 

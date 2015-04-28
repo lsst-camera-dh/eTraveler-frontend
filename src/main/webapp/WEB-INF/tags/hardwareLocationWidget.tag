@@ -62,6 +62,7 @@
             and L.id!=?<sql:param value="${currentLoc}"/>
         </c:if>
         and S.name=?<sql:param value="${preferences.siteName}"/>
+        order by S.name, L.name;
     </sql:query>
 
     <form action="fh/setHardwareLocation.jsp" method="GET">

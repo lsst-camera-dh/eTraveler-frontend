@@ -26,7 +26,8 @@
     left join HardwareRelationship HR on HR.componentId=H.id
     where HSH.hardwareStatusId=(select id from HardwareStatus where name=?<sql:param value="${status}"/>)
     and (HR.end is not null or HR.id is null)
-    and A.id=?<sql:param value="${activityId}"/>;
+    and A.id=?<sql:param value="${activityId}"/>
+    order by H.lsstId;
 </sql:query>
 
 <c:choose>

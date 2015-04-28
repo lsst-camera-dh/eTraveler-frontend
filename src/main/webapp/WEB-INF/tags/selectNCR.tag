@@ -16,7 +16,8 @@
     select * from ExceptionType
     where 
     exitProcessPath=?<sql:param value="${edgePath}"/>
-    and status='ENABLED';
+    and status='ENABLED'
+    order by conditionString;
 </sql:query>
 
 <form method="get" action="fh/doNCR.jsp" target="_top">

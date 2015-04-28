@@ -19,7 +19,8 @@
 </sql:query>
 
 <sql:query var="newStatesQ">
-    select id, name from TravelerTypeState where name not in ('new', ?<sql:param value="${oldStateQ.rows[0].name}"/>);
+    select id, name from TravelerTypeState where name not in ('new', ?<sql:param value="${oldStateQ.rows[0].name}"/>)
+    order by name;
 </sql:query>
 
 <form action="fh/updateTravelerType.jsp" method="get">
