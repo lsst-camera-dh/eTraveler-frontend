@@ -13,7 +13,7 @@
 
 <%@attribute name="hardwareGroupId"%>
 <%@attribute name="hardwareTypeId"%>
-<%@attribute name="hardwareStatusId"%>
+<%@attribute name="hardwareStatusName"%>
 <%@attribute name="siteId"%>
 <%@attribute name="locationId"%>
 
@@ -45,8 +45,8 @@
     <c:if test="${! empty hardwareTypeId}">
         and HT.id=?<sql:param value="${hardwareTypeId}"/>
     </c:if>
-    <c:if test="${! empty hardwareStatusId}">
-        and HS.id=?<sql:param value="${hardwareStatusId}"/>
+    <c:if test="${! empty hardwareStatusName && hardwareStatusName != 'any'}">
+        and HS.name=?<sql:param value="${hardwareStatusName}"/>
     </c:if>
     <c:if test="${! empty siteId}">
         and siteId=?<sql:param value="${siteId}"/>
@@ -70,7 +70,7 @@
         <display:column property="hardwareTypeName" title="Type" sortable="true" headerClass="sortable"
                         href="displayHardwareType.jsp" paramId="hardwareTypeId" paramProperty="hardwareTypeId"/>
     </c:if>
-    <c:if test="${empty hardwareStatusId or preferences.showFilteredColumns}">
+    <c:if test="${(empty hardwareStatusName || hardwareStatusName == 'any') or preferences.showFilteredColumns}">
         <display:column property="hardwareStatusName" title="Status" sortable="true" headerClass="sortable"/>
     </c:if>
     <display:column property="nTravelers" title="# Travelers" sortable="true" headerClass="sortable"
