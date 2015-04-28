@@ -49,7 +49,7 @@
     false <%-- otherwise it will list all hardware and procs if called with no attributes --%>
         </c:otherwise>
     </c:choose>
-    <c:if test="${activeTravelerTypesOnly}">
+    <c:if test="${activeTravelerTypesOnly && empty processId}">
         and TTS.name='active'
     </c:if>
     order by P.name
