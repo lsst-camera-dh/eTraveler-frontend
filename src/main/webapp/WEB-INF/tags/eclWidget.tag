@@ -14,7 +14,7 @@
 <%@attribute name="processId"%>
 <%@attribute name="activityId"%>
 
-<h2>eLog</h2>
+<h2>Electronic Logbook</h2>
 
 <c:set var="version" value="${appVariables.etravelerELogVersion}"/>
 <c:set var="eLogHome" value="${appVariables.etravelerELogUrl}"/>
@@ -62,11 +62,17 @@
 </c:url>
 <c:set var="displayLink" value="<a href='${displayUrl}' target='_blank'>eTraveler</a>"/>
 
+<table border="1">
+    <tr>
+        <td>
 <c:url var="searchLink" value="${eLogHome}/${eLogSearchPath}">
     <c:param name="text" value="${searchField}"/>
 </c:url>
 <a href="${searchLink}" target="_blank">Search eLog</a>
-
+        </td>
+    </tr>
+    <tr>
+        <td>
 <form method="GET" action="fh/eclPost.jsp">
     <input type="hidden" name="displayLink" value="${displayLink}">
     <input type="hidden" name="author" value="${author}">
@@ -78,3 +84,6 @@
     <textarea name="text"></textarea>
     <input type="SUBMIT" value="Post a comment">
 </form>
+        </td>
+    </tr>
+</table>

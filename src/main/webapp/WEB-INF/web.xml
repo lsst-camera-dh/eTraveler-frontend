@@ -53,6 +53,16 @@
         <param-value>LSST_TEST_TYPE</param-value>
     </context-param>
 
+    <!-- Load the Multipart Filter -->
+<filter>
+    <filter-name>MultipartFilter</filter-name>
+    <filter-class>org.srs.web.base.filters.multipart.MultipartFilter</filter-class>
+</filter>
+<filter-mapping>
+    <filter-name>MultipartFilter</filter-name>
+    <url-pattern>/*</url-pattern>
+</filter-mapping>
+
     <!-- Login Filter -->
     <filter>
         <filter-name>LoginFilter</filter-name>
@@ -67,7 +77,7 @@
         </init-param>
         <init-param>
             <param-name>skipPages</param-name>
-            <param-value>fakeLimsBack.jsp*,*/fakeLimsBack.jsp*,fakeLimsFront.jsp,*inputResult.jsp*</param-value>
+            <param-value>fakeLimsBack.jsp*,*/fakeLimsBack.jsp*,fakeLimsFront.jsp</param-value>
         </init-param>
     </filter>
     <filter-mapping>
@@ -100,16 +110,6 @@
 <filter-name>BlankLineFilter</filter-name>
       <url-pattern>/*</url-pattern>
     </filter-mapping>
-
-    <!-- Load the Multipart Filter -->
-<filter>
-    <filter-name>MultipartFilter</filter-name>
-    <filter-class>org.srs.web.base.filters.multipart.MultipartFilter</filter-class>
-</filter>
-<filter-mapping>
-    <filter-name>MultipartFilter</filter-name>
-    <url-pattern>/*</url-pattern>
-</filter-mapping>
 
 <!-- Icons for tree tag -->
     <servlet>
