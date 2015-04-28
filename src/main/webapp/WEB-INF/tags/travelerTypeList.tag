@@ -59,13 +59,15 @@
             true
         </c:otherwise>
     </c:choose>
-    <c:if test="${! empty state}">
+    <c:if test="${! empty state && state != 'any'}">
         and TTS.name=?<sql:param value="${state}"/>
     </c:if>
     <c:if test="${version=='latest'}">
         and P.version=(select max(version) from Process where name=P.name)
     </c:if>
     group by P.id
+    order by P.name
+    ;
 </sql:query>
 <display:table name="${result.rows}" id="ttRow" class="datatable" sort="list"
                pagesize="${fn:length(result.rows) > preferences.pageLength ? preferences.pageLength : 0}">
@@ -75,7 +77,7 @@
         <display:column property="hardwareGroupName" title="Component Group" sortable="true" headerClass="sortable"
                         href="displayHardwareGroup.jsp" paramId="hardwareGroupId" paramProperty="hardwareGroupId"/>
     </c:if>
-    <c:if test="${empty state or preferences.showFilteredColumns}">
+    <c:if test="${(empty state || state == 'any') || preferences.showFilteredColumns}">
         <display:column property="state" sortable="true" headerClass="sortable"
                         href="displayTravelerType.jsp" paramId="travelerTypeId" paramProperty="travelerTypeId"/>
     </c:if>
