@@ -52,7 +52,7 @@ inner join ActivityFinalStatus AFS on AFS.id=ASH.activityStatusId
 where
 A.hardwareId=?<sql:param value="${row.hardwareId}"/>
 and A.processId=?<sql:param value="${row.prereqProcessId}"/>
-and AFS.activityStatusId=(select id from ActivityFinalStatus where name='success')
+and AFS.id=(select id from ActivityFinalStatus where name='success')
 order by A.begin desc;
                     </sql:query>
                     <c:choose>
