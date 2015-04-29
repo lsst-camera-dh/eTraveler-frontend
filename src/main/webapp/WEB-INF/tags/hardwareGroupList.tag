@@ -10,6 +10,7 @@
 <%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql"%>
 <%@taglib prefix="display" uri="http://displaytag.sf.net"%>
 
+<%@attribute name="name"%>
 <%@attribute name="hardwareTypeId"%>
 
 <sql:query var="groupsQ">
@@ -18,7 +19,13 @@
     left join HardwareTypeGroupMapping HTGM on HTGM.hardwareGroupId=HG.id
     <c:if test="${! empty hardwareTypeId}">
         inner join HardwareTypeGroupMapping HTGMS on HTGMS.hardwareGroupId=HG.id
-        where HTGMS.hardwareTypeId=?<sql:param value="${hardwareTypeId}"/>
+    </c:if>
+    where true
+    <c:if test="${! empty hardwareTypeId}">
+        and HTGMS.hardwareTypeId=?<sql:param value="${hardwareTypeId}"/>
+    </c:if>
+    <c:if test="${! empty name}">
+        and HG.name like concat('%', ?<sql:param value="${name}"/>, '%')
     </c:if>
     group by HG.id
 </sql:query>

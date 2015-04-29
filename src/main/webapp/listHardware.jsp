@@ -24,6 +24,7 @@ select name from HardwareStatus order by name;
         </c:choose>
         
         <filter:filterTable>
+            <filter:filterInput var="name" title="Type (substring search)"/>
             <filter:filterSelection title="State" var="state" defaultValue='${theState}'>
                 <filter:filterOption value="any">Any</filter:filterOption>
                 <c:forEach var="stateName" items="${statesQ.rows}">
@@ -35,6 +36,7 @@ select name from HardwareStatus order by name;
                                hardwareGroupId="${param.hardwareGroupId}"
                                hardwareStatusName="${state}"
                                siteId="${param.siteId}"
-                               locationId="${param.locationId}"/>
+                               locationId="${param.locationId}"
+                               name="${name}"/>
     </body>
 </html>

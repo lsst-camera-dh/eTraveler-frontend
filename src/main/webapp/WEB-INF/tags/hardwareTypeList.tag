@@ -11,6 +11,7 @@
 <%@taglib prefix="display" uri="http://displaytag.sf.net"%>
 
 <%@attribute name="hardwareGroupId"%>
+<%@attribute name="name"%>
 
 <sql:query var="result" >
     select HT.id, HT.name, HT.description, count(H.id) as count
@@ -20,8 +21,12 @@
         inner join HardwareTypeGroupMapping HTGM on HTGM.hardwareTypeId=HT.id
     </c:if>
     left join Hardware H on H.hardwareTypeId=HT.id
+    where true
     <c:if test="${! empty hardwareGroupId}">
-        where HTGM.hardwareGroupId=?<sql:param value="${hardwareGroupId}"/>
+        and HTGM.hardwareGroupId=?<sql:param value="${hardwareGroupId}"/>
+    </c:if>
+    <c:if test="${! empty name}">
+        and HT.name like concat('%', ?<sql:param value="${name}"/>, '%')
     </c:if>
     group by HT.id;
 </sql:query>

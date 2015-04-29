@@ -14,7 +14,8 @@
 <%@attribute name="hardwareTypeId"%>
 <%@attribute name="hardwareGroupId"%>
 <%@attribute name="state"%>
-<%@attribute name="version"%> 
+<%@attribute name="version"%>
+<%@attribute name="name"%>
 
 <c:set var="activeTravelerTypesOnly" value="false"/> <%-- should get this from user pref --%>
 
@@ -59,6 +60,9 @@
             true
         </c:otherwise>
     </c:choose>
+    <c:if test="${! empty name}">
+        and P.name like concat('%', ?<sql:param value="${name}"/>, '%')
+    </c:if>
     <c:if test="${! empty state && state != 'any'}">
         and TTS.name=?<sql:param value="${state}"/>
     </c:if>

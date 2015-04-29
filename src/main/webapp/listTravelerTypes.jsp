@@ -32,6 +32,7 @@ select name from TravelerTypeState order by name;
         </c:choose>
         
         <filter:filterTable>
+            <filter:filterInput var="name" title="Name (substring search)"/>
             <filter:filterSelection title="State" var="state" defaultValue='${theState}'>
                 <filter:filterOption value="any">Any</filter:filterOption>
                 <c:forEach var="stateName" items="${statesQ.rows}">
@@ -43,6 +44,6 @@ select name from TravelerTypeState order by name;
                 <filter:filterOption value="all">All</filter:filterOption>
             </filter:filterSelection>
         </filter:filterTable>
-        <traveler:travelerTypeList hardwareTypeId="${param.hardwareTypeId}" version="${version}" state="${state}"/>
+        <traveler:travelerTypeList hardwareTypeId="${param.hardwareTypeId}" version="${version}" state="${state}" name="${name}"/>
     </body>
 </html>

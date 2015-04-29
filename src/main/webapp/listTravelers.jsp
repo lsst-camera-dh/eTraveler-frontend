@@ -7,8 +7,8 @@
 <%@page contentType="text/html" pageEncoding="US-ASCII"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql"%>
-<%@taglib prefix="traveler" tagdir="/WEB-INF/tags"%>
 <%@taglib prefix="filter" uri="http://srs.slac.stanford.edu/filter"%>
+<%@taglib prefix="traveler" tagdir="/WEB-INF/tags"%>
 
 <!DOCTYPE html>
 <html>
@@ -25,11 +25,13 @@
     </head>
     <body>
         <filter:filterTable>
+            <filter:filterInput var="name" title="Name (substring search)"/>
             <filter:filterSelection title="Version" var="version" defaultValue='all'>
                 <filter:filterOption value="latest">Latest</filter:filterOption>
                 <filter:filterOption value="all">All</filter:filterOption>
             </filter:filterSelection>
         </filter:filterTable>
-        <traveler:activityList travelersOnly="true" version="${version}" processId="${param.processId}" done="${param.done}" hardwareId="${param.hardwareId}"/>
+        <traveler:activityList travelersOnly="true" version="${version}" processId="${param.processId}" 
+                               done="${param.done}" hardwareId="${param.hardwareId}" name="${name}"/>
     </body>
 </html>

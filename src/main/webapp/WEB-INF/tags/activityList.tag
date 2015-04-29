@@ -16,6 +16,7 @@
 <%@attribute name="travelersOnly"%>
 <%@attribute name="userId"%>
 <%@attribute name="version"%> 
+<%@attribute name="name"%>
 
 <sql:query var="result" >
   select A.id as activityId, A.begin, A.end, A.createdBy, A.closedBy,
@@ -39,6 +40,9 @@
     </c:if>
     <c:if test="${! empty processId}">
         and P.id=?<sql:param value="${processId}"/>
+    </c:if>
+    <c:if test="${! empty name}">
+        and P.name like concat('%', ?<sql:param value="${name}"/>, '%')
     </c:if>
     <c:if test="${! empty hardwareId}">
         and H.id=?<sql:param value="${hardwareId}"/>

@@ -5,7 +5,9 @@
 --%>
 
 <%@page contentType="text/html" pageEncoding="US-ASCII"%>
+<%@taglib prefix="filter" uri="http://srs.slac.stanford.edu/filter"%>
 <%@taglib prefix="traveler" tagdir="/WEB-INF/tags"%>
+
 <!DOCTYPE html>
 <html>
     <head>
@@ -14,6 +16,9 @@
     </head>
     <body>
         <h1>Hardware Types</h1>
-        <traveler:hardwareTypeList/>
+        <filter:filterTable>
+            <filter:filterInput var="name" title="Name (substring search)"/>
+        </filter:filterTable>
+        <traveler:hardwareTypeList name="${name}"/>
     </body>
 </html>

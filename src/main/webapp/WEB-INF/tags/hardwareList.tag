@@ -16,6 +16,7 @@
 <%@attribute name="hardwareStatusName"%>
 <%@attribute name="siteId"%>
 <%@attribute name="locationId"%>
+<%@attribute name="name"%>
 
 <sql:query var="result" >
     select H.id, H.creationTS, H.lsstId, H.manufacturer, H.manufacturerId, H.model, H.manufactureDate,
@@ -44,6 +45,9 @@
     </c:if>
     <c:if test="${! empty hardwareTypeId}">
         and HT.id=?<sql:param value="${hardwareTypeId}"/>
+    </c:if>
+    <c:if test="${! empty name}">
+        and HT.name like concat('%', ?<sql:param value="${name}"/>, '%')
     </c:if>
     <c:if test="${! empty hardwareStatusName && hardwareStatusName != 'any'}">
         and HS.name=?<sql:param value="${hardwareStatusName}"/>
