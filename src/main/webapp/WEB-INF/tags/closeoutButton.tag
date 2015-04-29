@@ -12,14 +12,15 @@
 <%@attribute name="activityId" required="true"%>
 <%@attribute name="resultsFiled" required="true"%>
 
-<sql:query var="activityQ" >
-    select A.*, P.substeps, P.maxIteration,
-    P.travelerActionMask&(select maskBit from InternalAction where name='harnessedJob') as isHarnessed,
-    P.travelerActionMask&(select maskBit from InternalAction where name='async') as isAsync 
-    from Activity A
-    inner join Process P on P.id=A.processId
-    where A.id=?<sql:param value="${activityId}"/>;
-</sql:query>
+    <sql:query var="activityQ" >
+select A.*, P.substeps, P.maxIteration, P.newLocation,
+P.travelerActionMask&(select maskBit from InternalAction where name='harnessedJob') as isHarnessed,
+P.travelerActionMask&(select maskBit from InternalAction where name='async') as isAsync,
+P.travelerActionMask&(select maskBit from InternalAction where name='setHardwareLocation') as setsLocation
+from Activity A
+inner join Process P on P.id=A.processId
+where A.id=?<sql:param value="${activityId}"/>;
+    </sql:query>
 <c:set var="activity" value="${activityQ.rows[0]}"/>
 
 <c:set var="message" value="bug 696274"/>
@@ -40,12 +41,12 @@
             </c:when>
             <c:when test="${activity.substeps == 'SEQUENCE'}">
                 <sql:query var="stepsRemainingQ" >
-                    select Ac.id
-                    from Activity Ap
-                    inner join ProcessEdge PE on PE.parent=Ap.processId
-                    left join Activity Ac on Ac.processEdgeId=PE.id and Ac.parentActivityId=Ap.id
-                    where Ap.id=?<sql:param value="${activityId}"/>
-                    and Ac.end is null    
+select Ac.id
+from Activity Ap
+inner join ProcessEdge PE on PE.parent=Ap.processId
+left join Activity Ac on Ac.processEdgeId=PE.id and Ac.parentActivityId=Ap.id
+where Ap.id=?<sql:param value="${activityId}"/>
+and Ac.end is null    
                 </sql:query>
                 <c:if test="${empty stepsRemainingQ.rows}">
                     <c:set var="readyToClose" value="true"/>
@@ -53,10 +54,10 @@
             </c:when>
             <c:when test="${activity.substeps == 'SELECTION'}">
                 <sql:query var="childQ">
-                    select count(*) as completedSteps
-                    from Activity A where
-                    A.parentActivityId=?<sql:param value="${activityId}"/>
-                    and A.end is not null
+select count(*) as completedSteps
+from Activity A where
+A.parentActivityId=?<sql:param value="${activityId}"/>
+and A.end is not null
                 </sql:query>
                 <c:if test="${childQ.rows[0].completedSteps != 0}">
                     <c:set var="readyToClose" value="true"/>
@@ -90,10 +91,39 @@
 <traveler:hasOpenSWH var="hasOpenSWH" activityId="${activityId}"/>
 
 <c:out value="${message}"/><br>
+
+<form METHOD=GET ACTION="fh/closeoutActivity.jsp" target="_top">
+    <c:if test="${activity.setsLocation != 0 && readyToClose}">
+        <sql:query var="locsQ">
+select L.id, L.name 
+from Location L 
+    inner join Site S on S.id=L.siteId
+where S.name=?<sql:param value="${preferences.siteName}"/>
+<c:if test="${! empty activity.newLocation}">
+    and L.name=?<sql:param value="${activity.newLocation}"/>
+</c:if>
+;
+        </sql:query>
+        <c:if test="${empty locsQ.rows}">
+            <traveler:error message="No location"/>
+        </c:if>
+        <c:choose>
+            <c:when test="${! empty activity.newLocation}">
+                <input type="hidden" name="newLocationId" value="${locsQ.rows[0].id}">
+            </c:when>
+            <c:otherwise>
+                Pick a Location:
+                <select name="newLocationId">
+                    <c:forEach var="loc" items="${locsQ.rows}">
+                        <option value="${loc.id}"><c:out value="${loc.name}"/></option>
+                    </c:forEach>
+                </select>
+            </c:otherwise>
+        </c:choose>
+    </c:if>
 <table>
     <tr>
         <td>
-            <form METHOD=GET ACTION="fh/closeoutActivity.jsp" target="_top">
                 <input type="hidden" name="activityId" value="${activityId}">       
                 <input type="hidden" name="topActivityId" value="${param.topActivityId}">       
                 <INPUT TYPE=SUBMIT value="Closeout Success"

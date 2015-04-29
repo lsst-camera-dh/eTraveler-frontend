@@ -19,7 +19,7 @@
     <body>
 
         <sql:transaction >
-            <ta:closeoutActivity activityId="${param.activityId}"/>
+            <ta:closeoutActivity activityId="${param.activityId}" newLocationId="${param.newLocationId}"/>
 
             <sql:query var="activityQ">
 select * from Activity where id=?<sql:param value="${param.activityId}"/>;

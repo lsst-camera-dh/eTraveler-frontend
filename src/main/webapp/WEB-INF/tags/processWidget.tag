@@ -13,11 +13,12 @@
 <%@attribute name="parentActivityId"%>
 <%@attribute name="processEdgeId"%>
 
-<sql:query var="processQ" >
-    select P.*
-    from Process P
-    where id=?<sql:param value="${processId}"/>;
-</sql:query>
+    <sql:query var="processQ" >
+select P.*,
+P.travelerActionMask&(select maskBit from InternalAction where name='setHardwareLocation') as setsLocation
+from Process P
+where id=?<sql:param value="${processId}"/>;
+    </sql:query>
 <c:set var="process" value="${processQ.rows[0]}"/>
 
 <c:if test="${! empty process.description}">
@@ -34,4 +35,7 @@
     <c:if test="${processQ.rows[0].substeps == 'SELECTION'}"><traveler:selectionWidget processId="${processId}"/></c:if>
     <traveler:processInputWidget processId="${processId}"/>
 </c:if>
-    
+
+<c:if test="${process.setsLocation != 0}">
+Component will move to <c:out value="${empty process.newLocation ? 'User Input' : process.newLocation}"/>
+</c:if>
