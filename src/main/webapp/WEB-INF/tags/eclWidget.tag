@@ -51,7 +51,7 @@
         <c:set var="searchField" value="${hardwareTypeField}"/>
     </c:when>
     <c:otherwise>
-        Bug 098653
+        <traveler:error message="Bug 098653" bug="true"/>
     </c:otherwise>
 </c:choose>
 

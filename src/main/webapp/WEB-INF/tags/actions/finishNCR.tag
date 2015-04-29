@@ -30,7 +30,7 @@
 </sql:query>
 <c:choose>
     <c:when test="${fn:length(exceptionQ.rows) != 1}">
-        Inconceivable! #253795
+        <traveler:error message="Inconceivable! #253795" bug="true"/>
     </c:when>
     <c:otherwise>
         <c:set var="exception" value="${exceptionQ.rows[0]}"/>

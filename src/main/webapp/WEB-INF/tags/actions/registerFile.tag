@@ -9,7 +9,7 @@
 <%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql"%>
 <%@taglib prefix="traveler" tagdir="/WEB-INF/tags"%>
-<%@taglib uri="/tlds/dcTagLibrary.tld" prefix="dc"%>
+<%@taglib prefix="dc" uri="/tlds/dcTagLibrary.tld"%>
 <%@taglib prefix="upload" uri="/tlds/uploads.tld"%>
 
 <%@attribute name="activityId" required="true"%>
@@ -32,7 +32,7 @@
         <c:set var="modePath" value="${initParam['mirroredSubfolder']}"/>
     </c:when>
     <c:otherwise>
-        AAAaaack!!!! #220560
+        <traveler:error message="AAAaaack!!!! #220560" bug="true"/>
     </c:otherwise>
 </c:choose>
 
@@ -70,7 +70,7 @@
 <c:set var="fileFormat" value="${fileExt == name ? 'unspecified' : fileExt}"/>
     </c:when>
     <c:otherwise>
-        AAAaaack!!!! #220561
+        <traveler:error message="AAAaaack!!!! #220561" bug="true"/>
     </c:otherwise>
 </c:choose>
 

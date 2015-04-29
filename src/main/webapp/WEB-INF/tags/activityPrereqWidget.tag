@@ -62,7 +62,7 @@
                         <traveler:componentSelector activityId="${activityId}"/>
                 </c:when>
                 <c:otherwise>
-                    Error <%-- This really shouldn't happen --%>
+                    <traveler:error message="Error 202338" bug="true"/>
                 </c:otherwise>
             </c:choose>
         </display:column>
@@ -78,7 +78,7 @@
                     </form>
                 </c:when>
                 <c:otherwise>
-                    Error <%-- This really shouldn't happen --%>
+                    <traveler:error message="Error 580837" bug="true"/>
                 </c:otherwise>
             </c:choose>            
         </display:column>

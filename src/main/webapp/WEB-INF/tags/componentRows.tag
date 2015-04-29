@@ -24,7 +24,8 @@
     </c:when>
     <c:otherwise>
         <c:set var="me" value="tarzan"/>
-        <c:set var="you" value="jane"/>        
+        <c:set var="you" value="jane"/>
+        <traveler:error message="Bad mode in component tree." bug="true"/>
     </c:otherwise>
 </c:choose>
 

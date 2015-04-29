@@ -6,6 +6,7 @@
 
 <%@tag description="Redirect to the displayActivity page" pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@taglib prefix="traveler" tagdir="/WEB-INF/tags"%>
 
 <%@attribute name="activityId"%>
 
@@ -27,7 +28,7 @@
         <c:redirect url="${daLink}"/>
     </c:when>
     <c:otherwise>
-        Oh dear.
-        Tell the developers you ran into bug #689743.
+<traveler:error message="Oh dear.
+Tell the developers you ran into bug #689743." bug="true"/>
     </c:otherwise>
 </c:choose>
