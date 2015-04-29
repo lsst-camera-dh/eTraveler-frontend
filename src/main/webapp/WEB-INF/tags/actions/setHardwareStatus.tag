@@ -12,6 +12,7 @@
 <%@attribute name="hardwareId" required="true"%>
 <%@attribute name="hardwareStatusId"%>
 <%@attribute name="hardwareStatusName"%>
+<%@attribute name="activityId"%>
 
 <c:choose>
     <c:when test="${! empty hardwareStatusName}">
@@ -40,6 +41,9 @@ select id from HardwareStatus where name=?<sql:param value="${hardwareStatusName
     insert into HardwareStatusHistory set
     hardwareStatusId=?<sql:param value="${hardwareStatusId}"/>,
     hardwareId=?<sql:param value="${hardwareId}"/>,
+    <c:if test="${! empty activityId}">
+        activityId=?<sql:param value="${activityId}"/>,
+    </c:if>
     createdBy=?<sql:param value="${userName}"/>,
     creationTS=UTC_TIMESTAMP();
 </sql:update>
