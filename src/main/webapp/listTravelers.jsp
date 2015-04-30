@@ -10,6 +10,10 @@
 <%@taglib prefix="filter" uri="http://srs.slac.stanford.edu/filter"%>
 <%@taglib prefix="traveler" tagdir="/WEB-INF/tags"%>
 
+    <sql:query var="statesQ">
+select name from ActivityFinalStatus order by name;
+    </sql:query>
+
 <!DOCTYPE html>
 <html>
     <head>
@@ -26,12 +30,18 @@
     <body>
         <filter:filterTable>
             <filter:filterInput var="name" title="Name (substring search)"/>
+            <filter:filterSelection title="Status" var="status" defaultValue='any'>
+                <filter:filterOption value="any">Any</filter:filterOption>
+                <c:forEach var="statusName" items="${statesQ.rows}">
+                    <filter:filterOption value="${statusName.name}"><c:out value="${statusName.name}"/></filter:filterOption>
+                </c:forEach>
+            </filter:filterSelection>
             <filter:filterSelection title="Version" var="version" defaultValue='all'>
                 <filter:filterOption value="latest">Latest</filter:filterOption>
                 <filter:filterOption value="all">All</filter:filterOption>
             </filter:filterSelection>
         </filter:filterTable>
         <traveler:activityList travelersOnly="true" version="${version}" processId="${param.processId}" 
-                               done="${param.done}" hardwareId="${param.hardwareId}" name="${name}"/>
+                               done="${param.done}" status="${status}" hardwareId="${param.hardwareId}" name="${name}"/>
     </body>
 </html>

@@ -17,6 +17,7 @@
 <%@attribute name="userId"%>
 <%@attribute name="version"%> 
 <%@attribute name="name"%>
+<%@attribute name="status"%>
 
 <sql:query var="result" >
   select A.id as activityId, A.begin, A.end, A.createdBy, A.closedBy,
@@ -48,7 +49,10 @@
         and H.id=?<sql:param value="${hardwareId}"/>
     </c:if>
     <c:if test="${! empty done}">
-        and A.end is <c:if test="${done}">not</c:if> null
+        and <c:if test="${! done}">not</c:if> AFS.isFinal
+    </c:if>
+    <c:if test="${! empty status && status != 'any'}">
+        and AFS.name=?<sql:param value="${status}"/>
     </c:if>
     <c:if test="${! empty userId}">
         and (A.createdBy=?<sql:param value="${userId}"/> or A.closedBy=?<sql:param value="${userId}"/>
@@ -71,13 +75,15 @@
             <display:column property="nickName" title="${preferences.idAuthName} Identifier" sortable="true" headerClass="sortable"/>
         </c:if>
     </c:if>
-    <c:if test="${(empty processId and empty hardwareId) or preferences.showFilteredColumns}">
+    <c:if test="${(empty processId && empty hardwareId) || preferences.showFilteredColumns}">
         <display:column property="hardwareName" title="Component Type" sortable="true" headerClass="sortable"
                         href="displayHardwareType.jsp" paramId="hardwareTypeId" paramProperty="hardwareTypeId"/>
     </c:if>
     <display:column property="begin" sortable="true" headerClass="sortable"/>
     <display:column property="createdBy" sortable="true" headerClass="sortable"/>
-    <display:column property="status" sortable="true" headerClass="sortable"/>
+    <c:if test="${(empty status || status == 'any') || preferences.showFilteredColumns}">
+        <display:column property="status" sortable="true" headerClass="sortable"/>
+    </c:if>
     <display:column property="end" sortable="true" headerClass="sortable"/>
     <display:column property="closedBy" sortable="true" headerClass="sortable"/>
 </display:table>        
