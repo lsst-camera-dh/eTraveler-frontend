@@ -36,7 +36,7 @@
         inner join Process P on P.id=A.processId
         inner join ProcessEdge PE on PE.id=A.processEdgeId
         inner join ActivityStatusHistory ASH on ASH.activityId=A.id and ASH.id=(select max(id) from ActivityStatusHistory where activityId=A.id)
-        left join ActivityFinalStatus AFS on AFS.id=ASH.activityStatusId
+        inner join ActivityFinalStatus AFS on AFS.id=ASH.activityStatusId
         left join Exception E on E.exitActivityId=A.id
     where
         A.parentActivityId=?<sql:param value="${activityId}"/>

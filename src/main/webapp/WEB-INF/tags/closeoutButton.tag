@@ -17,7 +17,7 @@ select A.*, P.substeps, P.maxIteration, P.newLocation,
 P.travelerActionMask&(select maskBit from InternalAction where name='harnessedJob') as isHarnessed,
 P.travelerActionMask&(select maskBit from InternalAction where name='async') as isAsync,
 P.travelerActionMask&(select maskBit from InternalAction where name='setHardwareLocation') as setsLocation,
-AFS.name as state, AFS.isFinal
+AFS.name as status, AFS.isFinal
 from Activity A
 inner join Process P on P.id=A.processId
 inner join ActivityStatusHistory ASH on ASH.activityId=A.id and ASH.id=(select max(id) from ActivityStatusHistory where activityId=A.id)
@@ -85,7 +85,7 @@ and A.end is not null
 
 <c:set var="readyToClose" value="${readyToClose && resultsFiled}"/>
 
-<c:set var="pausable" value="${activity.state == 'new' || activity.state == 'inProgress'}"/>
+<c:set var="pausable" value="${activity.status == 'new' || activity.status == 'inProgress'}"/>
 
 <c:set var="retryable" value="${activity.iteration < activity.maxIteration && readyToClose}"/>
 <c:if test="${readyToClose}">
@@ -141,7 +141,7 @@ Make a new version of the Traveler."/>
         </td>
         <td>
         <c:choose>
-            <c:when test="${activity.state == 'paused'}">
+            <c:when test="${activity.status == 'paused'}">
                 <form METHOD=GET ACTION="fh/unPauseTraveler.jsp" target="_top">
                     <input type="hidden" name="activityId" value="${activityId}">       
                     <INPUT TYPE=SUBMIT value="Resume paused Traveler">
@@ -185,7 +185,7 @@ Make a new version of the Traveler."/>
                 <input type="hidden" name="activityId" value="${activityId}">       
                 <input type="hidden" name="topActivityId" value="${param.topActivityId}">       
                 <INPUT TYPE=SUBMIT value="Skip Step"
-                       <c:if test="${closed}">disabled</c:if>>
+                       <c:if test="${! pausable}">disabled</c:if>>
             </form>            
         </td>
     </tr>

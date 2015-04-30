@@ -19,10 +19,13 @@ select
 Ap.hardwareId, Ap.begin, Ap.inNCR,
 PE.child, PE.id as edgeId, PE.step, PE.cond,
 P.name,
+AFS.name as status,
 Ac.creationTS
 from Activity Ap
 inner join ProcessEdge PE on PE.parent=Ap.processId
 inner join Process P on P.id=PE.child
+inner join ActivityStatusHistory ASH on ASH.activityId=Ap.id and ASH.id=(select max(id) from ActivityStatusHistory where activityId=Ap.id)
+inner join ActivityFinalStatus AFS on AFS.id=ASH.activityStatusId
 left join Activity Ac on Ac.parentActivityId=Ap.id and Ac.processEdgeId=PE.id
 where Ap.id=?<sql:param value="${activityId}"/>
 order by abs(PE.step);
@@ -70,7 +73,8 @@ order by abs(PE.step);
                         <input type="hidden" name="topActivityId" value="${param.topActivityId}">
                         <input type="hidden" name="processId" value="${childRow.child}">
                         <input type="hidden" name="processEdgeId" value="${childRow.edgeId}">
-                        <input type="submit" value="${childRow.name}">
+                        <input type="submit" value="${childRow.name}"
+                               <c:if test="${childRow.status != 'new' && childRow.status != 'inProgress'}">disabled</c:if>>
                     </form>
                 </c:when>
                 <c:otherwise>
