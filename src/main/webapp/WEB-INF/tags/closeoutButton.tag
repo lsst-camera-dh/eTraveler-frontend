@@ -85,7 +85,7 @@ and A.end is not null
 
 <c:set var="readyToClose" value="${readyToClose && resultsFiled}"/>
 
-<c:set var="pausable" value="${activity.status == 'new' || activity.status == 'inProgress'}"/>
+<c:set var="active" value="${activity.status == 'new' || activity.status == 'inProgress'}"/>
 
 <c:set var="retryable" value="${activity.iteration < activity.maxIteration && readyToClose}"/>
 <c:if test="${readyToClose}">
@@ -151,7 +151,7 @@ Make a new version of the Traveler."/>
                 <form METHOD=GET ACTION="fh/pauseTraveler.jsp" target="_top">
                     <input type="hidden" name="activityId" value="${activityId}">       
                     <INPUT TYPE=SUBMIT value="Pause Traveler"
-                           <c:if test="${! pausable}">disabled</c:if>>
+                           <c:if test="${! active}">disabled</c:if>>
                 </form>
             </c:otherwise>
         </c:choose>
@@ -165,27 +165,30 @@ Make a new version of the Traveler."/>
             </form>
         </td>
         <td>
-            <form METHOD=GET ACTION="stopWork.jsp" target="_top">
-                <input type="hidden" name="activityId" value="${activityId}">       
-                <input type="hidden" name="topActivityId" value="${param.topActivityId}">       
-                <%--<input type="hidden" name="status" value="stopped">--%>
-                <INPUT TYPE=SUBMIT value="Stop Work"
-                       <c:if test="${(! failable) || isStopped}">disabled</c:if>>
-            </form>                  
-        </td>
-        <td>
-            <form METHOD=GET ACTION="resolveStop.jsp" target="_top">
-                <input type="hidden" name="activityId" value="${activityId}">       
-                <INPUT TYPE=SUBMIT value="Resolve Stop Work"
-                       <c:if test="${! hasOpenSWH}">disabled</c:if>>
-            </form>                              
+            <c:choose>
+                <c:when test="${hasOpenSWH}">
+                    <form METHOD=GET ACTION="resolveStop.jsp" target="_top">
+                        <input type="hidden" name="activityId" value="${activityId}">       
+                        <INPUT TYPE=SUBMIT value="Resolve Stop Work">
+                    </form>                                              
+                </c:when>
+                <c:otherwise>
+                    <form METHOD=GET ACTION="stopWork.jsp" target="_top">
+                        <input type="hidden" name="activityId" value="${activityId}">       
+                        <input type="hidden" name="topActivityId" value="${param.topActivityId}">       
+                        <%--<input type="hidden" name="status" value="stopped">--%>
+                        <INPUT TYPE=SUBMIT value="Stop Work"
+                               <c:if test="${(! failable) || ! active}">disabled</c:if>>
+                    </form>                                  
+                </c:otherwise>
+            </c:choose>
         </td>
         <td>
             <form METHOD=GET ACTION="fh/skipStep.jsp" target="_top">
                 <input type="hidden" name="activityId" value="${activityId}">       
                 <input type="hidden" name="topActivityId" value="${param.topActivityId}">       
                 <INPUT TYPE=SUBMIT value="Skip Step"
-                       <c:if test="${! pausable}">disabled</c:if>>
+                       <c:if test="${! active}">disabled</c:if>>
             </form>            
         </td>
     </tr>
