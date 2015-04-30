@@ -16,9 +16,12 @@
 select A.*, P.substeps, P.maxIteration, P.newLocation,
 P.travelerActionMask&(select maskBit from InternalAction where name='harnessedJob') as isHarnessed,
 P.travelerActionMask&(select maskBit from InternalAction where name='async') as isAsync,
-P.travelerActionMask&(select maskBit from InternalAction where name='setHardwareLocation') as setsLocation
+P.travelerActionMask&(select maskBit from InternalAction where name='setHardwareLocation') as setsLocation,
+AFS.name as state, AFS.isFinal
 from Activity A
 inner join Process P on P.id=A.processId
+inner join ActivityStatusHistory ASH on ASH.activityId=A.id and ASH.id=(select max(id) from ActivityStatusHistory where activityId=A.id)
+inner join ActivityFinalStatus AFS on AFS.id=ASH.activityStatusId
 where A.id=?<sql:param value="${activityId}"/>;
     </sql:query>
 <c:set var="activity" value="${activityQ.rows[0]}"/>
@@ -82,6 +85,8 @@ and A.end is not null
 
 <c:set var="readyToClose" value="${readyToClose && resultsFiled}"/>
 
+<c:set var="pausable" value="${activity.state == 'new' || activity.state == 'inProgress'}"/>
+
 <c:set var="retryable" value="${activity.iteration < activity.maxIteration && readyToClose}"/>
 <c:if test="${readyToClose}">
     <c:set var="message" value="Ready to close"/>
@@ -133,6 +138,23 @@ Make a new version of the Traveler."/>
                 <INPUT TYPE=SUBMIT value="Closeout Success"
                        <c:if test="${! readyToClose}">disabled</c:if>>
             </form>      
+        </td>
+        <td>
+        <c:choose>
+            <c:when test="${activity.state == 'paused'}">
+                <form METHOD=GET ACTION="fh/unPauseTraveler.jsp" target="_top">
+                    <input type="hidden" name="activityId" value="${activityId}">       
+                    <INPUT TYPE=SUBMIT value="Resume paused Traveler">
+                </form>
+            </c:when>
+            <c:otherwise>
+                <form METHOD=GET ACTION="fh/pauseTraveler.jsp" target="_top">
+                    <input type="hidden" name="activityId" value="${activityId}">       
+                    <INPUT TYPE=SUBMIT value="Pause Traveler"
+                           <c:if test="${! pausable}">disabled</c:if>>
+                </form>
+            </c:otherwise>
+        </c:choose>
         </td>
         <td>
             <form METHOD=GET ACTION="fh/retryActivity.jsp" target="_top">

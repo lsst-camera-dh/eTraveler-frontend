@@ -14,29 +14,33 @@
 
 <traveler:isStopped var="isStopped" activityId="${activityId}"/>
 
-<sql:query var="activityQ" >
-    select A.*, P.hardwareRelationShipTypeId
-    from Activity A
+    <sql:query var="activityQ" >
+select A.*, P.hardwareRelationShipTypeId,
+    AFS.name as state, AFS.isFinal
+from Activity A
     inner join Process P on P.id=A.processId
-    where A.id=?<sql:param value="${activityId}"/>
-</sql:query>
+    inner join ActivityStatusHistory ASH on ASH.activityId=A.id and ASH.id=(select max(id) from ActivityStatusHistory where activityId=A.id)
+    inner join ActivityFinalStatus AFS on AFS.id=ASH.activityStatusId
+where A.id=?<sql:param value="${activityId}"/>
+;
+    </sql:query>
 <c:set var="activity" value="${activityQ.rows[0]}"/>
 
 <traveler:prereqProcesses activityId="${activityId}"/>
 
-<sql:query var="componentQ" >
-    select PP.*, HT.name as hardwareTypeName, H.id as componentId, H.lsstId, PI.creationTS as satisfaction,
-    P.travelerActionMask&(select maskBit from InternalAction where name='makeHardwareRelationship') as makesRelationship
-    from PrerequisitePattern PP
-    inner join Process P on P.id=PP.processId
-    inner join HardwareType HT on HT.id=PP.hardwareTypeId
-    inner join Activity A on A.processId=PP.processId
-    left join (Prerequisite PI 
-        inner join Hardware H on H.id=PI.hardwareId)
-        on PI.activityId=A.id and PI.prerequisitePatternId=PP.id
-    where A.id=?<sql:param value="${activityId}"/>
-    and PP.prerequisiteTypeId=(select id from PrerequisiteType where name='COMPONENT')
-</sql:query>
+    <sql:query var="componentQ" >
+select PP.*, HT.name as hardwareTypeName, H.id as componentId, H.lsstId, PI.creationTS as satisfaction,
+P.travelerActionMask&(select maskBit from InternalAction where name='makeHardwareRelationship') as makesRelationship
+from PrerequisitePattern PP
+inner join Process P on P.id=PP.processId
+inner join HardwareType HT on HT.id=PP.hardwareTypeId
+inner join Activity A on A.processId=PP.processId
+left join (Prerequisite PI 
+    inner join Hardware H on H.id=PI.hardwareId)
+    on PI.activityId=A.id and PI.prerequisitePatternId=PP.id
+where A.id=?<sql:param value="${activityId}"/>
+and PP.prerequisiteTypeId=(select id from PrerequisiteType where name='COMPONENT')
+    </sql:query>
 <c:if test="${! empty componentQ.rows}">
     <h2>Components</h2>
     <display:table name="${componentQ.rows}" id="row" class="datatable">
@@ -89,8 +93,7 @@
 <traveler:prereqTable prereqTypeName="CONSUMABLE" activityId="${activityId}"/>
 
 <c:choose>
-    <c:when test="${empty activity.begin}">
-        <traveler:isStopped activityId="${activityId}" var="isStopped"/>
+    <c:when test="${activity.state == 'new'}">
         <sql:query var="prereqQ" >
             select count(PP.id)-count(PR.id) as prsRemaining from
             PrerequisitePattern PP
@@ -98,7 +101,7 @@
             left join Prerequisite PR on PR.activityId=A.id and PR.prerequisitePatternId=PP.id
             where A.id=?<sql:param value="${activityId}"/>
         </sql:query>
-        <c:set var="readyToStart" value="${prereqQ.rows[0].prsRemaining==0 && ! isStopped}"/>
+        <c:set var="readyToStart" value="${prereqQ.rows[0].prsRemaining==0}"/>
     </c:when>
     <c:otherwise>
         <c:set var="readyToStart" value="false"/>

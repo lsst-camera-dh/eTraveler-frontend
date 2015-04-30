@@ -16,7 +16,7 @@
     <c:set var="status" value="stopped"/>
 </c:if>
 
-<ta:setActivityStatus activityId="${activityId}" status="stopped"/>
+<ta:setActivityStatus activityId="${activityId}" status="${status}"/>
 
 <sql:query var="childrenQ">
     select id 

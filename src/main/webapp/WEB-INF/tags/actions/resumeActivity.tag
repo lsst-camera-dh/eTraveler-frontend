@@ -16,7 +16,6 @@
     select * from Activity where id=?<sql:param value="${activityId}"/>
 </sql:query>
 <c:set var="activity" value="${activityQ.rows[0]}"/>
-<c:set var="neverStarted" value="${activity.begin == activity.end}"/>
 
 <traveler:getActivityStatus var="status" activityId="${activityId}"/>
 
@@ -41,7 +40,7 @@ from
     inner join ActivityFinalStatus AFS on AFS.id=ASH.activityStatusId
 where 
     A.parentActivityId=?<sql:param value="${activityId}"/>
-    and AFS.id=(select id from ActivityFinalStatus where name='stopped')
+    and AFS.id in (select id from ActivityFinalStatus where name in ('stopped', 'paused'))
 ;
     </sql:query>
 
