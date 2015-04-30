@@ -14,43 +14,50 @@
 <%@attribute name="var" required="true" rtexprvalue="false"%>
 <%@variable name-from-attribute="var" alias="resultsFiled" scope="AT_BEGIN"%>
 
-<c:set var="resultsFiled" value="true"/> <%-- will get set to false if any are not --%>
+<traveler:getActivityStatus var="status" activityId="${activityId}"/>
 
-<sql:query var="inputQ" >
-    select A.begin, A.end, IP.*, RM.value, ISm.name as ISName
-    from Activity A
-    inner join InputPattern IP on IP.processId=A.processId
-    inner join InputSemantics ISm on ISm.id=IP.inputSemanticsId
-    left join FloatResultManual RM on RM.activityId=A.id and RM.inputPatternId=IP.id
-    where A.id=?<sql:param value="${activityId}"/>
-    and ISm.name='float'
-    union
-    select A.begin, A.end, IP.*, RM.value, ISm.name as ISName
-    from Activity A
-    inner join InputPattern IP on IP.processId=A.processId
-    inner join InputSemantics ISm on ISm.id=IP.inputSemanticsId
-    left join IntResultManual RM on RM.activityId=A.id and RM.inputPatternId=IP.id
-    where A.id=?<sql:param value="${activityId}"/>
-    and ISm.name='int'
-    union
-    select A.begin, A.end, IP.*, RM.value, ISm.name as ISName
-    from Activity A
-    inner join InputPattern IP on IP.processId=A.processId
-    inner join InputSemantics ISm on ISm.id=IP.inputSemanticsId
-    left join StringResultManual RM on RM.activityId=A.id and RM.inputPatternId=IP.id
-    where A.id=?<sql:param value="${activityId}"/>
-    and ISm.name='string'
-    union
-    select A.begin, A.end, IP.*, RM.value, ISm.name as ISName
-    from Activity A
-    inner join InputPattern IP on IP.processId=A.processId
-    inner join InputSemantics ISm on ISm.id=IP.inputSemanticsId
-    left join FilepathResultManual RM on RM.activityId=A.id and RM.inputPatternId=IP.id
-    where A.id=?<sql:param value="${activityId}"/>
-    and ISm.name='filepath'
-</sql:query>
+<c:choose>
+    <c:when test="${status == 'inProgress'}">
+        <c:set var="resultsFiled" value="true"/> <%-- will get set to false if any are not --%>
+    </c:when>
+    <c:otherwise>
+        <c:set var="resultsFiled" value="false"/>
+    </c:otherwise>
+</c:choose>
 
-<traveler:isStopped var="isStopped" activityId="${activityId}"/>
+    <sql:query var="inputQ" >
+select A.begin, A.end, IP.*, RM.value, ISm.name as ISName
+from Activity A
+inner join InputPattern IP on IP.processId=A.processId
+inner join InputSemantics ISm on ISm.id=IP.inputSemanticsId
+left join FloatResultManual RM on RM.activityId=A.id and RM.inputPatternId=IP.id
+where A.id=?<sql:param value="${activityId}"/>
+and ISm.name='float'
+union
+select A.begin, A.end, IP.*, RM.value, ISm.name as ISName
+from Activity A
+inner join InputPattern IP on IP.processId=A.processId
+inner join InputSemantics ISm on ISm.id=IP.inputSemanticsId
+left join IntResultManual RM on RM.activityId=A.id and RM.inputPatternId=IP.id
+where A.id=?<sql:param value="${activityId}"/>
+and ISm.name='int'
+union
+select A.begin, A.end, IP.*, RM.value, ISm.name as ISName
+from Activity A
+inner join InputPattern IP on IP.processId=A.processId
+inner join InputSemantics ISm on ISm.id=IP.inputSemanticsId
+left join StringResultManual RM on RM.activityId=A.id and RM.inputPatternId=IP.id
+where A.id=?<sql:param value="${activityId}"/>
+and ISm.name='string'
+union
+select A.begin, A.end, IP.*, RM.value, ISm.name as ISName
+from Activity A
+inner join InputPattern IP on IP.processId=A.processId
+inner join InputSemantics ISm on ISm.id=IP.inputSemanticsId
+left join FilepathResultManual RM on RM.activityId=A.id and RM.inputPatternId=IP.id
+where A.id=?<sql:param value="${activityId}"/>
+and ISm.name='filepath'
+    </sql:query>
 
 <c:if test="${! empty inputQ.rows}">
     <h2>Results</h2>
@@ -66,7 +73,7 @@
                 <c:when test="${! empty row.value}">
                     ${row.value}
                 </c:when>
-                <c:when test="${(empty row.begin) || isStopped}">
+                <c:when test="${(empty row.begin) || status == 'paused' || status == 'stopped'}">
                     Not yet
                 </c:when>
                 <c:when test="${! empty row.end}">
