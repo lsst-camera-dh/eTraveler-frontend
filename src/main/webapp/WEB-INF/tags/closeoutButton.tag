@@ -105,7 +105,11 @@ where S.name=?<sql:param value="${preferences.siteName}"/>
 ;
         </sql:query>
         <c:if test="${empty locsQ.rows}">
-            <traveler:error message="No location"/>
+            <traveler:error message="This step moves the component to a Location (${activity.newLocation}) that does not exist at your Site.
+Your options, easiest to hardest:
+Go to the right Site,
+Create a new Location,
+Make a new version of the Traveler."/>
         </c:if>
         <c:choose>
             <c:when test="${! empty activity.newLocation}">
