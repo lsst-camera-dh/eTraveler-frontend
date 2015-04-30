@@ -12,25 +12,26 @@
 
 <%@attribute name="activityId" required="true"%>
 
-<traveler:isStopped var="isStopped" activityId="${activityId}"/>
-
-<sql:query var="prereqsQ" >
-    select 
-    Ap.id as activityId, Ap.hardwareId,
-    PP.id as ppId, PP.name as patternName, PP.prereqProcessId, PP.description,
-    P.name as processName, P.userVersionString, 
-    Ac.id as childId, Ac.begin
-    from
-    Activity Ap
-    inner join PrerequisitePattern PP on PP.processId=Ap.processId
-    inner join Process P on P.id=PP.prereqProcessId
-    left join (
-        Prerequisite PI
-        inner join Activity Ac on Ac.id=PI.prerequisiteActivityId
-    ) on PI.prerequisitePatternId=PP.id and PI.activityId=Ap.id
-    where Ap.id=?<sql:param value="${activityId}"/>
-    and PP.prerequisiteTypeid=(select id from PrerequisiteType where name='PROCESS_STEP');
-</sql:query>
+    <sql:query var="prereqsQ" >
+select 
+Ap.id as activityId, Ap.hardwareId,
+PP.id as ppId, PP.name as patternName, PP.prereqProcessId, PP.description,
+P.name as processName, P.userVersionString,
+AFS.name as status,
+Ac.id as childId, Ac.begin
+from
+Activity Ap
+inner join PrerequisitePattern PP on PP.processId=Ap.processId
+inner join Process P on P.id=PP.prereqProcessId
+inner join ActivityStatusHistory ASH on ASH.activityId=Ap.id and ASH.id=(select max(id) from ActivityStatusHistory where activityId=Ap.id)
+inner join ActivityFinalStatus AFS on AFS.id=ASH.activityStatusId
+left join (
+    Prerequisite PI
+    inner join Activity Ac on Ac.id=PI.prerequisiteActivityId
+) on PI.prerequisitePatternId=PP.id and PI.activityId=Ap.id
+where Ap.id=?<sql:param value="${activityId}"/>
+and PP.prerequisiteTypeid=(select id from PrerequisiteType where name='PROCESS_STEP');
+    </sql:query>
 <c:if test="${! empty prereqsQ.rows}">
     <h2>Required Steps</h2>
     <display:table name="${prereqsQ.rows}" id="row" class="datatable">
@@ -65,7 +66,7 @@ order by A.begin desc;
                                         <option value="${activity.id}">${activity.id}, ${activity.begin}</option>
                                     </c:forEach>
                                 </select>
-                                <input type="SUBMIT" value="This One" <c:if test="${isStopped}">disabled</c:if>>
+                                <input type="SUBMIT" value="This One" <c:if test="${row.status != 'new'}">disabled</c:if>>
                             </form>
                         </c:when>
                         <c:otherwise>

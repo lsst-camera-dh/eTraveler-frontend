@@ -14,23 +14,23 @@
 <%@attribute name="activityId"%>
 <%@attribute name="processId"%>
 
-<traveler:isStopped var="isStopped" activityId="${activityId}"/>
-
-<sql:query var="prereqQ" >
-    select PP.*<c:if test="${! empty activityId}">, PI.creationTS as satisfaction</c:if>
-    from PrerequisitePattern PP
+    <sql:query var="prereqQ" >
+select PP.*<c:if test="${! empty activityId}">, PI.creationTS as satisfaction, AFS.name as status</c:if>
+from PrerequisitePattern PP
     <c:choose>
         <c:when test="${! empty activityId}">
-            inner join Activity A on A.processId=PP.processId
-            left join Prerequisite PI on PI.activityId=A.id and PI.prerequisitePatternId=PP.id
-            where A.id=?<sql:param value="${activityId}"/>
+inner join Activity A on A.processId=PP.processId
+inner join ActivityStatusHistory ASH on ASH.activityId=A.id and ASH.id=(select max(id) from ActivityStatusHistory where activityId=A.id)
+inner join ActivityFinalStatus AFS on AFS.id=ASH.activityStatusId
+left join Prerequisite PI on PI.activityId=A.id and PI.prerequisitePatternId=PP.id
+where A.id=?<sql:param value="${activityId}"/>
         </c:when>
         <c:otherwise>
-            where PP.processId=?<sql:param value="${processId}"/>
+where PP.processId=?<sql:param value="${processId}"/>
         </c:otherwise>
     </c:choose>
-    and PP.prerequisiteTypeId=(select id from PrerequisiteType where name=?<sql:param value="${prereqTypeName}"/>)
-</sql:query>
+and PP.prerequisiteTypeId=(select id from PrerequisiteType where name=?<sql:param value="${prereqTypeName}"/>)
+    </sql:query>
 <c:if test="${! empty prereqQ.rows}">
     <h2>Required <c:out value="${prereqTypeName}"/>s</h2>
     <display:table name="${prereqQ.rows}" id="row" class="datatable">
@@ -47,7 +47,7 @@
                         <form method="get" action="fh/satisfyPrereq.jsp">
                             <input type="hidden" name="prerequisitePatternId" value="${row.id}">
                             <input type="hidden" name="activityId" value="${activityId}">
-                            <input type="submit" value="Done" <c:if test="${isStopped}">disabled</c:if>>
+                            <input type="submit" value="Done" <c:if test="${row.status != 'new'}">disabled</c:if>>
                         </form>
                     </c:otherwise>
                 </c:choose>

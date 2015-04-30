@@ -12,11 +12,9 @@
 
 <%@attribute name="activityId" required="true"%>
 
-<traveler:isStopped var="isStopped" activityId="${activityId}"/>
-
     <sql:query var="activityQ" >
 select A.*, P.hardwareRelationShipTypeId,
-    AFS.name as state, AFS.isFinal
+    AFS.name as status, AFS.isFinal
 from Activity A
     inner join Process P on P.id=A.processId
     inner join ActivityStatusHistory ASH on ASH.activityId=A.id and ASH.id=(select max(id) from ActivityStatusHistory where activityId=A.id)
@@ -77,7 +75,7 @@ and PP.prerequisiteTypeId=(select id from PrerequisiteType where name='COMPONENT
                 </c:when>
                 <c:when test="${(empty row.componentId) and (empty row.satisfaction)}">
                     <c:if test="${gotSomeComponents}">
-                        <input type="submit" value="Done" <c:if test="${isStopped}">disabled</c:if>>
+                        <input type="submit" value="Done" <c:if test="${activity.status != 'new'}">disabled</c:if>>
                     </c:if>
                     </form>
                 </c:when>
@@ -93,7 +91,7 @@ and PP.prerequisiteTypeId=(select id from PrerequisiteType where name='COMPONENT
 <traveler:prereqTable prereqTypeName="CONSUMABLE" activityId="${activityId}"/>
 
 <c:choose>
-    <c:when test="${activity.state == 'new'}">
+    <c:when test="${activity.status == 'new'}">
         <sql:query var="prereqQ" >
             select count(PP.id)-count(PR.id) as prsRemaining from
             PrerequisitePattern PP
