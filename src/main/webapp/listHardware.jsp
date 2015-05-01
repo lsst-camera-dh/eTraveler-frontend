@@ -16,25 +16,25 @@ select name from HardwareStatus order by name;
     <body>
         <c:choose>
             <c:when test="${! empty param.status}">
-                <c:set var="theState" value="${param.status}"/>
+                <c:set var="theStatus" value="${param.status}"/>
             </c:when>
             <c:otherwise>
-                <c:set var="theState" value="any"/>
+                <c:set var="theStatus" value="any"/>
             </c:otherwise>
         </c:choose>
         
         <filter:filterTable>
             <filter:filterInput var="name" title="Type (substring search)"/>
-            <filter:filterSelection title="State" var="state" defaultValue='${theState}'>
+            <filter:filterSelection title="Status" var="status" defaultValue='${theStatus}'>
                 <filter:filterOption value="any">Any</filter:filterOption>
-                <c:forEach var="stateName" items="${statesQ.rows}">
-                    <filter:filterOption value="${stateName.name}"><c:out value="${stateName.name}"/></filter:filterOption>
+                <c:forEach var="statusName" items="${statesQ.rows}">
+                    <filter:filterOption value="${statusName.name}"><c:out value="${statusName.name}"/></filter:filterOption>
                 </c:forEach>
             </filter:filterSelection>
         </filter:filterTable>
         <traveler:hardwareList hardwareTypeId="${param.hardwareTypeId}"
                                hardwareGroupId="${param.hardwareGroupId}"
-                               hardwareStatusName="${state}"
+                               hardwareStatusName="${status}"
                                siteId="${param.siteId}"
                                locationId="${param.locationId}"
                                name="${name}"/>
