@@ -13,6 +13,6 @@
         <a href="${helpUrl}"><h1>HELP</h1></a>
 
         <h2>Recent Activity</h2>
-        <traveler:activityList/>
+        <traveler:activityList perHw="true"/>
     </body>
 </html>

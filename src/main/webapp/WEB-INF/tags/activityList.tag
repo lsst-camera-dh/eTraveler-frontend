@@ -18,16 +18,18 @@
 <%@attribute name="version"%> 
 <%@attribute name="name"%>
 <%@attribute name="status"%>
+<%@attribute name="perHw"%>
+<c:if test="${empty perHw}"><c:set var="perHw" value="false"/></c:if>
 
-<sql:query var="result" >
-  select A.id as activityId, A.begin, A.end, A.createdBy, A.closedBy,
+    <sql:query var="result" >
+select A.id as activityId, A.begin, A.end, A.createdBy, A.closedBy,
     AFS.name as status,
     P.id as processId, 
     concat(P.name, ' v', P.version) as processName,
     H.id as hardwareId, H.lsstId, H.manufacturerId,
     HT.name as hardwareName, HT.id as hardwareTypeId,
     HI.identifier as nickName
-    from Activity A
+from Activity A
     inner join Process P on A.processId=P.id
     inner join Hardware H on A.hardwareId=H.id
     inner join HardwareType HT on H.hardwareTypeId=HT.id
@@ -35,7 +37,7 @@
     inner join ActivityFinalStatus AFS on AFS.id=ASH.activityStatusId
     left join HardwareIdentifier HI on HI.hardwareId=H.id 
         and HI.authorityId=(select id from HardwareIdentifierAuthority where name=?<sql:param value="${preferences.idAuthName}"/>)
-    where true
+where true
     <c:if test="${! empty travelersOnly}">
         and A.processEdgeId IS NULL 
     </c:if>
@@ -60,8 +62,13 @@
     <c:if test="${version=='latest'}">
         and P.version=(select max(version) from Process where name=P.name)
     </c:if>
-    order by A.id desc;
-</sql:query>
+    <c:if test="${perHw}">
+        and A.id=(select max(id) from Activity where hardwareId=H.id)
+        group by H.id
+    </c:if>
+order by A.id desc
+;
+    </sql:query>
 <display:table name="${result.rows}" class="datatable" sort="list"
                pagesize="${fn:length(result.rows) > preferences.pageLength ? preferences.pageLength : 0}">
     <display:column property="processName" title="Name" sortable="true" headerClass="sortable"
