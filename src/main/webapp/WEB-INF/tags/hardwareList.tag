@@ -15,6 +15,7 @@
 <%@attribute name="hardwareTypeId"%>
 <%@attribute name="hardwareStatusName"%>
 <%@attribute name="siteId"%>
+<%@attribute name="siteName"%>
 <%@attribute name="locationId"%>
 <%@attribute name="name"%>
 
@@ -55,6 +56,9 @@
     <c:if test="${! empty siteId}">
         and siteId=?<sql:param value="${siteId}"/>
     </c:if>
+    <c:if test="${! empty siteName && siteName != 'any'}">
+        and S.name=?<sql:param value="${siteName}"/>
+    </c:if>
     <c:if test="${! empty locationId}">
         and locationId=?<sql:param value="${locationId}"/>
     </c:if>
@@ -83,7 +87,7 @@
         <traveler:countComponents var="nComps" hardwareId="${row.id}"/>
         <c:out value="${nComps}"/>
     </display:column>
-    <c:if test="${(empty siteId and empty locationId) or preferences.showFilteredColumns}">
+    <c:if test="${(empty siteId and empty locationId and (empty siteName or siteName == 'any')) or preferences.showFilteredColumns}">
         <display:column property="siteName" title="Site" sortable="true" headerClass="sortable"
                         href="displaySite.jsp" paramId="siteId" paramProperty="siteId"/>
     </c:if>

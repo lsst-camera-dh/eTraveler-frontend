@@ -8,6 +8,10 @@
 select name from HardwareStatus order by name;
     </sql:query>
 
+    <sql:query var="sitesQ">
+select name from Site order by name;
+    </sql:query>
+
 <!DOCTYPE html>
 <html>
     <head>
@@ -25,6 +29,13 @@ select name from HardwareStatus order by name;
         
         <filter:filterTable>
             <filter:filterInput var="name" title="Type (substring search)"/>
+            <filter:filterSelection title="Site" var="site" defaultValue='${preferences.siteName}'>
+                <filter:filterOption value="any">Any</filter:filterOption>
+                <filter:filterOption value="${preferences.siteName}">User Pref</filter:filterOption>
+                <c:forEach var="siteName" items="${sitesQ.rows}">
+                    <filter:filterOption value="${siteName.name}"><c:out value="${siteName.name}"/></filter:filterOption>
+                </c:forEach>
+            </filter:filterSelection>
             <filter:filterSelection title="Status" var="status" defaultValue='${theStatus}'>
                 <filter:filterOption value="any">Any</filter:filterOption>
                 <c:forEach var="statusName" items="${statesQ.rows}">
@@ -36,6 +47,7 @@ select name from HardwareStatus order by name;
                                hardwareGroupId="${param.hardwareGroupId}"
                                hardwareStatusName="${status}"
                                siteId="${param.siteId}"
+                               siteName="${site}"
                                locationId="${param.locationId}"
                                name="${name}"/>
     </body>
