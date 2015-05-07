@@ -85,6 +85,62 @@
         <url-pattern>*.jsp</url-pattern>
     </filter-mapping>
 
+
+<!-- GroupManager -->
+    <filter>
+        <filter-name>AdminCheckerFilter</filter-name>
+<filter-class>org.srs.groupmanager.filter.GroupCheckerFilter</filter-class>
+        <init-param>
+            <param-name>groups</param-name>
+            <param-value>EtravelerAdmin</param-value>
+        </init-param>
+    </filter>
+    <filter-mapping>
+        <filter-name>AdminCheckerFilter</filter-name>
+<url-pattern>/admin/*</url-pattern>
+    </filter-mapping>
+
+    <filter>
+        <filter-name>ApproverCheckerFilter</filter-name>
+<filter-class>org.srs.groupmanager.filter.GroupCheckerFilter</filter-class>
+        <init-param>
+            <param-name>groups</param-name>
+            <param-value>EtravelerApprover</param-value>
+        </init-param>
+    </filter>
+    <filter-mapping>
+        <filter-name>ApproverCheckerFilter</filter-name>
+<url-pattern>/approver/*</url-pattern>
+    </filter-mapping>
+
+    <filter>
+        <filter-name>SupervisorCheckerFilter</filter-name>
+<filter-class>org.srs.groupmanager.filter.GroupCheckerFilter</filter-class>
+        <init-param>
+            <param-name>groups</param-name>
+            <param-value>EtravelerSupervisor</param-value>
+        </init-param>
+    </filter>
+    <filter-mapping>
+        <filter-name>SupervisorCheckerFilter</filter-name>
+<url-pattern>/supervisor/*</url-pattern>
+    </filter-mapping>
+
+    <filter>
+        <filter-name>OperatorCheckerFilter</filter-name>
+<filter-class>org.srs.groupmanager.filter.GroupCheckerFilter</filter-class>
+        <init-param>
+            <param-name>groups</param-name>
+            <param-value>EtravelerApprover</param-value>
+        </init-param>
+    </filter>
+    <filter-mapping>
+        <filter-name>OperatorCheckerFilter</filter-name>
+<url-pattern>/operator/*</url-pattern>
+    </filter-mapping>
+<!-- /GroupManager -->
+
+
     <filter>
         <filter-name>ModeSwitcherFilter</filter-name>
         <filter-class>org.srs.web.base.filters.modeswitcher.ModeSwitcherFilter</filter-class>
