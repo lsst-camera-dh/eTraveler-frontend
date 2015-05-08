@@ -33,9 +33,10 @@
 <sql:query var="result" >
     select P.id as processId, concat(P.name, ' v', P.version) as processName, 
         HG.name as hardwareGroupName, HG.id as hardwareGroupId, 
-        TT.id as travelerTypeId,
+        TT.id as travelerTypeId, TT.creationTS,
         TTS.name as state,
-        count(A.id)-count(A.end) as inProgress, count(A.id) as total, count(A.end) as completed 
+        count(A.id)-count(A.end) as inProgress, count(A.id) as total, count(A.end) as completed,
+        max(A.creationTS) as lastUsed
     from
     Process P
     inner join HardwareGroup HG on HG.id=P.hardwareGroupId
@@ -85,6 +86,8 @@
         <display:column property="state" sortable="true" headerClass="sortable"
                         href="displayTravelerType.jsp" paramId="travelerTypeId" paramProperty="travelerTypeId"/>
     </c:if>
+    <display:column property="creationTS" title="Created" sortable="true" headerClass="sortable"/>
+    <display:column property="lastUsed" title="Last Used" sortable="true" headerClass="sortable"/>
     <display:column title="Steps" sortable="true" headerClass="sortable">
         <traveler:countSteps var="nSteps" processId="${ttRow.processId}"/>
         <c:out value="${nSteps}"/>
