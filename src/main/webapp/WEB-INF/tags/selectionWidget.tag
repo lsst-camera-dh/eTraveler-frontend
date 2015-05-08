@@ -12,6 +12,15 @@
 <%@attribute name="activityId" %>
 <%@attribute name="processId" %>
 
+<c:choose>
+    <c:when test="${! empty param.topActivityId}">
+        <c:set var="topActivityId" value="${param.topActivityId}"/>
+    </c:when>
+    <c:otherwise>
+        <traveler:findTraveler var="topActivityId" activityId="${activityId}"/>
+    </c:otherwise>
+</c:choose>
+
 <sql:query var="choicesQ">
      <c:choose>
        <c:when test="${! empty activityId}">
@@ -70,7 +79,7 @@ order by abs(PE.step);
                         <input type="hidden" name="parentActivityId" value="${activityId}">
                         <input type="hidden" name="hardwareId" value="${childRow.hardwareId}">
                         <input type="hidden" name="inNCR" value="${childRow.inNCR}">
-                        <input type="hidden" name="topActivityId" value="${param.topActivityId}">
+                        <input type="hidden" name="topActivityId" value="${topActivityId}">
                         <input type="hidden" name="processId" value="${childRow.child}">
                         <input type="hidden" name="processEdgeId" value="${childRow.edgeId}">
                         <input type="submit" value="${childRow.name}"

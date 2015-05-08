@@ -12,5 +12,5 @@
 <%@attribute name="var" required="true" rtexprvalue="false"%>
 <%@variable name-from-attribute="var" alias="processId" scope="AT_BEGIN"%>
 
-<c:set var="processArr" value="${fn:split(param.processPath, '.')}"/>
+<c:set var="processArr" value="${fn:split(processPath, '.')}"/>
 <c:set var="processId" value="${processArr[fn:length(processArr)-1]}"/>
