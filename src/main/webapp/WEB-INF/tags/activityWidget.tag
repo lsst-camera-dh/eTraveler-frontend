@@ -52,7 +52,10 @@
         </c:if>
 </table>
 
-            <traveler:activityStopWidget activityId="${activityId}"/>
+<traveler:activityStatusWidget activityId="${activityId}"/>
+
+<traveler:activityStopWidget activityId="${activityId}"/>
+
 <table>
     <tr><td><traveler:ncrLinks activityId="${activityId}" mode="return"/></td></tr>
     <tr><td><traveler:ncrLinks activityId="${activityId}" mode="exit"/></td></tr>
@@ -65,5 +68,3 @@
 <c:if test="${empty activity.end && activity.isAutomatable != 0}">
     <traveler:scriptWidget activityId="${activityId}"/>
 </c:if>
-
-<traveler:activityStatusWidget activityId="${activityId}"/>
