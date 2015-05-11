@@ -19,7 +19,7 @@
     <body>
 <%
 String dateStr = request.getParameter("manufactureDateDate");  
-SimpleDateFormat formater = new SimpleDateFormat("dd/MM/yyyy");
+SimpleDateFormat formater = new SimpleDateFormat("yyyy-MM-dd");
 Date result = formater.parse(dateStr);
 request.setAttribute("manufactureDate", result);
 %>
