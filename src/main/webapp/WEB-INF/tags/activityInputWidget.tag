@@ -26,7 +26,9 @@
 </c:choose>
 
     <sql:query var="inputQ" >
-select A.begin, A.end, IP.*, RM.value, ISm.name as ISName
+select A.begin, A.end, IP.*,
+    RM.value, null as catalogKey,
+    ISm.name as ISName
 from Activity A
 inner join InputPattern IP on IP.processId=A.processId
 inner join InputSemantics ISm on ISm.id=IP.inputSemanticsId
@@ -34,7 +36,9 @@ left join FloatResultManual RM on RM.activityId=A.id and RM.inputPatternId=IP.id
 where A.id=?<sql:param value="${activityId}"/>
 and ISm.name='float'
 union
-select A.begin, A.end, IP.*, RM.value, ISm.name as ISName
+select A.begin, A.end, IP.*,
+    RM.value, null as catalogKey,
+    ISm.name as ISName
 from Activity A
 inner join InputPattern IP on IP.processId=A.processId
 inner join InputSemantics ISm on ISm.id=IP.inputSemanticsId
@@ -42,7 +46,9 @@ left join IntResultManual RM on RM.activityId=A.id and RM.inputPatternId=IP.id
 where A.id=?<sql:param value="${activityId}"/>
 and ISm.name='int'
 union
-select A.begin, A.end, IP.*, RM.value, ISm.name as ISName
+select A.begin, A.end, IP.*,
+    RM.value, null as catalogKey,
+    ISm.name as ISName
 from Activity A
 inner join InputPattern IP on IP.processId=A.processId
 inner join InputSemantics ISm on ISm.id=IP.inputSemanticsId
@@ -50,7 +56,9 @@ left join StringResultManual RM on RM.activityId=A.id and RM.inputPatternId=IP.i
 where A.id=?<sql:param value="${activityId}"/>
 and ISm.name='string'
 union
-select A.begin, A.end, IP.*, RM.value, ISm.name as ISName
+select A.begin, A.end, IP.*,
+    RM.value, RM.catalogKey,
+    ISm.name as ISName
 from Activity A
 inner join InputPattern IP on IP.processId=A.processId
 inner join InputSemantics ISm on ISm.id=IP.inputSemanticsId
@@ -71,7 +79,18 @@ and ISm.name='filepath'
         <display:column title="Value">
             <c:choose>
                 <c:when test="${! empty row.value}">
-                    ${row.value}
+                    <c:choose>
+                        <c:when test="${(row.ISName == 'filepath') && (! empty row.catalogKey)}">
+                            <c:url var="dcLink" value="http://srs.slac.stanford.edu/DataCatalog/">
+                                <c:param name="dataset" value="${row.catalogKey}"/>
+                                <c:param name="experiment" value="LSST-CAMERA"/>
+                            </c:url>
+                            <a href="${dcLink}" target="_blank"><c:out value="${row.value}"/></a>
+                        </c:when>
+                        <c:otherwise>
+                            <c:out value="${row.value}"/>
+                        </c:otherwise>
+                    </c:choose>
                 </c:when>
                 <c:when test="${(empty row.begin) || status == 'paused' || status == 'stopped'}">
                     Not yet
