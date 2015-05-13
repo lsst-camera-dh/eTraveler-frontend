@@ -37,10 +37,12 @@
         xhr.onload = function () {
             var text = xhr.responseText;
             alert('Command executed: ' + text);
+            window.top.location.reload(true);
         };
 
         xhr.onerror = function () {
             alert('Woops, there was an error making the request. Make sure your python script is running (rc=' + xhr.status + ')');
+            window.top.location.reload(true);
         };
 
         xhr.send();
