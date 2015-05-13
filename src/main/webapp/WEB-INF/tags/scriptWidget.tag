@@ -11,7 +11,10 @@
 
 <%@attribute name="activityId" required="true"%>
 
+<traveler:cors/>
+
 <traveler:jhCommand var="command" varError="allOk" activityId="${activityId}"/>
 
 Enter the following command to automate this step:<br>
-<c:out value="${command}"/>
+<c:out value="${command}"/><br>
+<button onclick="makeCorsRequest('${command}')">Or click here if you are running the CORS client</button><br>
