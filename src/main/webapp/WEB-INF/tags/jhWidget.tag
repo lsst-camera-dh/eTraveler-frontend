@@ -12,8 +12,6 @@
 
 <%@attribute name="activityId" required="true"%>
 
-<traveler:cors/>
-
 <sql:query var="historyQ" >
     select JSH.*, JHS.name
     from JobStepHistory JSH
@@ -39,7 +37,7 @@
             <traveler:jhCommand var="command" varError="allOk" activityId="${activityId}"/>
 Now enter the following command:<br>
 <c:out value="${command}"/><br>
-<button onclick="makeCorsRequest('${command}')">Or click here if you are running the CORS client</button><br>
+<traveler:cors command="${command}"/>
         </c:if>
     </c:otherwise>
 </c:choose>

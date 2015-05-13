@@ -6,6 +6,8 @@
 
 <%@tag description="CORS script" pageEncoding="UTF-8"%>
 
+<%@attribute name="command" required="true"%>
+
 <script>
     function createCORSRequest(method, url) {
         var xhr = new XMLHttpRequest();
@@ -48,3 +50,5 @@
         xhr.send();
     }
 </script>
+
+<button onclick="makeCorsRequest('${command}')">Or click here if you are running lcatr-launcher</button><br>
