@@ -11,9 +11,10 @@
 
 <traveler:checkId table="Activity" id="${param.activityId}"/>
 <sql:query var="activityQ" >
-    select A.*, P.name
+    select A.*, P.name, H.lsstId
     from Activity A
     inner join Process P on P.id=A.processId
+    inner join Hardware H on H.id=A.hardwareId
     where A.id=?<sql:param value="${param.activityId}"/>;
 </sql:query>
 <c:set var="activity" value="${activityQ.rows[0]}"/>
@@ -31,7 +32,7 @@
                                   varStepId="currentStepActivityId" stepList="${stepList}"/>
 
         <traveler:setPaths activityVar="activityPath" processVar="processPath" activityId="${param.activityId}"/>
-                  
+<%--                  
         <table>
             <tr>
                 <td>
@@ -50,6 +51,9 @@
             </tr>
         </table>
         <h2>Steps</h2>
+--%>
+<c:url var="hwLink" value="displayHardware.jsp"><c:param name="hardwareId" value="${activity.hardwareId}"/></c:url>
+<h2>Process: <c:out value="${activity.name}"/> Component: <a href="${hwLink}"><c:out value="${activity.lsstId}"/></a></h2>
     <div id="theFold"/>        
         <table>
             <tr>
