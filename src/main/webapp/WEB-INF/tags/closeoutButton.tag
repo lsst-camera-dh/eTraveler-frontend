@@ -144,7 +144,7 @@ Make a new version of the Traveler."/>
         <td>
                 <input type="hidden" name="activityId" value="${activityId}">       
                 <input type="hidden" name="topActivityId" value="${topActivityId}">       
-                <INPUT TYPE=SUBMIT value="Closeout Success"
+                <INPUT TYPE=SUBMIT value="Complete"
                        <c:if test="${! readyToClose}">disabled</c:if>>
             </form>      
         </td>
