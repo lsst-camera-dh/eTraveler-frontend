@@ -98,6 +98,7 @@ and PP.prerequisiteTypeId=(select id from PrerequisiteType where name='COMPONENT
     
 <traveler:prereqTable prereqTypeName="TEST_EQUIPMENT" activityId="${activityId}"/>
 <traveler:prereqTable prereqTypeName="CONSUMABLE" activityId="${activityId}"/>
+<traveler:prereqTable prereqTypeName="PREPARATION" activityId="${activityId}"/>
 
 <c:choose>
     <c:when test="${activity.status == 'new'}">
