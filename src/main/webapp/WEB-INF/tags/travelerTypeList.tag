@@ -68,7 +68,7 @@
         and TTS.name=?<sql:param value="${state}"/>
     </c:if>
     <c:if test="${version=='latest'}">
-        and P.version=(select max(version) from Process where name=P.name)
+        and P.version=(select max(version) from Process where name=P.name and hardwareGroupId=P.hardwareGroupId)
     </c:if>
     group by P.id
     order by P.name
