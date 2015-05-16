@@ -18,18 +18,16 @@
     <display:column title="Step">
         <c:if test="${! empty step.stepPath}">
         <c:choose>
-            <c:when test="${mode == 'activity' && ! empty step.activityId}">
-                <c:url var="drilldownLink" value="displayActivity.jsp">
-                    <c:param name="activityId" value="${step.activityId}"/>
-                </c:url>
+            <c:when test="${mode == 'activity'}">
+                <c:out value="${step.stepPath}"/>
             </c:when>
             <c:otherwise>
                 <c:url var="drilldownLink" value="displayProcess.jsp">
                     <c:param name="processPath" value="${step.processPath}"/>
                 </c:url>                
+                <a href="${drilldownLink}"><c:out value="${step.stepPath}"/></a>
             </c:otherwise>
         </c:choose>
-            <a href="${drilldownLink}">${step.stepPath}</a>
         </c:if>
     </display:column>
     <display:column title="Name">
