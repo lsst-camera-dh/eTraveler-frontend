@@ -82,7 +82,7 @@
     </c:when>
     <c:when test="${mode == 'harnessed'}">
 <c:set var="fnComponents" value="${fn:split(name, '.')}"/>
-<c:set var="fileExt" value="${fnComponents[fn:length(fnComponents)-1]}"/>
+<c:set var="fileExt" value="${fn:toLowerCase(fnComponents[fn:length(fnComponents)-1])}"/>
 <c:set var="fileFormat" value="${fileExt == name ? 'unspecified' : fileExt}"/>
     </c:when>
     <c:otherwise>

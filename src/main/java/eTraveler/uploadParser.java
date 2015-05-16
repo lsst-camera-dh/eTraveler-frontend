@@ -26,7 +26,7 @@ public class uploadParser extends SimpleTagSupport {
             String inputName = fileItem.getName();
             String fileName = FilenameUtils.getName(inputName);
             context.setAttribute(varName, fileName);
-            String extension = FilenameUtils.getExtension(inputName);
+            String extension = FilenameUtils.getExtension(inputName).toLowerCase();
             context.setAttribute(varFormat, extension);
             Long size = fileItem.getSize();
             context.setAttribute(varSize, size);
