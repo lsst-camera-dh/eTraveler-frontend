@@ -96,7 +96,8 @@ and A.end is not null
 
 <c:set var="active" value="${activity.status == 'new' || activity.status == 'inProgress'}"/>
 
-<c:set var="retryable" value="${activity.iteration < activity.maxIteration && active}"/>
+<c:set var="retryable" value="${activity.iteration < activity.maxIteration && 
+                                (activity.status == 'new' || activity.status == 'inProgress' || (isHarnessed && activity.status == 'stopped'))}"/>
 <c:if test="${readyToClose}">
     <c:set var="message" value="Ready to close"/>
 </c:if>
