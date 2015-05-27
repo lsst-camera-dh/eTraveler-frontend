@@ -42,6 +42,7 @@
                         href="displayHardwareType.jsp" paramId="hardwareTypeId" paramProperty="componentTypeId"/>
     </c:if>
     <display:column property="slot" sortable="true" headerClass="sortable"/>
+    <display:column property="description" sortable="true" headerClass="sortable"/>
     <display:column property="createdBy" title="Creator" sortable="true" headerClass="sortable"/>
     <display:column property="creationTS" title="Date" sortable="true" headerClass="sortable"/>
 </display:table>

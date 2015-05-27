@@ -74,6 +74,7 @@
             </c:forEach>
         </select>
         Slot: <input type="number" name="slot" value="1">
+        Description: <textarea name="description"></textarea>
     </form>
     <traveler:hardwareRelationshipTypeList/>
 
