@@ -78,7 +78,7 @@
     </context-param>
     <context-param>
         <param-name>defaultDataType</param-name>
-        <param-value>LSST_TEST_TYPE</param-value>
+        <param-value>TEST_TYPE</param-value>
     </context-param>
 
     <!-- Load the Multipart Filter -->
