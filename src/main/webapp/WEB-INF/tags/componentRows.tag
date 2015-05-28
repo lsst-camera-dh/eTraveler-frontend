@@ -34,7 +34,7 @@
 <sql:query var="componentsQ" >
     select 
     HR.${you} as itemId, HR.begin, HR.end, 
-    HRT.name as relationshipName, 
+    HRT.name as relationshipName, HRT.slot,
     HT.name as hardwareName, HT.id as hardwareTypeId, 
     H.lsstId
     from HardwareRelationship HR
