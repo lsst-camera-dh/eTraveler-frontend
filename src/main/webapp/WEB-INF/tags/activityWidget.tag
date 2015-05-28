@@ -16,11 +16,13 @@
     P.description, P.instructionsUrl,
     P.travelerActionMask&(select maskBit from InternalAction where name='harnessedJob') as isHarnessed,
     P.travelerActionMask&(select maskBit from InternalAction where name='automatable') as isAutomatable,
-    P.substeps
+    P.substeps,
+    JSH.id as jshId
     from Activity A
     inner join Process P on P.id=A.processId
     inner join ActivityStatusHistory ASH on ASH.activityId=A.id and ASH.id=(select max(id) from ActivityStatusHistory where activityId=A.id)
     inner join ActivityFinalStatus AFS on AFS.id=ASH.activityStatusId
+    left join JobStepHistory JSH on JSH.activityId=A.id and JSH.id=(select max(id) from JobStepHistory where activityId=A.id)
     where A.id=?<sql:param value="${activityId}"/>;
 </sql:query>
 <c:set var="activity" value="${activityQ.rows[0]}"/>
@@ -36,8 +38,11 @@
     <a href="${activity.instructionsURL}">Detailed Instructions</a>
 </c:if>
 
-<c:if test="${! empty activity.begin && activity.isHarnessed != 0}">
-    <traveler:jhWidget activityId="${activityId}"/>
+<c:if test="${! empty activity.begin && activity.isHarnessed != 0 && empty activity.end && empty activity.jshId}">
+    <traveler:jhCommand var="command" varError="allOk" activityId="${activityId}"/>
+    Now enter the following command:<br>
+    <c:out value="${command}"/><br>
+    <traveler:cors command="${command}"/>
 </c:if>
 
 <c:if test="${empty activity.end && activity.isAutomatable != 0}">
@@ -69,6 +74,8 @@
         <tr><td>Status:</td><td>${activity.statusName}</td></tr>
         </c:if>
 </table>
+
+<traveler:jhWidget activityId="${activityId}"/>
 
 <traveler:activityStatusWidget activityId="${activityId}"/>
 
