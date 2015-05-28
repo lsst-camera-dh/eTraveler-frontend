@@ -13,6 +13,7 @@
 
 <sql:query var="activityQ" >
     select A.*, AFS.name as statusName,
+    P.description, P.instructionsUrl,
     P.travelerActionMask&(select maskBit from InternalAction where name='harnessedJob') as isHarnessed,
     P.travelerActionMask&(select maskBit from InternalAction where name='automatable') as isAutomatable,
     P.substeps
@@ -25,6 +26,23 @@
 <c:set var="activity" value="${activityQ.rows[0]}"/>
 
 <traveler:activityPrereqWidget activityId="${activityId}"/>
+
+<c:if test="${! empty activity.description}">
+    <c:out value="${activity.description}" escapeXml="false"/>
+    <br>
+</c:if>
+
+<c:if test="${! empty activity.instructionsURL}">
+    <a href="${activity.instructionsURL}">Detailed Instructions</a>
+</c:if>
+
+<c:if test="${! empty activity.begin && activity.isHarnessed != 0}">
+    <traveler:jhWidget activityId="${activityId}"/>
+</c:if>
+
+<c:if test="${empty activity.end && activity.isAutomatable != 0}">
+    <traveler:scriptWidget activityId="${activityId}"/>
+</c:if>
 
 <c:if test="${activityQ.rows[0].substeps == 'SELECTION'}"><traveler:selectionWidget activityId="${activityId}"/></c:if>
 
@@ -60,11 +78,3 @@
     <tr><td><traveler:ncrLinks activityId="${activityId}" mode="return"/></td></tr>
     <tr><td><traveler:ncrLinks activityId="${activityId}" mode="exit"/></td></tr>
 </table>
-
-<c:if test="${! empty activity.begin && activity.isHarnessed != 0}">
-    <traveler:jhWidget activityId="${activityId}"/>
-</c:if>
-
-<c:if test="${empty activity.end && activity.isAutomatable != 0}">
-    <traveler:scriptWidget activityId="${activityId}"/>
-</c:if>
