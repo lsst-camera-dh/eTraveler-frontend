@@ -32,11 +32,13 @@ where PP.processId=?<sql:param value="${processId}"/>
 and PP.prerequisiteTypeId=(select id from PrerequisiteType where name=?<sql:param value="${prereqTypeName}"/>)
     </sql:query>
 <c:if test="${! empty prereqQ.rows}">
-    <h2>Required <c:out value="${prereqTypeName}"/>s</h2>
+    <h2><c:out value="${prereqTypeName}"/> requirements</h2>
     <display:table name="${prereqQ.rows}" id="row" class="datatable">
         <display:column property="name"/>
         <display:column property="description"/>
-        <display:column property="quantity"/>
+        <c:if test="${prereqTypeName == 'CONSUMABLE'}">
+            <display:column property="quantity"/>
+        </c:if>
         <c:if test="${! empty activityId}">
             <display:column title="satisfaction">
                 <c:choose>
