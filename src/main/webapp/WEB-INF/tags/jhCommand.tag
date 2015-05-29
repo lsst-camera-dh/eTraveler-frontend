@@ -24,11 +24,11 @@
     P.travelerActionMask&(select maskBit from InternalAction where name='harnessedJob') as isHarnessed,
     P.travelerActionMask&(select maskBit from InternalAction where name='automatable') as isAutomatable,
     H.lsstId,
-    HG.name as hardwareGroupName
+    HT.name as hardwareTypeName
     from Activity A
     inner join Process P on P.id=A.processId
     inner join Hardware H on H.id=A.hardwareId
-    inner join HardwareGroup HG on HG.id=P.hardwareGroupId
+    inner join HardwareType HT on HT.id=H.hardwareTypeId
     where A.id=?<sql:param value="${activityId}"/>
 </sql:query>
 <c:set var="activity" value="${activityQ.rows[0]}"/>
@@ -41,7 +41,7 @@
         <c:set var="command" value="lcatr-iterator --container-id=${activityId} --lims-url=${limsUrl}"/>
     </c:when>
     <c:when test="${activity.isHarnessed != 0}">
-        <c:set var="command">lcatr-harness --unit-type=${activity.hardwareGroupName} --unit-id=${activity.lsstId} --job=${activity.processName} --version=${activity.userVersionString} --lims-url=${limsUrl}</c:set>
+        <c:set var="command">lcatr-harness --unit-type=${activity.hardwareTypeName} --unit-id=${activity.lsstId} --job=${activity.processName} --version=${activity.userVersionString} --lims-url=${limsUrl}</c:set>
     </c:when>
     <c:otherwise>
         <c:set var="allOk" value="false"/>

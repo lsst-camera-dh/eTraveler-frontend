@@ -11,7 +11,7 @@
 <%@attribute name="activityId" required="true"%>
 
 <sql:query var="activityQ" >
-    select * from Activity where id=?<sql:param value="${param.activityId}"/>;
+    select * from Activity where id=?<sql:param value="${activityId}"/>;
 </sql:query>
 <c:set var="activity" value="${activityQ.rows[0]}"/>
 

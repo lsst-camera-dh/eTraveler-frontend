@@ -39,19 +39,35 @@
 <sql:query var="activityQ">
     select
         A.id as activityId,
-        P.name as processName, P.userVersionString,
+        P.id as processId, P.name as processName, P.userVersionString,
         H.id as hardwareId, H.lsstId, 
-        HT.name as hardwareTypeName
+        HT.id as hardwareTypeId, HT.name as hardwareTypeName,
+        HG.id as hardwareGroupId, HG.name as hardwareGroupName
     from
         Activity A
         inner join Process P on P.id=A.processId
         inner join Hardware H on H.id=A.hardwareId
         inner join HardwareType HT on HT.id=H.hardwareTypeId
+        inner join HardwareGroup HG on HG.id=P.hardwareGroupId
     where
         A.id=?<sql:param value="${activityId}"/>
     ;
 </sql:query>
 <c:set var="activity" value="${activityQ.rows[0]}"/>
+
+<%--
+<traveler:mapCreate var="metaData"/>
+<traveler:mapAdd theMap="${metaData}" key="nActivityId" value="${activityId}"/>
+<traveler:mapAdd theMap="metaData" key="nProcessId" value="${activity.processId}"/>
+<traveler:mapAdd theMap="metaData" key="" value=""/>
+<traveler:mapAdd theMap="metaData" key="nHardwareId" value="${activity.hardwareId}"/>
+<traveler:mapAdd theMap="metaData" key="" value=""/>
+<traveler:mapAdd theMap="metaData" key="nHardwareTypeId" value="${activity.hardwareTypeId}"/>
+<traveler:mapAdd theMap="metaData" key="" value=""/>
+<traveler:mapAdd theMap="metaData" key="nHardwareGroupId" value="${activity.hardwareGroupId}"/>
+<traveler:mapAdd theMap="metaData" key="" value=""/>
+<traveler:mapAdd theMap="metaData" key="" value=""/>
+--%>
 
 <%-- dataCatalogDb --%>
 <c:set var="dataCatalogDb" value="${appVariables.dataCatalogDb}"/>
@@ -66,7 +82,7 @@
     </c:when>
     <c:when test="${mode == 'harnessed'}">
 <c:set var="fnComponents" value="${fn:split(name, '.')}"/>
-<c:set var="fileExt" value="${fnComponents[fn:length(fnComponents)-1]}"/>
+<c:set var="fileExt" value="${fn:toLowerCase(fnComponents[fn:length(fnComponents)-1])}"/>
 <c:set var="fileFormat" value="${fileExt == name ? 'unspecified' : fileExt}"/>
     </c:when>
     <c:otherwise>

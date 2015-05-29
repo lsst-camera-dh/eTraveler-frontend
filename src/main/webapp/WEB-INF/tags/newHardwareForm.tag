@@ -58,10 +58,10 @@
             <td><INPUT TYPE=TEXT NAME=model SIZE=50 autofocus></td>
         </tr>
         <tr>
-            <td>Manufacture Date<br>(dd/mm/yyyy):</td>
+            <td>Manufacture Date<br>(yyyy-mm-dd):</td>
             <td>
-                <time:dateTimePicker value="${time:now('PST')}" showtime="false" size="18" name="manufactureDate"  timezone="PST"
-shownone="true"/>
+                <time:dateTimePicker value="${time:now('UTC')}" showtime="false" size="18" name="manufactureDate"  timezone="UTC"
+format="%Y-%m-%d" shownone="true"/>
             </td>
         </tr>
         <tr>

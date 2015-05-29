@@ -26,28 +26,28 @@
 <c:set var="hardwareTypeField" value="hardwareTypeId${! empty hardwareTypeId ? hardwareTypeId : 0}"/>
 
 <c:choose>
-    <c:when test="${! empty param.activityId}">
+    <c:when test="${! empty activityId}">
         <c:set var="page" value="displayActivity.jsp"/>
         <c:set var="paramName" value="activityId"/>
-        <c:set var="paramValue" value="${param.activityId}"/>
+        <c:set var="paramValue" value="${activityId}"/>
         <c:set var="searchField" value="${activityField}"/>
     </c:when>
-    <c:when test="${! empty param.processId}">
+    <c:when test="${! empty processId}">
         <c:set var="page" value="displayProcess.jsp"/>
         <c:set var="paramName" value="processPath"/>
-        <c:set var="paramValue" value="${param.processId}"/>
+        <c:set var="paramValue" value="${processId}"/>
         <c:set var="searchField" value="${processField}"/>
     </c:when>
-    <c:when test="${! empty param.hardwareId}">
+    <c:when test="${! empty hardwareId}">
         <c:set var="page" value="displayHardware.jsp"/>
         <c:set var="paramName" value="hardwareId"/>
-        <c:set var="paramValue" value="${param.hardwareId}"/>
+        <c:set var="paramValue" value="${hardwareId}"/>
         <c:set var="searchField" value="${hardwareField}"/>
    </c:when>
-    <c:when test="${! empty param.hardwareTypeId}">
+    <c:when test="${! empty hardwareTypeId}">
         <c:set var="page" value="displayHardwareType.jsp"/>            
         <c:set var="paramName" value="hardwareTypeId"/>
-        <c:set var="paramValue" value="${param.hardwareTypeId}"/>
+        <c:set var="paramValue" value="${hardwareTypeId}"/>
         <c:set var="searchField" value="${hardwareTypeField}"/>
     </c:when>
     <c:otherwise>

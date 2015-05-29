@@ -14,4 +14,5 @@
 <traveler:jhCommand var="command" varError="allOk" activityId="${activityId}"/>
 
 Enter the following command to automate this step:<br>
-<c:out value="${command}"/>
+<c:out value="${command}"/><br>
+<traveler:cors command="${command}"/>

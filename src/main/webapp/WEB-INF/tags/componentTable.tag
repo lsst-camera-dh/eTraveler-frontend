@@ -39,4 +39,5 @@
                     href="displayHardwareType.jsp" paramId="hardwareTypeId" paramProperty="hardwareTypeId"/>
     <display:column property="begin" sortable="true" headerClass="sortable"/>
     <display:column property="relationshipName" sortable="true" headerClass="sortable"/>
+    <display:column property="slot" sortable="true" headerClass="sortable"/>
 </display:table>

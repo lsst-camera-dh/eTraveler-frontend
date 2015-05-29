@@ -4,7 +4,7 @@
 
     <session-config>
         <session-timeout>
-            300
+            3600
         </session-timeout>
     </session-config>
 
@@ -22,6 +22,34 @@
         </param-value>
     </context-param>
     
+     <context-param>
+        <param-name>
+            version
+        </param-name>
+        <param-value>
+            ${pom.version}
+        </param-value>
+    </context-param>
+
+    <context-param>
+        <param-name>
+            titleHeight
+        </param-name>
+        <param-value>
+            60
+        </param-value>
+    </context-param>
+
+
+    <context-param>
+        <param-name>
+            imageHeight
+        </param-name>
+        <param-value>
+            100
+        </param-value>
+    </context-param>
+
     <!-- Default Database Connection -->
     <context-param>
         <param-name>
@@ -50,7 +78,7 @@
     </context-param>
     <context-param>
         <param-name>defaultDataType</param-name>
-        <param-value>LSST_TEST_TYPE</param-value>
+        <param-value>TEST_TYPE</param-value>
     </context-param>
 
     <!-- Load the Multipart Filter -->

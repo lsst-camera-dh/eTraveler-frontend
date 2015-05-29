@@ -12,6 +12,15 @@
 
 <%@attribute name="activityId" required="true"%>
 
+<c:choose>
+    <c:when test="${! empty param.topActivityId}">
+        <c:set var="topActivityId" value="${param.topActivityId}"/>
+    </c:when>
+    <c:otherwise>
+        <traveler:findTraveler var="topActivityId" activityId="${activityId}"/>
+    </c:otherwise>
+</c:choose>
+
     <sql:query var="activityQ" >
 select A.*, P.hardwareRelationShipTypeId,
     AFS.name as status, AFS.isFinal
@@ -89,6 +98,7 @@ and PP.prerequisiteTypeId=(select id from PrerequisiteType where name='COMPONENT
     
 <traveler:prereqTable prereqTypeName="TEST_EQUIPMENT" activityId="${activityId}"/>
 <traveler:prereqTable prereqTypeName="CONSUMABLE" activityId="${activityId}"/>
+<traveler:prereqTable prereqTypeName="PREPARATION" activityId="${activityId}"/>
 
 <c:choose>
     <c:when test="${activity.status == 'new'}">
@@ -108,7 +118,7 @@ and PP.prerequisiteTypeId=(select id from PrerequisiteType where name='COMPONENT
 
 <form method="get" action="fh/startActivity.jsp" target="_top">
     <input type="hidden" name="activityId" value="${activityId}">
-    <input type="hidden" name="topActivityId" value="${param.topActivityId}">
+    <input type="hidden" name="topActivityId" value="${topActivityId}">
     <input type="submit" value="Start Work"
            <c:if test="${! readyToStart}">disabled</c:if>>
 </form>                    

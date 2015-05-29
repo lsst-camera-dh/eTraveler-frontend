@@ -20,8 +20,7 @@
     order by JSH.id desc
 </sql:query>
     
-<c:choose>
-    <c:when test="${! empty historyQ.rows}">
+<c:if test="${! empty historyQ.rows}">
         <%-- display the history --%>
         <h3>Job Harness History</h3>
         <display:table name="${historyQ.rows}" class="datatable">
@@ -30,13 +29,4 @@
             <display:column property="createdBy" sortable="true" headerClass="sortable"/>
             <display:column property="creationTS" sortable="true" headerClass="sortable"/>
         </display:table>
-    </c:when>
-    <c:otherwise>
-        <%-- Try to show the jh command --%>
-        <c:if test="${empty activity.end}">
-            <traveler:jhCommand var="command" varError="allOk" activityId="${activityId}"/>
-Now enter the following command:<br>
-<c:out value="${command}"/><br>
-        </c:if>
-    </c:otherwise>
-</c:choose>
+</c:if>

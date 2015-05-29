@@ -18,7 +18,7 @@
         Activity A
         inner join Hardware H on A.hardwareId=H.id
         inner join Process P on A.processId=P.id
-        inner join HardwareGroup HG on HG.id=P.hardwareGroupId
+        inner join HardwareType HT on HT.id=H.hardwareTypeId
         inner join ActivityStatusHistory ASH on ASH.activityId=A.id and ASH.id=(select max(id) from ActivityStatusHistory where activityId=A.id)
         inner join ActivityFinalStatus AFS on AFS.id=ASH.activityStatusId
         where
@@ -26,7 +26,7 @@
         and P.name=?<sql:param value="${inputs.job}"/>
         and P.userVersionString=?<sql:param value="${inputs.version}"/>
         and P.travelerActionMask&(select maskBit from InternalAction where name='harnessedJob')!=0
-        and HG.name=?<sql:param value="${inputs.unit_type}"/>
+        and HT.name=?<sql:param value="${inputs.unit_type}"/>
         and A.begin is not null
         and A.end is null
         and AFS.name='inProgress'
@@ -43,14 +43,14 @@
     <sql:query var="prereqQ" >
         select A.id as activityId, A.hardwareId, A.createdBy,
         H.lsstId,
-        HG.name as hardwareGroupName, 
+        HT.name as hardwareTypeName, 
         P.name as processName, P.userVersionString
         from
         Prerequisite PI
         inner join Activity A on A.id=PI.prerequisiteActivityId
         inner join Process P on P.id=A.processId
-        inner join HardwareGroup HG on HG.id=P.hardwareGroupId
         inner join Hardware H on H.id=A.hardwareId
+        inner join HardwareType HT on HT.id=H.hardwareTypeId
         where
         PI.activityId=?<sql:param value="${activityRow.id}"/>
     </sql:query>
@@ -70,7 +70,7 @@
             "prereq": [<c:forEach var="prereqRow" items="${prereqQ.rows}" varStatus="status">
                 {
                     "jobid": "${prereqRow.activityId}",
-                    "unit_type": "${prereqRow.hardwareGroupName}",
+                    "unit_type": "${prereqRow.hardwareTypeName}",
                     "unit_id": "${prereqRow.lsstId}",
                     "job": "${prereqRow.processName}",
                     "version": "${prereqRow.userVersionString}",

@@ -22,7 +22,7 @@ P.travelerActionMask&(select maskBit from InternalAction where name='breakHardwa
 P.travelerActionMask&(select maskBit from InternalAction where name='setHardwareLocation') as setsLocation
 from Activity A
 inner join Process P on P.id=A.processId
-where A.id=?<sql:param value="${param.activityId}"/>;
+where A.id=?<sql:param value="${activityId}"/>;
     </sql:query>
 <c:set var="activity" value="${activityQ.rows[0]}"/>
 

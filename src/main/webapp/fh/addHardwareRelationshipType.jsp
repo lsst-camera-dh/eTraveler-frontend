@@ -22,6 +22,7 @@
             hardwareTypeId=?<sql:param value="${param.hardwareTypeId}"/>,
             componentTypeId=?<sql:param value="${param.componentTypeId}"/>,
             slot=?<sql:param value="${param.slot}"/>,
+            description=?<sql:param value="${param.description}"/>,
             createdBy=?<sql:param value="${userName}"/>,
             creationTS=UTC_TIMESTAMP();
         </sql:update>

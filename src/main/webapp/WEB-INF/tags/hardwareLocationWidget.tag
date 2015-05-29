@@ -44,7 +44,7 @@
 <sql:query var="locQ">
     select locationId 
     from HardwareLocationHistory 
-    where hardwareId=?<sql:param value="${param.hardwareId}"/>
+    where hardwareId=?<sql:param value="${hardwareId}"/>
     order by creationTS desc limit 1;
 </sql:query>
 <c:if test="${! empty locQ.rows}">

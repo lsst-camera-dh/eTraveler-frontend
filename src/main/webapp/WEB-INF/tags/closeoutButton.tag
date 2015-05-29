@@ -12,6 +12,15 @@
 <%@attribute name="activityId" required="true"%>
 <%@attribute name="resultsFiled" required="true"%>
 
+<c:choose>
+    <c:when test="${! empty param.topActivityId}">
+        <c:set var="topActivityId" value="${param.topActivityId}"/>
+    </c:when>
+    <c:otherwise>
+        <traveler:findTraveler var="topActivityId" activityId="${activityId}"/>
+    </c:otherwise>
+</c:choose>
+
     <sql:query var="activityQ" >
 select A.*, P.substeps, P.maxIteration, P.newLocation,
 P.travelerActionMask&(select maskBit from InternalAction where name='harnessedJob') as isHarnessed,
@@ -87,7 +96,8 @@ and A.end is not null
 
 <c:set var="active" value="${activity.status == 'new' || activity.status == 'inProgress'}"/>
 
-<c:set var="retryable" value="${activity.iteration < activity.maxIteration && readyToClose}"/>
+<c:set var="retryable" value="${activity.iteration < activity.maxIteration && 
+                                (activity.status == 'new' || activity.status == 'inProgress' || (isHarnessed && activity.status == 'stopped'))}"/>
 <c:if test="${readyToClose}">
     <c:set var="message" value="Ready to close"/>
 </c:if>
@@ -134,8 +144,8 @@ Make a new version of the Traveler."/>
     <tr>
         <td>
                 <input type="hidden" name="activityId" value="${activityId}">       
-                <input type="hidden" name="topActivityId" value="${param.topActivityId}">       
-                <INPUT TYPE=SUBMIT value="Closeout Success"
+                <input type="hidden" name="topActivityId" value="${topActivityId}">       
+                <INPUT TYPE=SUBMIT value="Complete"
                        <c:if test="${! readyToClose}">disabled</c:if>>
             </form>      
         </td>
@@ -159,7 +169,7 @@ Make a new version of the Traveler."/>
         <td>
             <form METHOD=GET ACTION="fh/retryActivity.jsp" target="_top">
                 <input type="hidden" name="activityId" value="${activityId}">       
-                <input type="hidden" name="topActivityId" value="${param.topActivityId}">       
+                <input type="hidden" name="topActivityId" value="${topActivityId}">       
                 <INPUT TYPE=SUBMIT value="Retry Step"
                        <c:if test="${! retryable}">disabled</c:if>>
             </form>
@@ -175,7 +185,7 @@ Make a new version of the Traveler."/>
                 <c:otherwise>
                     <form METHOD=GET ACTION="stopWork.jsp" target="_top">
                         <input type="hidden" name="activityId" value="${activityId}">       
-                        <input type="hidden" name="topActivityId" value="${param.topActivityId}">       
+                        <input type="hidden" name="topActivityId" value="${topActivityId}">       
                         <%--<input type="hidden" name="status" value="stopped">--%>
                         <INPUT TYPE=SUBMIT value="Stop Work"
                                <c:if test="${(! failable) || ! active}">disabled</c:if>>
@@ -186,7 +196,7 @@ Make a new version of the Traveler."/>
         <td>
             <form METHOD=GET ACTION="fh/skipStep.jsp" target="_top">
                 <input type="hidden" name="activityId" value="${activityId}">       
-                <input type="hidden" name="topActivityId" value="${param.topActivityId}">       
+                <input type="hidden" name="topActivityId" value="${topActivityId}">       
                 <INPUT TYPE=SUBMIT value="Skip Step"
                        <c:if test="${! active}">disabled</c:if>>
             </form>            
