@@ -31,7 +31,7 @@ The interface here is terrible, if you have ideas on improving it, please share!
         </c:otherwise>
     </c:choose>
 
-<form method="get" action="fh/addTravelerType.jsp">
+<form method="get" action="approver/addTravelerType.jsp">
     <input type="submit" value="Add Process Traveler Entry Point">
     Root Process: 
     <c:choose>

@@ -36,6 +36,15 @@
             <td>Current Value: <c:out value="${preferences.role}"/></td>
         </tr>
 
+            <preferences:preference name="writeable" title="<b>Write:</b> ">
+                <preferences:value value="false"/>
+                <preferences:value value="true"/>
+            </preferences:preference>
+        <tr>
+            <td>Downgrade your permissions</td>
+            <td>Current Value: <c:out value="${preferences.writeable}"/></td>
+        </tr>
+
         <preferences:preference name="siteName" title="<b>Site:</b> ">
                 <c:forEach var="row" items="${siteQ.rows}">
                     <preferences:value value="${row.name}"/>

@@ -23,7 +23,7 @@
     order by name;
 </sql:query>
 
-<form action="fh/updateTravelerType.jsp" method="get">
+<form action="approver/updateTravelerType.jsp" method="get">
     <input type="submit" value="Update Traveler Type Status">
     <input type="hidden" name="travelerTypeId" value="${travelerTypeId}">
     State:

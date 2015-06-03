@@ -33,7 +33,7 @@
 
 <hr>
 <h2>Hardware Groups</h2>
-    <form method="get" action="fh/addHardwareGroup.jsp">
+    <form method="get" action="admin/addHardwareGroup.jsp">
         <input type="submit" value="Add Hardware Group">
         Name: <input name="name" type="text" required>
         Description: <input name="description" type="text">
@@ -41,7 +41,7 @@
 
 <hr>
 <h2>Hardware Types</h2>
-    <form method="get" action="fh/addHardwareType.jsp">
+    <form method="get" action="admin/addHardwareType.jsp">
         <input type="submit" value="Add Hardware Type">
         Name or Drawing #: <input type="text" name="name" required>
         Sequence width - set to zero if not automatic:<select name="width">
@@ -60,7 +60,7 @@
     <sql:query var="hardwareTypesQ" >
         select id, name from HardwareType order by name;
     </sql:query>
-    <form method="get" action="fh/addHardwareRelationshipType.jsp">
+    <form method="get" action="admin/addHardwareRelationshipType.jsp">
         <input type="submit" value="Add Hardware Relationship Type">
         Name: <input type="text" name="name" required>
         Hardware Type: <select name="hardwareTypeId">
@@ -80,7 +80,7 @@
 
 <hr>
 <h2>Sites</h2>
-    <form method="get" action="fh/addSite.jsp">
+    <form method="get" action="admin/addSite.jsp">
         <input type="submit" value="Add Site">
         Name: <input type="text" name="name" required>
         jhVirtualEnv: <input type="text" name="jhVirtualEnv">
@@ -93,7 +93,7 @@
 
 <hr>
 <h2>Hardware Identifier Authorities</h2>
-    <form method="get" action="fh/addHardwareIdentifierAuthority.jsp">
+    <form method="get" action="admin/addHardwareIdentifierAuthority.jsp">
         <input type="submit" value="Add Hardware Identifier Authority">
         Name: <input type="text" name="name" required>
     </form>

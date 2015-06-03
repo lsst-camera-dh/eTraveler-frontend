@@ -10,6 +10,7 @@ import org.srs.base.application.preferences.ApplicationPreferences;
 public class UserPreferences implements ApplicationPreferences {
     
     public String role = "spectator";
+    public String writeable = "false";
     public String siteName = "SLAC";
     public String idAuthName = "null";
     public int pageLength = 10;
@@ -22,6 +23,13 @@ public class UserPreferences implements ApplicationPreferences {
     }
     public void setRole(String role) {
         this.role = role;
+    }    
+
+    public String getWriteable() {
+        return writeable;
+    }
+    public void setWriteable(String writeable) {
+        this.writeable = writeable;
     }    
 
     public String getSiteName() {
