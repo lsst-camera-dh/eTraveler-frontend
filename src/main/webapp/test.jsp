@@ -21,7 +21,8 @@
         <br>
         role: ${preferences.role}<br>
         <traveler:checkPerm var="oper" group="EtravelerOperator"/>
-        [${oper}]
+        [${oper}]<br>
+        [${appVariables.dataSourceMode}]<br>
         <c:choose>
         <c:when test="${gm:isUserInGroup(pageContext,'EtravelerAdmin')}">
             yup<br>

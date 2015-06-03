@@ -12,4 +12,9 @@
 <%@variable name-from-attribute="var" alias="hasPerm" scope="AT_BEGIN"%>
 <%@attribute name="group" required="true"%>
 
-<c:set var="hasPerm" value="${gm:isUserInGroup(pageContext, group) && preferences.writeable}"/>
+<c:set var="hasPerm" value="${preferences.writeable
+                              &&
+                              (appVariables.dataSourceMode != 'Test'
+                                || 
+                                gm:isUserInGroup(pageContext, group)
+                              )}"/>

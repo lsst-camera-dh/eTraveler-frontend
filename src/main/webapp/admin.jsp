@@ -9,6 +9,8 @@
 <%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql"%>
 <%@taglib prefix="traveler" tagdir="/WEB-INF/tags"%>
 
+<traveler:checkPerm var="mayAdmin" group="EtravelerAdmin"/>
+
 <!DOCTYPE html>
 <html>
     <head>
@@ -34,7 +36,8 @@
 <hr>
 <h2>Hardware Groups</h2>
     <form method="get" action="admin/addHardwareGroup.jsp">
-        <input type="submit" value="Add Hardware Group">
+        <input type="submit" value="Add Hardware Group"
+           <c:if test="${! mayAdmin}">disabled</c:if>>
         Name: <input name="name" type="text" required>
         Description: <input name="description" type="text">
     </form>
@@ -42,7 +45,8 @@
 <hr>
 <h2>Hardware Types</h2>
     <form method="get" action="admin/addHardwareType.jsp">
-        <input type="submit" value="Add Hardware Type">
+        <input type="submit" value="Add Hardware Type"
+           <c:if test="${! mayAdmin}">disabled</c:if>>
         Name or Drawing #: <input type="text" name="name" required>
         Sequence width - set to zero if not automatic:<select name="width">
             <option value="0">0</option>
@@ -61,7 +65,8 @@
         select id, name from HardwareType order by name;
     </sql:query>
     <form method="get" action="admin/addHardwareRelationshipType.jsp">
-        <input type="submit" value="Add Hardware Relationship Type">
+        <input type="submit" value="Add Hardware Relationship Type"
+           <c:if test="${! mayAdmin}">disabled</c:if>>
         Name: <input type="text" name="name" required>
         Hardware Type: <select name="hardwareTypeId">
             <c:forEach var="htRow" items="${hardwareTypesQ.rows}">
@@ -81,7 +86,8 @@
 <hr>
 <h2>Sites</h2>
     <form method="get" action="admin/addSite.jsp">
-        <input type="submit" value="Add Site">
+        <input type="submit" value="Add Site"
+           <c:if test="${! mayAdmin}">disabled</c:if>>
         Name: <input type="text" name="name" required>
         jhVirtualEnv: <input type="text" name="jhVirtualEnv">
         jhOutputRoot: <input type="text" name="jhOutputRoot">
@@ -94,7 +100,8 @@
 <hr>
 <h2>Hardware Identifier Authorities</h2>
     <form method="get" action="admin/addHardwareIdentifierAuthority.jsp">
-        <input type="submit" value="Add Hardware Identifier Authority">
+        <input type="submit" value="Add Hardware Identifier Authority"
+           <c:if test="${! mayAdmin}">disabled</c:if>>
         Name: <input type="text" name="name" required>
     </form>
     <traveler:hardwareIdentifierAuthorityList/>

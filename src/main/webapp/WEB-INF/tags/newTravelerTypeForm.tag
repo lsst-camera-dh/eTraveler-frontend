@@ -7,8 +7,11 @@
 <%@tag description="A form to make a new TravelerType" pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql"%>
+<%@taglib prefix="traveler" tagdir="/WEB-INF/tags"%>
 
 <%@attribute name="processId"%>
+
+<traveler:checkPerm var="mayApprove" group="EtravelerApprover"/>
 
 <sql:query var="processQ">
     select id, name 
@@ -32,7 +35,8 @@ The interface here is terrible, if you have ideas on improving it, please share!
     </c:choose>
 
 <form method="get" action="approver/addTravelerType.jsp">
-    <input type="submit" value="Add Process Traveler Entry Point">
+    <input type="submit" value="Add Process Traveler Entry Point"
+           <c:if test="${! mayApprove}">disabled</c:if>>
     Root Process: 
     <c:choose>
         <c:when test="${! empty processId}">
