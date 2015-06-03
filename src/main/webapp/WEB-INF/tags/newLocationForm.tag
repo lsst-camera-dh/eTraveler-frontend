@@ -11,7 +11,7 @@
 
 <%@attribute name="siteId"%>
 
-<traveler:checkPerm var="mayAdmin" group="EtravelerAdmin"/>
+<traveler:checkPerm var="mayAdmin" groups="EtravelerAdmin"/>
 
 <sql:query var="sitesQ" >
     select id, name from Site

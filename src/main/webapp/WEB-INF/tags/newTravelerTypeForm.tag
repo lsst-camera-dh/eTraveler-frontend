@@ -11,7 +11,7 @@
 
 <%@attribute name="processId"%>
 
-<traveler:checkPerm var="mayApprove" group="EtravelerApprover"/>
+<traveler:checkPerm var="mayApprove" groups="EtravelerApprover"/>
 
 <sql:query var="processQ">
     select id, name 

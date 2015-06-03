@@ -10,11 +10,18 @@
 
 <%@attribute name="var" required="true" rtexprvalue="false"%>
 <%@variable name-from-attribute="var" alias="hasPerm" scope="AT_BEGIN"%>
-<%@attribute name="group" required="true"%>
+<%@attribute name="groups" required="true"%>
+
+<c:set var="inAGroup" value="false"/>
+<c:forTokens var="group" items="${groups}" delims=",">
+    <c:if test="${gm:isUserInGroup(pageContext, group)}">
+        <c:set var="inAGroup" value="true"/>
+    </c:if>
+</c:forTokens>
 
 <c:set var="hasPerm" value="${preferences.writeable
                               &&
                               (appVariables.dataSourceMode != 'Test'
                                 || 
-                                gm:isUserInGroup(pageContext, group)
+                                inAGroup
                               )}"/>

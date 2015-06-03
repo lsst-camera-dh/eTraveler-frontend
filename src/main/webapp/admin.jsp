@@ -9,7 +9,7 @@
 <%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql"%>
 <%@taglib prefix="traveler" tagdir="/WEB-INF/tags"%>
 
-<traveler:checkPerm var="mayAdmin" group="EtravelerAdmin"/>
+<traveler:checkPerm var="mayAdmin" groups="EtravelerAdmin"/>
 
 <!DOCTYPE html>
 <html>
