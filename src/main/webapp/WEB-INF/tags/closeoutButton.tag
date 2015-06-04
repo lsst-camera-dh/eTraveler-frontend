@@ -12,6 +12,9 @@
 <%@attribute name="activityId" required="true"%>
 <%@attribute name="resultsFiled" required="true"%>
 
+<traveler:checkPerm var="mayOperate" groups="EtravelerOperator,EtravelerSupervisor"/>
+<traveler:checkPerm var="maySupervise" groups="EtravelerSupervisor"/>
+
 <c:choose>
     <c:when test="${! empty param.topActivityId}">
         <c:set var="topActivityId" value="${param.topActivityId}"/>
@@ -107,7 +110,7 @@ and A.end is not null
 
 <c:out value="${message}"/><br>
 
-<form METHOD=GET ACTION="fh/closeoutActivity.jsp" target="_top">
+<form METHOD=GET ACTION="operator/closeoutActivity.jsp" target="_top">
     <c:if test="${activity.setsLocation != 0 && readyToClose}">
         <sql:query var="locsQ">
 select L.id, L.name 
@@ -146,59 +149,61 @@ Make a new version of the Traveler."/>
                 <input type="hidden" name="activityId" value="${activityId}">       
                 <input type="hidden" name="topActivityId" value="${topActivityId}">       
                 <INPUT TYPE=SUBMIT value="Complete"
-                       <c:if test="${! readyToClose}">disabled</c:if>>
+                       <c:if test="${(! readyToClose) || (! mayOperate)}">disabled</c:if>>
             </form>      
         </td>
         <td>
         <c:choose>
             <c:when test="${activity.status == 'paused'}">
-                <form METHOD=GET ACTION="fh/unPauseTraveler.jsp" target="_top">
+                <form METHOD=GET ACTION="operator/unPauseTraveler.jsp" target="_top">
                     <input type="hidden" name="activityId" value="${activityId}">       
-                    <INPUT TYPE=SUBMIT value="Resume paused Traveler">
+                    <INPUT TYPE=SUBMIT value="Resume paused Traveler"
+                       <c:if test="${! mayOperate}">disabled</c:if>>
                 </form>
             </c:when>
             <c:otherwise>
-                <form METHOD=GET ACTION="fh/pauseTraveler.jsp" target="_top">
+                <form METHOD=GET ACTION="operator/pauseTraveler.jsp" target="_top">
                     <input type="hidden" name="activityId" value="${activityId}">       
                     <INPUT TYPE=SUBMIT value="Pause Traveler"
-                           <c:if test="${! active}">disabled</c:if>>
+                           <c:if test="${(! active) || (! mayOperate)}">disabled</c:if>>
                 </form>
             </c:otherwise>
         </c:choose>
         </td>
         <td>
-            <form METHOD=GET ACTION="fh/retryActivity.jsp" target="_top">
+            <form METHOD=GET ACTION="operator/retryActivity.jsp" target="_top">
                 <input type="hidden" name="activityId" value="${activityId}">       
                 <input type="hidden" name="topActivityId" value="${topActivityId}">       
                 <INPUT TYPE=SUBMIT value="Retry Step"
-                       <c:if test="${! retryable}">disabled</c:if>>
+                       <c:if test="${(! retryable) || (! mayOperate)}">disabled</c:if>>
             </form>
         </td>
         <td>
             <c:choose>
                 <c:when test="${hasOpenSWH}">
-                    <form METHOD=GET ACTION="resolveStop.jsp" target="_top">
+                    <form METHOD=GET ACTION="supervisor/resolveStop.jsp" target="_top">
                         <input type="hidden" name="activityId" value="${activityId}">       
-                        <INPUT TYPE=SUBMIT value="Resolve Stop Work">
+                        <INPUT TYPE=SUBMIT value="Resolve Stop Work"
+                            <c:if test="${! maySupervise}">disabled</c:if>>
                     </form>                                              
                 </c:when>
                 <c:otherwise>
-                    <form METHOD=GET ACTION="stopWork.jsp" target="_top">
+                    <form METHOD=GET ACTION="operator/stopWork.jsp" target="_top">
                         <input type="hidden" name="activityId" value="${activityId}">       
                         <input type="hidden" name="topActivityId" value="${topActivityId}">       
                         <%--<input type="hidden" name="status" value="stopped">--%>
                         <INPUT TYPE=SUBMIT value="Stop Work"
-                               <c:if test="${(! failable) || ! active}">disabled</c:if>>
+                               <c:if test="${(! failable || ! active) || (! mayOperate)}">disabled</c:if>>
                     </form>                                  
                 </c:otherwise>
             </c:choose>
         </td>
         <td>
-            <form METHOD=GET ACTION="fh/skipStep.jsp" target="_top">
+            <form METHOD=GET ACTION="operator/skipStep.jsp" target="_top">
                 <input type="hidden" name="activityId" value="${activityId}">       
                 <input type="hidden" name="topActivityId" value="${topActivityId}">       
                 <INPUT TYPE=SUBMIT value="Skip Step"
-                       <c:if test="${! active}">disabled</c:if>>
+                       <c:if test="${(! active) || (! maySupervise)}">disabled</c:if>>
             </form>            
         </td>
     </tr>
