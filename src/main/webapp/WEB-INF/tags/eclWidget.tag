@@ -14,6 +14,8 @@
 <%@attribute name="processId"%>
 <%@attribute name="activityId"%>
 
+<traveler:checkPerm var="mayTravel" groups="EtravelerAdmin,EtravelerApprover,EtravelerOperator,EtravelerSupervisor"/>
+
 <h2>Electronic Logbook</h2>
 
 <c:set var="version" value="${appVariables.etravelerELogVersion}"/>
@@ -82,7 +84,8 @@
     <input type="hidden" name="activityId" value="${activityField}">
     <input type="hidden" name="version" value="${version}">
     <textarea name="text"></textarea>
-    <input type="SUBMIT" value="Post a comment">
+    <input type="SUBMIT" value="Post a comment"
+        <c:if test="${! mayTravel}">disabled</c:if>>
 </form>
         </td>
     </tr>
