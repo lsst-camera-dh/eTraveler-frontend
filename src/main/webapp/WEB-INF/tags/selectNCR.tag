@@ -10,6 +10,9 @@
 <%@taglib prefix="traveler" tagdir="/WEB-INF/tags"%>
 
 <%@attribute name="activityId" required="true"%>
+
+<traveler:checkPerm var="maySupervise" groups="EtravelerSupervisor"/>
+
 <traveler:findPath var="edgePath" activityId="${activityId}"/>
 
 <sql:query var="ncrQ">
@@ -20,7 +23,7 @@
     order by conditionString;
 </sql:query>
 
-<form method="get" action="fh/doNCR.jsp" target="_top">
+<form method="get" action="supervisor/doNCR.jsp" target="_top">
     <input type="hidden" name="activityId" value="${activityId}">
     <select name="exceptionTypeId">
         <c:forEach var="et" items="${ncrQ.rows}">
@@ -36,5 +39,6 @@
                value="No NCRs defined" disabled
            </c:otherwise>
         </c:choose>
+        <c:if test="${! maySupervise}">disabled</c:if>
     >
 </form>

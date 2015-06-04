@@ -12,6 +12,8 @@
 
 <%@attribute name="activityId" required="true"%>
 
+<traveler:checkPerm var="mayOperate" groups="EtravelerOperator,EtravelerSupervisor"/>
+
     <sql:query var="prereqsQ" >
 select 
 Ap.id as activityId, Ap.hardwareId,
@@ -58,7 +60,7 @@ order by A.begin desc;
                     </sql:query>
                     <c:choose>
                         <c:when test="${! empty activityQ.rows}">
-                            <form method="GET" action="fh/satisfyPrereq.jsp">
+                            <form method="GET" action="operator/satisfyPrereq.jsp">
                                 <input type="HIDDEN" name="prerequisitePatternId" value="${row.ppId}">
                                 <input type="HIDDEN" name="activityId" value="${activityId}">
                                 <select name="prerequisiteActivityId">
@@ -66,7 +68,7 @@ order by A.begin desc;
                                         <option value="${activity.id}">${activity.id}, ${activity.begin}</option>
                                     </c:forEach>
                                 </select>
-                                <input type="SUBMIT" value="This One" <c:if test="${row.status != 'new'}">disabled</c:if>>
+                                <input type="SUBMIT" value="This One" <c:if test="${(row.status != 'new') || (! mayOperate)}">disabled</c:if>>
                             </form>
                         </c:when>
                         <c:otherwise>

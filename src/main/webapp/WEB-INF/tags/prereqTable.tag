@@ -14,6 +14,8 @@
 <%@attribute name="activityId"%>
 <%@attribute name="processId"%>
 
+<traveler:checkPerm var="mayOperate" groups="EtravelerOperator,EtravelerSupervisor"/>
+
     <sql:query var="prereqQ" >
 select PP.*<c:if test="${! empty activityId}">, PI.creationTS as satisfaction, AFS.name as status</c:if>
 from PrerequisitePattern PP
@@ -46,10 +48,10 @@ and PP.prerequisiteTypeId=(select id from PrerequisiteType where name=?<sql:para
                         <c:out value="${row.satisfaction}"/>
                     </c:when>
                     <c:otherwise>
-                        <form method="get" action="fh/satisfyPrereq.jsp">
+                        <form method="get" action="operator/satisfyPrereq.jsp">
                             <input type="hidden" name="prerequisitePatternId" value="${row.id}">
                             <input type="hidden" name="activityId" value="${activityId}">
-                            <input type="submit" value="Done" <c:if test="${row.status != 'new'}">disabled</c:if>>
+                            <input type="submit" value="Done" <c:if test="${(row.status != 'new') || (! mayOperate)}">disabled</c:if>>
                         </form>
                     </c:otherwise>
                 </c:choose>

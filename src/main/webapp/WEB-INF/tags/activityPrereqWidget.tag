@@ -12,6 +12,8 @@
 
 <%@attribute name="activityId" required="true"%>
 
+<traveler:checkPerm var="mayOperate" groups="EtravelerOperator,EtravelerSupervisor"/>
+
 <c:choose>
     <c:when test="${! empty param.topActivityId}">
         <c:set var="topActivityId" value="${param.topActivityId}"/>
@@ -63,7 +65,7 @@ and PP.prerequisiteTypeId=(select id from PrerequisiteType where name='COMPONENT
                     <a href="${hwLink}" target="_top"><c:out value="${row.lsstId}"/></a>
                 </c:when>
                 <c:when test="${(empty row.componentId) and (empty row.satisfaction)}">
-                    <form method="get" action="fh/satisfyPrereq.jsp">
+                    <form method="get" action="operator/satisfyPrereq.jsp">
                         <input type="hidden" name="prerequisitePatternId" value="${row.id}">
                         <input type="hidden" name="activityId" value="${activityId}">
                         <input type="hidden" name="hardwareId" value="${activity.hardwareId}">
@@ -84,7 +86,7 @@ and PP.prerequisiteTypeId=(select id from PrerequisiteType where name='COMPONENT
                 </c:when>
                 <c:when test="${(empty row.componentId) and (empty row.satisfaction)}">
                     <c:if test="${gotSomeComponents}">
-                        <input type="submit" value="Done" <c:if test="${activity.status != 'new'}">disabled</c:if>>
+                        <input type="submit" value="Done" <c:if test="${(activity.status != 'new') || (! mayOperate)}">disabled</c:if>>
                     </c:if>
                     </form>
                 </c:when>
@@ -116,9 +118,9 @@ and PP.prerequisiteTypeId=(select id from PrerequisiteType where name='COMPONENT
     </c:otherwise>
 </c:choose>
 
-<form method="get" action="fh/startActivity.jsp" target="_top">
+<form method="get" action="operator/startActivity.jsp" target="_top">
     <input type="hidden" name="activityId" value="${activityId}">
     <input type="hidden" name="topActivityId" value="${topActivityId}">
     <input type="submit" value="Start Work"
-           <c:if test="${! readyToStart}">disabled</c:if>>
+           <c:if test="${(! readyToStart) || (! mayOperate)}">disabled</c:if>>
 </form>                    

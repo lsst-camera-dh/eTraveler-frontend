@@ -14,6 +14,8 @@
 <%@attribute name="var" required="true" rtexprvalue="false"%>
 <%@variable name-from-attribute="var" alias="resultsFiled" scope="AT_BEGIN"%>
 
+<traveler:checkPerm var="mayOperate" groups="EtravelerOperator,EtravelerSupervisor"/>
+
 <traveler:getActivityStatus var="status" activityId="${activityId}"/>
 
 <c:choose>
@@ -111,7 +113,7 @@ and ISm.name='filepath'
                             <c:set var="inputType" value="number"/>
                         </c:otherwise>
                     </c:choose>
-                    <form method="post"  action="fh/inputResult.jsp" enctype="multipart/form-data">
+                    <form method="post"  action="operator/inputResult.jsp" enctype="multipart/form-data">
                         <input type="hidden" name="activityId" value="${activityId}">
                         <input type="hidden" name="inputPatternId" value="${row.id}">
                         <input type="hidden" name="isName" value="${row.ISName}">
@@ -120,7 +122,8 @@ and ISm.name='filepath'
                                 <c:if test="${!empty row.minV}">min="<c:out value="${row.minV}"/>"</c:if>
                                 <c:if test="${!empty row.maxV}">max="<c:out value="${row.maxV}"/>"</c:if>
                                 >
-                        <input type="submit" value="Record Result">
+                        <input type="submit" value="Record Result"
+                            <c:if test="${! mayOperate}">disabled</c:if>>
                     </form>
                 </c:otherwise>
             </c:choose>

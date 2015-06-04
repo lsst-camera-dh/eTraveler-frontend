@@ -9,8 +9,11 @@
 <%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql"%>
 <%@taglib prefix="display" uri="http://displaytag.sf.net"%>
+<%@taglib prefix="traveler" tagdir="/WEB-INF/tags"%>
 
 <%@attribute name="hardwareId" required="true"%>
+
+<traveler:checkPerm var="mayOperate" groups="EtravelerOperator,EtravelerSupervisor"/>
 
 <sql:query  var="locationHistoryQ">
     select HLH.*,
@@ -65,14 +68,15 @@
         order by S.name, L.name;
     </sql:query>
 
-    <form action="fh/setHardwareLocation.jsp" method="GET">
-        <input type="hidden" name="hardwareId" value="${hardwareId}"/>
+    <form action="operator/setHardwareLocation.jsp" method="GET">
+        <input type="hidden" name="hardwareId" value="${hardwareId}">
         <select name="newLocationId" required>
             <option value="" selected>Pick a new location</option>
             <c:forEach var="lRow" items="${locationsQ.rows}">
                 <option value="${lRow.id}">${lRow.siteName} ${lRow.locationName}</option>
             </c:forEach>
         </select>
-        <input type="submit" value="Move it!"/>
+        <input type="submit" value="Move it!"
+            <c:if test="${! mayOperate}">disabled</c:if>>
     </form>
 </c:if>

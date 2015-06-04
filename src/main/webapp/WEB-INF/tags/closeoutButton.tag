@@ -199,7 +199,7 @@ Make a new version of the Traveler."/>
             </c:choose>
         </td>
         <td>
-            <form METHOD=GET ACTION="operator/skipStep.jsp" target="_top">
+            <form METHOD=GET ACTION="supervisor/skipStep.jsp" target="_top">
                 <input type="hidden" name="activityId" value="${activityId}">       
                 <input type="hidden" name="topActivityId" value="${topActivityId}">       
                 <INPUT TYPE=SUBMIT value="Skip Step"

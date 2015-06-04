@@ -8,9 +8,12 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql"%>
 <%@taglib prefix="display" uri="http://displaytag.sf.net"%>
+<%@taglib prefix="traveler" tagdir="/WEB-INF/tags"%>
 
 <%@attribute name="activityId" %>
 <%@attribute name="processId" %>
+
+<traveler:checkPerm var="mayOperate" groups="EtravelerOperator,EtravelerSupervisor"/>
 
 <c:choose>
     <c:when test="${! empty param.topActivityId}">
@@ -75,7 +78,7 @@ order by abs(PE.step);
         <display:column title="${selectionColumnTitle}">
             <c:choose>
                 <c:when test="${numChosen == 0 && ! empty childRow.begin}">
-                    <form method="get" action="fh/createActivity.jsp" target="_top">
+                    <form method="get" action="operator/createActivity.jsp" target="_top">
                         <input type="hidden" name="parentActivityId" value="${activityId}">
                         <input type="hidden" name="hardwareId" value="${childRow.hardwareId}">
                         <input type="hidden" name="inNCR" value="${childRow.inNCR}">
@@ -83,7 +86,7 @@ order by abs(PE.step);
                         <input type="hidden" name="processId" value="${childRow.child}">
                         <input type="hidden" name="processEdgeId" value="${childRow.edgeId}">
                         <input type="submit" value="${childRow.name}"
-                               <c:if test="${childRow.status != 'new' && childRow.status != 'inProgress'}">disabled</c:if>>
+                               <c:if test="${(childRow.status != 'new' && childRow.status != 'inProgress') || (! mayOperate)}">disabled</c:if>>
                     </form>
                 </c:when>
                 <c:otherwise>

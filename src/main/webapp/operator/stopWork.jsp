@@ -5,6 +5,11 @@
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+
+<%@taglib prefix="traveler" tagdir="/WEB-INF/tags"%>
+
+<traveler:checkPerm var="mayOperate" groups="EtravelerOperator,EtravelerSupervisor"/>
+
 <!DOCTYPE html>
 <html>
     <head>
@@ -13,13 +18,14 @@
     </head>
     <body>
         <h1>Stopping Work for Activity ${param.activityId}</h1>
-        <form method="get" action="fh/stopTraveler.jsp">
+        <form method="get" action="operator/stopTraveler.jsp">
             <input type="hidden" name="activityId" value="${param.activityId}">       
             <input type="hidden" name="topActivityId" value="${param.topActivityId}">
             <table>
                 <tr><td>Why?</td><td><textarea name="reason"></textarea></td>
             </table>
-            <input type="submit" value="Yes, really stop">
+            <input type="submit" value="Yes, really stop"
+                <c:if test="${! mayOperate}">disabled</c:if>>
         </form>
     </body>
 </html>
