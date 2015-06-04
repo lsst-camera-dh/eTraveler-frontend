@@ -14,6 +14,11 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Activity <c:out value="${param.activityId}"/></title>
         <link href="http://srs.slac.stanford.edu/Commons/css/srsCommons.jsp?experimantName=${appVariables.experiment}"rel="stylesheet" type="text/css" />
+            <style type="text/css">
+table.datatable th, table.datatable td {
+	text-align: left;
+}
+            </style>
     </head>
     <body>
         <sql:query var="activityQ" >
