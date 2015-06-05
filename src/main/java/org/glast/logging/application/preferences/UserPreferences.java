@@ -9,7 +9,7 @@ import org.srs.base.application.preferences.ApplicationPreferences;
  */
 public class UserPreferences implements ApplicationPreferences {
     
-    public String writeable = "false";
+    public String writeable = "true";
     public String siteName = "SLAC";
     public String idAuthName = "null";
     public int pageLength = 10;
