@@ -5,7 +5,7 @@
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@taglib prefix="traveler" tagdir="/WEB-INF/tags"%>
 
 <traveler:checkPerm var="mayOperate" groups="EtravelerOperator,EtravelerSupervisor"/>
@@ -18,7 +18,7 @@
     </head>
     <body>
         <h1>Stopping Work for Activity ${param.activityId}</h1>
-        <form method="get" action="operator/stopTraveler.jsp">
+        <form method="get" action="stopTraveler.jsp">
             <input type="hidden" name="activityId" value="${param.activityId}">       
             <input type="hidden" name="topActivityId" value="${param.topActivityId}">
             <table>
