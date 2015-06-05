@@ -12,10 +12,6 @@
     
     <body>
         
-        <sql:query var="roleQ">
-            select id, name from PermissionGroup
-        </sql:query>
-            
         <sql:query var="siteQ" >
             select id, name from Site;
         </sql:query>
@@ -26,22 +22,12 @@
             
         <preferences:preferences name="preferences">
 
-            <preferences:preference name="role" title="<b>Role:</b> ">
-                <c:forEach var="row" items="${roleQ.rows}">
-                    <preferences:value value="${row.name}"/>
-                </c:forEach>
-            </preferences:preference>
-        <tr>
-            <td>Downgrade your permissions</td>
-            <td>Current Value: <c:out value="${preferences.role}"/></td>
-        </tr>
-
             <preferences:preference name="writeable" title="<b>Write:</b> ">
                 <preferences:value value="false"/>
                 <preferences:value value="true"/>
             </preferences:preference>
         <tr>
-            <td>Downgrade your permissions</td>
+            <td>Downgrade your permissions. If this is false, you won't be able to do anything, just look.</td>
             <td>Current Value: <c:out value="${preferences.writeable}"/></td>
         </tr>
 

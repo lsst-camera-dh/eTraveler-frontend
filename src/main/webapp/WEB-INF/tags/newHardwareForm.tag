@@ -7,9 +7,12 @@
 <%@tag description="Display a form to register a new component" pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql"%>
-<%@taglib uri="http://srs.slac.stanford.edu/time" prefix="time"%>
+<%@taglib prefix="time" uri="http://srs.slac.stanford.edu/time"%>
+<%@taglib prefix="traveler" tagdir="/WEB-INF/tags"%>
 
 <%@attribute name="hardwareTypeId" required="true"%>
+
+<traveler:checkPerm var="mayOperate" groups="EtravelerOperator,EtravelerSupervisor"/>
 
 <sql:query var="typeQ" >
     select * from HardwareType
@@ -30,7 +33,7 @@
 </sql:query>
 
 <h2>Register new ${hType.name}</h2>
-<form METHOD=GET ACTION="fh/createHardware.jsp" name="hwSpex">
+<form METHOD=GET ACTION="operator/createHardware.jsp" name="hwSpex">
 
     <table>
         <c:choose>
@@ -76,5 +79,6 @@ format="%Y-%m-%d" shownone="true"/>
         </tr>
     </table>    
     <input type="hidden" name="hardwareTypeId" value="${hardwareTypeId}"/>
-    <INPUT TYPE=SUBMIT value="Register Component">
+    <INPUT TYPE=SUBMIT value="Register Component"
+        <c:if test="${! mayOperate}">disabled</c:if>>
 </form>

@@ -10,6 +10,8 @@
 <%@taglib prefix="display" uri="http://displaytag.sf.net"%>
 <%@taglib prefix="traveler" tagdir="/WEB-INF/tags"%>
 
+<traveler:checkPerm var="mayOperate" groups="EtravelerOperator,EtravelerSupervisor"/>
+
 <traveler:checkId table="Hardware" id="${param.hardwareId}"/>
 <sql:query var="hardwareQ">
     select H.*, HT.name as hardwareTypeName
@@ -63,7 +65,7 @@
             order by name;
         </sql:query>
         <c:if test="${not empty idAuthQ.rows}">
-            <form METHOD=GET ACTION="fh/addIdentifier.jsp">
+            <form METHOD=GET ACTION="operator/addIdentifier.jsp">
                 <input type="hidden" name="hardwareId" value="${param.hardwareId}">
                 <input type="hidden" name="hardwareTypeId" value="${hardwareTypeId}">
 
@@ -75,7 +77,8 @@
                 </c:forEach>
                 </select>
 
-                <INPUT TYPE=SUBMIT value="Add Identifier">
+                <INPUT TYPE=SUBMIT value="Add Identifier"
+                    <c:if test="${! mayOperate}">disabled</c:if>>
             </form>
         </c:if>
         

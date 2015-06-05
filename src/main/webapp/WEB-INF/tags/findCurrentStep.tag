@@ -109,7 +109,7 @@
         <c:set var="currentStepActivityId" value="${theId}"/>
     </c:when>
     <c:when test="${mode == 'process'}">
-        <c:set var="processUrl" value="${activityAutoCreate ? 'fh/createActivity.jsp' : 'processPane.jsp'}"/>
+        <c:set var="processUrl" value="${activityAutoCreate ? 'operator/createActivity.jsp' : 'processPane.jsp'}"/>
         <c:url var="processLink" value="${processUrl}">
             <c:param name="processId" value="${theId}"/>
             <c:param name="topActivityId" value="${topActivityId}"/>

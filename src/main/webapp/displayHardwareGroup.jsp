@@ -9,6 +9,8 @@
 <%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql"%>
 <%@taglib prefix="traveler" tagdir="/WEB-INF/tags"%>
 
+<traveler:checkPerm var="mayAdmin" groups="EtravelerAdmin"/>
+
 <!DOCTYPE html>
 
 <sql:query var="hardwareGroupQ">
@@ -37,8 +39,9 @@
             order by name
             ;
         </sql:query>
-            <form method="get" action="fh/addTypeToGroup.jsp">
-                <input type="submit" value="Add Member Type">
+            <form method="get" action="admin/addTypeToGroup.jsp">
+                <input type="submit" value="Add Member Type"
+                    <c:if test="${! mayAdmin}">disabled</c:if>>
                 <input type="hidden" name="hardwareGroupId" value="${param.hardwareGroupId}">
                 <select name="hardwareTypeId">
                     <c:forEach var="hwType" items="${hwTypesQ.rows}">

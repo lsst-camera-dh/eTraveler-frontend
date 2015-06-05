@@ -7,11 +7,14 @@
 <%@tag description="Display a form to start a process traveler" pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql"%>
+<%@taglib prefix="traveler" tagdir="/WEB-INF/tags"%>
 
 <%@attribute name="hardwareTypeId"%>
 <%@attribute name="hardwareGroupId"%>
 <%@attribute name="processId"%>
 <%@attribute name="hardwareId"%>
+
+<traveler:checkPerm var="mayOperate" groups="EtravelerOperator,EtravelerSupervisor"/>
 
 <c:set var="activeTravelerTypesOnly" value="true"/> <%-- should get this from user pref? --%>
 
@@ -91,7 +94,7 @@
     ;
 </sql:query>
    
-<form METHOD=GET ACTION="fh/createTraveler.jsp">
+<form METHOD=GET ACTION="operator/createTraveler.jsp">
     <input type="hidden" name="inNCR" value="FALSE">
     <table>
         <tr>
@@ -135,5 +138,6 @@
             </td>
         </tr>
     </table>
-    <INPUT TYPE=SUBMIT value="Initiate Traveler">
+    <INPUT TYPE=SUBMIT value="Initiate Traveler"
+        <c:if test="${! mayOperate}">disabled</c:if>>
 </form>

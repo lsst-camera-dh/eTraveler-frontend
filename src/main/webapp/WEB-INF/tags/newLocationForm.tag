@@ -19,7 +19,7 @@
     order by name;
 </sql:query>
     
-<form method="get" action="fh/addLocation.jsp">
+<form method="get" action="admin/addLocation.jsp">
     <input type="submit" value="Add Location"
        <c:if test="${! mayAdmin}">disabled</c:if>>
     Name: <input type="text" name="name" required>

@@ -19,7 +19,6 @@
     <body>
         <h1>Hello World!</h1>
         <br>
-        role: ${preferences.role}<br>
         <traveler:checkPerm var="oper" groups="EtravelerOperator,EtravelerAdmin"/>
         [${oper}]<br>
         [${appVariables.dataSourceMode}]<br>

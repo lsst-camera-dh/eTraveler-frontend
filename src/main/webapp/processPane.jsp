@@ -9,6 +9,8 @@
 <%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql"%>
 <%@taglib prefix="traveler" tagdir="/WEB-INF/tags"%>
 
+<traveler:checkPerm var="mayOperate" groups="EtravelerOperator,EtravelerSupervisor"/>
+
 <!DOCTYPE html>
 <html>
     <head>
@@ -35,14 +37,15 @@ table.datatable th, table.datatable td {
         <c:if test="${! empty param.parentActivityId}">
             <%-- This is only set if this process is the current step and is not instantiated
             which never happens if activities are autocreated --%>
-            <form METHOD=GET ACTION="fh/createActivity.jsp" target="_top">
+            <form METHOD=GET ACTION="operator/createActivity.jsp" target="_top">
                 <input type="hidden" name="parentActivityId" value="${param.parentActivityId}">       
                 <input type="hidden" name="processEdgeId" value="${param.processEdgeId}">       
                 <input type="hidden" name="inNCR" value="${param.inNCR}">       
                 <input type="hidden" name="hardwareId" value="${param.hardwareId}">       
                 <input type="hidden" name="processId" value="${param.processId}">       
                 <input type="hidden" name="topActivityId" value="${param.topActivityId}">       
-                <INPUT TYPE=SUBMIT value="Start Prep">
+                <INPUT TYPE=SUBMIT value="Start Prep"
+                    <c:if test="${! mayOperate}">disabled</c:if>>
             </form>
         </c:if>
         <traveler:eclWidget
