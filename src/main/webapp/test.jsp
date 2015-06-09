@@ -21,6 +21,7 @@
         <br>
         <traveler:checkPerm var="oper" groups="EtravelerOperator,EtravelerAdmin"/>
         [${oper}]<br>
+        ${request.requestString}<br>
         [${appVariables.dataSourceMode}]<br>
         <c:choose>
         <c:when test="${gm:isUserInGroup(pageContext,'EtravelerAdmin')}">

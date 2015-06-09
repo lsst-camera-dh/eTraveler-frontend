@@ -9,6 +9,7 @@
 <%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql"%>
 <%@taglib prefix="display" uri="http://displaytag.sf.net"%>
+<%@taglib prefix="filter" uri="http://srs.slac.stanford.edu/filter"%>
 <%@taglib prefix="traveler" tagdir="/WEB-INF/tags"%>
 
 <%@attribute name="hardwareTypeId"%>
@@ -22,6 +23,33 @@
 <c:if test="${empty state && activeTravelerTypesOnly}">
     <c:set var="state" value="active"/>
 </c:if>
+
+    <sql:query var="statesQ">
+select name from TravelerTypeState order by name;
+    </sql:query>
+
+<c:choose>
+    <c:when test="${! empty state}">
+        <c:set var="theState" value="${state}"/>
+    </c:when>
+    <c:otherwise>
+        <c:set var="theState" value="active"/>
+    </c:otherwise>
+</c:choose>
+
+<filter:filterTable>
+    <filter:filterInput var="name" title="Name (substring search)"/>
+    <filter:filterSelection title="State" var="state" defaultValue='${theState}'>
+        <filter:filterOption value="any">Any</filter:filterOption>
+        <c:forEach var="stateName" items="${statesQ.rows}">
+            <filter:filterOption value="${stateName.name}"><c:out value="${stateName.name}"/></filter:filterOption>
+        </c:forEach>
+    </filter:filterSelection>
+    <filter:filterSelection title="Version" var="version" defaultValue='all'>
+        <filter:filterOption value="latest">Latest</filter:filterOption>
+        <filter:filterOption value="all">All</filter:filterOption>
+    </filter:filterSelection>
+</filter:filterTable>
 
 <c:url var="inProgressLink" value="listTravelers.jsp">
     <c:param name="done" value="false"/>
