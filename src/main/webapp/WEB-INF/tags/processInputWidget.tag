@@ -27,6 +27,5 @@
             <c:if test="${! empty row.units}">${row.units}</c:if>
             ${row.ISName}
         </display:column>
-        <display:column property="description"/>
     </display:table>
 </c:if>

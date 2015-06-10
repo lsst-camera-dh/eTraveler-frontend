@@ -49,6 +49,16 @@ where A.id=?<sql:param value="${activityId}"/>
 and ISm.name='int'
 union
 select A.begin, A.end, IP.*,
+    if(RM.value=0,'False','True') as value, null as catalogKey,
+    ISm.name as ISName
+from Activity A
+inner join InputPattern IP on IP.processId=A.processId
+inner join InputSemantics ISm on ISm.id=IP.inputSemanticsId
+left join IntResultManual RM on RM.activityId=A.id and RM.inputPatternId=IP.id
+where A.id=?<sql:param value="${activityId}"/>
+and ISm.name='boolean'
+union
+select A.begin, A.end, IP.*,
     RM.value, null as catalogKey,
     ISm.name as ISName
 from Activity A
@@ -117,17 +127,24 @@ and ISm.name='filepath'
                         <input type="hidden" name="activityId" value="${activityId}">
                         <input type="hidden" name="inputPatternId" value="${row.id}">
                         <input type="hidden" name="isName" value="${row.ISName}">
+                <c:choose>
+                    <c:when test="${row.ISName == 'boolean'}">
+                        <label>True<input type="radio" name="value" value="1"></label>
+                        <label>False<input type="radio" name="value" value="0" checked></label>
+                    </c:when>
+                    <c:otherwise>
                         *<input type="${inputType}" name="value" required
                                 <c:if test="${row.ISName=='float'}">step="any"</c:if>
                                 <c:if test="${!empty row.minV}">min="<c:out value="${row.minV}"/>"</c:if>
                                 <c:if test="${!empty row.maxV}">max="<c:out value="${row.maxV}"/>"</c:if>
                                 >
+                    </c:otherwise>
+                </c:choose>
                         <input type="submit" value="Record Result"
                             <c:if test="${! mayOperate}">disabled</c:if>>
                     </form>
                 </c:otherwise>
             </c:choose>
         </display:column>
-        <display:column property="description"/>
     </display:table>
 </c:if>
