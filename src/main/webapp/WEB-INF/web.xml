@@ -115,6 +115,7 @@
 
 
 <!-- GroupManager -->
+<!--
     <filter>
         <filter-name>AdminCheckerFilter</filter-name>
         <filter-class>org.srs.groupmanager.filter.GroupCheckerFilter</filter-class>
@@ -146,7 +147,7 @@
         <filter-class>org.srs.groupmanager.filter.GroupCheckerFilter</filter-class>
         <init-param>
             <param-name>groups</param-name>
-            <param-value>EtravelerApprover</param-value>
+            <param-value>EtravelerOperator</param-value>
         </init-param>
     </filter>
     <filter-mapping>
@@ -179,6 +180,7 @@
         <filter-name>TravelerCheckerFilter</filter-name>
         <url-pattern>/fh/*</url-pattern>
     </filter-mapping>
+-->
 <!-- /GroupManager -->
 
 
