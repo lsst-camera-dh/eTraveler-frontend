@@ -12,6 +12,7 @@
 <%@variable name-from-attribute="var" alias="hasPerm" scope="AT_BEGIN"%>
 <%@attribute name="groups" required="true"%>
 
+<%-- Is the user in an allowed group? --%>
 <c:set var="inAGroup" value="false"/>
 <c:forTokens var="group" items="${groups}" delims=",">
     <c:if test="${gm:isUserInGroup(pageContext, group)}">
@@ -19,9 +20,14 @@
     </c:if>
 </c:forTokens>
 
+<%-- Is the dataSourceMode protected? --%>
+<c:set var="inAMode" value="false"/>
+<c:forTokens var="mode" items="${initParam['protectedModes']}" delims=",">
+    <c:if test="${appVariables.dataSourceMode == mode}">
+        <c:set var="inAMode" value="true"/>
+    </c:if>    
+</c:forTokens>
+
 <c:set var="hasPerm" value="${preferences.writeable
                               &&
-                              (appVariables.dataSourceMode != 'Test'
-                                || 
-                                inAGroup
-                              )}"/>
+                              (inAGroup || !inAMode)}"/>
