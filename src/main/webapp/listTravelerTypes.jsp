@@ -14,6 +14,10 @@
 select name from TravelerTypeState order by name;
     </sql:query>
 
+    <sql:query var="groupsQ">
+select id, name from HardwareGroup order by name;
+    </sql:query>
+
 <!DOCTYPE html>
 <html>
     <head>
@@ -33,6 +37,12 @@ select name from TravelerTypeState order by name;
         
         <filter:filterTable>
             <filter:filterInput var="name" title="Name (substring search)"/>
+            <filter:filterSelection title="Component Group" var="hardwareGroupId" defaultValue="">
+                <filter:filterOption value=""></filter:filterOption>
+                <c:forEach var="group" items="${groupsQ.rows}">
+                    <filter:filterOption value="${group.id}"><c:out value="${group.name}"/></filter:filterOption>
+                </c:forEach>
+            </filter:filterSelection>
             <filter:filterSelection title="State" var="state" defaultValue='${theState}'>
                 <filter:filterOption value="any">Any</filter:filterOption>
                 <c:forEach var="stateName" items="${statesQ.rows}">
@@ -44,6 +54,7 @@ select name from TravelerTypeState order by name;
                 <filter:filterOption value="all">All</filter:filterOption>
             </filter:filterSelection>
         </filter:filterTable>
-        <traveler:travelerTypeList hardwareTypeId="${param.hardwareTypeId}" version="${version}" state="${state}" name="${name}"/>
+        <traveler:travelerTypeList hardwareTypeId="${param.hardwareTypeId}" hardwareGroupId="${hardwareGroupId}"
+                                   version="${version}" state="${state}" name="${name}"/>
     </body>
 </html>
