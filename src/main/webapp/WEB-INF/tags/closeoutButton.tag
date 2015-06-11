@@ -175,7 +175,7 @@ Make a new version of the Traveler."/>
                 <input type="hidden" name="activityId" value="${activityId}">       
                 <input type="hidden" name="topActivityId" value="${topActivityId}">       
                 <INPUT TYPE=SUBMIT value="Retry Step"
-                       <c:if test="${((! retryable) || (! mayOperate)) && (! maySupervise)}">disabled</c:if>>
+                       <c:if test="${((! retryable) || (! mayOperate)) && ((! active) || (! maySupervise))}">disabled</c:if>>
             </form>
         </td>
         <td>
