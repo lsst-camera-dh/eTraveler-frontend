@@ -77,8 +77,8 @@
 
         <c:if test="${! empty process.travelerTypeId}">
         <h2>Instances</h2>
-        <traveler:activityList processId="${processId}"/>
         Make a new instance: <traveler:newTravelerForm processId="${processId}" hardwareGroupId="${process.hardwareGroupId}"/>
+        <traveler:activityList processId="${processId}"/>
         </c:if>
         
         <traveler:newTravelerTypeForm processId="${processId}"/> 
