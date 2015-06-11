@@ -65,23 +65,13 @@ and P.travelerActionMask&(select maskBit from InternalAction where name='harness
         <c:set var="message" value="Update Failure."/>
     </c:if>
 </c:if>
+        {
 <c:choose>
     <c:when test="${allOk}">
-        {
             "acknowledge": null
-        }
     </c:when>
     <c:otherwise>
-        {
             "acknowledge": "${message}"
-        }
-        <c:if test="${empty inputs.status}">
-            <ta:stopTraveler activityId="${inputs.jobid}" mask="15"
-                            reason="${message}" travelerId="${travelerId}"/>
-        </c:if>
     </c:otherwise>
 </c:choose>
-<c:if test="${! empty inputs.status}">
-   <ta:stopTraveler activityId="${inputs.jobid}" mask="15"
-         reason="Job Harness failure" travelerId="${travelerId}"/>
-</c:if>
+        }
