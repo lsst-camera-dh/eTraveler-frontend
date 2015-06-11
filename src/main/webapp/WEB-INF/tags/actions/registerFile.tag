@@ -154,7 +154,7 @@
     </c:when>
     <c:when test="${mode=='manual'}">
         <c:set var="dcSite" value="SLAC"/>
-        <c:set var="fsHead" value="${initParam['eTravelerFileStore']}${dataSourceFolder}/${siteName}"/>
+        <c:set var="fsHead" value="${appVariables.etravelerFileStore}/${initParam['eTravelerFileSubfolder']}${dataSourceFolder}/${siteName}"/>
     </c:when>
 </c:choose>
 <c:set var="fullFsPath" value="${fsHead}/${commonPath}/${name}"/>

@@ -61,8 +61,8 @@
     </context-param>
 
     <context-param>
-        <param-name>eTravelerFileStore</param-name>
-        <param-value>/nfs/farm/g/lsst/u1/ET/userFiles</param-value>
+        <param-name>eTravelerFileSubfolder</param-name>
+        <param-value>userFiles</param-value>
     </context-param>
     <context-param>
         <param-name>datacatFolder</param-name>
