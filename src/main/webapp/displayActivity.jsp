@@ -63,9 +63,9 @@
                          currentStepActivityId="${currentStepActivityId}"/>
                 </td>
                 <td style="vertical-align:top;">
-                    <iframe name="content" src="${currentStepLink}" width="600" height="400"></iframe>
-                    <br>
                     <a href="${currentStepLink}" target="content">Return to current step</a>
+                    <br>
+                    <iframe name="content" src="${currentStepLink}" width="800" height="4000"></iframe>
                 </td>
             </tr>
         </table>

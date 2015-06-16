@@ -70,7 +70,7 @@
                     <c:url var="contentLink" value="processPane.jsp">
                         <c:param name="processId" value="${processId}"/>
                     </c:url>
-                    <iframe name="content" src="${contentLink}" width="600" height="400"></iframe>
+                    <iframe name="content" src="${contentLink}" width="800" height="4000"></iframe>
                 </td>
             </tr>
         </table>
