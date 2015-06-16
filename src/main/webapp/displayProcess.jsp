@@ -59,6 +59,12 @@
             </tr>
         </table>
 
+        <c:if test="${! empty process.travelerTypeId}">
+        <h2>Instances</h2>
+        Make a new instance: <traveler:newTravelerForm processId="${processId}" hardwareGroupId="${process.hardwareGroupId}"/>
+        <traveler:activityList processId="${processId}"/>
+        </c:if>
+        
         <h2>Steps</h2>
         <traveler:expandProcess var="stepList" processId="${processId}"/>
         <table>
@@ -75,12 +81,6 @@
             </tr>
         </table>
 
-        <c:if test="${! empty process.travelerTypeId}">
-        <h2>Instances</h2>
-        Make a new instance: <traveler:newTravelerForm processId="${processId}" hardwareGroupId="${process.hardwareGroupId}"/>
-        <traveler:activityList processId="${processId}"/>
-        </c:if>
-        
         <traveler:newTravelerTypeForm processId="${processId}"/> 
     </body>
 </html>
