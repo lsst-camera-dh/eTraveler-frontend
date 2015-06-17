@@ -8,6 +8,7 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql"%>
 <%@taglib prefix="traveler" tagdir="/WEB-INF/tags"%>
+<%@taglib prefix="ta" tagdir="/WEB-INF/tags/actions"%>
 
 <%@attribute name="activityId" required="true"%>
 <%@attribute name="status" required="true"%>
@@ -18,6 +19,20 @@ select * from ActivityFinalStatus where name=?<sql:param value="${status}"/>;
 <c:set var="activityStatus" value="${statusIdQ.rows[0]}"/>
 <c:set var="statusId" value="${activityStatus.id}"/>
 <c:set var="isFinal" value="${activityStatus.isFinal}"/>
+
+<c:if test="${isFinal}">
+    <sql:query var="childrenQ">
+select A.id
+from Activity A
+inner join ActivityStatusHistory ASH on ASH.activityId=A.id and ASH.id=(select max(id) from ActivityStatusHistory where activityId=A.id)
+inner join ActivityFinalStatus AFS on AFS.id=ASH.activityStatusId
+where A.parentActivityId=?<sql:param value="${activityId}"/>
+and not AFS.isFinal;
+    </sql:query>
+    <c:forEach var="child" items="${childrenQ.rows}">
+        <ta:setActivityStatus activityId="${child.id}" status="${status}"/>
+    </c:forEach>
+</c:if>
 
     <sql:query var="activityQ">
 select * from Activity where id=?<sql:param value="${activityId}"/>;
