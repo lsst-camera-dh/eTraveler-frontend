@@ -49,7 +49,7 @@ where A.id=?<sql:param value="${activityId}"/>
 and ISm.name='int'
 union
 select A.begin, A.end, IP.*,
-    if(RM.value=0,'False','True') as value, null as catalogKey,
+    if(RM.value is not null, if(RM.value=0,'False','True'), null) as value, null as catalogKey,
     ISm.name as ISName
 from Activity A
 inner join InputPattern IP on IP.processId=A.processId
