@@ -25,7 +25,7 @@
     <body>
         <h1>Drat!</h1>
         <br>There was a problem:<br>
-        <c:out value="${param.message}"/>
+        <c:out value="${param.message}" escapeXml="false"/>
         <c:if test="${bug}">
 This is not your fault, it's a bug.
         </c:if>

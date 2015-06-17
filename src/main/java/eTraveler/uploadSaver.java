@@ -24,7 +24,7 @@ public class uploadSaver extends SimpleTagSupport {
             if (directory.exists()) {
                 fileItem.write(uploadedFile);
             } else {
-                out.write("couldn't make directory");
+                throw new JspException("couldn't make directory " + directory.toString());
             }
         } catch (Exception ex) {
             throw new JspException("Error in uploadSaver tag", ex);

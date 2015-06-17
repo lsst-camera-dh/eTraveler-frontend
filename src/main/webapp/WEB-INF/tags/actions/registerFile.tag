@@ -177,12 +177,24 @@ replaceExisting: <c:out value="${replaceExisting}"/><br>
 </c:if>
 <c:if test="${doRegister}">
     <c:if test="${mode == 'manual'}">
-        <upload:uploadSaver path="${fullFsPath}" fileItem="${fileItem}"/>
+        <c:catch var="ex">
+            <upload:uploadSaver path="${fullFsPath}" fileItem="${fileItem}"/>
+        </c:catch>
+        <c:if test="${!empty ex}">
+            <traveler:error message="Couldn't save file ${fullFsPath}."/>
+        </c:if>
     </c:if>
+    <c:catch var="ex">
     <dc:dcRegister dataCatalogDb="${dataCatalogDb}"
         name="${name}" fileFormat="${fileFormat}" dataType="${dataType}"
                    logicalFolderPath="${logicalFolderPath}" 
                    site="${dcSite}" location="${fullFsPath}" replaceExisting="${replaceExisting}"
                    var="dcPk"/>
+    </c:catch>
+    <c:if test="${!empty ex}">
+        <traveler:error message="Couldn't register file ${fullFsPath}.<br>
+Perhaps the file format (${fileFormat}) is not on the data catalog's list?<br>
+Check <a href='http://srs.slac.stanford.edu/DataCatalog/datasetfileformat.jsp' target='_'>here</a>."/>
+    </c:if>
 </c:if>
 <c:set var="fullVirtualPath" value="${logicalFolderPath}/${name}"/>
