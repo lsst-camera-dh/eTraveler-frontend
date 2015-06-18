@@ -12,22 +12,22 @@
 <%@attribute name="activityId" required="true"%>
 
     <sql:query var="resultsQ">
-select name, value, catalogKey, schemaName, schemaVersion, schemaInstance, id
+select name, value, catalogKey, schemaName, schemaVersion, schemaInstance, id, 1 as section
 from FilepathResultHarnessed
 where activityId=?<sql:param value="${activityId}"/>
 union
-select name, value, null as catalogKey, schemaName, schemaVersion, schemaInstance, id
+select name, value, null as catalogKey, schemaName, schemaVersion, schemaInstance, id, 2 as section
 from FloatResultHarnessed
 where activityId=?<sql:param value="${activityId}"/>
 union
-select name, value, null as catalogKey, schemaName, schemaVersion, schemaInstance, id
+select name, value, null as catalogKey, schemaName, schemaVersion, schemaInstance, id, 2 as section
 from IntResultHarnessed
 where activityId=?<sql:param value="${activityId}"/>
 union
-select name, value, null as catalogKey, schemaName, schemaVersion, schemaInstance, id
+select name, value, null as catalogKey, schemaName, schemaVersion, schemaInstance, id, 2 as section
 from StringResultHarnessed
 where activityId=?<sql:param value="${activityId}"/>
-order by schemaName, schemaVersion, schemaInstance, id
+order by section, schemaName, schemaVersion, schemaInstance, name
 ;
     </sql:query>
     
