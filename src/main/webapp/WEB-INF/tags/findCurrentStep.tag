@@ -44,7 +44,7 @@
             </c:if>
             <c:if test="${empty step.begin}">
                 <c:if test="${unstarted != 0}">
-                    <traveler:error message="Too many unstarted steps" bug="true"/>
+                    <traveler:error message="Too many unstarted steps ${unstarted} ${step.activityId}" bug="true"/>
                 </c:if>
                 <c:set var="unstarted" value="${step.activityId}"/>
                 <c:set var="usPath" value="${step.edgePath}"/>
