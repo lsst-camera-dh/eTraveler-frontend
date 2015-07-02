@@ -27,19 +27,23 @@
 
 <c:choose>
     <c:when test="${oldState == 'new'}">
-        <h3>Next step is approval by a supervisor.</h3><br>
+        <h3>Next step is approval by a supervisor.</h3>
     </c:when>
     <c:when test="${oldState == 'validated'}">
-        <h3>Next step is approval by an approver.</h3><br>
+        <h3>Next step is approval by an approver.</h3>
     </c:when>
     <c:when test="${oldState == 'approved'}">
-        <h3>Next step is approval by QA.</h3><br>
+        <h3>Next step is approval by QA.</h3>
     </c:when>
 </c:choose>
 
 <sql:query var="newStatesQ">
-    select id, name from TravelerTypeState where name not in ('new', ?<sql:param value="${oldState}"/>)
-    order by name;
+    select id, name, 1 as section
+    from TravelerTypeState where name not in ('new', 'deactivated', ?<sql:param value="${oldState}"/>)
+    union
+    select id, name, 2 as section
+    from TravelerTypeState where name='deactivated'
+    order by section, name;
 </sql:query>
 
 <form action="approver/updateTravelerType.jsp" method="get">
