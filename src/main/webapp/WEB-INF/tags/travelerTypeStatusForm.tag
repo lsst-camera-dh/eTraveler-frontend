@@ -27,13 +27,13 @@
 
 <c:choose>
     <c:when test="${oldState == 'new'}">
-        Next step is approval by a supervisor.<br>
+        <h3>Next step is approval by a supervisor.</h3><br>
     </c:when>
     <c:when test="${oldState == 'validated'}">
-        Next step is approval by an approver.<br>
+        <h3>Next step is approval by an approver.</h3><br>
     </c:when>
     <c:when test="${oldState == 'approved'}">
-        Next step is approval by QA.<br>
+        <h3>Next step is approval by QA.</h3><br>
     </c:when>
 </c:choose>
 
