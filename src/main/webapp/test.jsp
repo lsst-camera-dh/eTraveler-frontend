@@ -7,8 +7,11 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@taglib prefix="gm" uri="http://srs.slac.stanford.edu/GroupManager"%>
+<%@taglib prefix="preferences" uri="http://srs.slac.stanford.edu/preferences"%>
 <%@taglib prefix="traveler" tagdir="/WEB-INF/tags"%>
 <%@taglib prefix="ta" tagdir="/WEB-INF/tags/actions"%>
+
+<preferences:setPreference name="preferences" property="writeable" value="false"/>
 
 <!DOCTYPE html>
 <html>
@@ -21,7 +24,7 @@
         <br>
         <traveler:checkPerm var="oper" groups="EtravelerOperator,EtravelerAdmin"/>
         [${oper}]<br>
-        [${appVariables.dataSourceMode}]<br>
+        [${appVariables.dataSourceMode}]${preferences.writeable}<br>
         <c:choose>
         <c:when test="${gm:isUserInGroup(pageContext,'EtravelerAdmin')}">
             yup<br>

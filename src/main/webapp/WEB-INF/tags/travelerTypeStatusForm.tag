@@ -11,10 +11,11 @@
 
 <%@attribute name="travelerTypeId" required="true"%>
 
-<traveler:checkPerm var="maySupervise" groups="EtravelerSupervisor"/>
-<traveler:checkPerm var="mayApprove" groups="EtravelerApprover"/>
+<traveler:checkPerm var="mayWD" groups="EtravelerWorkflowDevelopers"/>
+<traveler:checkPerm var="maySE" groups="EtravelerSubjectExperts"/>
+<traveler:checkPerm var="maySoftMan" groups="EtravelerSoftwareManagers"/>
+<traveler:checkPerm var="maySubsMan" groups="EtravelerSubsystemManagers"/>
 <traveler:checkPerm var="mayQA" groups="EtravelerQualityAssurance"/>
-<c:set var="mayDeact" value="${mayApprove}"/>
 
 <sql:query var="oldStateQ">
     select TTS.name
@@ -27,12 +28,18 @@
 
 <c:choose>
     <c:when test="${oldState == 'new'}">
-        <h3>Next step is approval by a supervisor.</h3>
+        <h3>Next step is approval by a Workflow Developer (or Subsystem Manager for minor changes).</h3>
     </c:when>
-    <c:when test="${oldState == 'validated'}">
-        <h3>Next step is approval by an approver.</h3>
+    <c:when test="${oldState == 'workflowApproved'}">
+        <h3>Next step is approval by a Subject Expert.</h3>
     </c:when>
-    <c:when test="${oldState == 'approved'}">
+    <c:when test="${oldState == 'subjectApproved'}">
+        <h3>Next step is approval by a Software Manager.</h3>
+    </c:when>
+    <c:when test="${oldState == 'softwareApproved'}">
+        <h3>Next step is approval by a Subsystem Manager.</h3>
+    </c:when>
+    <c:when test="${oldState == 'subsystemApproved'}">
         <h3>Next step is approval by QA.</h3>
     </c:when>
 </c:choose>
@@ -52,17 +59,21 @@
     <c:set var="anyEnabled" value="false"/>
     <select name="stateId">
         <c:forEach var="newState" items="${newStatesQ.rows}">
-            <c:if test="${
-                  (maySupervise and oldState == 'new' and newState.name == 'validated')
-                  or (mayApprove and oldState == 'validated' and newState.name == 'approved')
-                  or (mayQA and oldState == 'approved' and newState.name == 'active')
-                  or (mayDeact and newState.name == 'deactivated')
+            <c:if test="${(
+                      (mayWD and oldState == 'new' and (newState.name == 'workflowApproved' or newState.name == 'deactivated'))
+                      or (maySE and oldState == 'workflowApproved' and (newState.name == 'subjectApproved' or newState.name == 'deactivated'))
+                      or (maySoftMan and oldState == 'subjectApproved' and (newState.name == 'softwareApproved' or newState.name == 'deactivated'))
+                      or (maySubsMan and oldState == 'softwareApproved' and (newState.name == 'subsystemApproved' or newState.name == 'deactivated'))
+                      or (mayQA and oldState == 'subsystemApproved' and (newState.name == 'active' or newState.name == 'deactivated'))
+                  )
+                  or (maySubsMan and oldState == 'new' and newState.name == 'active')
+                  or (maySubsMan and newState.name == 'deactivated')
                   }">
                 <c:set var="anyEnabled" value="true"/>
                 <option value="${newState.id}"><c:out value="${newState.name}"/></option>
             </c:if>
         </c:forEach>
     </select>
-    Reason:<textarea name='reason'></textarea>
+    Reason:<textarea name='reason' required></textarea>
     <input type="submit" value="Update Traveler Type Status" <c:if test="${! anyEnabled}">disabled</c:if>>
 </form>
