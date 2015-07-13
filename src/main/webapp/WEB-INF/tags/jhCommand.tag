@@ -45,7 +45,7 @@
         <c:set var="command" value="lcatr-iterator --container-id=${activityId} --lims-url=${limsUrl}"/>
     </c:when>
     <c:when test="${activity.isHarnessed != 0}">
-        <c:set var="command">lcatr-harness --unit-type=${activity.hardwareTypeName} --unit-id=${activity.lsstId} --job=${activity.processName} --version=${activity.userVersionString} --lims-url=${limsUrl} --archive_root=${activity.jhOutputRoot}</c:set>
+        <c:set var="command">lcatr-harness --unit-type=${activity.hardwareTypeName} --unit-id=${activity.lsstId} --job=${activity.processName} --version=${activity.userVersionString} --lims-url=${limsUrl} --archive-root=${activity.jhOutputRoot}</c:set>
     </c:when>
     <c:otherwise>
         <c:set var="allOk" value="false"/>

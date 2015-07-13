@@ -41,7 +41,7 @@
 <c:if test="${! empty activity.begin && activity.isHarnessed != 0 && empty activity.end && empty activity.jshId}">
     <traveler:jhCommand var="command" varError="allOk" activityId="${activityId}"/>
     Now enter the following command:<br>
-    <c:out value="${command}"/><br>
+    &nbsp;&nbsp;<c:out value="${command}"/><br>
     <traveler:cors command="${command}"/>
 </c:if>
 
