@@ -32,7 +32,7 @@
     ;
 </sql:query>
 
-<h2>Register new ${hType.name}</h2>
+    <h2>Register new <c:if test="${hType.isBatched != 0}">batch of</c:if> ${hType.name}</h2>
 <form METHOD=GET ACTION="operator/createHardware.jsp" name="hwSpex">
 
     <table>
@@ -48,6 +48,11 @@
                 <INPUT TYPE="hidden" NAME="typeName" value="${hType.name}"/>
             </c:otherwise>
         </c:choose>
+        <c:if test="${hType.isBatched != 0}">
+            <tr>
+                <td>Quantity:</td><td>*<input type="number" name="quantity" min="1" required></td>
+            </tr>
+        </c:if>
         <tr>
             <td>Manufacturer:</td>
             <td>*<INPUT TYPE=TEXT NAME=manufacturer SIZE=50 autofocus required></td>
