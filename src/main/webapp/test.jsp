@@ -11,8 +11,6 @@
 <%@taglib prefix="traveler" tagdir="/WEB-INF/tags"%>
 <%@taglib prefix="ta" tagdir="/WEB-INF/tags/actions"%>
 
-<preferences:setPreference name="preferences" property="writeable" value="false"/>
-
 <!DOCTYPE html>
 <html>
     <head>
@@ -20,6 +18,27 @@
         <title>Test Page</title>
     </head>
     <body>
+<traveler:checkPerm var="mayWD" groups="EtravelerWorkflowDevelopers"/>
+<traveler:checkPerm var="maySE" groups="EtravelerSubjectExperts"/>
+<traveler:checkPerm var="maySoftMan" groups="EtravelerSoftwareManagers"/>
+<traveler:checkPerm var="maySubsMan" groups="EtravelerSubsystemManagers"/>
+<traveler:checkPerm var="mayQA" groups="EtravelerQualityAssurance"/>
+<table>
+    <tr><td>${mayWD}</td><td>${maySE}</td><td>${maySoftMan}</td><td>${maySubsMan}</td><td>${mayQA}</td></tr>
+</table>
+
+<preferences:setPreference name="preferences" property="writeable" value="false"/>
+
+<traveler:checkPerm var="mayWD" groups="EtravelerWorkflowDevelopers"/>
+<traveler:checkPerm var="maySE" groups="EtravelerSubjectExperts"/>
+<traveler:checkPerm var="maySoftMan" groups="EtravelerSoftwareManagers"/>
+<traveler:checkPerm var="maySubsMan" groups="EtravelerSubsystemManagers"/>
+<traveler:checkPerm var="mayQA" groups="EtravelerQualityAssurance"/>
+<table>
+    <tr><td>${mayWD}</td><td>${maySE}</td><td>${maySoftMan}</td><td>${maySubsMan}</td><td>${mayQA}</td></tr>
+</table>
+
+
         <h1>Hello World!</h1>
         <br>
         <traveler:checkPerm var="oper" groups="EtravelerOperator,EtravelerAdmin"/>

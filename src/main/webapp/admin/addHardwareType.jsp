@@ -20,6 +20,7 @@
                 insert into HardwareType set
                 name=?<sql:param value="${param.name}"/>,
                 autoSequenceWidth=?<sql:param value="${param.width}"/>,
+                isBatched=?<sql:param value="${param.isBatched}"/>,
                 description=?<sql:param value="${param.description}"/>,
                 createdBy=?<sql:param value="${userName}"/>,
                 creationTS=utc_timestamp();
