@@ -11,6 +11,8 @@
 <%@taglib prefix="display" uri="http://displaytag.sf.net"%>
 
 <%@attribute name="hardwareId" required="true"%>
+<%@attribute name="varTotal" required="true" rtexprvalue="false"%>
+<%@variable name-from-attribute="varTotal" alias="total" scope="AT_BEGIN"%>
 
     <sql:query var="historyQ">
 select BIH.*, P.name as processName
@@ -33,3 +35,5 @@ order by id desc;
         <tr><td>Total</td><td><c:out value="${totals.column2}"/></td></tr>
     </display:footer>
 </display:table>
+
+<c:set var="total" value="${totals.column2}"/>
