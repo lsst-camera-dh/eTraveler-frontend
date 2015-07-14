@@ -84,6 +84,7 @@ format="%Y-%m-%d" shownone="true"/>
         </tr>
     </table>    
     <input type="hidden" name="hardwareTypeId" value="${hardwareTypeId}"/>
-    <INPUT TYPE=SUBMIT value="Register Component"
+    <c:set var="what" value="${hType.isBatched == 0 ? 'Component' : 'Batch'}"/>
+    <INPUT TYPE=SUBMIT value="Register ${what}"
         <c:if test="${! mayOperate}">disabled</c:if>>
 </form>

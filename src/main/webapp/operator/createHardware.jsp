@@ -58,6 +58,9 @@ request.setAttribute("manufactureDate", result);
             <c:set var="hardware" value="${hardwareQ.rows[0]}"/>
             <ta:setHardwareStatus hardwareId="${hardware.id}" hardwareStatusName="NEW"/>
             <ta:setHardwareLocation hardwareId="${hardware.id}" newLocationId="${param.locationId}"/>
+            <c:if test="${! empty param.quantity}">
+                <ta:adjustBatchInventory hardwareId="${hardware.id}" adjustment="${param.quantity}" reason="New batch"/>
+            </c:if>
         </sql:transaction>
         <c:redirect url="/displayHardware.jsp" context="/eTraveler">
             <c:param name="hardwareId" value="${hardware.id}"/>

@@ -15,13 +15,13 @@
 
     <sql:update>
 insert into BatchedInventoryHistory set 
-harwareId=?<sql:param value="${param.harwareId}"/>,
-adjustment=?<sql:param value="${param.adjustment}"/>,
-<c:if test="${! empty param.reason}">
-    reason=?<sql:param value="${param.reason}"/>,
+hardwareId=?<sql:param value="${hardwareId}"/>,
+adjustment=?<sql:param value="${adjustment}"/>,
+<c:if test="${! empty reason}">
+    reason=?<sql:param value="${reason}"/>,
 </c:if>
-<c:if test="${! empty param.activityId}">
-    activityId=?<sql:param value="${param.activityId}"/>,
+<c:if test="${! empty activityId}">
+    activityId=?<sql:param value="${activityId}"/>,
 </c:if>
 createdBy=?<sql:param value="${userName}"/>,
 creationTS=utc_timestamp();
