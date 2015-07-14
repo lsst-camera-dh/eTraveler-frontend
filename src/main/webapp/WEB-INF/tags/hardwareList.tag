@@ -27,7 +27,8 @@
     L.id as locationId, L.name as locationName,
     S.id as siteId, S.name as siteName,
     HI.identifier as nickName,
-    count(A.id) as nTravelers
+    count(A.id) as nTravelers,
+    sum(BIH.adjustment) as quantity
     from Hardware H
     inner join HardwareType HT on HT.id=H.hardwareTypeId
     <c:if test="${! empty hardwareGroupId}">
@@ -41,6 +42,7 @@
     left join HardwareIdentifier HI on HI.hardwareId=H.id 
         and HI.authorityId=(select id from HardwareIdentifierAuthority where name=?<sql:param value="${preferences.idAuthName}"/>)
     left join Activity A on A.hardwareId=H.id
+    left join BatchedInventoryHistory BIH on BIH.hardwareId=H.id
     where A.parentActivityId is null
     <c:if test="${! empty hardwareGroupId}">
         and HTGM.hardwareGroupId=?<sql:param value="${hardwareGroupId}"/>
@@ -85,6 +87,7 @@
     <c:if test="${(empty hardwareStatusName || hardwareStatusName == 'any') or preferences.showFilteredColumns}">
         <display:column property="hardwareStatusName" title="Status" sortable="true" headerClass="sortable"/>
     </c:if>
+    <display:column property="quantity" sortable="true" headerClass="sortable"/>
     <display:column property="nTravelers" title="# Travelers" sortable="true" headerClass="sortable"
                     href="listTravelers.jsp" paramId="hardwareId" paramProperty="id"/>
     <display:column title="# Components" sortable="true" headerClass="sortable">
