@@ -83,6 +83,7 @@ and ISm.name='filepath'
     <h2>Results</h2>
     <display:table name="${inputQ.rows}" id="row" class="datatable">
         <display:column property="label" title="Name" sortable="true" headerClass="sortable"/>
+        <display:column property="description" sortable="true" headerClass="sortable"/>
         <display:column title="Type">
             <c:if test="${! empty row.minV or ! empty row.maxV}">${row.minV} - ${row.maxV}</c:if>
             <c:if test="${! empty row.units}">${row.units}</c:if>
