@@ -14,7 +14,7 @@
 
 <traveler:checkId table="Hardware" id="${param.hardwareId}"/>
 <sql:query var="hardwareQ">
-    select H.*, HT.name as hardwareTypeName
+    select H.*, HT.name as hardwareTypeName, HT.isBatched
     from Hardware H
     inner join HardwareType HT on HT.id=H.hardwareTypeId
     where H.id=?<sql:param value="${param.hardwareId}"/>
@@ -33,6 +33,11 @@
         
         <h2>Status</h2>
         <traveler:hardwareStatusWidget hardwareId="${param.hardwareId}"/>
+        
+        <c:if test="${HT.isBatched != 0}">
+            <h2>Inventory History</h2>
+            <traveler:inventoryHistory hardwareId="${param.hardwareId}"/>
+        </c:if>
         
         <h2>Location</h2>
         <traveler:hardwareLocationWidget hardwareId="${param.hardwareId}"/>
