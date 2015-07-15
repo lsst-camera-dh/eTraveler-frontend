@@ -28,5 +28,6 @@
             <c:if test="${! empty row.units}">${row.units}</c:if>
             ${row.ISName}
         </display:column>
+        <display:column property="isOptional" sortable="true" headerClass="sortable"/>
     </display:table>
 </c:if>

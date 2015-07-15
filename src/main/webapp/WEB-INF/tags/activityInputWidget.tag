@@ -89,6 +89,7 @@ and ISm.name='filepath'
             <c:if test="${! empty row.units}">${row.units}</c:if>
             ${row.ISName}
         </display:column>
+        <display:column property="isOptional" sortable="true" headerClass="sortable"/>
         <display:column title="Value">
             <c:choose>
                 <c:when test="${! empty row.value}">
@@ -108,11 +109,16 @@ and ISm.name='filepath'
                 <c:when test="${(empty row.begin) || status == 'paused' || status == 'stopped'}">
                     Not yet
                 </c:when>
-                <c:when test="${! empty row.end}">
+                <c:when test="${! empty row.end && row.isOptional == 0}">
                     ERROR: no value found
                 </c:when>
+                <c:when test="${! empty row.end && row.isOptional != 0}">
+                    No value supplied
+                </c:when>
                 <c:otherwise>
-                    <c:set var="resultsFiled" value="false"/>
+                    <c:if test="${row.isOptional == 0}">
+                        <c:set var="resultsFiled" value="false"/>
+                    </c:if>
                     <c:choose>
                         <c:when test="${row.ISName == 'string'}">
                             <c:set var="inputType" value="text"/>
@@ -134,7 +140,7 @@ and ISm.name='filepath'
                         <label>False<input type="radio" name="value" value="0" checked></label>
                     </c:when>
                     <c:otherwise>
-                        *<input type="${inputType}" name="value" required
+                        <c:if test="${row.isOptional == 0}">*</c:if><input type="${inputType}" name="value" required
                                 <c:if test="${row.ISName=='float'}">step="any"</c:if>
                                 <c:if test="${!empty row.minV}">min="<c:out value="${row.minV}"/>"</c:if>
                                 <c:if test="${!empty row.maxV}">max="<c:out value="${row.maxV}"/>"</c:if>
