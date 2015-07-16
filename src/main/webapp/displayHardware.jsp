@@ -34,7 +34,7 @@
         <h2>Status</h2>
         <traveler:hardwareStatusWidget hardwareId="${param.hardwareId}"/>
         
-        <c:if test="${HT.isBatched != 0}">
+        <c:if test="${hardware.isBatched != 0}">
             <h2>Inventory History</h2>
             <traveler:inventoryHistory hardwareId="${param.hardwareId}" varTotal="quantity"/>
             <form action="operator/adjustBatchInventory.jsp">
