@@ -30,6 +30,10 @@ select name from ActivityFinalStatus order by name;
     <body>
         <filter:filterTable>
             <filter:filterInput var="name" title="Name (substring search)"/>
+            <filter:filterInput var="cSerial" title="Camera Serial #"/>
+            <filter:filterInput var="mSerial" title="Manufacturer Serial #"/>
+            <filter:filterInput var="type" title="Component Type"/>
+            <filter:filterInput var="userId" title="User"/>
             <filter:filterSelection title="Status" var="status" defaultValue='any'>
                 <filter:filterOption value="any">Any</filter:filterOption>
                 <c:forEach var="statusName" items="${statesQ.rows}">
@@ -42,6 +46,7 @@ select name from ActivityFinalStatus order by name;
             </filter:filterSelection>
         </filter:filterTable>
         <traveler:activityList travelersOnly="true" version="${version}" processId="${param.processId}" 
-                               done="${param.done}" status="${status}" hardwareId="${param.hardwareId}" name="${name}"/>
+                               done="${param.done}" status="${status}" hardwareId="${param.hardwareId}" name="${name}"
+                               camSerial="${cSerial}" manSerial="${mSerial}" type="${type}" userId="${userId}"/>
     </body>
 </html>

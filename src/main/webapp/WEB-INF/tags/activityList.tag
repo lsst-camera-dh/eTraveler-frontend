@@ -17,6 +17,9 @@
 <%@attribute name="userId"%>
 <%@attribute name="version"%> 
 <%@attribute name="name"%>
+<%@attribute name="camSerial"%>
+<%@attribute name="manSerial"%>
+<%@attribute name="type"%>
 <%@attribute name="status"%>
 <%@attribute name="perHw"%>
 <c:if test="${empty perHw}"><c:set var="perHw" value="false"/></c:if>
@@ -47,6 +50,15 @@ where true
     <c:if test="${! empty name}">
         and P.name like concat('%', ?<sql:param value="${name}"/>, '%')
     </c:if>
+    <c:if test="${! empty camSerial}">
+        and H.lsstId like concat('%', ?<sql:param value="${camSerial}"/>, '%')
+    </c:if>
+    <c:if test="${! empty manSerial}">
+        and H.manufacturerId like concat('%', ?<sql:param value="${manSerial}"/>, '%')
+    </c:if>
+    <c:if test="${! empty type}">
+        and HT.name like concat('%', ?<sql:param value="${type}"/>, '%')
+    </c:if>
     <c:if test="${! empty hardwareId}">
         and H.id=?<sql:param value="${hardwareId}"/>
     </c:if>
@@ -57,7 +69,7 @@ where true
         and AFS.name=?<sql:param value="${status}"/>
     </c:if>
     <c:if test="${! empty userId}">
-        and (A.createdBy=?<sql:param value="${userId}"/> or A.closedBy=?<sql:param value="${userId}"/>
+        and (A.createdBy=?<sql:param value="${userId}"/> or A.closedBy=?<sql:param value="${userId}"/>)
     </c:if>
     <c:if test="${version=='latest'}">
         and P.version=(select max(version) from Process where name=P.name)
