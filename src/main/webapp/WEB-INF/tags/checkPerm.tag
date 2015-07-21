@@ -22,7 +22,7 @@
 
 <%-- Is the dataSourceMode protected? --%>
 <c:set var="inAMode" value="false"/>
-<c:forTokens var="mode" items="${initParam['protectedModes']}" delims=",">
+<c:forTokens var="mode" items="${appVariables.etravelerProtectedModes}" delims=",">
     <c:if test="${appVariables.dataSourceMode == mode}">
         <c:set var="inAMode" value="true"/>
     </c:if>    

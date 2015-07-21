@@ -80,10 +80,6 @@
         <param-name>defaultDataType</param-name>
         <param-value>TEST_TYPE</param-value>
     </context-param>
-    <context-param>
-        <param-name>protectedModes</param-name>
-        <param-value>Prod,Test</param-value>
-    </context-param>
 
     <!-- Load the Multipart Filter -->
 <filter>
