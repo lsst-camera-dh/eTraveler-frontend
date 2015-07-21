@@ -80,8 +80,8 @@
             </preferences:preference>
         <tr>
             <td>Normally, list columns which would always have the same value due to filtering options are not shown.<br>
-                Like, the list of process travelers for a component doesn't really need a column for its identifier,<br>
-                and the list of components at a site doesn't need a column for its name.<br>
+                Like, the list of process travelers for a component doesn't really need a column for the component serial number,<br>
+                and the list of components at a site doesn't need a column for the site name.<br>
             Setting this to true will show them.</td>
             <td>Current Value: <c:out value="${preferences.showFilteredColumns}"/></td>
         </tr>
