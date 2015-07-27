@@ -5,7 +5,7 @@
 --%>
 
 <%@page contentType="application/json" pageEncoding="UTF-8"%>
-<%@page import="com.fasterxml.jackson.databind.ObjectMapper,java.util.Map"%>
+<%@page import="com.fasterxml.jackson.databind.ObjectMapper,com.fasterxml.jackson.core.JsonParser,java.util.Map"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql"%>
 <%@taglib prefix="traveler" tagdir="/WEB-INF/tags"%>
@@ -14,6 +14,7 @@
 
 <%
     ObjectMapper mapper = new ObjectMapper();
+    mapper.configure(JsonParser.Feature.ALLOW_NON_NUMERIC_NUMBERS, true);
     String jo = session.getAttribute("jsonObject").toString();
     Map<String, Object> inputs = mapper.readValue(jo, Map.class);
     request.setAttribute("inputs", inputs);

@@ -23,7 +23,7 @@
 %>
 
 <c:if test="${allOk}">
-<c:catch var="didntWork">
+<%--<c:catch var="didntWork">--%>
 <sql:transaction>
 
 <c:forEach var="summary" items="${inputs.result}">
@@ -57,13 +57,19 @@ creationTS=UTC_TIMESTAMP();
 
         <c:otherwise>
             <c:forEach var="fieldName" items="${summary.keySet()}">
+                <c:set var="goodData" value="true"/>
                 <c:if test="${fieldName != 'schema_name' && fieldName != 'schema_version'}">
                     <c:set var="fieldValue" value="${summary.get(fieldName)}"/>
                     <c:set var="fieldType" value="${fieldValue.getClass().getName()}"/>
+                    <c:if test="${fieldType == 'java.lang.Double' && fieldValue.isNaN()}">
+                        <c:set var="goodData" value="false"/>
+                    </c:if>
                     <sql:update>
 insert into ${tables[fieldType]} set
 name=?<sql:param value="${fieldName}"/>,
+<c:if test="${goodData}">
 value=?<sql:param value="${fieldValue}"/>,
+</c:if>
 schemaName=?<sql:param value="${summary.schema_name}"/>,
 schemaVersion=?<sql:param value="${summary.schema_version}"/>,
 schemaInstance=?<sql:param value="${instances[schemaTag]}"/>,
@@ -89,7 +95,7 @@ creationTS=UTC_TIMESTAMP();
 <ta:setActivityStatus activityId="${inputs.jobid}" status="success"/>
 
 </sql:transaction>
-</c:catch>
+<%--</c:catch>--%>
 
 </c:if>
     
