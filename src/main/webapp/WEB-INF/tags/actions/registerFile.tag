@@ -128,14 +128,17 @@
 
 <c:choose>
     <c:when test="${'Prod' == appVariables.dataSourceMode}">
-        <c:set var="dataSourceFolder" value=""/>
+        <c:set var="dataSourceFolder" value="prod"/>
+    </c:when>
+    <c:when test="${'Dev' == appVariables.dataSourceMode}">
+        <c:set var="dataSourceFolder" value="test"/>
     </c:when>
     <c:otherwise>
-        <c:set var="dataSourceFolder" value="/${appVariables.dataSourceMode}"/>
+        <c:set var="dataSourceFolder" value="noise"/>
     </c:otherwise>
 </c:choose>
 
-<c:set var="dcHead" value="${initParam['datacatFolder']}${dataSourceFolder}/${modePath}/${siteName}"/>
+<c:set var="dcHead" value="${initParam['datacatFolder']}/${modePath}/${siteName}-${dataSourceFolder}/${dataSourceFolder}"/>
 
 <c:set var="commonPath" value=
 "${activity.hardwareTypeName}/${activity.lsstId}/${activity.processName}${processVersion}/${activityId}"
@@ -154,7 +157,7 @@
     </c:when>
     <c:when test="${mode=='manual'}">
         <c:set var="dcSite" value="SLAC"/>
-        <c:set var="fsHead" value="${appVariables.etravelerFileStore}/${initParam['eTravelerFileSubfolder']}${dataSourceFolder}/${siteName}"/>
+        <c:set var="fsHead" value="${appVariables.etravelerFileStore}/${initParam['eTravelerFileSubfolder']}/${dataSourceFolder}/${siteName}"/>
     </c:when>
 </c:choose>
 <c:set var="fullFsPath" value="${fsHead}/${commonPath}/${name}"/>
