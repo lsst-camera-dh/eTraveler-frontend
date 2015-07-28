@@ -58,7 +58,8 @@
 
             <preferences:preference name="pageLength" size="3" title="<b>Page Length:</b> " />
         <tr>
-            <td>This is the number of rows to show in paginated tables.</td>
+            <td>This is the number of rows to show in paginated tables.<br>
+            0 is unlimited.</td>
             <td>Current Value: <c:out value="${preferences.pageLength}"/></td>
         </tr>
 
