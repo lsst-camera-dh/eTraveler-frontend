@@ -18,6 +18,9 @@
         <title>Test Page</title>
     </head>
     <body>
+        <traveler:fullRequestString var="here"/>
+        ${here}
+  
 <traveler:checkPerm var="mayWD" groups="EtravelerWorkflowDevelopers"/>
 <traveler:checkPerm var="maySE" groups="EtravelerSubjectExperts"/>
 <traveler:checkPerm var="maySoftMan" groups="EtravelerSoftwareManagers"/>
