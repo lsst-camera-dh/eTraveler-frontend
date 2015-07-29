@@ -51,7 +51,7 @@ order by id desc limit 1;
 <sql:transaction>
                 <ta:setHardwareStatus hardwareStatusId="${param.hardwareStatusId}" hardwareId="${param.hardwareId}"/>
 </sql:transaction>
-                <c:redirect url="${header.referer}"/>
+                <c:redirect url="${param.referringPage}"/>
             </c:when>
             <c:otherwise>
                 <traveler:error message="${message}"/>

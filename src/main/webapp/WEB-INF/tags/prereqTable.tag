@@ -14,6 +14,7 @@
 <%@attribute name="activityId"%>
 <%@attribute name="processId"%>
 
+<traveler:fullRequestString var="thisPage"/>
 <traveler:checkPerm var="mayOperate" groups="EtravelerOperator,EtravelerSupervisor"/>
 
     <sql:query var="prereqQ" >
@@ -49,6 +50,7 @@ and PP.prerequisiteTypeId=(select id from PrerequisiteType where name=?<sql:para
                     </c:when>
                     <c:otherwise>
                         <form method="get" action="operator/satisfyPrereq.jsp">
+                            <input type="hidden" name="referringPage" value="${thisPage}">
                             <input type="hidden" name="prerequisitePatternId" value="${row.id}">
                             <input type="hidden" name="activityId" value="${activityId}">
                             <input type="submit" value="Done" <c:if test="${(row.status != 'new') || (! mayOperate)}">disabled</c:if>>

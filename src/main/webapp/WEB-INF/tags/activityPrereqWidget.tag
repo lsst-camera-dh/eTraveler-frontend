@@ -12,6 +12,7 @@
 
 <%@attribute name="activityId" required="true"%>
 
+<traveler:fullRequestString var="thisPage"/>
 <traveler:checkPerm var="mayOperate" groups="EtravelerOperator,EtravelerSupervisor"/>
 
 <c:choose>
@@ -66,6 +67,7 @@ and PP.prerequisiteTypeId=(select id from PrerequisiteType where name='COMPONENT
                 </c:when>
                 <c:when test="${(empty row.componentId) and (empty row.satisfaction)}">
                     <form method="get" action="operator/satisfyPrereq.jsp">
+                        <input type="hidden" name="referringPage" value="${thisPage}">
                         <input type="hidden" name="prerequisitePatternId" value="${row.id}">
                         <input type="hidden" name="activityId" value="${activityId}">
                         <input type="hidden" name="hardwareId" value="${activity.hardwareId}">

@@ -13,6 +13,7 @@
 
 <%@attribute name="hardwareId" required="true"%>
 
+<traveler:fullRequestString var="thisPage"/>
 <traveler:checkPerm var="mayOperate" groups="EtravelerOperator,EtravelerSupervisor"/>
 
 <sql:query  var="locationHistoryQ">
@@ -69,6 +70,7 @@
     </sql:query>
 
     <form action="operator/setHardwareLocation.jsp" method="GET">
+        <input type="hidden" name="referringPage" value="${thisPage}">
         <input type="hidden" name="hardwareId" value="${hardwareId}">
         <select name="newLocationId" required>
             <option value="" selected>Pick a new location</option>

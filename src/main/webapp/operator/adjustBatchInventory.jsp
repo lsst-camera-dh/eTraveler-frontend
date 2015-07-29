@@ -18,6 +18,6 @@
 <sql:transaction>
     <ta:adjustBatchInventory hardwareId="${param.hardwareId}" adjustment="${param.adjustment * param.sign}" reason="${param.reason}"/>
 </sql:transaction>        
-<c:redirect url="${header.referer}"/>
+<c:redirect url="${param.referringPage}"/>
     </body>
 </html>

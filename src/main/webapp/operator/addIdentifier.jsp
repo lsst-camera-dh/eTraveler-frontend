@@ -26,6 +26,6 @@
             creationTS=UTC_TIMESTAMP();
         </sql:update>
 </sql:transaction>
-        <c:redirect url="${header.referer}"/>
+        <c:redirect url="${param.referringPage}"/>
     </body>
 </html>

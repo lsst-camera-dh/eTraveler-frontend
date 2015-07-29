@@ -14,6 +14,7 @@
 <%@attribute name="processId"%>
 <%@attribute name="activityId"%>
 
+<traveler:fullRequestString var="thisPage"/>
 <traveler:checkPerm var="mayTravel" groups="EtravelerAdmin,EtravelerApprover,EtravelerOperator,EtravelerSupervisor"/>
 
 <h2>Electronic Logbook</h2>
@@ -76,6 +77,7 @@
     <tr>
         <td>
 <form method="GET" action="fh/eclPost.jsp">
+    <input type="hidden" name="referringPage" value="${thisPage}">
     <input type="hidden" name="displayLink" value="${displayLink}">
     <input type="hidden" name="author" value="${author}">
     <input type="hidden" name="hardwareTypeId" value="${hardwareTypeField}">

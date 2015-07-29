@@ -29,5 +29,5 @@
         />
     </body>
     
-    <c:redirect url="${header.referer}"/>
+    <c:redirect url="${param.referringPage}"/>
 </html>

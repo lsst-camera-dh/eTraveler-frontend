@@ -11,6 +11,7 @@
 
 <%@attribute name="travelerTypeId" required="true"%>
 
+<traveler:fullRequestString var="thisPage"/>
 <traveler:checkPerm var="mayWD" groups="EtravelerWorkflowDevelopers"/>
 <traveler:checkPerm var="maySE" groups="EtravelerSubjectExperts"/>
 <traveler:checkPerm var="maySoftMan" groups="EtravelerSoftwareManagers"/>
@@ -54,6 +55,7 @@
 </sql:query>
 
 <form action="approver/updateTravelerType.jsp" method="get">
+    <input type="hidden" name="referringPage" value="${thisPage}">
     <input type="hidden" name="travelerTypeId" value="${travelerTypeId}">
     New Status:
     <c:set var="anyEnabled" value="false"/>

@@ -14,6 +14,7 @@
 <%@attribute name="var" required="true" rtexprvalue="false"%>
 <%@variable name-from-attribute="var" alias="resultsFiled" scope="AT_BEGIN"%>
 
+<traveler:fullRequestString var="thisPage"/>
 <traveler:checkPerm var="mayOperate" groups="EtravelerOperator,EtravelerSupervisor"/>
 
 <traveler:getActivityStatus var="status" activityId="${activityId}"/>
@@ -131,6 +132,7 @@ and ISm.name='filepath'
                         </c:otherwise>
                     </c:choose>
                     <form method="post"  action="operator/inputResult.jsp" enctype="multipart/form-data">
+                        <input type="hidden" name="referringPage" value="${thisPage}">
                         <input type="hidden" name="activityId" value="${activityId}">
                         <input type="hidden" name="inputPatternId" value="${row.id}">
                         <input type="hidden" name="isName" value="${row.ISName}">

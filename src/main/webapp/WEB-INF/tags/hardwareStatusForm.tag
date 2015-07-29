@@ -11,6 +11,7 @@
 
 <%@attribute name="hardwareId" required="true"%>
 
+<traveler:fullRequestString var="thisPage"/>
 <traveler:checkPerm var="maySupervise" groups="EtravelerSupervisor"/>
 
 <sql:query var="statesQ" >
@@ -22,6 +23,7 @@
 </sql:query>
 
 <form action="operator/setHardwareStatus.jsp">
+    <input type="hidden" name="referringPage" value="${thisPage}">
     <input type="hidden" name="hardwareId" value="${hardwareId}">
     <select name="hardwareStatusId" required>
         <option value="" selected>Pick a new status</option>

@@ -12,6 +12,7 @@
 
 <%@attribute name="activityId" required="true"%>
 
+<traveler:fullRequestString var="thisPage"/>
 <traveler:checkPerm var="mayOperate" groups="EtravelerOperator,EtravelerSupervisor"/>
 
     <sql:query var="prereqsQ" >
@@ -61,6 +62,7 @@ order by A.begin desc;
                     <c:choose>
                         <c:when test="${! empty activityQ.rows}">
                             <form method="GET" action="operator/satisfyPrereq.jsp">
+                                <input type="hidden" name="referringPage" value="${thisPage}">
                                 <input type="HIDDEN" name="prerequisitePatternId" value="${row.ppId}">
                                 <input type="HIDDEN" name="activityId" value="${activityId}">
                                 <select name="prerequisiteActivityId">

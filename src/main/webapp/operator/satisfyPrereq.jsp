@@ -51,6 +51,6 @@
             </c:if>
         </sql:transaction>
                 
-        <c:redirect url="${header.referer}"/>
+        <c:redirect url="${param.referringPage}"/>
     </body>
 </html>

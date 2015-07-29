@@ -59,7 +59,7 @@
 <sql:transaction>
                 <ta:setHardwareLocation hardwareId="${param.hardwareId}" newLocationId="${param.newLocationId}"/>
 </sql:transaction>
-                <c:redirect url="${header.referer}"/>
+                <c:redirect url="${param.referringPage}"/>
             </c:when>
             <c:otherwise>
                 ${message}

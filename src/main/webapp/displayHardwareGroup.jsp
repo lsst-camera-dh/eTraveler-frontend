@@ -9,6 +9,7 @@
 <%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql"%>
 <%@taglib prefix="traveler" tagdir="/WEB-INF/tags"%>
 
+<traveler:fullRequestString var="thisPage"/>
 <traveler:checkPerm var="mayAdmin" groups="EtravelerAdmin"/>
 
 <!DOCTYPE html>
@@ -40,6 +41,7 @@
             ;
         </sql:query>
             <form method="get" action="admin/addTypeToGroup.jsp">
+                <input type="hidden" name="referringPage" value="${thisPage}">
                 <input type="submit" value="Add Member Type"
                     <c:if test="${! mayAdmin}">disabled</c:if>>
                 <input type="hidden" name="hardwareGroupId" value="${param.hardwareGroupId}">

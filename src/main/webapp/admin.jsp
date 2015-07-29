@@ -9,6 +9,7 @@
 <%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql"%>
 <%@taglib prefix="traveler" tagdir="/WEB-INF/tags"%>
 
+<traveler:fullRequestString var="thisPage"/>
 <traveler:checkPerm var="mayAdmin" groups="EtravelerAdmin"/>
 
 <!DOCTYPE html>
@@ -66,6 +67,7 @@
         select id, name from HardwareType order by name;
     </sql:query>
     <form method="get" action="admin/addHardwareRelationshipType.jsp">
+        <input type="hidden" name="referringPage" value="${thisPage}">
         <input type="submit" value="Add Hardware Relationship Type"
            <c:if test="${! mayAdmin}">disabled</c:if>>
         Name: <input type="text" name="name" required>
@@ -101,6 +103,7 @@
 <hr>
 <h2>Hardware Identifier Authorities</h2>
     <form method="get" action="admin/addHardwareIdentifierAuthority.jsp">
+        <input type="hidden" name="referringPage" value="${thisPage}">
         <input type="submit" value="Add Hardware Identifier Authority"
            <c:if test="${! mayAdmin}">disabled</c:if>>
         Name: <input type="text" name="name" required>
