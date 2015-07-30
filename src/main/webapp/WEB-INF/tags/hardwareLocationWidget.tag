@@ -19,11 +19,14 @@
 <sql:query  var="locationHistoryQ">
     select HLH.*,
     L.id as locationId, L.name as locationName, 
-    S.id as siteId, S.name as siteName
+    S.id as siteId, S.name as siteName,
+    P.name as processName
     from
     HardwareLocationHistory HLH
     inner join Location L on L.id=HLH.locationId
     inner join Site S on S.id=L.siteId
+    left join (Activity A
+    inner join Process P on P.id=A.processId) on A.id=HLH.activityId
     where
     HLH.hardwareId=?<sql:param value="${hardwareId}"/>
     order by HLH.creationTS desc
@@ -31,12 +34,14 @@
     
 <display:table name="${locationHistoryQ.rows}" class="datatable" sort="list"
                pagesize="${fn:length(locationHistoryQ.rows) > preferences.pageLength ? preferences.pageLength : 0}">
-    <display:column property="siteName" title="Site"
+    <display:column property="siteName" title="Site" sortable="true" headerClass="sortable"
                     href="displaySite.jsp" paramId="siteId" paramProperty="siteId"/>
-    <display:column property="locationName" title="Location"
+    <display:column property="locationName" title="Location" sortable="true" headerClass="sortable"
                     href="displayLocation.jsp" paramId="locationId" paramProperty="locationId"/>
-    <display:column property="creationTS" title="When"/>
-    <display:column property="createdBy" title="Who"/>
+    <display:column property="processName" title="Step" sortable="true" headerClass="sortable"
+                    href="displayActivity.jsp" paramId="activityId" paramProperty="activityId"/>
+    <display:column property="creationTS" title="Date" sortable="true" headerClass="sortable"/>
+    <display:column property="createdBy" title="User" sortable="true" headerClass="sortable"/>
 </display:table>
     
 <sql:query var="parentsQ" >

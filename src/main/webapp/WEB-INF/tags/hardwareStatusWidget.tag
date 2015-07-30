@@ -25,12 +25,12 @@
     
 <display:table name="${statusHistoryQ.rows}" class="datatable" sort="list"
                pagesize="${fn:length(statusHistoryQ.rows) > preferences.pageLength ? preferences.pageLength : 0}">
-    <display:column property="statusName" title="What" sortable="true" headerClass="sortable"/>
-    <display:column property="reason" title="Why" sortable="true" headerClass="sortable"/>
-    <display:column property="processName" title="Where" sortable="true" headerClass="sortable"
+    <display:column property="statusName" title="Status" sortable="true" headerClass="sortable"/>
+    <display:column property="reason" title="Reason" sortable="true" headerClass="sortable"/>
+    <display:column property="processName" title="Step" sortable="true" headerClass="sortable"
                     href="displayActivity.jsp" paramId="activityId" paramProperty="activityId"/>
-    <display:column property="creationTS" title="When" sortable="true" headerClass="sortable"/>
-    <display:column property="createdBy" title="Who" sortable="true" headerClass="sortable"/>
+    <display:column property="creationTS" title="Date" sortable="true" headerClass="sortable"/>
+    <display:column property="createdBy" title="User" sortable="true" headerClass="sortable"/>
 </display:table>
 
 <traveler:hardwareStatusForm hardwareId="${hardwareId}"/>
