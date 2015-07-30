@@ -22,7 +22,7 @@
             <input type="hidden" name="activityId" value="${param.activityId}">       
             <input type="hidden" name="topActivityId" value="${param.topActivityId}">
             <table>
-                <tr><td>Why?</td><td><textarea name="reason"></textarea></td>
+                <tr><td>Why?</td><td><textarea name="reason" required="true"></textarea></td>
             </table>
             <input type="submit" value="Yes, really stop"
                 <c:if test="${! mayOperate}">disabled</c:if>>
