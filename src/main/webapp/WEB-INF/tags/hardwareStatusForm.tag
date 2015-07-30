@@ -12,7 +12,7 @@
 <%@attribute name="hardwareId" required="true"%>
 
 <traveler:fullRequestString var="thisPage"/>
-<traveler:checkPerm var="maySupervise" groups="EtravelerSupervisor"/>
+<traveler:checkPerm var="mayManage" groups="EtravelerSubsystemManagers"/>
 
 <sql:query var="statesQ" >
     select * 
@@ -31,6 +31,7 @@
             <option value="${sRow.id}"><c:out value="${sRow.name}"/></option>
         </c:forEach>        
     </select>
+    Reason: <textarea name="reason" required="true"></textarea>
     <input type="submit" value="Change Status"
-           <c:if test="${! maySupervise}">disabled</c:if>>
+           <c:if test="${! mayManage}">disabled</c:if>>
 </form>

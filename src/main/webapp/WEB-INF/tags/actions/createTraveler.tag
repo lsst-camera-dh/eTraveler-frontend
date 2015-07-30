@@ -33,5 +33,5 @@
     where H.id=?<sql:param value="${hardwareId}"/>;
 </sql:query>
 <c:if test="${hardwareQ.rows[0].name == 'NEW'}">
-    <ta:setHardwareStatus hardwareId="${hardwareId}" hardwareStatusName="IN_PROGRESS"/>
+    <ta:setHardwareStatus hardwareId="${hardwareId}" hardwareStatusName="IN_PROGRESS" reason="First Process Traveler" activityId="${activityId}"/>
 </c:if>

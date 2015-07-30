@@ -47,7 +47,7 @@
                     where id=?<sql:param value="${param.activityId}"/>;
                 </sql:update>
 
-                <ta:setHardwareStatus hardwareId="${param.componentId}" hardwareStatusName="USED" activityId="${param.activityId}"/>
+                <ta:setHardwareStatus hardwareId="${param.componentId}" hardwareStatusName="USED" activityId="${param.activityId}" reason="Installed"/>
             </c:if>
         </sql:transaction>
                 

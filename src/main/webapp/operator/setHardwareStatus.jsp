@@ -49,7 +49,7 @@ order by id desc limit 1;
         <c:choose>
             <c:when test="${allOk}">
 <sql:transaction>
-                <ta:setHardwareStatus hardwareStatusId="${param.hardwareStatusId}" hardwareId="${param.hardwareId}"/>
+                <ta:setHardwareStatus hardwareStatusId="${param.hardwareStatusId}" hardwareId="${param.hardwareId}" reason="${param.reason}"/>
 </sql:transaction>
                 <c:redirect url="${param.referringPage}"/>
             </c:when>

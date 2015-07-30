@@ -56,7 +56,7 @@ request.setAttribute("manufactureDate", result);
                 select id from Hardware where id=LAST_INSERT_ID();
             </sql:query>
             <c:set var="hardware" value="${hardwareQ.rows[0]}"/>
-            <ta:setHardwareStatus hardwareId="${hardware.id}" hardwareStatusName="NEW"/>
+            <ta:setHardwareStatus hardwareId="${hardware.id}" hardwareStatusName="NEW" reason="New Item"/>
             <ta:setHardwareLocation hardwareId="${hardware.id}" newLocationId="${param.locationId}"/>
             <c:if test="${! empty param.quantity}">
                 <ta:adjustBatchInventory hardwareId="${hardware.id}" adjustment="${param.quantity}" reason="New batch"/>

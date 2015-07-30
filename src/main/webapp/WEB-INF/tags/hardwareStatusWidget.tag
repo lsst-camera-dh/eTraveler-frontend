@@ -14,18 +14,23 @@
 <%@attribute name="hardwareId" required="true"%>
 
 <sql:query  var="statusHistoryQ">
-    select HS.name, HSH.creationTS, HSH.createdBy
+    select HS.name as statusName, HSH.*, P.name as processName
     from HardwareStatus HS
     inner join HardwareStatusHistory HSH on HS.id=HSH.hardwareStatusId
+    left join (Activity A
+    inner join Process P on P.id=A.processId) on A.id=HSH.activityId
     where HSH.hardwareId=?<sql:param value="${hardwareId}"/>
     order by HSH.creationTS desc;
 </sql:query>
     
 <display:table name="${statusHistoryQ.rows}" class="datatable" sort="list"
                pagesize="${fn:length(statusHistoryQ.rows) > preferences.pageLength ? preferences.pageLength : 0}">
-    <display:column property="name" title="Staus"/>
-    <display:column property="creationTS" title="When"/>
-    <display:column property="createdBy" title="Who"/>
+    <display:column property="statusName" title="What" sortable="true" headerClass="sortable"/>
+    <display:column property="reason" title="Why" sortable="true" headerClass="sortable"/>
+    <display:column property="processName" title="Where" sortable="true" headerClass="sortable"
+                    href="displayActivity.jsp" paramId="activityId" paramProperty="activityId"/>
+    <display:column property="creationTS" title="When" sortable="true" headerClass="sortable"/>
+    <display:column property="createdBy" title="Who" sortable="true" headerClass="sortable"/>
 </display:table>
 
 <traveler:hardwareStatusForm hardwareId="${hardwareId}"/>
