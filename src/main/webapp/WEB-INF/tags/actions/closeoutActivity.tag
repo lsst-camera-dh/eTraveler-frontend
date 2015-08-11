@@ -17,32 +17,12 @@
 
     <sql:query var="activityQ">
 select A.*, 
-P.travelerActionMask&(select maskBit from InternalAction where name='makeHardwareRelationship') as makesRelationship,
-P.travelerActionMask&(select maskBit from InternalAction where name='breakHardwareRelationship') as breaksRelationship,
 P.travelerActionMask&(select maskBit from InternalAction where name='setHardwareLocation') as setsLocation
 from Activity A
 inner join Process P on P.id=A.processId
 where A.id=?<sql:param value="${activityId}"/>;
     </sql:query>
 <c:set var="activity" value="${activityQ.rows[0]}"/>
-
-<c:if test="${activity.makesRelationShip != 0}">
-    <sql:update>
-update HardwareRelationship set 
-begin=?<sql:param value="${activity.end}"/>
-where 
-id=?<sql:param value="${activity.hardwareRelationshipId}"/>;
-    </sql:update>
-</c:if>
-
-<c:if test="${activity.breaksRelationship != 0}">
-    <sql:update>
-update HardwareRelationship set 
-end=?<sql:param value="${activity.end}"/>
-where 
-id=?<sql:param value="${activity.hardwareRelationshipId}"/>;
-    </sql:update>
-</c:if>
 
 <c:if test="${activity.setsLocation != 0}">
     <c:choose>
