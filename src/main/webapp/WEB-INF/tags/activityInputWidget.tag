@@ -29,7 +29,7 @@
 </c:choose>
 
     <sql:query var="inputQ" >
-select A.begin, A.end, IP.*,
+(select A.begin, A.end, IP.*, IP.id as ipId,
     RM.value, null as catalogKey,
     ISm.name as ISName
 from Activity A
@@ -37,9 +37,9 @@ inner join InputPattern IP on IP.processId=A.processId
 inner join InputSemantics ISm on ISm.id=IP.inputSemanticsId
 left join FloatResultManual RM on RM.activityId=A.id and RM.inputPatternId=IP.id
 where A.id=?<sql:param value="${activityId}"/>
-and ISm.name='float'
+and ISm.name='float')
 union
-select A.begin, A.end, IP.*,
+(select A.begin, A.end, IP.*, IP.id as ipId,
     RM.value, null as catalogKey,
     ISm.name as ISName
 from Activity A
@@ -47,9 +47,9 @@ inner join InputPattern IP on IP.processId=A.processId
 inner join InputSemantics ISm on ISm.id=IP.inputSemanticsId
 left join IntResultManual RM on RM.activityId=A.id and RM.inputPatternId=IP.id
 where A.id=?<sql:param value="${activityId}"/>
-and ISm.name='int'
+and ISm.name='int')
 union
-select A.begin, A.end, IP.*,
+(select A.begin, A.end, IP.*, IP.id as ipId,
     if(RM.value is not null, if(RM.value=0,'False','True'), null) as value, null as catalogKey,
     ISm.name as ISName
 from Activity A
@@ -57,9 +57,9 @@ inner join InputPattern IP on IP.processId=A.processId
 inner join InputSemantics ISm on ISm.id=IP.inputSemanticsId
 left join IntResultManual RM on RM.activityId=A.id and RM.inputPatternId=IP.id
 where A.id=?<sql:param value="${activityId}"/>
-and ISm.name='boolean'
+and ISm.name='boolean')
 union
-select A.begin, A.end, IP.*,
+(select A.begin, A.end, IP.*, IP.id as ipId,
     RM.value, null as catalogKey,
     ISm.name as ISName
 from Activity A
@@ -67,9 +67,9 @@ inner join InputPattern IP on IP.processId=A.processId
 inner join InputSemantics ISm on ISm.id=IP.inputSemanticsId
 left join StringResultManual RM on RM.activityId=A.id and RM.inputPatternId=IP.id
 where A.id=?<sql:param value="${activityId}"/>
-and ISm.name='string'
+and ISm.name='string')
 union
-select A.begin, A.end, IP.*,
+(select A.begin, A.end, IP.*, IP.id as ipId,
     RM.value, RM.catalogKey,
     ISm.name as ISName
 from Activity A
@@ -77,7 +77,8 @@ inner join InputPattern IP on IP.processId=A.processId
 inner join InputSemantics ISm on ISm.id=IP.inputSemanticsId
 left join FilepathResultManual RM on RM.activityId=A.id and RM.inputPatternId=IP.id
 where A.id=?<sql:param value="${activityId}"/>
-and ISm.name='filepath'
+and ISm.name='filepath')
+order by ipId;
     </sql:query>
 
 <c:if test="${! empty inputQ.rows}">

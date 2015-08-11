@@ -16,6 +16,7 @@
     from InputPattern IP
     inner join InputSemantics ISm on ISm.id=IP.inputSemanticsId
     where IP.processId=?<sql:param value="${processId}"/>
+    order by IP.id;
 </sql:query>
 
 <c:if test="${! empty inputQ.rows}">
