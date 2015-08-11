@@ -19,11 +19,13 @@
     select H.id, H.lsstId, HT.name 
     from Activity A
     inner join Process P on P.id=A.processId
-    inner join HardwareRelationshipType HRT on HRT.id=P.hardwareRelationshipTypeId
-    inner join HardwareType HT on HT.id=HRT.componentTypeId
+    inner join ProcessRelationshipTag PRT on PRT.processId=P.id
+    inner join MultiRelationshipType MRT on MRT.id=PRT.multiRelationshipTypeId
+    inner join HardwareType HT on HT.id=MRT.minorTypeId
     inner join Hardware H on H.hardwareTypeId=HT.id
     inner join HardwareStatusHistory HSH on HSH.hardwareId=H.id and HSH.id=(select max(id) from HardwareStatusHistory where hardwareId=H.id)
-    left join HardwareRelationship HR on HR.componentId=H.id
+    left join MultiRelationshipSlot MRS on MRS.componentId=H.id
+    <%-- Something about the relationship history? --%>
     where HSH.hardwareStatusId=(select id from HardwareStatus where name=?<sql:param value="${status}"/>)
     and (HR.end is not null or HR.id is null)
     and A.id=?<sql:param value="${activityId}"/>

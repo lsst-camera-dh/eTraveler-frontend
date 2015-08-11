@@ -24,7 +24,8 @@ select * from Activity where id=?<sql:param value="${activityId}"/>;
 </c:if>
 
     <sql:query var="actionsQ">
-select PRT.multiRelationshipActionId as intendedActionId,
+select MRST.id as mrstId, MR.id as mrId, MRH.id as mrhId,
+    PRT.multiRelationshipActionId as intendedActionId,
     MRH.multiRelationshipActionId as actualActionId
 from Process P
     inner join ProcessRelationshipTag PRT on PRT.processId = P.id
