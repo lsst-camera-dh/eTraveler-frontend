@@ -24,18 +24,19 @@ select * from Activity where id=?<sql:param value="${activityId}"/>;
 </c:if>
 
     <sql:query var="actionsQ">
-select *
+select PRT.multiRelationshipActionId as intendedActionId,
+    MRH.multiRelationshipActionId as actualActionId
 from Process P
     inner join ProcessRelationshipTag PRT on PRT.processId = P.id
     inner join MultiRelationshipType MRT on MRT.id = PRT.multiRelationshipTypeId
+    inner join MultiRelationshipAction MRA on MRA.id=PRT.multiRelationshipActionId
     inner join MultiRelationshipSlotType MRST on MRST.multiRelationshipTypeId = MRT.id
 <c:if test="${! empty activityId}">
     left join MultiRelationship MR on MR.multiRelationshipSlotTypeId = MRST.id
-    left join (select * from MultiRelationshipHistory MRH 
-                where MRH.multiRelationshipId = MR.id and MRH.activityId=?<sql:param value="${activityId}"/>
-                limit 1)
+    left join MultiRelationshipHistory MRH 
+                on MRH.multiRelationshipId = MR.id and MRH.activityId=?<sql:param value="${activityId}"/>
 </c:if>
 where P.id = ?<sql:param value="${processId}"/>
-order by MRST.id, MR.id, MRH.id desc
+order by MRST.id desc, MR.id desc, MRH.id desc
 ;
     </sql:query>
