@@ -9,6 +9,16 @@
 <%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql"%>
 <%@taglib prefix="traveler" tagdir="/WEB-INF/tags"%>
 
-<%@attribute name="parentId" required="true"%>
-<%@attribute name="childId" required="true"%>
+<%@attribute name="slotId" required="true"%>
 <%@attribute name="action" required="true"%>
+<%@attribute name="activityId"%>
+
+    <sql:update>
+insert into MultiRelationshipHistory 
+multiRelationshipSlotId=?<sql:param value="${slotId}"/>,
+multiRelationshipActionId=(select id from MultiRelationshipAction where name=?<sql:param value="${action}"/>),
+activityId=?<sql:param value="${activityId}"/>,
+createdBy=?<sql:param value="${userName}"/>,
+creationTS=utc_timestamp()
+;
+    </sql:update>

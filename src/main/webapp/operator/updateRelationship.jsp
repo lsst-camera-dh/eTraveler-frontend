@@ -17,7 +17,7 @@
     </head>
     <body>
 <sql:transaction>
-    <ta:updateHardwareRelationship/>
+    <ta:updateRelationship slotId="" action=""/>
 </sql:transaction>        
 <c:redirect url="${header.referer}"/>
     </body>
