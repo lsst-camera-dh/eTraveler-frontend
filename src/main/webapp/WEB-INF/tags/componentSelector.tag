@@ -26,6 +26,7 @@
     inner join HardwareStatusHistory HSH on HSH.hardwareId=H.id and HSH.id=(select max(id) from HardwareStatusHistory where hardwareId=H.id)
     left join MultiRelationshipSlot MRS on MRS.componentId=H.id
     <%-- Something about the relationship history? --%>
+    <%-- and the inventory! --%>
     where HSH.hardwareStatusId=(select id from HardwareStatus where name=?<sql:param value="${status}"/>)
     and (HR.end is not null or HR.id is null)
     and A.id=?<sql:param value="${activityId}"/>

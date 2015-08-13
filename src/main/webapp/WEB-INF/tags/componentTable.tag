@@ -26,10 +26,10 @@
 
 <%
     java.util.List components = new java.util.LinkedList();
-    request.setAttribute("components", components);
+    jspContext.setAttribute("components", components);
 %>
 <c:if test="${depth > 0}">
-    <traveler:componentRows hardwareId="${hardwareId}" mode="${mode}" depth="${depth}"/>
+    <traveler:componentRows hardwareId="${hardwareId}" mode="${mode}" depth="${depth}" compList="${components}"/>
 </c:if>
 
 <display:table name="${components}" class="datatable">
