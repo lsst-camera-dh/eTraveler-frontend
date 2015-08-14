@@ -14,7 +14,7 @@
 <%@attribute name="activityId"%>
 
     <sql:update>
-insert into MultiRelationshipHistory 
+insert into MultiRelationshipHistory set
 multiRelationshipSlotId=?<sql:param value="${slotId}"/>,
 multiRelationshipActionId=(select id from MultiRelationshipAction where name=?<sql:param value="${action}"/>),
 activityId=?<sql:param value="${activityId}"/>,

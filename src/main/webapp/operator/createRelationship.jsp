@@ -1,6 +1,6 @@
 <%-- 
-    Document   : updateHardwareRelationship
-    Created on : Jul 28, 2015, 5:29:19 PM
+    Document   : createRelationship
+    Created on : Aug 13, 2015, 4:43:22 PM
     Author     : focke
 --%>
 
@@ -13,11 +13,12 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>JSP Page</title>
+        <title>create relationship</title>
     </head>
     <body>
 <sql:transaction>
-    <ta:updateRelationship slotId="${param.slotId}" action="${param.action}"/>
+    <ta:createRelationship hardwareId="${param.hardwareId}" minorId="${param.minorId}" 
+                           slotTypeId="${param.slotTypeId}" activityId="${param.activityId}"/>
 </sql:transaction>        
 <c:redirect url="${param.referringPage}"/>
     </body>

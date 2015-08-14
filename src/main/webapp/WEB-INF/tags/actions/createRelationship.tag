@@ -15,7 +15,7 @@
 <%@attribute name="activityId"%>
 
     <sql:update>
-insert into MultiRelationshipSlot 
+insert into MultiRelationshipSlot set
 hardwareId=?<sql:param value="${hardwareId}"/>,
 minorId=?<sql:param value="${minorId}"/>,
 multiRelationshipSlotTypeId=?<sql:param value="${slotTypeId}"/>,
@@ -26,6 +26,6 @@ creationTS=utc_timestamp()
     <sql:query var="slotQ">
 select last_insert_id() as slotId;
     </sql:query>
-<c:set var="slotId" value="slotQ.rows[0].slotId"/>
+<c:set var="slotId" value="${slotQ.rows[0].slotId}"/>
 
 <ta:updateRelationship slotId="${slotId}" action="assign" activityId="${activityId}"/>

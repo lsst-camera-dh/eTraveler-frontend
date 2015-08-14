@@ -43,8 +43,8 @@ select
 from MultiRelationshipSlot MRS
     inner join MultiRelationshipSlotType MRST on MRST.id=MRS.multiRelationshipSlotTypeId
     inner join MultiRelationshipType MRT on MRT.id=MRST.multiRelationshipTypeId
-    inner join MultiRelationshipHistory MRH on MRH.multiRelashionshipSlotId=MRS.id 
-        and MRH.id=(select max(id) from MultiRelationshipHistory where multiRelashionshipSlotId=MRS.id)
+    inner join MultiRelationshipHistory MRH on MRH.multiRelationshipSlotId=MRS.id 
+        and MRH.id=(select max(id) from MultiRelationshipHistory where multiRelationshipSlotId=MRS.id)
     inner join MultiRelationshipAction MRA on MRA.id=MRH.multiRelationshipActionId
     inner join Hardware H on H.id=MRS.${you}
     inner join HardwareType HT on HT.id=H.hardwareTypeId
