@@ -35,7 +35,8 @@
     <sql:query var="componentsQ">
 select 
     MRS.${you} as itemId, 
-    MRH.*,
+    MRH.creationTS as date,
+    MRA.name as action,
     MRT.name as relationshipName, 
     MRST.slotname,
     HT.name as hardwareName, HT.id as hardwareTypeId, 
@@ -57,9 +58,9 @@ where
 
 <c:forEach var="cRow" items="${componentsQ.rows}">
     <%
-        ((java.util.List)jspContext.getAttribute("components")).add(jspContext.getAttribute("cRow"));
+        ((java.util.List)jspContext.getAttribute("compList")).add(jspContext.getAttribute("cRow"));
     %>
     <c:if test="${newDepth > 0}">
-        <traveler:componentRows hardwareId="${cRow.itemId}" mode="${mode}" depth="${newDepth}" compList="${components}"/>
+        <traveler:componentRows hardwareId="${cRow.itemId}" mode="${mode}" depth="${newDepth}" compList="${compList}"/>
     </c:if>
 </c:forEach>
