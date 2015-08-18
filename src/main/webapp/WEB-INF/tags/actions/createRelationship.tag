@@ -29,3 +29,5 @@ select last_insert_id() as slotId;
 <c:set var="slotId" value="${slotQ.rows[0].slotId}"/>
 
 <ta:updateRelationship slotId="${slotId}" action="assign" activityId="${activityId}"/>
+
+<ta:setHardwareStatus hardwareId="${minorId}" hardwareStatusName="USED" activityId="${activityId}"/>

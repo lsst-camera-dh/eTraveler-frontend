@@ -17,9 +17,13 @@
 
     <sql:query var="activityQ">
 select A.*, 
-P.travelerActionMask&(select maskBit from InternalAction where name='setHardwareLocation') as setsLocation
+P.travelerActionMask&(select maskBit from InternalAction where name='setHardwareLocation') as setsLocation,
+MRA.name as relationshipAction
 from Activity A
 inner join Process P on P.id=A.processId
+left join (ProcessRelationshipTag PRT 
+    inner join MultiRelationshipAction MRA on MRA.id=PRT.multiRelationshipActionId)
+    on PRT.processId=P.id
 where A.id=?<sql:param value="${activityId}"/>;
     </sql:query>
 <c:set var="activity" value="${activityQ.rows[0]}"/>
@@ -37,3 +41,5 @@ where A.id=?<sql:param value="${activityId}"/>;
         </c:otherwise>
     </c:choose>
 </c:if>
+
+<ta:closeoutRelationship activityId="${activityId}"/>
