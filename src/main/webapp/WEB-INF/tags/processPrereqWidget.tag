@@ -48,3 +48,5 @@
 <traveler:prereqTable prereqTypeName="TEST_EQUIPMENT" processId="${processId}"/>
 <traveler:prereqTable prereqTypeName="CONSUMABLE" processId="${processId}"/>
 <traveler:prereqTable prereqTypeName="PREPARATION" processId="${processId}"/>
+
+<traveler:showSlots processId="${processId}"/>

@@ -18,6 +18,8 @@
         <title>Test Page</title>
     </head>
     <body>
+        <traveler:showSlots activityId="${param.activityID}" processId="${param.processId}"/>
+        
 <traveler:checkPerm var="mayWD" groups="EtravelerWorkflowDevelopers"/>
 <traveler:checkPerm var="maySE" groups="EtravelerSubjectExperts"/>
 <traveler:checkPerm var="maySoftMan" groups="EtravelerSoftwareManagers"/>
@@ -27,7 +29,7 @@
     <tr><td>${mayWD}</td><td>${maySE}</td><td>${maySoftMan}</td><td>${maySubsMan}</td><td>${mayQA}</td></tr>
 </table>
 
-<preferences:setPreference name="preferences" property="writeable" value="false"/>
+<%--<preferences:setPreference name="preferences" property="writeable" value="false"/>--%>
 
 <traveler:checkPerm var="mayWD" groups="EtravelerWorkflowDevelopers"/>
 <traveler:checkPerm var="maySE" groups="EtravelerSubjectExperts"/>

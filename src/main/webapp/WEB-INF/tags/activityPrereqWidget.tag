@@ -113,6 +113,8 @@ and PP.prerequisiteTypeId=(select id from PrerequisiteType where name='COMPONENT
     </c:otherwise>
 </c:choose>
 
+<traveler:showSlots activityId="${activityId}"/>
+
 <form method="get" action="operator/startActivity.jsp" target="_top">
     <input type="hidden" name="activityId" value="${activityId}">
     <input type="hidden" name="topActivityId" value="${topActivityId}">
