@@ -16,5 +16,5 @@
 <traveler:getSlots var="slotList" activityId="${activityId}" processId="${processId}"/>
 
 <c:if test="${! empty slotList}">
-    <display:table name="${slotList}"/>
+    <display:table id="row" name="${slotList}"/>
 </c:if>
