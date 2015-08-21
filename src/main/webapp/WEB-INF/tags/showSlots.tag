@@ -13,6 +13,7 @@
 <%@attribute name="processId"%>
 <%@attribute name="activityId"%>
 
+<traveler:fullRequestString var="thisPage"/>
 <traveler:checkPerm var="mayOperate" groups="EtravelerOperator,EtravelerSupervisor"/>
 
 <traveler:getSlots var="slotList" activityId="${activityId}" processId="${processId}"/>
@@ -40,6 +41,7 @@ select hardwareID from Activity where id=?<sql:param value="${activityId}"/>;
                     </c:when>
                     <c:otherwise>
                     <form method="get" action="operator/createRelationship.jsp">
+                        <input type="hidden" name="referringPage" value="${thisPage}">
                         <input type="hidden" name="slotTypeId" value="${row.mrstId}">
                         <input type="hidden" name="activityId" value="${activityId}">
                         <input type="hidden" name="hardwareId" value="${hardwareId}">
