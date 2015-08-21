@@ -26,13 +26,14 @@ select * from Activity where id=?<sql:param value="${activityId}"/>;
 </c:if>
 
     <sql:query var="slotsQ">
-select MRT.name as relName,
+select MRT.name as relName, MRT.minorTypeId, if(MRT.singleBatch != 0, MRT.nMinorItems, 1) as nMinorItems,
+    HTminor.name as minorTypeName,
     MRST.id as mrstId, MRST.slotName,
     PRT.multiRelationshipActionId as intendedActionId, 
-    MRAint.name as intName
-<c:if test="${! empty activityId}">
-, MRS.id as mrsId, MRH.id as mrhId,    MRH.multiRelationshipActionId as actualActionId, MRH.creationTS as date,
-MRAact.name as actName
+    MRAint.name as intName <c:if test="${! empty activityId}">,
+        MRS.id as mrsId, Hminor.lsstId,
+        MRH.id as mrhId,    MRH.multiRelationshipActionId as actualActionId, MRH.creationTS as date,
+        MRAact.name as actName
 </c:if>
 from 
 <c:choose>
@@ -46,12 +47,14 @@ from
 </c:choose>
     inner join ProcessRelationshipTag PRT on PRT.processId = P.id
     inner join MultiRelationshipType MRT on MRT.id = PRT.multiRelationshipTypeId
+    inner join HardwareType HTminor on HTminor.id=MRT.minorTypeId
     inner join MultiRelationshipAction MRAint on MRAint.id=PRT.multiRelationshipActionId
     inner join MultiRelationshipSlotType MRST on MRST.multiRelationshipTypeId = MRT.id
 <c:if test="${! empty activityId}">
-    left join MultiRelationshipSlot MRS on MRS.multiRelationshipSlotTypeId = MRST.id and MRS.hardwareId=A.hardwareId
+    left join (MultiRelationshipSlot MRS
+        inner join Hardware Hminor on Hminor.id=MRS.minorId) on MRS.multiRelationshipSlotTypeId=MRST.id and MRS.hardwareId=A.hardwareId
     left join (MultiRelationshipHistory MRH
-    inner join MultiRelationshipAction MRAact on MRAact.id=MRH.multiRelationshipActionId) on MRH.multiRelationshipSlotId = MRS.id
+        inner join MultiRelationshipAction MRAact on MRAact.id=MRH.multiRelationshipActionId) on MRH.multiRelationshipSlotId = MRS.id
 </c:if>
 where 
 <c:choose>

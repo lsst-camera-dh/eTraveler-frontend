@@ -10,9 +10,11 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql"%>
 <%@taglib prefix="ta" tagdir="/WEB-INF/tags/actions"%>
+<%@taglib prefix="traveler" tagdir="/WEB-INF/tags"%>
 
 <%@attribute name="activityId" required="true"%>
 
+<%--
     <sql:query var="activityQ">
 select A.hardwareId, 
 MRA.name as relationshipAction
@@ -27,4 +29,10 @@ left join (ProcessRelationshipTag PRT
 where A.id=?<sql:param value="${activityId}"/>;
     </sql:query>
 <c:set var="activity" value="${activityQ.rows[0]}"/>
+--%>
 
+<traveler:getSlots activityId="${activityId}" var="slotList"/>
+
+<c:forEach var="slot" items="${slotList}">
+    <c:out value="<ta:updateRelationship slotId=slot.mrsId action=slot.actName activityId=activityId/>"/>
+</c:forEach>

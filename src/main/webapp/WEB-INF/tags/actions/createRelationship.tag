@@ -31,3 +31,4 @@ select last_insert_id() as slotId;
 <ta:updateRelationship slotId="${slotId}" action="assign" activityId="${activityId}"/>
 
 <ta:setHardwareStatus hardwareId="${minorId}" hardwareStatusName="USED" activityId="${activityId}"/>
+<%-- deduct from batch --%>

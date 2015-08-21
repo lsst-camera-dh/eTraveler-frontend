@@ -35,7 +35,7 @@ where A.id=?<sql:param value="${activityId}"/>
 <c:set var="activity" value="${activityQ.rows[0]}"/>
 
 <traveler:prereqProcesses activityId="${activityId}"/>
-
+<%--
     <sql:query var="componentQ" >
 select PP.*, HT.name as hardwareTypeName, H.id as componentId, H.lsstId, PI.creationTS as satisfaction
 from PrerequisitePattern PP
@@ -92,7 +92,7 @@ and PP.prerequisiteTypeId=(select id from PrerequisiteType where name='COMPONENT
         </display:column>
     </display:table>
 </c:if>
-    
+--%>
 <traveler:prereqTable prereqTypeName="TEST_EQUIPMENT" activityId="${activityId}"/>
 <traveler:prereqTable prereqTypeName="CONSUMABLE" activityId="${activityId}"/>
 <traveler:prereqTable prereqTypeName="PREPARATION" activityId="${activityId}"/>
