@@ -25,10 +25,9 @@
 </c:choose>
 
     <sql:query var="activityQ" >
-select A.*, P.hardwareRelationShipTypeId,
+select A.*,
     AFS.name as status, AFS.isFinal
 from Activity A
-    inner join Process P on P.id=A.processId
     inner join ActivityStatusHistory ASH on ASH.activityId=A.id and ASH.id=(select max(id) from ActivityStatusHistory where activityId=A.id)
     inner join ActivityFinalStatus AFS on AFS.id=ASH.activityStatusId
 where A.id=?<sql:param value="${activityId}"/>
@@ -37,10 +36,9 @@ where A.id=?<sql:param value="${activityId}"/>
 <c:set var="activity" value="${activityQ.rows[0]}"/>
 
 <traveler:prereqProcesses activityId="${activityId}"/>
-
+<%--
     <sql:query var="componentQ" >
-select PP.*, HT.name as hardwareTypeName, H.id as componentId, H.lsstId, PI.creationTS as satisfaction,
-P.travelerActionMask&(select maskBit from InternalAction where name='makeHardwareRelationship') as makesRelationship
+select PP.*, HT.name as hardwareTypeName, H.id as componentId, H.lsstId, PI.creationTS as satisfaction
 from PrerequisitePattern PP
 inner join Process P on P.id=PP.processId
 inner join HardwareType HT on HT.id=PP.hardwareTypeId
@@ -71,9 +69,6 @@ and PP.prerequisiteTypeId=(select id from PrerequisiteType where name='COMPONENT
                         <input type="hidden" name="prerequisitePatternId" value="${row.id}">
                         <input type="hidden" name="activityId" value="${activityId}">
                         <input type="hidden" name="hardwareId" value="${activity.hardwareId}">
-                        <c:if test="${row.makesRelationship != 0}">
-                            <input type="hidden" name="hardwareRelationshipTypeId" value="${activity.hardwareRelationshipTypeId}">
-                        </c:if>
                         <traveler:componentSelector activityId="${activityId}"/>
                 </c:when>
                 <c:otherwise>
@@ -99,7 +94,7 @@ and PP.prerequisiteTypeId=(select id from PrerequisiteType where name='COMPONENT
         </display:column>
     </display:table>
 </c:if>
-    
+--%>
 <traveler:prereqTable prereqTypeName="TEST_EQUIPMENT" activityId="${activityId}"/>
 <traveler:prereqTable prereqTypeName="CONSUMABLE" activityId="${activityId}"/>
 <traveler:prereqTable prereqTypeName="PREPARATION" activityId="${activityId}"/>
@@ -119,6 +114,8 @@ and PP.prerequisiteTypeId=(select id from PrerequisiteType where name='COMPONENT
         <c:set var="readyToStart" value="false"/>
     </c:otherwise>
 </c:choose>
+
+<traveler:showSlots activityId="${activityId}"/>
 
 <form method="get" action="operator/startActivity.jsp" target="_top">
     <input type="hidden" name="activityId" value="${activityId}">

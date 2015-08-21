@@ -25,19 +25,20 @@
 </c:choose>
 
 <%
-    java.util.List components = new java.util.LinkedList();
-    request.setAttribute("components", components);
+    java.util.List compList = new java.util.LinkedList();
+    jspContext.setAttribute("compList", compList);
 %>
 <c:if test="${depth > 0}">
-    <traveler:componentRows hardwareId="${hardwareId}" mode="${mode}" depth="${depth}"/>
+    <traveler:componentRows hardwareId="${hardwareId}" mode="${mode}" depth="${depth}" compList="${compList}"/>
 </c:if>
 
-<display:table name="${components}" class="datatable">
+<display:table name="${compList}" class="datatable">
     <display:column property="lsstId" title="Component" sortable="true" headerClass="sortable"
                     href="displayHardware.jsp" paramId="hardwareId" paramProperty="itemId"/>
     <display:column property="hardwareName" title="Component Type" sortable="true" headerClass="sortable"
                     href="displayHardwareType.jsp" paramId="hardwareTypeId" paramProperty="hardwareTypeId"/>
-    <display:column property="begin" sortable="true" headerClass="sortable"/>
     <display:column property="relationshipName" sortable="true" headerClass="sortable"/>
-    <display:column property="slot" sortable="true" headerClass="sortable"/>
+    <display:column property="slotname" sortable="true" headerClass="sortable"/>
+    <display:column property="action" title="Status" sortable="true" headerClass="sortable"/>
+    <display:column property="date" sortable="true" headerClass="sortable"/>
 </display:table>

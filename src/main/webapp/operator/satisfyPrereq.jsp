@@ -30,25 +30,6 @@
                 createdBy=?<sql:param value="${userName}"/>,
                 creationTs=UTC_TIMESTAMP();
             </sql:update>
-            
-            <c:if test="${! empty param.hardwareRelationshipTypeId}">
-                <sql:update>
-                    insert into HardwareRelationship set
-                    hardwareId=?<sql:param value="${param.hardwareId}"/>,
-                    componentId=?<sql:param value="${param.componentId}"/>,
-                    hardwareRelationshipTypeId=?<sql:param value="${param.hardwareRelationshipTypeId}"/>,
-                    createdBy=?<sql:param value="${userName}"/>,
-                    creationTs=UTC_TIMESTAMP();
-                </sql:update>
-
-                <sql:update>
-                    update Activity set
-                    hardwareRelationshipId=LAST_INSERT_ID()
-                    where id=?<sql:param value="${param.activityId}"/>;
-                </sql:update>
-
-                <ta:setHardwareStatus hardwareId="${param.componentId}" hardwareStatusName="USED" activityId="${param.activityId}" reason="Installed"/>
-            </c:if>
         </sql:transaction>
                 
         <c:redirect url="${param.referringPage}"/>

@@ -42,17 +42,17 @@
                 <input type="hidden" name="referringPage" value="${thisPage}">
                 <input type="hidden" name="hardwareId" value="${param.hardwareId}">
                 <input type="hidden" name="sign" value="-1">
+                <input type="submit" value="Remove Some">
                 How many?&nbsp;<input type="number" name="adjustment" min="1" max="${quantity}" required>
                 Why?&nbsp;<input type="text" name="reason">
-                <input type="submit" value="Remove Some">
             </form>
             <form action="operator/adjustBatchInventory.jsp">
                 <input type="hidden" name="referringPage" value="${thisPage}">
                 <input type="hidden" name="hardwareId" value="${param.hardwareId}">
                 <input type="hidden" name="sign" value="1">
+                <input type="submit" value="Add Some">
                 How many?&nbsp;<input type="number" name="adjustment" min="1" required>
                 Why?&nbsp;<input type="text" name="reason">
-                <input type="submit" value="Add Some">
             </form>
         </c:if>
         
