@@ -31,7 +31,7 @@ select MRT.name as relName, MRT.minorTypeId, if(MRT.singleBatch != 0, MRT.nMinor
     MRST.id as mrstId, MRST.slotName,
     PRT.multiRelationshipActionId as intendedActionId, 
     MRAint.name as intName <c:if test="${! empty activityId}">,
-        MRS.id as mrsId, Hminor.lsstId,
+        MRS.id as mrsId, Hminor.lsstId, Hminor.id as minorId,
         MRH.id as mrhId,    MRH.multiRelationshipActionId as actualActionId, MRH.creationTS as date,
         MRAact.name as actName
 </c:if>
@@ -54,7 +54,8 @@ from
     left join (MultiRelationshipSlot MRS
         inner join Hardware Hminor on Hminor.id=MRS.minorId) on MRS.multiRelationshipSlotTypeId=MRST.id and MRS.hardwareId=A.hardwareId
     left join (MultiRelationshipHistory MRH
-        inner join MultiRelationshipAction MRAact on MRAact.id=MRH.multiRelationshipActionId) on MRH.multiRelationshipSlotId = MRS.id
+        inner join MultiRelationshipAction MRAact on MRAact.id=MRH.multiRelationshipActionId) 
+        on MRH.multiRelationshipSlotId = MRS.id and MRH.multiRelationshipActionId=PRT.multiRelationshipActionId
 </c:if>
 where 
 <c:choose>

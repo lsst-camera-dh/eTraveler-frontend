@@ -24,11 +24,27 @@ creationTS=utc_timestamp()
 ;
     </sql:update>
     <sql:query var="slotQ">
-select last_insert_id() as slotId;
+select 
+    last_insert_id() as slotId
+    ,if(MRT.singleBatch != 0, MRT.nMinorItems, 1) as nMinorItems
+    ,HT.isBatched
+from 
+    MultiRelationshipSlotType MRST
+    inner join MultiRelationshipType MRT on MRT.id=MRST.multiRelationshipTypeId
+    inner join HardwareType HT on HT.id=MRT.minorTypeId
+where 
+    MRST.id=?<sql:param value="${slotTypeId}"/>
+;
     </sql:query>
-<c:set var="slotId" value="${slotQ.rows[0].slotId}"/>
+<c:set var="slot" value="${slotQ.rows[0]}"/>
 
-<ta:updateRelationship slotId="${slotId}" action="assign" activityId="${activityId}"/>
+<ta:updateRelationship slotId="${slot.slotId}" action="assign" activityId="${activityId}"/>
 
-<ta:setHardwareStatus hardwareId="${minorId}" hardwareStatusName="USED" activityId="${activityId}"/>
-<%-- deduct from batch --%>
+<c:choose>
+    <c:when test="${slot.isBatched == 0}">
+        <ta:setHardwareStatus hardwareId="${minorId}" hardwareStatusName="USED" activityId="${activityId}"/>
+    </c:when>
+    <c:otherwise>
+        <ta:adjustBatchInventory adjustment="${-1 * slot.nMinorItems}" activityId="${activityId}" hardwareId="${minorId}" reason="assigned by traveler"/>
+    </c:otherwise>
+</c:choose>

@@ -17,6 +17,13 @@
 
 <traveler:getSlots var="slotList" activityId="${activityId}" processId="${processId}"/>
 
+<c:if test="${! empty activityId}">
+    <sql:query var="hardwareQ">
+select hardwareID from Activity where id=?<sql:param value="${activityId}"/>;
+    </sql:query>
+    <c:set var="hardwareId" value="${hardwareQ.rows[0].hardwareId}"/>
+</c:if>
+
 <c:if test="${! empty slotList}">
     <display:table id="row" name="${slotList}" class="datatable">
         <display:column property="minorTypeName" title="Component Type" sortable="true" headerClass="sortable"
@@ -33,9 +40,9 @@
                     </c:when>
                     <c:otherwise>
                     <form method="get" action="operator/createRelationship.jsp">
-                        <input type="hidden" name="prerequisitePatternId" value="${row.id}">
+                        <input type="hidden" name="slotTypeId" value="${row.mrstId}">
                         <input type="hidden" name="activityId" value="${activityId}">
-                        <input type="hidden" name="hardwareId" value="${activity.hardwareId}">
+                        <input type="hidden" name="hardwareId" value="${hardwareId}">
                         <traveler:componentSelector var="gotSome" hardwareTypeId="${row.minorTypeId}" quantity="${row.nMinorItems}"/>
                         <input type="submit" value="Assign" <c:if test="${(! gotSome) || (! mayOperate)}">disabled</c:if>>
                     </form>

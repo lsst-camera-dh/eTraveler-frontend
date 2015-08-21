@@ -31,8 +31,8 @@ from Hardware H
 where H.hardwareTypeId=?<sql:param value="${hardwareTypeId}"/>
 and HSH.hardwareStatusId=(select id from HardwareStatus where name='READY')
 <c:if test="${isBatched}">
-    and nAvailable>=?<sql:param value="${quantity}"/>
     group by H.id
+    having nAvailable>=?<sql:param value="${quantity}"/>
 </c:if>
 ;
     </sql:query>
@@ -44,9 +44,9 @@ and HSH.hardwareStatusId=(select id from HardwareStatus where name='READY')
     </c:when>
     <c:otherwise>
         <c:set var="gotSome" value="true"/>
-        <select name="componentId">
+        <select name="minorId">
             <c:forEach var="hRow" items="${componentsQ.rows}">
-                <option value="${hRow.id}">${hRow.lsstId} <c:if test="${isBatched}">(${nAvailable})</c:if></option>
+                <option value="${hRow.id}">${hRow.lsstId} <c:if test="${isBatched}">(${hRow.nAvailable})</c:if></option>
             </c:forEach>
         </select>
     </c:otherwise>
