@@ -34,5 +34,7 @@ where A.id=?<sql:param value="${activityId}"/>;
 <traveler:getSlots activityId="${activityId}" var="slotList"/>
 
 <c:forEach var="slot" items="${slotList}">
-    <c:out value="<ta:updateRelationship slotId=slot.mrsId action=slot.actName activityId=activityId/>"/>
+    <c:if test="${(slot.intName == 'install') || (slot.intName == 'uninstall')}">
+        <ta:updateRelationship slotId="${slot.mrsId}" action="${slot.intName}" activityId="${activityId}"/>
+    </c:if>
 </c:forEach>
