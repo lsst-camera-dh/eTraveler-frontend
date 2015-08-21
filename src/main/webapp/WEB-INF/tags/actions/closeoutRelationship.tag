@@ -14,23 +14,6 @@
 
 <%@attribute name="activityId" required="true"%>
 
-<%--
-    <sql:query var="activityQ">
-select A.hardwareId, 
-MRA.name as relationshipAction
-from Activity A
-inner join Process P on P.id=A.processId
-left join (ProcessRelationshipTag PRT 
-    inner join MultiRelationshipAction MRA on MRA.id=PRT.multiRelationshipActionId
-    inner join MultiRelationshipType MRT on MRT.id=PRT.multiRelationshipTypeId
-    inner join MultiRelationshipSlotType MRST on MRST.multiRelationshipTypeId=MRT.id
-    left join MultiRelationshipSlot MRS on MRS.multiRelationshipSlotTypeId=MRST.id)
-    on PRT.processId=P.id
-where A.id=?<sql:param value="${activityId}"/>;
-    </sql:query>
-<c:set var="activity" value="${activityQ.rows[0]}"/>
---%>
-
 <traveler:getSlots activityId="${activityId}" var="slotList"/>
 
 <c:forEach var="slot" items="${slotList}">
