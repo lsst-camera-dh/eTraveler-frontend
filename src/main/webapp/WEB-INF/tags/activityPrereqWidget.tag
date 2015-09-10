@@ -48,6 +48,8 @@ left join (Prerequisite PI
     on PI.activityId=A.id and PI.prerequisitePatternId=PP.id
 where A.id=?<sql:param value="${activityId}"/>
 and PP.prerequisiteTypeId=(select id from PrerequisiteType where name='COMPONENT')
+order by PP.id
+;
     </sql:query>
 <c:if test="${! empty componentQ.rows}">
     <h2>Components</h2>

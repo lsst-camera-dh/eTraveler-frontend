@@ -11,13 +11,16 @@
 <%@taglib prefix="traveler" tagdir="/WEB-INF/tags"%>
 
 <%@attribute name="processId" required="true"%>
-    
+
+<%--
 <sql:query var="componentQ" >
     select PP.*, HT.name as hardwareTypeName
     from PrerequisitePattern PP
     inner join HardwareType HT on HT.id=PP.hardwareTypeId
     where PP.prerequisiteTypeId=(select id from PrerequisiteType where name='COMPONENT')
     and PP.processId=?<sql:param value="${processId}"/>
+order by PP.id
+;
 </sql:query>
 <c:if test="${! empty componentQ.rows}">
     <h2>Components</h2>
@@ -27,14 +30,17 @@
         <display:column property="hardwareTypeName"/>
     </display:table>
 </c:if>
-    
-<sql:query var="processQ" >
-    select PP.*, P.name as processName, P.userVersionString
-    from PrerequisitePattern PP
-    inner join Process P on P.id=PP.prereqProcessId
-    where PP.prerequisiteTypeId=(select id from PrerequisiteType where name='PROCESS_STEP')
-    and PP.processId=?<sql:param value="${processId}"/>
-</sql:query>
+--%>
+
+    <sql:query var="processQ" >
+select PP.*, P.name as processName, P.userVersionString
+from PrerequisitePattern PP
+inner join Process P on P.id=PP.prereqProcessId
+where PP.prerequisiteTypeId=(select id from PrerequisiteType where name='PROCESS_STEP')
+and PP.processId=?<sql:param value="${processId}"/>
+order by PP.id
+;
+    </sql:query>
 <c:if test="${! empty processQ.rows}">
     <h2>Process Steps</h2>
     <display:table name="${processQ.rows}" class="datatable">

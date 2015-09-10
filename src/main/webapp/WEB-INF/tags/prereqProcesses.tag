@@ -33,7 +33,9 @@ left join (
     inner join Activity Ac on Ac.id=PI.prerequisiteActivityId
 ) on PI.prerequisitePatternId=PP.id and PI.activityId=Ap.id
 where Ap.id=?<sql:param value="${activityId}"/>
-and PP.prerequisiteTypeid=(select id from PrerequisiteType where name='PROCESS_STEP');
+and PP.prerequisiteTypeid=(select id from PrerequisiteType where name='PROCESS_STEP')
+order by PP.id
+;
     </sql:query>
 <c:if test="${! empty prereqsQ.rows}">
     <h2>Required Steps</h2>

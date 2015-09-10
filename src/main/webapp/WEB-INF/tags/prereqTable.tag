@@ -33,6 +33,8 @@ where PP.processId=?<sql:param value="${processId}"/>
         </c:otherwise>
     </c:choose>
 and PP.prerequisiteTypeId=(select id from PrerequisiteType where name=?<sql:param value="${prereqTypeName}"/>)
+order by PP.id
+;
     </sql:query>
 <c:if test="${! empty prereqQ.rows}">
     <h2><c:out value="${prereqTypeName}"/> requirements</h2>
