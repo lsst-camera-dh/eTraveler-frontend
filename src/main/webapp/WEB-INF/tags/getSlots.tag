@@ -29,7 +29,7 @@ select * from Activity where id=?<sql:param value="${activityId}"/>;
 select MRT.name as relName, MRT.minorTypeId, if(MRT.singleBatch != 0, MRT.nMinorItems, 1) as nMinorItems,
     HTminor.name as minorTypeName,
     MRST.id as mrstId, MRST.slotName,
-    PRT.multiRelationshipActionId as intendedActionId, 
+    PRT.id as prtId, PRT.multiRelationshipActionId as intendedActionId, 
     MRAint.name as intName <c:if test="${! empty activityId}">,
         MRS.id as mrsId, Hminor.lsstId, Hminor.id as minorId,
         MRH.id as mrhId,    MRH.multiRelationshipActionId as actualActionId, MRH.creationTS as date,
@@ -66,7 +66,7 @@ where
         P.id = ?<sql:param value="${processId}"/>
     </c:otherwise>
 </c:choose>
-order by MRST.id desc<c:if test="${! empty activityId}">, MRS.id desc, MRH.id desc</c:if>
+order by PRT.id
 ;
     </sql:query>
 <c:set var="slotList" value="${slotsQ.rows}"/>
