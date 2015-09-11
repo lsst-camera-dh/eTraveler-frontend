@@ -13,11 +13,11 @@
 <%@attribute name="activityId" required="true"%>
 
     <sql:query var="historyQ" >
-select JSH.*, JHS.name
-from JobStepHistory JSH
-inner join JobHarnessStep JHS on JHS.id=JSH.jobHarnessStepId
-where JSH.activityId=?<sql:param value="${activityId}"/>
-order by JSH.id desc
+select JSH.*, JHS.name, JHS.id
+from JobHarnessStep JHS
+left join JobStepHistory JSH on JHS.id=JSH.jobHarnessStepId
+    and JSH.activityId=?<sql:param value="${activityId}"/>
+order by JHS.id;
     </sql:query>
     
 <c:if test="${! empty historyQ.rows}">
