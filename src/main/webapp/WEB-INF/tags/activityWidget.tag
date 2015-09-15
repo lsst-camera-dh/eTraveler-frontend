@@ -75,7 +75,9 @@
         </c:if>
 </table>
 
-<traveler:jhWidget activityId="${activityId}"/>
+<c:if test="${activity.isHarnessed != 0}">
+    <traveler:jhWidget activityId="${activityId}"/>
+</c:if>
 
 <traveler:activityStatusWidget activityId="${activityId}"/>
 
