@@ -26,6 +26,7 @@ select hardwareID from Activity where id=?<sql:param value="${activityId}"/>;
 </c:if>
 
 <c:if test="${! empty slotList}">
+    <h3>Component Actions</h3>
     <display:table id="row" name="${slotList}" class="datatable">
         <display:column property="minorTypeName" title="Component Type" sortable="true" headerClass="sortable"
                         href="displayHardwareType.jsp" paramId="hardwareTypeId" paramProperty="minorTypeId"/>

@@ -30,16 +30,18 @@ select MRT.name as relName, MRT.minorTypeId, if(MRT.singleBatch != 0, MRT.nMinor
     HTminor.name as minorTypeName,
     MRST.id as mrstId, MRST.slotName,
     PRT.id as prtId, PRT.multiRelationshipActionId as intendedActionId, 
-    MRAint.name as intName <c:if test="${! empty activityId}">,
+    MRAint.name as intName 
+    <c:if test="${! empty activityId}">,
         MRS.id as mrsId, Hminor.lsstId, Hminor.id as minorId,
         MRH.id as mrhId,    MRH.multiRelationshipActionId as actualActionId, MRH.creationTS as date,
         MRAact.name as actName
-</c:if>
+    </c:if>
 from 
 <c:choose>
     <c:when test="${! empty activityId}">
         Activity A
         inner join Process P on P.id=A.processId
+        inner join Hardware Hmajor on Hmajor.id=A.hardwareId
     </c:when>
     <c:otherwise>
         Process P
@@ -47,6 +49,9 @@ from
 </c:choose>
     inner join ProcessRelationshipTag PRT on PRT.processId = P.id
     inner join MultiRelationshipType MRT on MRT.id = PRT.multiRelationshipTypeId
+    <c:if test="${! empty activityId}">
+        and MRT.hardwareTypeId = Hmajor.hardwareTypeId
+    </c:if>
     inner join HardwareType HTminor on HTminor.id=MRT.minorTypeId
     inner join MultiRelationshipAction MRAint on MRAint.id=PRT.multiRelationshipActionId
     inner join MultiRelationshipSlotType MRST on MRST.multiRelationshipTypeId = MRT.id
