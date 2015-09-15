@@ -13,7 +13,7 @@
 <%@attribute name="hardwareStatusId"%>
 <%@attribute name="hardwareStatusName"%>
 <%@attribute name="activityId"%>
-<%@attribute name="reason"%>
+<%@attribute name="reason" required="true"%>
 
 <c:choose>
     <c:when test="${! empty hardwareStatusName}">

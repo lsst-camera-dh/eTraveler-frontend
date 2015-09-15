@@ -33,7 +33,7 @@ select MRT.name as relName, MRT.minorTypeId, if(MRT.singleBatch != 0, MRT.nMinor
     MRAint.name as intName 
     <c:if test="${! empty activityId}">,
         MRS.id as mrsId, Hminor.lsstId, Hminor.id as minorId,
-        MRH.id as mrhId,    MRH.multiRelationshipActionId as actualActionId, MRH.creationTS as date,
+        MRH.id as mrhId, MRH.activityId, MRH.multiRelationshipActionId as actualActionId, MRH.creationTS as date,
         MRAact.name as actName
     </c:if>
 from 
@@ -75,3 +75,11 @@ order by PRT.id
 ;
     </sql:query>
 <c:set var="slotList" value="${slotsQ.rows}"/>
+
+<c:if test="${! empty activityId}">
+<c:forEach var="row" items="${slotList}">
+    <c:if test="${row.actName == 'install' && row.activityId != activityId}">
+        <traveler:error message="Step calls for component ${row.minorTypeName} install in slot ${row.relName} ${row.slotName}, but the slot is already full."/>
+    </c:if>
+</c:forEach>
+</c:if>

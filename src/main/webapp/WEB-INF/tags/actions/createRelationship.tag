@@ -42,7 +42,7 @@ where
 
 <c:choose>
     <c:when test="${slot.isBatched == 0}">
-        <ta:setHardwareStatus hardwareId="${minorId}" hardwareStatusName="USED" activityId="${activityId}"/>
+        <ta:setHardwareStatus hardwareId="${minorId}" hardwareStatusName="USED" activityId="${activityId}" reason="Assigned by traveler"/>
     </c:when>
     <c:otherwise>
         <ta:adjustBatchInventory adjustment="${-1 * slot.nMinorItems}" activityId="${activityId}" hardwareId="${minorId}" reason="assigned by traveler"/>
