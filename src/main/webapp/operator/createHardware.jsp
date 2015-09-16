@@ -19,7 +19,7 @@
     <body>
         <sql:query var="typeQ" >
 select * from HardwareType
-where id=?<sql:param value="${hardwareTypeId}"/>;
+where id=?<sql:param value="${param.hardwareTypeId}"/>;
         </sql:query>
         <c:set var="hType" value="${typeQ.rows[0]}"/>
 
