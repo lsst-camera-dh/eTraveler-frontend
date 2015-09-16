@@ -45,6 +45,8 @@
         </tr>
         <tr>
             <td>
+                <div>If all items must come from the same batch,<br> specify multiple items and a single slot name.<br>
+                    Otherwise the number of items and slot names must match.</div>
             </td>
             <td>
                 <div>Description:</div> <textarea name="description"></textarea>

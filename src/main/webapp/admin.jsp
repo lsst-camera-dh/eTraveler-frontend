@@ -63,7 +63,7 @@
 
 <hr>
 <h2>Hardware Relationship Types</h2>
-   <traveler:newRelationshipTypeform/>
+<traveler:newRelationshipTypeForm/>
 <traveler:hardwareRelationshipTypeList/>
 
 <hr>
