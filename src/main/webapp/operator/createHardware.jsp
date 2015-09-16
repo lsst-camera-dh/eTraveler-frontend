@@ -17,6 +17,12 @@
         <title>Create Hardware</title>
     </head>
     <body>
+        <sql:query var="typeQ" >
+select * from HardwareType
+where id=?<sql:param value="${hardwareTypeId}"/>;
+        </sql:query>
+        <c:set var="hType" value="${typeQ.rows[0]}"/>
+
 <%
 String dateStr = request.getParameter("manufactureDateDate");  
 SimpleDateFormat formater = new SimpleDateFormat("yyyy-MM-dd");
@@ -40,6 +46,7 @@ request.setAttribute("manufactureDate", result);
                 lsstId=concat(
                     ?<sql:param value="${param.typeName}"/>,
                     '-',
+                    <c:if test="${hType.isBatched != 0}">'B',</c:if>
                     LPAD(LAST_INSERT_ID(), ?<sql:param value="${param.autoSequenceWidth}"/>, '0')
                 ),
                     </c:otherwise>
