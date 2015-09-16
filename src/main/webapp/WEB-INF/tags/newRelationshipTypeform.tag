@@ -9,6 +9,7 @@
 <%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql"%>
 <%@taglib prefix="traveler" tagdir="/WEB-INF/tags"%>
 
+<traveler:fullRequestString var="thisPage"/>
 <traveler:checkPerm var="mayAdmin" groups="EtravelerAdmin"/>
 
 <sql:query var="hardwareTypesQ" >
@@ -35,7 +36,7 @@
             </td>
             <td>
                 <div>Component Type:</div>
-                <select name="componentTypeId">
+                <select name="minorTypeId">
                     <c:forEach var="htRow" items="${hardwareTypesQ.rows}">
                         <option value="${htRow.id}">${htRow.name}</option>
                     </c:forEach>
@@ -53,7 +54,7 @@
                 <input type="number" name="nItems" value="1">
             </td>
             <td>
-                <div>Slot Names<br>(comma separated):</div> <input type="text" name="slot">
+                <div>Slot Names<br>(comma separated):</div> <input type="text" name="slotNames">
             </td>
         </tr>
     </table>
