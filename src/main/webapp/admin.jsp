@@ -63,28 +63,8 @@
 
 <hr>
 <h2>Hardware Relationship Types</h2>
-    <sql:query var="hardwareTypesQ" >
-        select id, name from HardwareType order by name;
-    </sql:query>
-    <form method="get" action="admin/addHardwareRelationshipType.jsp">
-        <input type="hidden" name="referringPage" value="${thisPage}">
-        <input type="submit" value="Add Hardware Relationship Type"
-           <c:if test="${! mayAdmin}">disabled</c:if>>
-        Name: <input type="text" name="name" required>
-        Hardware Type: <select name="hardwareTypeId">
-            <c:forEach var="htRow" items="${hardwareTypesQ.rows}">
-                <option value="${htRow.id}">${htRow.name}</option>
-            </c:forEach>
-        </select>
-        Component Type: <select name="componentTypeId">
-            <c:forEach var="htRow" items="${hardwareTypesQ.rows}">
-                <option value="${htRow.id}">${htRow.name}</option>
-            </c:forEach>
-        </select>
-        Slot: <input type="number" name="slot" value="1">
-        Description: <textarea name="description"></textarea>
-    </form>
-    <traveler:hardwareRelationshipTypeList/>
+   <traveler:newRelationshipTypeform/>
+<traveler:hardwareRelationshipTypeList/>
 
 <hr>
 <h2>Sites</h2>
