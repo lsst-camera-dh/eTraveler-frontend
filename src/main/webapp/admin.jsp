@@ -78,7 +78,11 @@
 
 <hr>
 <h2>Locations</h2>
-    <traveler:newLocationForm/>
+<traveler:newLocationForm/>
+
+<hr>
+<h2>Job Harness installs</h2>
+<traveler:jhList/>
 
 <hr>
 <h2>Hardware Identifier Authorities</h2>
