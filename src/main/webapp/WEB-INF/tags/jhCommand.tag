@@ -25,27 +25,27 @@
     P.travelerActionMask&(select maskBit from InternalAction where name='automatable') as isAutomatable,
     H.lsstId,
     HT.name as hardwareTypeName,
-    S.jhOutputRoot
+    JH.*
     from Activity A
     inner join Process P on P.id=A.processId
     inner join Hardware H on H.id=A.hardwareId
     inner join HardwareType HT on HT.id=H.hardwareTypeId
-    inner join HardwareLocationHistory HLH on HLH.hardwareId=H.id and HLH.id=(select max(id) from HardwareLocationHistory where hardwareId=H.id)
-    inner join Location L on L.id=HLH.locationId
-    inner join Site S on S.id=L.siteId
+    inner join JobHarness JH on JH.id=A.jobHarnessId
     where A.id=?<sql:param value="${activityId}"/>
 </sql:query>
 <c:set var="activity" value="${activityQ.rows[0]}"/>
+
+<c:set var="binDir" value="${activity.jhVirtualEnv}/bin"/>
 
 <traveler:fullContext var="fullContext"/>
 <c:url var="limsUrl" value="${fullContext}/${appVariables.dataSourceMode}"/>
 
 <c:choose>
     <c:when test="${activity.isAutomatable != 0}">
-        <c:set var="command" value="lcatr-iterator --container-id=${activityId} --lims-url=${limsUrl}"/>
+        <c:set var="command" value="${binDir}/lcatr-iterator --container-id=${activityId} --lims-url=${limsUrl} --stage-root=${activity.jhStageRoot} --install-area=${activity.jhVirtualEnv}"/>
     </c:when>
     <c:when test="${activity.isHarnessed != 0}">
-        <c:set var="command">lcatr-harness --unit-type=${activity.hardwareTypeName} --unit-id=${activity.lsstId} --job=${activity.processName} --version=${activity.userVersionString} --lims-url=${limsUrl} --archive-root=${activity.jhOutputRoot}</c:set>
+        <c:set var="command">${binDir}/lcatr-harness --unit-type=${activity.hardwareTypeName} --unit-id=${activity.lsstId} --job=${activity.processName} --version=${activity.userVersionString} --lims-url=${limsUrl} --archive-root=${activity.jhOutputRoot} --stage-root=${activity.jhStageRoot} --install-area=${activity.jhVirtualEnv}</c:set>
     </c:when>
     <c:otherwise>
         <c:set var="allOk" value="false"/>
