@@ -21,8 +21,21 @@
     <c:set var="inNCR" value="false"/>
 </c:if>
 
+<%-- TODO: check if there are any harnessed steps in traveler --%>
+    <sql:query var="jhQ">
+select JH.id 
+from JobHarness JH
+inner join Site S on S.id=JH.siteId
+where S.name=?<sql:param value="${preferences.siteName}"/>
+and JH.name=?<sql:param value="${preferences.jhName}"/>
+;
+    </sql:query>
+<c:if test="${empty jhQ.rows}">
+    <traveler:error message="Your Job Harness preference is ${preferences.jhName}, but there is no such install at site ${preferences.siteName}"/>
+</c:if>
+
 <ta:createActivity var="activityId"
-    hardwareId="${hardwareId}" processId="${processId}" inNCR="${inNCR}" 
+    hardwareId="${hardwareId}" processId="${processId}" inNCR="${inNCR}" jobHarnessId="${jhQ.rows[0].id}"
 />
 
 <sql:query var="hardwareQ">
