@@ -33,6 +33,7 @@
         <traveler:locationList siteId="${param.siteId}"/>
         
         <h3>Job Harness Installs</h3>
+        <traveler:newJhForm siteId="${param.siteId}"/>
         <traveler:jhList siteId="${param.siteId}"/>
 
         <h3>Components</h3>

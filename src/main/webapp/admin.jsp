@@ -81,7 +81,8 @@
 <traveler:newLocationForm/>
 
 <hr>
-<h2>Job Harness installs</h2>
+<h2>Job Harness Installs</h2>
+<traveler:newJhForm/>
 <traveler:jhList/>
 
 <hr>
