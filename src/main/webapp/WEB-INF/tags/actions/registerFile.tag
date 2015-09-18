@@ -97,23 +97,22 @@
 
 <%-- logicalFolderPath --%>
 
-<sql:query var="hwSiteQ">
-    select S.name as siteName, S.jhOutputRoot from 
-    Hardware H
-    inner join HardwareLocationHistory HLH on HLH.hardwareId=H.id
-    inner join Location L on L.id=HLH.locationId
-    inner join Site S on S.id=L.siteId
-    where H.id=?<sql:param value="${activity.hardwareId}"/>
-    order by HLH.id desc limit 1;
-</sql:query>
+    <sql:query var="jhSiteQ">
+select S.name as siteName, JH.jhOutputRoot from 
+Activity A
+inner join JobHarness JH on JH.id=A.jobHarnessId
+inner join Site S on S.id=JH.siteId
+where A.id=?<sql:param value="${activityId}"/>
+;
+    </sql:query>
 <c:choose>
-    <c:when test="${! empty hwSiteQ.rows}">
-        <c:set var="site" value="${hwSiteQ.rows[0]}"/>
+    <c:when test="${! empty jhSiteQ.rows}">
+        <c:set var="site" value="${jhSiteQ.rows[0]}"/>
         <c:set var="siteName" value="${site.siteName}"/>
         <c:set var="jhOutputRoot" value="${site.jhOutputRoot}"/>
     </c:when>
     <c:otherwise>
-        <traveler:error message="Component ${activity.lsstId} has no location."/>
+        <traveler:error message="Cannot resolve Job Harness info."/>
     </c:otherwise>
 </c:choose>
 
