@@ -53,7 +53,7 @@ select * from JobHarness where siteId=(select id from Site where name=?<sql:para
                 </c:forEach>
             </preferences:preference>
         <tr>
-            <td>This will be used for any harnessed jobs in an travelers that you start.</td>
+            <td>This will be used for any harnessed jobs in any travelers that you start.</td>
             <td>Current Value: <c:out value="${preferences.jhName}"/></td>
         </tr>
 
