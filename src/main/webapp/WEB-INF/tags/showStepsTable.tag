@@ -30,7 +30,7 @@
         </c:choose>
         </c:if>
     </display:column>
-    <display:column title="Name">
+    <display:column title="Description">
         <c:choose>
             <c:when test="${! empty currentStepLink && step.edgePath == currentStepEPath && (step.activityId == currentStepActivityId || (currentStepActivityId == -1 && empty step.activityId))}">
                 <c:set var="contentLink" value="${currentStepLink}"/>
@@ -46,7 +46,7 @@
                 </c:url>                
             </c:otherwise>
         </c:choose>
-        <a href="${contentLink}" target="content">${step.name}</a>
+        <a href="${contentLink}" target="content">${step.shortDescription}</a>
     </display:column><
     <c:if test="${mode == 'activity'}">
         <%--<display:column property="activityId"/>--%>

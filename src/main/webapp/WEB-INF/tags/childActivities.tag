@@ -25,7 +25,7 @@
 <sql:query var="theQ">
     select 
         A.id as activityId, A.begin, A.end, A.hardwareId, A.inNCR,
-        P.name, P.id as processId, P.substeps, P.id as processPath,
+        P.name, P.id as processId, P.substeps, P.id as processPath, P.shortDescription,
         AFS.name as statusName,
         E.id as exceptionId
     from 

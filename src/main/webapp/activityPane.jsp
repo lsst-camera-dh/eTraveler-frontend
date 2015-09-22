@@ -24,7 +24,7 @@ table.datatable th, table.datatable td {
         <sql:query var="activityQ" >
             select 
             A.processId, A.hardwareId,
-            concat(P.name, ' v', P.version) as processName, P.hardwareTypeId
+            concat(P.name, ' v', P.version) as processName, P.hardwareTypeId, P.shortDescription
             from Activity A
             inner join Process P on P.id=A.processId
             where A.id=?<sql:param value="${param.activityId}"/>;
@@ -32,6 +32,7 @@ table.datatable th, table.datatable td {
         <c:set var="activity" value="${activityQ.rows[0]}"/>
           
         <h2><c:out value="${activity.processName}"/></h2>
+        <h2><c:out value="${activity.shortDescription}"/></h2>
         <traveler:activityWidget activityId="${param.activityId}"/>
         <%--<traveler:processWidget processId="${activity.processId}"/>--%>
         <traveler:eclWidget

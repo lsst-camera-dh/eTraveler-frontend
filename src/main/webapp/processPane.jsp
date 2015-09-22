@@ -25,13 +25,14 @@ table.datatable th, table.datatable td {
     </head>
     <body>
         <sql:query var="processQ" >
-            select concat(P.name, ' v', P.version) as processName, P.hardwareTypeId
+            select concat(P.name, ' v', P.version) as processName, P.hardwareTypeId, P.shortDescription
             from Process P
             where P.id=?<sql:param value="${param.processId}"/>;
         </sql:query>
         <c:set var="process" value="${processQ.rows[0]}"/>
           
         <h2><c:out value="${process.processName}"/></h2>
+        <h2><c:out value="${process.shortDescription}"/></h2>
         <traveler:processWidget processId="${param.processId}"/>
         
         <c:if test="${! empty param.parentActivityId}">

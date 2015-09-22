@@ -26,7 +26,7 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
-        <title>Process <c:out value="${process.name}"/></title>
+        <title>Process <c:out value="${process.name}, ${process.shortDescription}"/></title>
     </head>
     <body>
 

@@ -32,6 +32,7 @@
 
 <sql:query var="result" >
     select P.id as processId, concat(P.name, ' v', P.version) as processName, 
+        P.shortDescription,
         HG.name as hardwareGroupName, HG.id as hardwareGroupId, 
         TT.id as travelerTypeId, TT.creationTS,
         TTS.name as state,
@@ -77,6 +78,8 @@
 <display:table name="${result.rows}" id="ttRow" class="datatable" sort="list"
                pagesize="${fn:length(result.rows) > preferences.pageLength ? preferences.pageLength : 0}">
     <display:column property="processName" title="Name" sortable="true" headerClass="sortable"
+                    href="displayProcess.jsp" paramId="processPath" paramProperty="processId"/>
+    <display:column property="shortDescription" title="Description" sortable="true" headerClass="sortable"
                     href="displayProcess.jsp" paramId="processPath" paramProperty="processId"/>
     <c:if test="${empty hardwareGroupId or preferences.showFilteredColumns}">
         <display:column property="hardwareGroupName" title="Component Group" sortable="true" headerClass="sortable"

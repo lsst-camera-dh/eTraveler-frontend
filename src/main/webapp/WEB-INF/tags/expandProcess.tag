@@ -19,7 +19,7 @@
 %>
 
 <sql:query var="theQ">
-    select P.id as processId, P.name, P.substeps, P.id as processPath
+    select P.id as processId, P.name, P.substeps, P.id as processPath, P.shortDescription
     from Process P
     where P.id=?<sql:param value="${processId}"/>;
 </sql:query>

@@ -20,7 +20,7 @@
 
 <sql:query var="processQ" >
     select 
-        P.id, concat(P.name, ' v', P.version) as versionedName
+        P.id, concat(P.name, ' v', P.version) as versionedName, P.shortDescription
     from 
         Process P
         inner join TravelerType TT on TT.rootProcessId=P.id
@@ -106,13 +106,13 @@
         <c:when test="${empty processId}">
             <select name="processId">
                 <c:forEach var="pRow" items="${processQ.rows}">
-                    <option value="${pRow.id}">${pRow.versionedName}</option>
+                    <option value="${pRow.id}">${pRow.shortDescription}</option>
                 </c:forEach>
             </select>
         </c:when>
         <c:otherwise>
             <input type="hidden" name="processId" value="${processQ.rows[0].id}">
-            <c:out value="${processQ.rows[0].versionedName}"/>
+            <c:out value="${processQ.rows[0].shortDescription}"/>
         </c:otherwise>
     </c:choose>
             </td>

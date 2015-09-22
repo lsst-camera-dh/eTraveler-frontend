@@ -29,6 +29,7 @@ select A.id as activityId, A.begin, A.end, A.createdBy, A.closedBy,
     AFS.name as status,
     P.id as processId, 
     concat(P.name, ' v', P.version) as processName,
+    P.shortDescription,
     H.id as hardwareId, H.lsstId, H.manufacturerId,
     HT.name as hardwareName, HT.id as hardwareTypeId,
     HI.identifier as nickName
@@ -83,9 +84,11 @@ order by A.id desc
     </sql:query>
 <display:table name="${result.rows}" class="datatable" sort="list"
                pagesize="${fn:length(result.rows) > preferences.pageLength ? preferences.pageLength : 0}">
-    <display:column property="processName" title="Name" sortable="true" headerClass="sortable"
+<%--    <display:column property="processName" title="Name" sortable="true" headerClass="sortable"
+                      href="displayActivity.jsp" paramId="activityId" paramProperty="activityId"/>--%>
+     <display:column property="shortDescription" title="Description" sortable="true" headerClass="sortable"
                       href="displayActivity.jsp" paramId="activityId" paramProperty="activityId"/>
-    <c:if test="${empty hardwareId or preferences.showFilteredColumns}">
+   <c:if test="${empty hardwareId or preferences.showFilteredColumns}">
         <display:column property="lsstId" title="${appVariables.experiment} Serial Number" sortable="true" headerClass="sortable"
                         href="displayHardware.jsp" paramId="hardwareId" paramProperty="hardwareId"/>
         <display:column property="manufacturerId" title="Manufacturer Serial Number" sortable="true" headerClass="sortable"

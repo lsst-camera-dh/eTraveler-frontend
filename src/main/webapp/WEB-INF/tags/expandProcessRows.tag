@@ -22,7 +22,7 @@
 <sql:query var="childrenQ" >
     select 
     PE.id as processEdgeId, PE.child, PE.step, 
-    P.name, P.id as processId, P.substeps,
+    P.name, P.id as processId, P.substeps, P.shortDescription,
     concat('${myStepPrefix}', abs(PE.step)) as stepPath,
     concat('${myEdgePrefix}', PE.id) as edgePath,
     concat('${myProcessPrefix}', P.id) as processPath

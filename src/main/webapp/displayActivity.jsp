@@ -11,7 +11,7 @@
 
 <traveler:checkId table="Activity" id="${param.activityId}"/>
 <sql:query var="activityQ" >
-    select A.*, P.name, H.lsstId
+    select A.*, P.name, P.shortDescription, H.lsstId
     from Activity A
     inner join Process P on P.id=A.processId
     inner join Hardware H on H.id=A.hardwareId
@@ -23,7 +23,7 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
-        <title>Activity <c:out value="${activity.name}"/></title>
+        <title>Activity <c:out value="${activity.name}, ${activity.shortDescription}"/></title>
     </head>
     <body>
         <c:set var="activityAutoCreate" value="true" scope="session"/>
