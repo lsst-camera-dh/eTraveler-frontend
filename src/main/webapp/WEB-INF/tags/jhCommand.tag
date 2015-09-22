@@ -36,6 +36,7 @@
 <c:set var="activity" value="${activityQ.rows[0]}"/>
 
 <c:set var="binDir" value="${activity.jhVirtualEnv}/bin"/>
+<c:set var="instDir" value="${activity.jhVirtualEnv}/share"/>
 
 <c:choose>
     <c:when test="${! empty activity.jhCfg}">
@@ -60,10 +61,10 @@
 
 <c:choose>
     <c:when test="${activity.isAutomatable != 0}">
-        <c:set var="command" value="${binDir}/lcatr-iterator --container-id=${activityId} --lims-url=${limsUrl} --install-area=${activity.jhVirtualEnv} ${stageBit} ${cfgBit}"/>
+        <c:set var="command" value="${binDir}/lcatr-iterator --container-id=${activityId} --lims-url=${limsUrl} --install-area=${instDir} ${stageBit} ${cfgBit}"/>
     </c:when>
     <c:when test="${activity.isHarnessed != 0}">
-        <c:set var="command">${binDir}/lcatr-harness --unit-type=${activity.hardwareTypeName} --unit-id=${activity.lsstId} --job=${activity.processName} --version=${activity.userVersionString} --lims-url=${limsUrl} --archive-root=${activity.jhOutputRoot} --install-area=${activity.jhVirtualEnv} ${stageBit} ${cfgBit}</c:set>
+        <c:set var="command">${binDir}/lcatr-harness --unit-type=${activity.hardwareTypeName} --unit-id=${activity.lsstId} --job=${activity.processName} --version=${activity.userVersionString} --lims-url=${limsUrl} --archive-root=${activity.jhOutputRoot} --install-area=${instDir} ${stageBit} ${cfgBit}</c:set>
     </c:when>
     <c:otherwise>
         <c:set var="allOk" value="false"/>
