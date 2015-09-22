@@ -24,8 +24,8 @@ select id, name from Site
     <input type="hidden" name="referringPage" value="${thisPage}">
     <input type="submit" value="Add JH Install"
            <c:if test="${! mayAdmin}">disabled</c:if>>
-    Name: <input type="text" name="name">
-    Description: <textarea name="description"></textarea>
+    Name: <input type="text" name="name" required="true">
+    Description: <textarea name="description" required="true"></textarea>
     Site: <c:choose>
         <c:when test="${empty siteId}">
             <select name="siteId">
@@ -39,8 +39,8 @@ select id, name from Site
         </c:otherwise>
     </c:choose>
     <br>
-    jhVirtualEnv: <input type="text" name="jhVirtualEnv">
-    jhOutputRoot: <input type="text" name="jhOutputRoot">
+    jhVirtualEnv: <input type="text" name="jhVirtualEnv" required="true">
+    jhOutputRoot: <input type="text" name="jhOutputRoot" required="true">
     jhStageRoot: <input type="text" name="jhStageRoot">
     jhCfg: <input type="text" name="jhCfg">
 </form>
