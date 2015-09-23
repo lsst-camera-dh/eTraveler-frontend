@@ -23,8 +23,6 @@
     <body>
         <h3>Site Info</h3>
         Name: <c:out value="${site.name}"/><br>
-        Job Harness Install: <c:out value="${site.jhVirtualEnv}"/><br>
-        Job Harness Output: <c:out value="${site.jhOutputRoot}"/><br>
         Creator: <c:out value="${site.createdBy}"/><br>
         Date: <c:out value="${site.creationTS}"/><br>
         

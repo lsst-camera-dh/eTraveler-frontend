@@ -72,8 +72,6 @@
         <input type="submit" value="Add Site"
            <c:if test="${! mayAdmin}">disabled</c:if>>
         Name: <input type="text" name="name" required>
-        jhVirtualEnv: <input type="text" name="jhVirtualEnv">
-        jhOutputRoot: <input type="text" name="jhOutputRoot">
     </form>
 
 <hr>
