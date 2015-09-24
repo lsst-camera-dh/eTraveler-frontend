@@ -186,13 +186,13 @@ replaceExisting: <c:out value="${replaceExisting}"/><br>
             <traveler:error message="Couldn't save file ${fullFsPath}."/>
         </c:if>
     </c:if>
-<%--    <c:catch var="ex">--%>
+    <c:catch var="ex">
     <dc:dcRegister dataCatalogDb="${dataCatalogDb}"
         name="${name}" fileFormat="${fileFormat}" dataType="${dataType}"
                    logicalFolderPath="${logicalFolderPath}" 
                    site="${dcSite}" location="${fullFsPath}" replaceExisting="${replaceExisting}"
                    var="dcPk"/>
-<%--    </c:catch>--%>
+    </c:catch>
     <c:if test="${!empty ex}">
         <traveler:error message="Couldn't register file ${fullFsPath}.<br>
 Perhaps the file format (${fileFormat}) is not on the data catalog's list?<br>
