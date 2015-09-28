@@ -21,6 +21,10 @@
         <traveler:fullRequestString var="here"/>
         ${here}
   
+        <c:forEach var="group" items="${gm:getGroupsForUser(pageContext, 'all')}">
+            <br>-${group}
+        </c:forEach>
+        
 <traveler:checkPerm var="mayWD" groups="EtravelerWorkflowDevelopers"/>
 <traveler:checkPerm var="maySE" groups="EtravelerSubjectExperts"/>
 <traveler:checkPerm var="maySoftMan" groups="EtravelerSoftwareManagers"/>
