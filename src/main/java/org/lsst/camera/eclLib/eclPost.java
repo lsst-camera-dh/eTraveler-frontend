@@ -22,6 +22,7 @@ public class eclPost extends SimpleTagSupport {
     private String text;
     private String author;
     private String hardwareTypeId;
+    private String hardwareGroupId;
     private String hardwareId;
     private String processId;
     private String activityId;
@@ -42,11 +43,6 @@ public class eclPost extends SimpleTagSupport {
     public void doTag() throws JspException {
         JspWriter out = getJspContext().getOut();
         try {
-            // TODO: insert code to write html before writing the body content.
-            // e.g.:
-            //
-            // out.println("<strong>" + attribute_1 + "</strong>");
-            // out.println("    <blockquote>");
 /**
             out.println("Author: " + author + "<br>");
             out.println("Activity: " + activityId + "<br>");
@@ -54,6 +50,7 @@ public class eclPost extends SimpleTagSupport {
             out.println("Component: " + hardwareId + "<br>");
             out.println("Component Type: " + hardwareTypeId + "<br>");
             out.println("Category: " + category + "<br>");
+            out.println("Component Group: " + hardwareGroupId + "<br>");
             out.println("Text: " + text + "<br>");
 **/
             conn = new ELogConnectionUtils();
@@ -66,6 +63,7 @@ public class eclPost extends SimpleTagSupport {
             entry.setFormField("ProcessId", processId);
             entry.setFormField("ComponentId", hardwareId);
             entry.setFormField("HardwareTypeId", hardwareTypeId);
+            entry.setFormField("HardwareGroupId", hardwareGroupId);
             entry.setFormField("text", text);
             result = conn.postEntryToElog(entry, version);
 
@@ -74,10 +72,6 @@ public class eclPost extends SimpleTagSupport {
                 f.invoke(out);
             }
 
-            // TODO: insert code to write html after writing the body content.
-            // e.g.:
-            //
-            // out.println("    </blockquote>");
         } catch (java.io.IOException ex) {
             throw new JspException("Error in eclPost tag", ex);
         }
@@ -91,6 +85,9 @@ public class eclPost extends SimpleTagSupport {
     }
     public void setHardwareTypeId(String hardwareTypeId) {
         this.hardwareTypeId = hardwareTypeId;
+    }
+    public void setHardwareGroupId(String hardwareGroupId) {
+        this.hardwareGroupId = hardwareGroupId;
     }
     public void setHardwareId(String hardwareId) {
         this.hardwareId = hardwareId;

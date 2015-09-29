@@ -22,6 +22,7 @@
         text="${text}" 
         author="${param.author}" 
         hardwareTypeId="${param.hardwareTypeId}" 
+        hardwareGroupId="${param.hardwareGroupId}" 
         hardwareId="${param.hardwareId}" 
         processId="${param.processId}" 
         activityId="${param.activityId}"

@@ -9,7 +9,8 @@
 <%@taglib prefix="traveler" tagdir="/WEB-INF/tags"%>
 
 <%@attribute name="author" required="true"%>
-<%@attribute name="hardwareTypeId" required="true"%>
+<%@attribute name="hardwareTypeId"%>
+<%@attribute name="hardwareGroupId"%>
 <%@attribute name="hardwareId"%>
 <%@attribute name="processId"%>
 <%@attribute name="activityId"%>
@@ -27,6 +28,7 @@
 <c:set var="processField" value="processId${! empty processId ? processId : 0}"/>
 <c:set var="hardwareField" value="hardwareId${! empty hardwareId ? hardwareId : 0}"/>
 <c:set var="hardwareTypeField" value="hardwareTypeId${! empty hardwareTypeId ? hardwareTypeId : 0}"/>
+<c:set var="hardwareGroupField" value="hardwareGroupId${! empty hardwareGroupId ? hardwareGroupId : 0}"/>
 
 <c:choose>
     <c:when test="${! empty activityId}">
@@ -40,6 +42,12 @@
         <c:set var="paramName" value="processPath"/>
         <c:set var="paramValue" value="${processId}"/>
         <c:set var="searchField" value="${processField}"/>
+    </c:when>
+    <c:when test="${! empty hardwareGroupId}">
+        <c:set var="page" value="displayHardwareGroup.jsp"/>            
+        <c:set var="paramName" value="hardwareGroupId"/>
+        <c:set var="paramValue" value="${hardwareGroupId}"/>
+        <c:set var="searchField" value="${hardwareGroupField}"/>
     </c:when>
     <c:when test="${! empty hardwareId}">
         <c:set var="page" value="displayHardware.jsp"/>
@@ -81,6 +89,7 @@
     <input type="hidden" name="displayLink" value="${displayLink}">
     <input type="hidden" name="author" value="${author}">
     <input type="hidden" name="hardwareTypeId" value="${hardwareTypeField}">
+    <input type="hidden" name="hardwareGroupId" value="${hardwareGroupField}">
     <input type="hidden" name="hardwareId" value="${hardwareField}">
     <input type="hidden" name="processId" value="${processField}">
     <input type="hidden" name="activityId" value="${activityField}">

@@ -27,6 +27,12 @@
         <type>java.lang.String</type>
     </attribute>
     <attribute>
+        <name>hardwareGroupId</name>
+        <required>true</required>
+        <rtexprvalue>true</rtexprvalue>
+        <type>java.lang.String</type>
+    </attribute>
+    <attribute>
         <name>hardwareId</name>
         <required>true</required>
         <rtexprvalue>true</rtexprvalue>
