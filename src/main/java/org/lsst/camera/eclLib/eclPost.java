@@ -21,6 +21,7 @@ import org.lsst.ccs.elog.ElogTransactionResult;
 public class eclPost extends SimpleTagSupport {
     private String text;
     private String author;
+    private String dataSourceMode;
     private String hardwareTypeId;
     private String hardwareGroupId;
     private String hardwareId;
@@ -45,6 +46,7 @@ public class eclPost extends SimpleTagSupport {
         try {
 /**
             out.println("Author: " + author + "<br>");
+            out.println("DataSourceMode: " + dataSourceMode + "<br>");
             out.println("Activity: " + activityId + "<br>");
             out.println("Process: " + processId + "<br>");
             out.println("Component: " + hardwareId + "<br>");
@@ -59,6 +61,7 @@ public class eclPost extends SimpleTagSupport {
             entry.setCategory(category);
             entry.setFormName("eTraveler entry");
             entry.setFormField("Author", author);
+            entry.setFormField("DataSourceMode", dataSourceMode);
             entry.setFormField("ActivityId", activityId);
             entry.setFormField("ProcessId", processId);
             entry.setFormField("ComponentId", hardwareId);
@@ -82,6 +85,9 @@ public class eclPost extends SimpleTagSupport {
     }
     public void setAuthor(String author) {
         this.author = author;
+    }
+    public void setDataSourceMode(String dataSourceMode) {
+        this.dataSourceMode = dataSourceMode;
     }
     public void setHardwareTypeId(String hardwareTypeId) {
         this.hardwareTypeId = hardwareTypeId;
