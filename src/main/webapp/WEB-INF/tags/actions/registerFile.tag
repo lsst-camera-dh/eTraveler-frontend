@@ -97,6 +97,7 @@
 
 <%-- logicalFolderPath --%>
 
+<c:if test="${mode == 'harnessed'}">
     <sql:query var="jhSiteQ">
 select S.name as siteName, JH.jhOutputRoot from 
 Activity A
@@ -105,16 +106,17 @@ inner join Site S on S.id=JH.siteId
 where A.id=?<sql:param value="${activityId}"/>
 ;
     </sql:query>
-<c:choose>
-    <c:when test="${! empty jhSiteQ.rows}">
-        <c:set var="site" value="${jhSiteQ.rows[0]}"/>
-        <c:set var="siteName" value="${site.siteName}"/>
-        <c:set var="jhOutputRoot" value="${site.jhOutputRoot}"/>
-    </c:when>
-    <c:otherwise>
-        <traveler:error message="Cannot resolve Job Harness info."/>
-    </c:otherwise>
-</c:choose>
+    <c:choose>
+        <c:when test="${! empty jhSiteQ.rows}">
+            <c:set var="site" value="${jhSiteQ.rows[0]}"/>
+            <c:set var="siteName" value="${site.siteName}"/>
+            <c:set var="jhOutputRoot" value="${site.jhOutputRoot}"/>
+        </c:when>
+        <c:otherwise>
+            <traveler:error message="Cannot resolve Job Harness info."/>
+        </c:otherwise>
+    </c:choose>
+</c:if>
 
 <c:choose>
     <c:when test="${empty activity.userVersionString}">
