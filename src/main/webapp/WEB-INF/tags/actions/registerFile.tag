@@ -81,6 +81,14 @@
 <c:set var="uploadDigest" value="${digest}" scope="request"/>
     </c:when>
     <c:when test="${mode == 'harnessed'}">
+        <c:choose>
+            <c:when test="${fn:contains(name, '/')}">
+                <upload:jhParser jhName="${name}" varPath="jhSubPath" varName="name"/>
+            </c:when>
+            <c:otherwise>
+                <c:set var="jhSubPath" value=""/>
+            </c:otherwise>
+        </c:choose>
 <c:set var="fnComponents" value="${fn:split(name, '.')}"/>
 <c:set var="fileExt" value="${fn:toLowerCase(fnComponents[fn:length(fnComponents)-1])}"/>
 <c:set var="fileFormat" value="${fileExt == name ? 'unspecified' : fileExt}"/>
@@ -144,6 +152,9 @@ where A.id=?<sql:param value="${activityId}"/>
 <c:set var="commonPath" value=
 "${activity.hardwareTypeName}/${activity.lsstId}/${activity.processName}${processVersion}/${activityId}"
 />
+<c:if test="${mode == 'harnessed' && ! empty jhSubPath}">
+    <c:set var="commonPath" value="${commonPath}/${jhSubPath}"/>
+</c:if>
 
 <c:set var="logicalFolderPath" value="${dcHead}/${commonPath}"/>
 

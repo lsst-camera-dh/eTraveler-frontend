@@ -78,4 +78,28 @@
     </attribute>
   </tag>
 
+  <tag>
+    <name>jhParser</name>
+    <tag-class>eTraveler.JhParser</tag-class>
+    <body-content>scriptless</body-content>
+    <attribute>
+      <name>jhName</name>
+      <required>true</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>String</type>
+    </attribute>
+    <attribute>
+      <name>varPath</name>
+      <required>true</required>
+      <rtexprvalue>false</rtexprvalue>
+      <type>String</type>
+    </attribute>
+    <attribute>
+      <name>varName</name>
+      <required>true</required>
+      <rtexprvalue>false</rtexprvalue>
+      <type>String</type>
+    </attribute>
+  </tag>
+
 </taglib>
