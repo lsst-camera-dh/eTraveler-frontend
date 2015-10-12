@@ -10,6 +10,7 @@
 <%@taglib prefix="preferences" uri="http://srs.slac.stanford.edu/preferences"%>
 <%@taglib prefix="traveler" tagdir="/WEB-INF/tags"%>
 <%@taglib prefix="ta" tagdir="/WEB-INF/tags/actions"%>
+<%@taglib uri="/tlds/eclTagLibrary.tld" prefix="ecl"%>
 
 <!DOCTYPE html>
 <html>
@@ -24,6 +25,11 @@
         <c:forEach var="group" items="${gm:getGroupsForUser(pageContext, 'all')}">
             <br>-${group}
         </c:forEach>
+            
+            <ecl:eclCategories var="categories" version="${appVariables.etravelerELogVersion}"/>
+            <c:forEach var="category" items="${categories}">
+                <br>-_-${category}
+            </c:forEach>
         
 <traveler:checkPerm var="mayWD" groups="EtravelerWorkflowDevelopers"/>
 <traveler:checkPerm var="maySE" groups="EtravelerSubjectExperts"/>

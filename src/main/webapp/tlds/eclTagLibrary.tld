@@ -3,7 +3,6 @@
   <tlib-version>1.0</tlib-version>
   <short-name>ecltaglibrary</short-name>
   <uri>/tlds/eclTagLibrary</uri>
-
   <tag>
     <name>eclPost</name>
     <tag-class>org.lsst.camera.eclLib.eclPost</tag-class>
@@ -15,35 +14,57 @@
       <type>java.lang.String</type>
     </attribute>
     <attribute>
-        <name>author</name>
-        <required>true</required>
-        <rtexprvalue>true</rtexprvalue>
-        <type>java.lang.String</type>
+      <name>author</name>
+      <required>true</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.String</type>
     </attribute>
     <attribute>
-        <name>hardwareTypeId</name>
-        <required>true</required>
-        <rtexprvalue>true</rtexprvalue>
-        <type>java.lang.String</type>
+      <name>hardwareTypeId</name>
+      <required>true</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.String</type>
     </attribute>
     <attribute>
-        <name>hardwareId</name>
-        <required>true</required>
-        <rtexprvalue>true</rtexprvalue>
-        <type>java.lang.String</type>
+      <name>hardwareId</name>
+      <required>true</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.String</type>
     </attribute>
     <attribute>
-        <name>processId</name>
-        <required>true</required>
-        <rtexprvalue>true</rtexprvalue>
-        <type>java.lang.String</type>
+      <name>processId</name>
+      <required>true</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.String</type>
     </attribute>
     <attribute>
-        <name>activityId</name>
+      <name>activityId</name>
+      <required>true</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.String</type>
+    </attribute>
+    <attribute>
+      <name>version</name>
+      <required>true</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.String</type>
+    </attribute>
+  </tag>
+  <tag>
+    <name>eclCategories</name>
+    <tag-class>org.lsst.camera.eclLib.eclCategories</tag-class>
+    <body-content>empty</body-content>
+    <attribute>
+        <name>var</name>
         <required>true</required>
-        <rtexprvalue>true</rtexprvalue>
+        <rtexprvalue>false</rtexprvalue>
         <type>java.lang.String</type>
     </attribute>
+    <variable>
+      <name-from-attribute>var</name-from-attribute>
+      <variable-class>java.util.List</variable-class>
+      <scope>AT_BEGIN</scope>
+    </variable>
     <attribute>
         <name>version</name>
         <required>true</required>
