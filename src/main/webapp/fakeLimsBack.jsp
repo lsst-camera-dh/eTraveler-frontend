@@ -50,6 +50,15 @@
         <c:set var="userName" value="${inputs.operator}" scope="session"/>
         <traveler:limsScript/>
     </c:when>
+    <c:when test="${command == 'registerHardware'}">
+        <traveler:limsRegisterHardware/>
+    </c:when>
+    <c:when test="${command == 'runTraveler'}">
+        <traveler:limsRunTraveler/>
+    </c:when>
+    <c:when test="${command == 'runOneStep'}">
+        <traveler:limsOneStep/>
+    </c:when>
     <c:when test="${command == 'status'}">
         <c:set var="allOk" value="false"/>
         <c:set var="message" value="status doesn't work yet."/>
