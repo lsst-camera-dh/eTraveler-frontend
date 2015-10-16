@@ -4,10 +4,7 @@
     Author     : focke
 --%>
 
-<%@tag description="put the tag description here" pageEncoding="UTF-8"%>
+<%@tag description="Register new hardware from scripting API" pageEncoding="UTF-8"%>
+<%@taglib prefix="ta" tagdir="/WEB-INF/tags/actions"%>
 
-<%-- The list of normal or fragment attributes can be specified here: --%>
 <%@attribute name="message"%>
-
-<%-- any content can be specified here e.g.: --%>
-<h2>${message}</h2>
