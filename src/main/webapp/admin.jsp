@@ -26,7 +26,7 @@
     <c:set var="backendLink" 
     value="${pageContext.request.scheme}://${pageContext.request.serverName}:${pageContext.request.serverPort}${backend}"/>
     <c:url var="backendUrl" value="${backendLink}">
-        <c:param name="dataSoucreMode" value="${appVariables.dataSourceMode}"/>
+        <c:param name="dataSourceMode" value="${appVariables.dataSourceMode}"/>
     </c:url>
     <a href="${backendUrl}">Upload a new Traveler Type or version</a>
 
