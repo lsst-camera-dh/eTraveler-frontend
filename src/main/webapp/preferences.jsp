@@ -12,14 +12,18 @@
     
     <body>
         
-        <sql:query var="siteQ" >
-            select id, name from Site;
+        <sql:query var="siteQ">
+select id, name from Site;
         </sql:query>
             
-        <sql:query var="idAuthQ" >
-            select id, name from HardwareIdentifierAuthority;
+        <sql:query var="idAuthQ">
+select id, name from HardwareIdentifierAuthority;
         </sql:query>
-            
+
+        <sql:query var="jhQ">
+select * from JobHarness where siteId=(select id from Site where name=?<sql:param value="${preferences.siteName}"/>);
+        </sql:query>
+
         <preferences:preferences name="preferences">
 
             <preferences:preference name="writeable" title="<b>Write:</b> ">
@@ -42,6 +46,16 @@
             <td>Current Value: <c:out value="${preferences.siteName}"/></td>
         </tr>
 
+        <preferences:preference name="jhName" title="<b>Job Harness Install:</b> ">
+                <preferences:value value="UNSET"/>
+                <c:forEach var="row" items="${jhQ.rows}">
+                    <preferences:value value="${row.name}"/>
+                </c:forEach>
+            </preferences:preference>
+        <tr>
+            <td>This will be used for any harnessed jobs in any travelers that you start.</td>
+            <td>Current Value: <c:out value="${preferences.jhName}"/></td>
+        </tr>
 
             <preferences:preference name="idAuthName" title="<b>Identifier Authority:</b> ">
                 <preferences:value value="null"/>

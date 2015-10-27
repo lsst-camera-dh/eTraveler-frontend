@@ -81,6 +81,14 @@
 <c:set var="uploadDigest" value="${digest}" scope="request"/>
     </c:when>
     <c:when test="${mode == 'harnessed'}">
+        <c:choose>
+            <c:when test="${fn:contains(name, '/')}">
+                <upload:jhParser jhName="${name}" varPath="jhSubPath" varName="name"/>
+            </c:when>
+            <c:otherwise>
+                <c:set var="jhSubPath" value=""/>
+            </c:otherwise>
+        </c:choose>
 <c:set var="fnComponents" value="${fn:split(name, '.')}"/>
 <c:set var="fileExt" value="${fn:toLowerCase(fnComponents[fn:length(fnComponents)-1])}"/>
 <c:set var="fileFormat" value="${fileExt == name ? 'unspecified' : fileExt}"/>
@@ -97,25 +105,26 @@
 
 <%-- logicalFolderPath --%>
 
-<sql:query var="hwSiteQ">
-    select S.name as siteName, S.jhOutputRoot from 
-    Hardware H
-    inner join HardwareLocationHistory HLH on HLH.hardwareId=H.id
-    inner join Location L on L.id=HLH.locationId
-    inner join Site S on S.id=L.siteId
-    where H.id=?<sql:param value="${activity.hardwareId}"/>
-    order by HLH.id desc limit 1;
-</sql:query>
-<c:choose>
-    <c:when test="${! empty hwSiteQ.rows}">
-        <c:set var="site" value="${hwSiteQ.rows[0]}"/>
-        <c:set var="siteName" value="${site.siteName}"/>
-        <c:set var="jhOutputRoot" value="${site.jhOutputRoot}"/>
-    </c:when>
-    <c:otherwise>
-        <traveler:error message="Component ${activity.lsstId} has no location."/>
-    </c:otherwise>
-</c:choose>
+<c:if test="${mode == 'harnessed'}">
+    <sql:query var="jhSiteQ">
+select S.name as siteName, JH.jhOutputRoot from 
+Activity A
+inner join JobHarness JH on JH.id=A.jobHarnessId
+inner join Site S on S.id=JH.siteId
+where A.id=?<sql:param value="${activityId}"/>
+;
+    </sql:query>
+    <c:choose>
+        <c:when test="${! empty jhSiteQ.rows}">
+            <c:set var="site" value="${jhSiteQ.rows[0]}"/>
+            <c:set var="siteName" value="${site.siteName}"/>
+            <c:set var="jhOutputRoot" value="${site.jhOutputRoot}"/>
+        </c:when>
+        <c:otherwise>
+            <traveler:error message="Cannot resolve Job Harness info."/>
+        </c:otherwise>
+    </c:choose>
+</c:if>
 
 <c:choose>
     <c:when test="${empty activity.userVersionString}">
@@ -143,6 +152,9 @@
 <c:set var="commonPath" value=
 "${activity.hardwareTypeName}/${activity.lsstId}/${activity.processName}${processVersion}/${activityId}"
 />
+<c:if test="${mode == 'harnessed' && ! empty jhSubPath}">
+    <c:set var="commonPath" value="${commonPath}/${jhSubPath}"/>
+</c:if>
 
 <c:set var="logicalFolderPath" value="${dcHead}/${commonPath}"/>
 

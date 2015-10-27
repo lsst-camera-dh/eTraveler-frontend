@@ -85,9 +85,45 @@
     <input type="hidden" name="processId" value="${processField}">
     <input type="hidden" name="activityId" value="${activityField}">
     <input type="hidden" name="version" value="${version}">
-    <textarea name="text"></textarea>
+    <table>
+        <tr>
+            <td>
+    <textarea name="text" required="true"></textarea>
+            </td>
+            <td>
+                <table>
+                    <tr>
+                        <td>
+    <select name="category" required="true">
+        <option value="" selected disabled>Pick a category</option>
+        <option value="Contamination">Contamination</option>
+        <option value="Electronic">Electronic</option>
+        <option value="Electronic/ASPIC">Electronic/ASPIC</option>
+        <option value="Electronic/CABAC">Electronic/CABAC</option>
+        <option value="Electronic/REB">Electronic/REB</option>
+        <option value="MTF">MTF</option>
+        <option value="Mechanical">Mechanical</option>
+        <option value="Refrigeration Test">Refrigeration Test</option>
+        <option value="Sensor">Sensor</option>
+        <option value="Sensor/Acceptance">Sensor/Acceptance</option>
+        <option value="Sensor/TS1 configuration">Sensor/TS1 configuration</option>
+        <option value="Sensor/TS2 configuration">Sensor/TS2 configuration</option>
+        <option value="Sensor/TS3 configuration">Sensor/TS3 configuration</option>
+        <option value="Single Filter Test">Single Filter Test</option>
+        <option value="Testing">Testing</option>
+    </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
     <input type="SUBMIT" value="Post a comment"
         <c:if test="${! mayTravel}">disabled</c:if>>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
 </form>
         </td>
     </tr>

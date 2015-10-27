@@ -23,6 +23,7 @@
     select 
     PE.id as processEdgeId, PE.child, PE.step, 
     P.name, P.id as processId, P.substeps, P.shortDescription,
+    P.travelerActionMask&(select maskBit from InternalAction where name='harnessedJob') as isHarnessed,
     concat('${myStepPrefix}', abs(PE.step)) as stepPath,
     concat('${myEdgePrefix}', PE.id) as edgePath,
     concat('${myProcessPrefix}', P.id) as processPath

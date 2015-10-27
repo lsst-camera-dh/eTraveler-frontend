@@ -23,8 +23,6 @@
     <body>
         <h3>Site Info</h3>
         Name: <c:out value="${site.name}"/><br>
-        Job Harness Install: <c:out value="${site.jhVirtualEnv}"/><br>
-        Job Harness Output: <c:out value="${site.jhOutputRoot}"/><br>
         Creator: <c:out value="${site.createdBy}"/><br>
         Date: <c:out value="${site.creationTS}"/><br>
         
@@ -32,6 +30,10 @@
         <traveler:newLocationForm siteId="${param.siteId}"/>
         <traveler:locationList siteId="${param.siteId}"/>
         
+        <h3>Job Harness Installs</h3>
+        <traveler:newJhForm siteId="${param.siteId}"/>
+        <traveler:jhList siteId="${param.siteId}"/>
+
         <h3>Components</h3>
         <traveler:hardwareList siteId="${param.siteId}"/>
     </body>

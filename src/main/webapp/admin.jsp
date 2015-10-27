@@ -72,13 +72,16 @@
         <input type="submit" value="Add Site"
            <c:if test="${! mayAdmin}">disabled</c:if>>
         Name: <input type="text" name="name" required>
-        jhVirtualEnv: <input type="text" name="jhVirtualEnv">
-        jhOutputRoot: <input type="text" name="jhOutputRoot">
     </form>
 
 <hr>
 <h2>Locations</h2>
-    <traveler:newLocationForm/>
+<traveler:newLocationForm/>
+
+<hr>
+<h2>Job Harness Installs</h2>
+<traveler:newJhForm/>
+<traveler:jhList/>
 
 <hr>
 <h2>Hardware Identifier Authorities</h2>

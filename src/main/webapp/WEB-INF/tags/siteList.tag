@@ -30,8 +30,6 @@ group by S.id
                     href="displaySite.jsp" paramId="siteId" paramProperty="id"/>
     <display:column property="nLocations" title="# Locations" sortable="true" headerClass="sortable"/>
     <display:column property="nComponents" title="# Components" sortable="true" headerClass="sortable"/>
-    <display:column property="jhVirtualEnv" sortable="true" headerClass="sortable"/>
-    <display:column property="jhOutputRoot" sortable="true" headerClass="sortable"/>
     <display:column property="createdBy" title="Creator" sortable="true" headerClass="sortable"/>
     <display:column property="creationTS" title="Date" sortable="true" headerClass="sortable"/>
 </display:table>
