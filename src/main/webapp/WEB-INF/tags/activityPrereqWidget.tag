@@ -122,6 +122,6 @@ order by PP.id
 <form method="get" action="operator/startActivity.jsp" target="_top">
     <input type="hidden" name="activityId" value="${activityId}">
     <input type="hidden" name="topActivityId" value="${topActivityId}">
-    <input type="submit" value="Start Work"
+    <input type="submit" value="Start Step"
            <c:if test="${(! readyToStart) || (! mayOperate)}">disabled</c:if>>
 </form>                    

@@ -25,6 +25,7 @@ public class eclPost extends SimpleTagSupport {
     private String hardwareId;
     private String processId;
     private String activityId;
+    private String category;
     private String version;
     
     private ELogConnectionUtils conn;
@@ -52,12 +53,13 @@ public class eclPost extends SimpleTagSupport {
             out.println("Process: " + processId + "<br>");
             out.println("Component: " + hardwareId + "<br>");
             out.println("Component Type: " + hardwareTypeId + "<br>");
+            out.println("Category: " + category + "<br>");
             out.println("Text: " + text + "<br>");
 **/
             conn = new ELogConnectionUtils();
             entry = new ElogEntry();
             entry.setAuthor(author);
-            entry.setCategory("Testing");
+            entry.setCategory(category);
             entry.setFormName("eTraveler entry");
             entry.setFormField("Author", author);
             entry.setFormField("ActivityId", activityId);
@@ -98,6 +100,9 @@ public class eclPost extends SimpleTagSupport {
     }
     public void setActivityId(String activityId) {
         this.activityId = activityId;
+    }
+    public void setCategory(String category) {
+        this.category = category;
     }
     public void setVersion(String version) {
         this.version = version;

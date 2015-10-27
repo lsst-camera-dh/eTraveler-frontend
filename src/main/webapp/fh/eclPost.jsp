@@ -25,6 +25,7 @@
         hardwareId="${param.hardwareId}" 
         processId="${param.processId}" 
         activityId="${param.activityId}"
+        category="${param.category}"
         version="${param.version}"
         />
     </body>
