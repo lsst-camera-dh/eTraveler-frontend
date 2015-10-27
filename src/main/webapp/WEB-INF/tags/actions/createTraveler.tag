@@ -21,9 +21,32 @@
     <c:set var="inNCR" value="false"/>
 </c:if>
 
-<ta:createActivity var="activityId"
-    hardwareId="${hardwareId}" processId="${processId}" inNCR="${inNCR}" 
-/>
+<%-- TODO: check if there are any harnessed steps in traveler --%>
+<traveler:hasHarnessedSteps var="hasHarnessed" processId="${processId}"/>
+<c:if test="${hasHarnessed}">
+    <sql:query var="jhQ">
+select JH.id 
+from JobHarness JH
+inner join Site S on S.id=JH.siteId
+where S.name=?<sql:param value="${preferences.siteName}"/>
+and JH.name=?<sql:param value="${preferences.jhName}"/>
+;
+    </sql:query>
+    <c:if test="${empty jhQ.rows}">
+        <traveler:error message="Your Job Harness preference is ${preferences.jhName}, but there is no such install at site ${preferences.siteName}"/>
+    </c:if>
+</c:if>
+
+<c:choose>
+    <c:when test="${hasHarnessed}">
+        <ta:createActivity var="activityId"
+            hardwareId="${hardwareId}" processId="${processId}" inNCR="${inNCR}" jobHarnessId="${jhQ.rows[0].id}"/>
+    </c:when>
+    <c:otherwise>
+        <ta:createActivity var="activityId"
+            hardwareId="${hardwareId}" processId="${processId}" inNCR="${inNCR}"/>
+    </c:otherwise>
+</c:choose>
 
 <sql:query var="hardwareQ">
     select H.*, HS.name

@@ -15,9 +15,16 @@
 <%@attribute name="processEdgeId"%>
 <%@attribute name="hardwareRelationshipId"%>
 <%@attribute name="iteration"%>
-
+<%@attribute name="jobHarnessId"%>
 <%@attribute name="var" required="true" rtexprvalue="false"%>
 <%@variable name-from-attribute="var" alias="activityId" scope="AT_BEGIN"%>
+
+<c:if test="${empty jobHarnessId && ! empty parentActivityId}">
+    <sql:query var="jhQ">
+select jobHarnessId from Activity where id=?<sql:param value="${parentActivityId}"/>;
+    </sql:query>
+    <c:set var="jobHarnessId" value="${jhQ.rows[0].jobHarnessId}"/>
+</c:if>
 
     <sql:update >
 insert into Activity set
@@ -28,6 +35,9 @@ hardwareId=?<sql:param value="${hardwareId}"/>,
 processId=?<sql:param value="${processId}"/>,
 <c:if test="${! empty parentActivityId}">
     parentActivityId=?<sql:param value="${parentActivityId}"/>,
+</c:if>
+<c:if test="${! empty jobHarnessId}">
+    jobHarnessId=?<sql:param value="${jobHarnessId}"/>,
 </c:if>
 <c:if test="${! empty processEdgeId}">
     processEdgeId=?<sql:param value="${processEdgeId}"/>,
