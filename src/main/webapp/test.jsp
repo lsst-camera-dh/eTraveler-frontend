@@ -25,10 +25,6 @@
             <br>-${group}
         </c:forEach>
         
-        <br>
-        <traveler:hasHarnessedSteps var="foo" processId="121"/>
-        [${foo}]
-        <br>
 <traveler:checkPerm var="mayWD" groups="EtravelerWorkflowDevelopers"/>
 <traveler:checkPerm var="maySE" groups="EtravelerSubjectExperts"/>
 <traveler:checkPerm var="maySoftMan" groups="EtravelerSoftwareManagers"/>

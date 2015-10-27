@@ -11,7 +11,6 @@ public class UserPreferences implements ApplicationPreferences {
     
     public String writeable = "true";
     public String siteName = "SLAC";
-    public String jhName = "UNSET";
     public String idAuthName = "null";
     public int pageLength = 10;
     public int componentHeight = 99;
@@ -30,13 +29,6 @@ public class UserPreferences implements ApplicationPreferences {
     }
     public void setSiteName(String siteName) {
         this.siteName = siteName;    
-    }
-
-    public String getJhName() {
-        return jhName;
-    }
-    public void setJhName(String jhName) {
-        this.jhName = jhName;    
     }
 
     public String getIdAuthName() {
