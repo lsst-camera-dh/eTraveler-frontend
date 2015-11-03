@@ -7,6 +7,7 @@
 <%@tag description="eLog stuff" pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@taglib prefix="traveler" tagdir="/WEB-INF/tags"%>
+<%@taglib uri="/tlds/eclTagLibrary.tld" prefix="ecl"%>
 
 <%@attribute name="author" required="true"%>
 <%@attribute name="hardwareTypeId" required="true"%>
@@ -18,6 +19,8 @@
 <traveler:checkPerm var="mayTravel" groups="EtravelerAdmin,EtravelerApprover,EtravelerOperator,EtravelerSupervisor"/>
 
 <h2>Electronic Logbook</h2>
+
+<ecl:eclCategories var="categories" version="${appVariables.etravelerELogVersion}"/>
 
 <c:set var="version" value="${appVariables.etravelerELogVersion}"/>
 <c:set var="eLogHome" value="${appVariables.etravelerELogUrl}"/>
@@ -96,21 +99,9 @@
                         <td>
     <select name="category" required="true">
         <option value="" selected disabled>Pick a category</option>
-        <option value="Contamination">Contamination</option>
-        <option value="Electronic">Electronic</option>
-        <option value="Electronic/ASPIC">Electronic/ASPIC</option>
-        <option value="Electronic/CABAC">Electronic/CABAC</option>
-        <option value="Electronic/REB">Electronic/REB</option>
-        <option value="MTF">MTF</option>
-        <option value="Mechanical">Mechanical</option>
-        <option value="Refrigeration Test">Refrigeration Test</option>
-        <option value="Sensor">Sensor</option>
-        <option value="Sensor/Acceptance">Sensor/Acceptance</option>
-        <option value="Sensor/TS1 configuration">Sensor/TS1 configuration</option>
-        <option value="Sensor/TS2 configuration">Sensor/TS2 configuration</option>
-        <option value="Sensor/TS3 configuration">Sensor/TS3 configuration</option>
-        <option value="Single Filter Test">Single Filter Test</option>
-        <option value="Testing">Testing</option>
+        <c:forEach var="category" items="${categories}">
+            <option value="${category}">${category}</option>
+        </c:forEach>
     </select>
                         </td>
                     </tr>
