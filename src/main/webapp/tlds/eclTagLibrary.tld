@@ -44,6 +44,12 @@
       <type>java.lang.String</type>
     </attribute>
     <attribute>
+        <name>category</name>
+        <required>true</required>
+        <rtexprvalue>true</rtexprvalue>
+        <type>java.lang.String</type>
+    </attribute>
+    <attribute>
       <name>version</name>
       <required>true</required>
       <rtexprvalue>true</rtexprvalue>
@@ -61,16 +67,10 @@
         <type>java.lang.String</type>
     </attribute>
     <variable>
-      <name-from-attribute>var</name-from-attribute>
-      <variable-class>java.util.List</variable-class>
-      <scope>AT_BEGIN</scope>
+        <name-from-attribute>var</name-from-attribute>
+        <variable-class>java.util.List</variable-class>
+        <scope>AT_BEGIN</scope>
     </variable>
-    <attribute>
-        <name>category</name>
-        <required>true</required>
-        <rtexprvalue>true</rtexprvalue>
-        <type>java.lang.String</type>
-    </attribute>
     <attribute>
         <name>version</name>
         <required>true</required>
