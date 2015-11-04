@@ -77,7 +77,7 @@
     <tr>
         <td>
 <c:url var="searchLink" value="${eLogHome}/${eLogSearchPath}">
-    <c:param name="adv_text" value="dataSourceMode${appVariables.dataSourceMode} & ${searchField}"/>
+    <c:param name="adv_text" value="${searchField}"/>
 </c:url>
 <a href="${searchLink}" target="_blank">Search eLog</a>
         </td>
