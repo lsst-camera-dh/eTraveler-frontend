@@ -13,6 +13,7 @@
 <%-- The list of normal or fragment attributes can be specified here: --%>
 <%@attribute name="hardwareId" required="true"%>
 <%@attribute name="processId" required="true"%>
+<%@attribute name="jobHarnessId"%>
 <%@attribute name="inNCR"%>
 <%@attribute name="var" required="true" rtexprvalue="false"%>
 <%@variable name-from-attribute="var" alias="activityId" scope="AT_BEGIN"%>
@@ -21,26 +22,13 @@
     <c:set var="inNCR" value="false"/>
 </c:if>
 
-<%-- TODO: check if there are any harnessed steps in traveler --%>
+<%-- check if there are any harnessed steps in traveler --%>
 <traveler:hasHarnessedSteps var="hasHarnessed" processId="${processId}"/>
-<c:if test="${hasHarnessed}">
-    <sql:query var="jhQ">
-select JH.id 
-from JobHarness JH
-inner join Site S on S.id=JH.siteId
-where S.name=?<sql:param value="${preferences.siteName}"/>
-and JH.name=?<sql:param value="${preferences.jhName}"/>
-;
-    </sql:query>
-    <c:if test="${empty jhQ.rows}">
-        <traveler:error message="Your Job Harness preference is ${preferences.jhName}, but there is no such install at site ${preferences.siteName}"/>
-    </c:if>
-</c:if>
 
 <c:choose>
     <c:when test="${hasHarnessed}">
         <ta:createActivity var="activityId"
-            hardwareId="${hardwareId}" processId="${processId}" inNCR="${inNCR}" jobHarnessId="${jhQ.rows[0].id}"/>
+            hardwareId="${hardwareId}" processId="${processId}" inNCR="${inNCR}" jobHarnessId="${jobHarnessId}"/>
     </c:when>
     <c:otherwise>
         <ta:createActivity var="activityId"
