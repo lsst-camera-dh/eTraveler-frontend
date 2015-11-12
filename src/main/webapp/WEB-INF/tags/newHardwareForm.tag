@@ -36,18 +36,12 @@
 <form METHOD=GET ACTION="operator/createHardware.jsp" name="hwSpex">
 
     <table>
-        <c:choose>
-            <c:when test="${hType.autoSequenceWidth==0}">
-                <tr>
-                    <td>${appVariables.experiment} Serial Number:</td>
-                    <td>*<INPUT TYPE="TEXT" NAME="lsstId" SIZE=50 autofocus required></td>
-                </tr>
-            </c:when>
-            <c:otherwise>
-                <INPUT TYPE="hidden" NAME="autoSequenceWidth" value="${hType.autoSequenceWidth}"/>
-                <INPUT TYPE="hidden" NAME="typeName" value="${hType.name}"/>
-            </c:otherwise>
-        </c:choose>
+        <c:if test="${hType.autoSequenceWidth==0}">
+            <tr>
+                <td>${appVariables.experiment} Serial Number:</td>
+                <td>*<INPUT TYPE="TEXT" NAME="lsstId" SIZE=50 autofocus required></td>
+            </tr>
+        </c:if>
         <c:if test="${hType.isBatched != 0}">
             <tr>
                 <td>Quantity:</td><td>*<input type="number" name="quantity" min="1" required></td>
