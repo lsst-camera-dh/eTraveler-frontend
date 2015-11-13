@@ -40,7 +40,7 @@ and S.name=?<sql:param value="${inputs.site}"/>
 ;
     </sql:query>
 
-<c:set var="userName" value="API" scope=""/>
+<c:set var="userName" value="API" scope="request"/>
 
 <ta:createHardware var="hardwareId" hardwareTypeId="${hType.id}" locationId="${locQ.rows[0].id}"
                    manufacturerId="${inputs.manufacturerId}" model="${inputs.model}"

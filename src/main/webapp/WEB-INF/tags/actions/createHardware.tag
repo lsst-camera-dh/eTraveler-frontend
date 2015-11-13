@@ -34,7 +34,7 @@ where id=?<sql:param value="${hardwareTypeId}"/>;
     </sql:query>
 <c:set var="hType" value="${typeQ.rows[0]}"/>
 
-<c:if test="${empty lsstId}">
+<c:if test="${hType.autoSequenceWidth != 0}">
     <sql:update>
         update HardwareType set autoSequence=LAST_INSERT_ID(autoSequence+1)
         where id=?<sql:param value="${hardwareTypeId}"/>;
@@ -43,7 +43,7 @@ where id=?<sql:param value="${hardwareTypeId}"/>;
     <sql:update>
 insert into Hardware set
 <c:choose>
-    <c:when test="${! empty lsstId}">
+    <c:when test="${hType.autoSequenceWidth == 0}">
 lsstId=?<sql:param value="${lsstId}"/>,
     </c:when>
     <c:otherwise>
@@ -70,6 +70,6 @@ select id from Hardware where id=LAST_INSERT_ID();
 <c:set var="hardwareId" value="${hardware.id}"/>
 <ta:setHardwareStatus hardwareId="${hardwareId}" hardwareStatusName="NEW" reason="New Item"/>
 <ta:setHardwareLocation hardwareId="${hardwareId}" newLocationId="${locationId}"/>
-<c:if test="${! empty quantity}">
+<c:if test="${hType.isBatched != 0}">
     <ta:adjustBatchInventory hardwareId="${hardwareId}" adjustment="${quantity}" reason="New batch"/>
 </c:if>
