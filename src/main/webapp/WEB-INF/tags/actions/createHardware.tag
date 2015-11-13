@@ -5,6 +5,7 @@
 --%>
 
 <%@tag description="Register new Hardware" pageEncoding="UTF-8"%>
+<%@tag import = "java.util.Date,java.text.SimpleDateFormat,java.text.ParseException"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql"%>
 <%@taglib prefix="ta" tagdir="/WEB-INF/tags/actions"%>
@@ -15,10 +16,17 @@
 <%@attribute name="manufacturer"%>
 <%@attribute name="manufacturerId"%>
 <%@attribute name="model"%>
-<%@attribute name="manufactureDate" type="java.util.Date"%>
+<%@attribute name="manufactureDateStr"%>
 <%@attribute name="locationId" required="true"%>
 <%@attribute name="var" required="true" rtexprvalue="false"%>
 <%@variable name-from-attribute="var" alias="hardwareId" scope="AT_BEGIN"%>
+
+<%
+String dateStr = jspContext.getAttribute("manufactureDateStr").toString();  
+SimpleDateFormat formater = new SimpleDateFormat("yyyy-MM-dd");
+Date result = formater.parse(dateStr);
+jspContext.setAttribute("manufactureDate", result);
+%>
 
     <sql:query var="typeQ" >
 select * from HardwareType
