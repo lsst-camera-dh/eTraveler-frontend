@@ -34,6 +34,10 @@
         <c:set var="userName" value="${creatorQ.rows[0].createdBy}" scope="session"/>
     </c:if>
 </c:if>
+        
+<c:if test="${empty userName}">
+    <c:set var="userName" value="${inputs.operator}" scope="session"/>
+</c:if>
 
 <c:if test="${allOk}">
 <c:choose>
@@ -47,7 +51,6 @@
         <traveler:limsIngest/>
     </c:when>
     <c:when test="${command == 'nextJob'}">
-        <c:set var="userName" value="${inputs.operator}" scope="session"/>
         <traveler:limsScript/>
     </c:when>
     <c:when test="${command == 'registerHardware'}">

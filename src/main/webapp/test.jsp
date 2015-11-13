@@ -20,11 +20,11 @@
     <body>
         <traveler:fullRequestString var="here"/>
         ${here}
-  
+${response}
         <c:forEach var="group" items="${gm:getGroupsForUser(pageContext, 'all')}">
             <br>-${group}
         </c:forEach>
-        
+        <traveler:test/>
         <br>
         <traveler:hasHarnessedSteps var="foo" processId="121"/>
         [${foo}]
