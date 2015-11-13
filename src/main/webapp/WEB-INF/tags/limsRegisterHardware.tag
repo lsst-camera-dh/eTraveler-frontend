@@ -4,11 +4,10 @@
     Author     : focke
 --%>
 
-<%@tag description="Register new hardware from scripting API" pageEncoding="UTF-8"%>
+<%@tag description="Register new Hardware from scripting API" pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql"%>
 <%@taglib prefix="ta" tagdir="/WEB-INF/tags/actions"%>
-<%@taglib prefix="traveler" tagdir="/WEB-INF/tags"%>
 
     <sql:query var="htQ">
 select * from HardwareType HT where name=?<sql:param value="${inputs.hardwareType}"/>;
