@@ -10,7 +10,7 @@
 <%@attribute name="message"%>
 
 <h2>Start Test</h2>
-${response.contentType}
+<br> <%=response.getContentType()%>
 <c:set var="fnord" value="eleventy" scope="request"/>
 [${pageContext.request.getHeader("Referer")}]<br>
 [${pageContext.getRequest().getServerName()}]<br>

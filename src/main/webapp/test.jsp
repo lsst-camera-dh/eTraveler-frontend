@@ -20,7 +20,8 @@
     <body>
         <traveler:fullRequestString var="here"/>
         ${here}
-${response}
+        <br> <c:set var="bork" value="<%=response.getContentType()%>"/>
+        =${bork}=
         <c:forEach var="group" items="${gm:getGroupsForUser(pageContext, 'all')}">
             <br>-${group}
         </c:forEach>
