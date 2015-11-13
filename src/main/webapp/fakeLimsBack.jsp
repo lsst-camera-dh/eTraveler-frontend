@@ -21,7 +21,7 @@
 %>
 
 <%-- for all but requestId or nextCommand: check if jobid matches an active JH Activity --%>
-<c:if test="${allOk && command != 'requestID' && command != 'nextJob'}">
+<c:if test="${allOk && command != 'requestID' && command != 'nextJob' && command != 'registerHardware'}">
     <sql:query var="creatorQ">
         select createdBy from Activity where id=?<sql:param value="${inputs.jobid}"/>
     </sql:query>
