@@ -59,8 +59,8 @@
     <c:when test="${command == 'defineHardwareType'}">
         <traveler:limsDefineHardwareType/>
     </c:when>
-    <c:when test="${command == 'runTraveler'}">
-        <traveler:limsRunTraveler/>
+    <c:when test="${command == 'runAutomatable'}">
+        <traveler:limsRunAutomatable/>
     </c:when>
     <c:when test="${command == 'runOneStep'}">
         <traveler:limsOneStep/>
