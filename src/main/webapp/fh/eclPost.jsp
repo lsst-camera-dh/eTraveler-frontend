@@ -21,7 +21,9 @@
     <ecl:eclPost 
         text="${text}" 
         author="${param.author}" 
+        dataSourceMode="dataSourceMode${appVariables.dataSourceMode}"
         hardwareTypeId="${param.hardwareTypeId}" 
+        hardwareGroupId="${param.hardwareGroupId}" 
         hardwareId="${param.hardwareId}" 
         processId="${param.processId}" 
         activityId="${param.activityId}"
