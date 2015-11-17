@@ -24,7 +24,6 @@
 
 <c:if test="${allOk}">
 <%--<c:catch var="didntWork">--%>
-<sql:transaction>
 
 <c:forEach var="summary" items="${inputs.result}">
     <c:set var="schemaTag" value="${summary.schema_name} v${summary.schema_version}" scope="request"/>
@@ -94,7 +93,6 @@ creationTS=UTC_TIMESTAMP();
 
 <ta:setActivityStatus activityId="${inputs.jobid}" status="success"/>
 
-</sql:transaction>
 <%--</c:catch>--%>
 
 </c:if>

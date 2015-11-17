@@ -40,6 +40,7 @@
 </c:if>
 
 <c:if test="${allOk}">
+<sql:transaction>
 <c:choose>
     <c:when test="${command == 'requestID'}">
         <traveler:limsRequestId/>
@@ -74,6 +75,7 @@
         <c:set var="message" value="Bad command"/>
     </c:otherwise>
 </c:choose>
+</sql:transaction>
 </c:if>
         
 <c:if test="${! allOk}">
