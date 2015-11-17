@@ -25,7 +25,7 @@ table.datatable th, table.datatable td {
     </head>
     <body>
         <sql:query var="processQ" >
-            select concat(P.name, ' v', P.version) as processName, P.hardwareTypeId, P.shortDescription
+            select concat(P.name, ' v', P.version) as processName, P.hardwareGroupId, P.shortDescription
             from Process P
             where P.id=?<sql:param value="${param.processId}"/>;
         </sql:query>
@@ -51,7 +51,7 @@ table.datatable th, table.datatable td {
         </c:if>
         <traveler:eclWidget
             author="${userName}"
-            hardwareTypeId="${process.hardwareTypeId}"
+            hardwareGroupId="${process.hardwareGroupId}"
             processId="${param.processId}"
             />
     </body>
