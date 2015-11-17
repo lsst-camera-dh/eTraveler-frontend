@@ -9,16 +9,8 @@
 <%@taglib prefix="ta" tagdir="/WEB-INF/tags/actions"%>
 <%@taglib prefix="traveler" tagdir="/WEB-INF/tags"%>
 
-<%--
-<%@attribute name="hardwareId" required="true"%>
-<%@attribute name="hardwareGroup" required="true"%>
-<%@attribute name="name" required="true"%>
-<%@attribute name="version"%>
-<%@attribute name="inputs"%>
---%>
-
 <traveler:findProcess var="processId" 
-                      name="${inputs.name}" version="${inputs.version}"
+                      name="${inputs.travelerName}" version="${inputs.travelerVersion}"
                       hardwareGroup="${inputs.hardwareGroup}"/>
 
 <traveler:countSteps var="nSteps" processId="${processId}"/>

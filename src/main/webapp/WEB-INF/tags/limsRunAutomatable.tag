@@ -1,5 +1,5 @@
 <%-- 
-    Document   : limsRunTraveler
+    Document   : limsRunAutomatable
     Created on : Oct 15, 2015, 4:53:34 PM
     Author     : focke
 --%>
@@ -11,7 +11,7 @@
 <%@taglib prefix="traveler" tagdir="/WEB-INF/tags"%>
 
 <traveler:findProcess var="processId" 
-                      name="${inputs.name}" version="${inputs.version}"
+                      name="${inputs.travelerName}" version="${inputs.travelerVersion}"
                       hardwareGroup="${inputs.hardwareGroup}"/>
 
     <sql:query var="autoQ">
@@ -20,9 +20,33 @@ travelerActionMask&(select maskBit from InternalAction where name='automatable')
 from Process where id=?<sql:param value="${processId}"/>;
     </sql:query>
 <c:set var="process" value="${autoQ.rows[0]}"/>
-<c:if test="${process.isHarnessed==0 || process.isAutomatable==0}">
-    <traveler:error message="Travler is neither automatable nor harnessed."/>
+<c:if test="${process.isHarnessed==0 && process.isAutomatable==0}">
+    <traveler:error message="Travler ${processId} is neither automatable ${process.isAutomatable} nor harnessed ${process.isHarnessed}."/>
 </c:if>
 
+    <sql:query var="jhQ">
+select JH.id from JobHarness JH
+inner join Site S on S.id=JH.siteId
+where JH.name=?<sql:param value="${inputs.jhInstall}"/>
+and S.name=?<sql:param value="${inputs.site}"/>
+;
+    </sql:query>
+<c:if test="${empty jhQ.rows}">
+    <traveler:error message="No job harness install with name=${inputs.jhInstall} and site=${inputs.site} found."/>
+</c:if>
+<c:set var="jhId" value="${jhQ.rows[0].id}"/>
+
 <ta:createTraveler var="activityId"
-                   processId="${processId}" hardwareId="${inputs.hardwareId}"/>
+                   processId="${processId}" hardwareId="${inputs.hardwareId}"
+                   jobHarnessId="${jhId}"/>
+
+<traveler:jhCommand var="command" varError="allOk" activityId="${activityId}"/>
+
+<c:choose>
+    <c:when test="${allOk}">
+{"command": "${command}", "acknowledge": null"}
+    </c:when>
+    <c:otherwise>
+{"command": null, "acknowledge": "${command}"}
+    </c:otherwise>
+</c:choose>
