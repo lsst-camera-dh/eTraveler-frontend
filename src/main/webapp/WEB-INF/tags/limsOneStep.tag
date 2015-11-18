@@ -20,3 +20,11 @@
 
 <ta:createTraveler var="activityId"
                    processId="${processId}" hardwareId="${inputs.hardwareId}"/>
+
+<ta:startActivity activityId="${activityId}"/>
+
+<%-- enter inputs --%>
+
+<ta:closeoutActivity activityId="${activityId}"/>
+
+{"acknowledge": null}
