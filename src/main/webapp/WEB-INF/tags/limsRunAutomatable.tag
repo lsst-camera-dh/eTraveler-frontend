@@ -44,7 +44,7 @@ and S.name=?<sql:param value="${inputs.site}"/>
 
 <c:choose>
     <c:when test="${allOk}">
-{"command": "${command}", "acknowledge": null"}
+{"command": "${command}", "acknowledge": null}
     </c:when>
     <c:otherwise>
 {"command": null, "acknowledge": "${command}"}
