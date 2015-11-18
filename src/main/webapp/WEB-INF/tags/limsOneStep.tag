@@ -23,9 +23,9 @@
 
 <ta:startActivity activityId="${activityId}"/>
 
-<%-- enter inputs --%>
 <c:forEach var="input" items="${inputs.operatorInputs}">
-    ${input.key} ${input.value}
+    <traveler:inputResultWrapper activityId="${activityId}" 
+                                 inputName="${input.key}" value="${input.value}"/>
 </c:forEach>
 
 <ta:closeoutActivity activityId="${activityId}"/>
