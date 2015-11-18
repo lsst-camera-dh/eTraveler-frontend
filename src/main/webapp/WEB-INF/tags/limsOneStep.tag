@@ -24,6 +24,9 @@
 <ta:startActivity activityId="${activityId}"/>
 
 <%-- enter inputs --%>
+<c:forEach var="input" items="${inputs.operatorInputs}">
+    ${input.key} ${input.value}
+</c:forEach>
 
 <ta:closeoutActivity activityId="${activityId}"/>
 

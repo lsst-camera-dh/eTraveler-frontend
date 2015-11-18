@@ -17,45 +17,8 @@
     </head>
     <body>
 <sql:transaction>
-        <c:choose>
-            <c:when test="${param.isName == 'float'}">
-                <c:set var="tableName" value="FloatResultManual"/>
-            </c:when>
-            <c:when test="${param.isName == 'string'}">
-                <c:set var="tableName" value="StringResultManual"/>
-            </c:when>
-            <c:when test="${param.isName == 'filepath'}">
-                <c:set var="tableName" value="FilepathResultManual"/>
-
-                <ta:registerFile activityId="${param.activityId}" fileItem="${fileItems.value}" mode="manual" 
-                                 varFsPath="fsPath" varDcPath="dcPath" varDcPk="dcPk"/>
-                <%-- File is saved in registerFile.
-                Which also sets uploadedFileSize and uploadDigest at request scope
-                --%>
-            </c:when>                   
-            <c:otherwise>
-                <c:set var="tableName" value="IntResultManual"/>
-            </c:otherwise>
-        </c:choose>
-        <sql:update>
-insert into ${tableName} set
-inputPatternId=?<sql:param value="${param.inputPatternId}"/>,
-activityId=?<sql:param value="${param.activityId}"/>,
-<c:choose>
-    <c:when test="${param.isName == 'filepath'}">
-value=?<sql:param value="${fsPath}"/>,
-virtualPath=?<sql:param value="${dcPath}"/>,
-catalogKey=?<sql:param value="${dcPk}"/>,
-size=?<sql:param value="${uploadedFileSize}"/>,
-sha1=?<sql:param value="${uploadDigest}"/>,
-    </c:when>
-    <c:otherwise>
-value=?<sql:param value="${param.value}"/>,
-    </c:otherwise>
-</c:choose>
-createdBy=?<sql:param value="${userName}"/>,
-creationTS=UTC_TIMESTAMP();
-        </sql:update>
+    <ta:inputResult activityId="${param.activityId}" inputPatternId="${param.inputPatternId}" 
+                    isName="${param.isName}" value="${param.value}"/>
 </sql:transaction>
         <c:redirect url="${param.referringPage}"/>
     </body>
