@@ -10,7 +10,7 @@
 <%@taglib prefix="ta" tagdir="/WEB-INF/tags/actions"%>
 
     <sql:query var="htQ">
-select * from HardwareType HT where name=?<sql:param value="${inputs.hardwareType}"/>;
+select * from HardwareType HT where name=?<sql:param value="${inputs.htype}"/>;
     </sql:query>
 <c:set var="hType" value="${htQ.rows[0]}"/>
 
@@ -28,4 +28,4 @@ and S.name=?<sql:param value="${inputs.site}"/>
                    manufactureDateStr="${inputs.manufactureDate}" manufacturer="${inputs.manufacturer}"
                    quantity="${inputs.quantity}" lsstId="${inputs.experimentSN}"/>
 
-{"hardwareId": ${hardwareId}, "acknowledge": null}
+{"id": ${hardwareId}, "acknowledge": null}

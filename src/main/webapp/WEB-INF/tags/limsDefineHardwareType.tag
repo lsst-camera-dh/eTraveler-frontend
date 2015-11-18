@@ -11,4 +11,4 @@
                        width="${inputs.sequenceWidth}" isBatched="${inputs.batchedFlag}"
                        description="${inputs.description}"/>
 
-{"hardwareTypeId": ${hardwareTypeId}, "acknowledge": null}
+{"id": ${hardwareTypeId}, "acknowledge": null}
