@@ -19,8 +19,9 @@
         <title>Test Page</title>
     </head>
     <body>
-<ecl:eclCategories var="categories" version="${appVariables.etravelerELogVersion}"/>
-}${categories}{<br>
+        <c:set var="mappy" value="<%=new java.util.HashMap()%>"/>
+        <traveler:mapAdd theMap="${mappy}" key="foo" value="1"/>
+        ${mappy}
         <traveler:fullRequestString var="here"/>
         ${here}
         <br> <c:set var="bork" value="<%=response.getContentType()%>"/>

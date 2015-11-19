@@ -57,6 +57,12 @@
         <type>java.lang.String</type>
     </attribute>
     <attribute>
+        <name>metadata</name>
+        <required>true</required>
+        <rtexprvalue>true</rtexprvalue>
+        <type>java.util.Map</type>
+    </attribute>
+    <attribute>
         <name>replaceExisting</name>
         <required>true</required>
         <rtexprvalue>true</rtexprvalue>
