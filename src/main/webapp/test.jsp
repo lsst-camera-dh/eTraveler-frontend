@@ -18,6 +18,9 @@
         <title>Test Page</title>
     </head>
     <body>
+        <c:set var="mappy" value="<%=new java.util.HashMap()%>"/>
+        <traveler:mapAdd theMap="${mappy}" key="foo" value="1"/>
+        ${mappy}
         <traveler:fullRequestString var="here"/>
         ${here}
   

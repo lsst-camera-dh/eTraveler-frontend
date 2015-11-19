@@ -25,6 +25,7 @@ public class dcRegister extends SimpleTagSupport {
     private String groupName=null;
     private String site;
     private String location;
+    private Map<String,Object> metadata;
     private boolean replaceExisting;
     private String var;
 
@@ -36,12 +37,12 @@ public class dcRegister extends SimpleTagSupport {
         try {
             DataCatClient c = new DataCatClient(conn, "WebApp");
             NewDataset nds = c.newDataset(name, fileFormat, dataType, logicalFolderPath, groupName, site, location);
-            Map<String,Object> metadata = null;
             Dataset ret = c.registerDataset(nds, metadata, replaceExisting );
             dsPk = ret.getPK();
             c.commit();
             getJspContext().setAttribute(var, dsPk);
         } catch (Exception ex) {
+            ex.printStackTrace();
             throw new JspException("Error in dcRegister tag", ex);
         } finally {
             try {
@@ -75,6 +76,9 @@ public class dcRegister extends SimpleTagSupport {
     }
     public void setLocation(String location) {
         this.location = location;
+    }
+    public void setMetadata(Map<String,Object> metadata) {
+        this.metadata = metadata;
     }
     public void setReplaceExisting(boolean replaceExisting) {
         this.replaceExisting = replaceExisting;
