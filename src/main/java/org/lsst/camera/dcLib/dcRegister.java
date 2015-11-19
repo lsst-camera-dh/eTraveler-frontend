@@ -74,6 +74,7 @@ public class dcRegister extends SimpleTagSupport {
             DatasetModel retDs = c.createDataset(logicalFolderPath, builder.build());
             getJspContext().setAttribute(var, retDs.getPk());
         } catch (Exception ex) {
+            ex.printStackTrace();
             throw new JspException("Error in dcRegister tag", ex);
         }
     }
