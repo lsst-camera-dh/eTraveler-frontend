@@ -21,12 +21,14 @@
 <%@attribute name="var" required="true" rtexprvalue="false"%>
 <%@variable name-from-attribute="var" alias="hardwareId" scope="AT_BEGIN"%>
 
+<c:if test="${! empty manufactureDateStr}">
 <%
 String dateStr = jspContext.getAttribute("manufactureDateStr").toString();  
 SimpleDateFormat formater = new SimpleDateFormat("yyyy-MM-dd");
 Date result = formater.parse(dateStr);
 jspContext.setAttribute("manufactureDate", result);
 %>
+</c:if>
 
     <sql:query var="typeQ" >
 select * from HardwareType
