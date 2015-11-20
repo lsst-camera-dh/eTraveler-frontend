@@ -10,6 +10,10 @@
 <%@taglib prefix="ta" tagdir="/WEB-INF/tags/actions"%>
 <%@taglib prefix="traveler" tagdir="/WEB-INF/tags"%>
 
+<traveler:findComponent var="hardwareId" serial="${inputs.experimentSN}"
+                        inputId="${inputs.hardwareId}" groupName="${inputs.hardwareGroup}"
+                        typeName="${inputs.htype}"/>
+
 <traveler:findProcess var="processId" 
                       name="${inputs.travelerName}" version="${inputs.travelerVersion}"
                       hardwareGroup="${inputs.hardwareGroup}"/>
@@ -37,7 +41,7 @@ and S.name=?<sql:param value="${inputs.site}"/>
 <c:set var="jhId" value="${jhQ.rows[0].id}"/>
 
 <ta:createTraveler var="activityId"
-                   processId="${processId}" hardwareId="${inputs.hardwareId}"
+                   processId="${processId}" hardwareId="${hardwareId}"
                    jobHarnessId="${jhId}"/>
 
 <traveler:jhCommand var="command" varError="allOk" activityId="${activityId}"/>

@@ -9,6 +9,10 @@
 <%@taglib prefix="ta" tagdir="/WEB-INF/tags/actions"%>
 <%@taglib prefix="traveler" tagdir="/WEB-INF/tags"%>
 
+<traveler:findComponent var="hardwareId" serial="${inputs.experimentSN}"
+                        inputId="${inputs.hardwareId}" groupName="${inputs.hardwareGroup}"
+                        typeName="${inputs.htype}"/>
+
 <traveler:findProcess var="processId" 
                       name="${inputs.travelerName}" version="${inputs.travelerVersion}"
                       hardwareGroup="${inputs.hardwareGroup}"/>
@@ -19,7 +23,7 @@
 </c:if>
 
 <ta:createTraveler var="activityId"
-                   processId="${processId}" hardwareId="${inputs.hardwareId}"/>
+                   processId="${processId}" hardwareId="${hardwareId}"/>
 
 <ta:startActivity activityId="${activityId}"/>
 
