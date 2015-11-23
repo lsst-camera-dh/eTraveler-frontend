@@ -30,8 +30,8 @@ select name from ActivityFinalStatus order by name;
     <body>
         <filter:filterTable>
             <filter:filterInput var="name" title="Name (substring search)"/>
-            <filter:filterInput var="cSerial" title="Camera Serial #"/>
-            <filter:filterInput var="mSerial" title="Manufacturer Serial #"/>
+            <filter:filterInput var="cSerial" title="Camera Serial"/>
+            <filter:filterInput var="mSerial" title="Manufacturer Serial"/>
             <filter:filterInput var="type" title="Component Type"/>
             <filter:filterInput var="userId" title="User"/>
             <filter:filterSelection title="Status" var="status" defaultValue='any'>
