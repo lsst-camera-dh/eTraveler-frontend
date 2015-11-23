@@ -8,10 +8,14 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql"%>
 <%@taglib prefix="ta" tagdir="/WEB-INF/tags/actions"%>
+<%@taglib prefix="traveler" tagdir="/WEB-INF/tags"%>
 
     <sql:query var="htQ">
 select * from HardwareType HT where name=?<sql:param value="${inputs.htype}"/>;
     </sql:query>
+<c:if test="${empty htQ.rows}">
+    <traveler:error message="No hardware type named ${htype} found."/>
+</c:if>
 <c:set var="hType" value="${htQ.rows[0]}"/>
 
     <sql:query var="locQ">
@@ -22,6 +26,9 @@ where L.name=?<sql:param value="${inputs.location}"/>
 and S.name=?<sql:param value="${inputs.site}"/>
 ;
     </sql:query>
+<c:if test="${empty locQ.rows}">
+    <traveler:error message="No location with name ${inputs.location} and site ${inputs.site} found."/>
+</c:if>
 
 <ta:createHardware var="hardwareId" hardwareTypeId="${hType.id}" locationId="${locQ.rows[0].id}"
                    manufacturerId="${inputs.manufacturerId}" model="${inputs.model}"
