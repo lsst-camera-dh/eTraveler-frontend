@@ -25,12 +25,8 @@
         <c:forEach var="group" items="${gm:getGroupsForUser(pageContext, 'all')}">
             <br>-${group}
         </c:forEach>
-            
-            <ecl:eclCategories var="categories" version="${appVariables.etravelerELogVersion}"/>
-            <c:forEach var="category" items="${categories}">
-                <br>-_-${category}
-            </c:forEach>
-        
+         <c:set var="bork" value="<%=response.getContentType()%>"/>
+               <br> [[${bork}]][[${response.contentType}]]
         <br>
         <traveler:hasHarnessedSteps var="foo" processId="121"/>
         [${foo}]
