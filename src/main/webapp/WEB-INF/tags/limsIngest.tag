@@ -8,6 +8,7 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql"%>
 <%@taglib prefix="ta" tagdir="/WEB-INF/tags/actions"%>
+<%@taglib prefix="traveler" tagdir="/WEB-INF/tags"%>
 
 <c:set var="allOk" value="true"/>
 
@@ -15,6 +16,7 @@
     java.util.Map<String, String> tables = new java.util.HashMap<String, String>();
     tables.put("java.lang.Double", "FloatResultHarnessed");
     tables.put("java.lang.Integer", "IntResultHarnessed");
+    tables.put("java.lang.Boolean", "IntResultHarnessed");
     tables.put("java.lang.String", "StringResultHarnessed");
     request.setAttribute("tables", tables);
 
@@ -63,6 +65,9 @@ creationTS=UTC_TIMESTAMP();
                     <c:set var="fieldType" value="${fieldValue.getClass().getName()}"/>
                     <c:if test="${fieldType == 'java.lang.Double' && fieldValue.isNaN()}">
                         <c:set var="goodData" value="false"/>
+                    </c:if>
+                    <c:if test="${! tables.containsKey(fieldType)}">
+                        <traveler:error message="Invalid data type ${fieldType}"/>
                     </c:if>
                     <sql:update>
 insert into ${tables[fieldType]} set
