@@ -9,6 +9,7 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql"%>
 <%@taglib prefix="traveler" tagdir="/WEB-INF/tags"%>
+<%@taglib prefix="lims" tagdir="/WEB-INF/tags/lims"%>
 
 <c:set var="allOk" value="true"/>
 
@@ -43,28 +44,28 @@
 <sql:transaction>
 <c:choose>
     <c:when test="${command == 'requestID'}">
-        <traveler:limsRequestId/>
+        <lims:requestId/>
     </c:when>
     <c:when test="${command == 'update'}">
-        <traveler:limsUpdate/>
+        <lims:update/>
     </c:when>
     <c:when test="${command == 'ingest'}">
-        <traveler:limsIngest/>
+        <lims:ingest/>
     </c:when>
     <c:when test="${command == 'nextJob'}">
-        <traveler:limsScript/>
+        <lims:script/>
     </c:when>
     <c:when test="${command == 'registerHardware'}">
-        <traveler:limsRegisterHardware/>
+        <lims:registerHardware/>
     </c:when>
     <c:when test="${command == 'defineHardwareType'}">
-        <traveler:limsDefineHardwareType/>
+        <lims:defineHardwareType/>
     </c:when>
     <c:when test="${command == 'runAutomatable'}">
-        <traveler:limsRunAutomatable/>
+        <lims:runAutomatable/>
     </c:when>
     <c:when test="${command == 'runOneStep'}">
-        <traveler:limsOneStep/>
+        <lims:oneStep/>
     </c:when>
     <c:when test="${command == 'status'}">
         <c:set var="allOk" value="false"/>
