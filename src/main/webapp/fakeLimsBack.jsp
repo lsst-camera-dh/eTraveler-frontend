@@ -61,6 +61,9 @@
     <c:when test="${command == 'defineHardwareType'}">
         <lims:defineHardwareType/>
     </c:when>
+    <c:when test="${command == 'defineRelationshipType'}">
+        <lims:defineRelationshipType/>
+    </c:when>
     <c:when test="${command == 'runAutomatable'}">
         <lims:runAutomatable/>
     </c:when>
