@@ -6,6 +6,7 @@ import javax.servlet.jsp.tagext.SimpleTagSupport;
 
 import java.sql.Connection;
 import java.util.Map;
+import java.math.BigDecimal;
 
 import org.srs.web.base.db.ConnectionManager;
 import org.srs.datacat.client.DataCatClient;
@@ -79,11 +80,22 @@ public class dcRegister extends SimpleTagSupport {
     }
     public void setMetadata(Map<String,Object> metadata) {
         this.metadata = metadata;
+        //numerify();
     }
     public void setReplaceExisting(boolean replaceExisting) {
         this.replaceExisting = replaceExisting;
     }
     public void setVar(String var) {
         this.var = var;
+    }
+    
+    private void numerify() {
+        for (String key : metadata.keySet()) {
+            try {
+                metadata.put(key, new BigDecimal(metadata.get(key).toString()));
+            } catch (NumberFormatException ex) {
+                // chill
+            }
+        }
     }
 }

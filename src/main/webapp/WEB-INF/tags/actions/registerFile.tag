@@ -208,11 +208,11 @@ replaceExisting: <c:out value="${replaceExisting}"/><br>
         </c:if>
     </c:if>
     <c:catch var="ex">
-    <dc:dcRegister dataCatalogDb="${dataCatalogDb}"
-        name="${name}" fileFormat="${fileFormat}" dataType="${dataType}"
-                   logicalFolderPath="${logicalFolderPath}" 
-                   site="${dcSite}" location="${fullFsPath}" replaceExisting="${replaceExisting}"
-                   var="dcPk" metadata="${dcMetadata}"/>
+        <dc:dcRegister dataCatalogDb="${dataCatalogDb}"
+            name="${name}" fileFormat="${fileFormat}" dataType="${dataType}"
+            logicalFolderPath="${logicalFolderPath}" 
+            site="${dcSite}" location="${fullFsPath}" replaceExisting="${replaceExisting}"
+            var="dcPk" metadata="${dcMetadata}"/>
     </c:catch>
     <c:if test="${!empty ex}">
         <traveler:error message="Couldn't register file ${fullFsPath}.<br>
