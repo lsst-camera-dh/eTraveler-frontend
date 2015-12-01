@@ -8,6 +8,7 @@ import javax.servlet.jsp.tagext.SimpleTagSupport;
 
 import java.util.HashMap;
 import java.util.Map;
+
 import org.glassfish.jersey.filter.LoggingFilter;
 import org.srs.datacat.client.Client;
 import org.srs.datacat.client.ClientBuilder;
@@ -99,5 +100,15 @@ public class dcRegister extends SimpleTagSupport {
     }
     public void setVar(String var) {
         this.var = var;
+    }
+    
+    private void numerify() {
+        for (String key : metadata.keySet()) {
+            try {
+                metadata.put(key, new BigDecimal(metadata.get(key).toString()));
+            } catch (NumberFormatException ex) {
+                // chill
+            }
+        }
     }
 }
