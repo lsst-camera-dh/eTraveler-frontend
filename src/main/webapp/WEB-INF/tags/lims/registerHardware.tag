@@ -9,14 +9,10 @@
 <%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql"%>
 <%@taglib prefix="ta" tagdir="/WEB-INF/tags/actions"%>
 <%@taglib prefix="traveler" tagdir="/WEB-INF/tags"%>
+<%@taglib prefix="lims" tagdir="/WEB-INF/tags/lims"%>
 
-    <sql:query var="htQ">
-select * from HardwareType HT where name=?<sql:param value="${inputs.htype}"/>;
-    </sql:query>
-<c:if test="${empty htQ.rows}">
-    <traveler:error message="No hardware type named ${inputs.htype} found."/>
-</c:if>
-<c:set var="hType" value="${htQ.rows[0]}"/>
+<lims:checkHardwareType var="hardwareTypeId"
+    inputTypeId="" inputTypeName="${inputs.htype}"/>
 
     <sql:query var="locQ">
 select L.id 
@@ -30,7 +26,7 @@ and S.name=?<sql:param value="${inputs.site}"/>
     <traveler:error message="No location with name ${inputs.location} and site ${inputs.site} found."/>
 </c:if>
 
-<ta:createHardware var="hardwareId" hardwareTypeId="${hType.id}" locationId="${locQ.rows[0].id}"
+<ta:createHardware var="hardwareId" hardwareTypeId="${hardwareTypeId}" locationId="${locQ.rows[0].id}"
                    manufacturerId="${inputs.manufacturerId}" model="${inputs.model}"
                    manufactureDateStr="${inputs.manufactureDate}" manufacturer="${inputs.manufacturer}"
                    quantity="${inputs.quantity}" lsstId="${inputs.experimentSN}"/>
