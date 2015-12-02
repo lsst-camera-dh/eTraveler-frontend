@@ -14,7 +14,7 @@
 select * from HardwareType HT where name=?<sql:param value="${inputs.htype}"/>;
     </sql:query>
 <c:if test="${empty htQ.rows}">
-    <traveler:error message="No hardware type named ${htype} found."/>
+    <traveler:error message="No hardware type named ${inputs.htype} found."/>
 </c:if>
 <c:set var="hType" value="${htQ.rows[0]}"/>
 
