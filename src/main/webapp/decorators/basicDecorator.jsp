@@ -46,6 +46,9 @@ table.datatable th, table.datatable td {
                 </td>
             </tr>
         </table>
+        <c:if test="${empty freshnessToken}">
+            <c:set var="freshnessToken" value="1" scope="session"/>
+        </c:if>
     </body>
 </html>
 

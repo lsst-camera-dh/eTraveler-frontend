@@ -18,7 +18,7 @@
         <title>Test Page</title>
     </head>
     <body>
-        <traveler:checkFreshness formToken="${freshnessToken}"/>
+        frshness: ${freshnessToken}
         <traveler:fullRequestString var="here"/>
         ${here}
   
