@@ -11,8 +11,6 @@
 <%@taglib prefix="traveler" tagdir="/WEB-INF/tags"%>
 <%@taglib prefix="lims" tagdir="/WEB-INF/tags/lims"%>
 
-<c:set var="allOk" value="true"/>
-
 <%
     ObjectMapper mapper = new ObjectMapper();
     mapper.configure(JsonParser.Feature.ALLOW_NON_NUMERIC_NUMBERS, true);
@@ -22,16 +20,15 @@
 %>
 
 <%-- if job-specific: check if jobid matches an active JH Activity --%>
-<c:if test="${allOk && (command == 'update' || command == 'ingest' || command == 'status')}">
+<c:if test="${command == 'update' || command == 'ingest' || command == 'status'}">
     <sql:query var="creatorQ">
         select createdBy from Activity where id=?<sql:param value="${inputs.jobid}"/>
     </sql:query>
     <c:if test="${empty creatorQ.rows}">
-        <c:set var="allOk" value="false"/>
-        <c:set var="message" value="Bad jobid."/>
+        <traveler:error message="Bad jobid."/>
     </c:if>
 
-    <c:if test="${allOk && empty userName}">
+    <c:if test="${empty userName}">
         <c:set var="userName" value="${creatorQ.rows[0].createdBy}" scope="session"/>
     </c:if>
 </c:if>
@@ -40,7 +37,6 @@
     <c:set var="userName" value="${inputs.operator}" scope="session"/>
 </c:if>
 
-<c:if test="${allOk}">
 <sql:transaction>
 <c:choose>
     <c:when test="${command == 'requestID'}">
@@ -71,20 +67,10 @@
         <lims:oneStep/>
     </c:when>
     <c:when test="${command == 'status'}">
-        <c:set var="allOk" value="false"/>
-        <c:set var="message" value="status doesn't work yet."/>
+        <traveler:error message="status doesn't work yet."/>
     </c:when>
     <c:otherwise>
-        <c:set var="allOk" value="false"/>
-        <c:set var="message" value="Bad command"/>
+        <traveler:error message="Bad command"/>
     </c:otherwise>
 </c:choose>
 </sql:transaction>
-</c:if>
-        
-<c:if test="${! allOk}">
-    {
-        "error": "${message}",
-        "acknowledge": "${message}"
-    }
-</c:if>
