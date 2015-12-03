@@ -9,6 +9,7 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql"%>
 <%@taglib prefix="ta" tagdir="/WEB-INF/tags/actions"%>
+<%@taglib prefix="traveler" tagdir="/WEB-INF/tags"%>
 
 <%@attribute name="hardwareTypeId" required="true"%>
 <%@attribute name="lsstId"%>
@@ -20,6 +21,18 @@
 <%@attribute name="locationId" required="true"%>
 <%@attribute name="var" required="true" rtexprvalue="false"%>
 <%@variable name-from-attribute="var" alias="hardwareId" scope="AT_BEGIN"%>
+
+<c:if test="${! empty lsstId}">
+    <sql:query var="dupQ">
+select id from Hardware 
+where lsstId=?<sql:param value="${lsstId}"/>
+and hardwareTypeId=?<sql:param value="${hardwareTypeId}"/>
+;
+    </sql:query>
+    <c:if test="${! empty dupQ.rows}">
+        <traveler:error message="Duplicate experiment serial number ${lsstId}"/>
+    </c:if>
+</c:if>
 
 <c:if test="${! empty manufactureDateStr}">
 <%
