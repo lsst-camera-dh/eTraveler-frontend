@@ -14,4 +14,4 @@
     <traveler:error message="You have submitted a form from a stale page had ${formToken} needed ${freshnessToken}."/>
 </c:if>
 
-<c:set var="freshnessToken" value="${freshnessToken + 1}" scope="session"/>
+<c:set var="freshnessToken" value="${freshnessGenerator.nextLong()}" scope="session"/>

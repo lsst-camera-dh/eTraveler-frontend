@@ -19,7 +19,9 @@
         <title>Test Page</title>
     </head>
     <body>
-        frshness: ${freshnessToken}
+        <c:set var="gen" value="<%= new java.util.Random() %>"/>
+        ${gen} ${gen.nextLong()}<br>
+        freshness: ${freshnessToken}<br>
         <traveler:fullRequestString var="here"/>
         ${here}
         <br> <c:set var="bork" value="<%=response.getContentType()%>"/>
