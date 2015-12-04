@@ -53,7 +53,7 @@
             </td>
             <td>
                 <div># Items</div>
-                <input type="number" name="nItems" value="1">
+                <input type="number" name="numItems" value="1">
             </td>
             <td>
                 <div>Slot Names<br>(comma separated):</div> <input type="text" name="slotNames">

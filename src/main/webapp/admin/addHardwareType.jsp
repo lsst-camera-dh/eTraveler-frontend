@@ -7,6 +7,7 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql"%>
+<%@taglib prefix="ta" tagdir="/WEB-INF/tags/actions"%>
 
 <!DOCTYPE html>
 <html>
@@ -16,40 +17,12 @@
     </head>
     <body>
         <sql:transaction>
-            <sql:update>
-                insert into HardwareType set
-                name=?<sql:param value="${param.name}"/>,
-                autoSequenceWidth=?<sql:param value="${param.width}"/>,
-                isBatched=?<sql:param value="${param.isBatched}"/>,
-                description=?<sql:param value="${param.description}"/>,
-                createdBy=?<sql:param value="${userName}"/>,
-                creationTS=utc_timestamp();
-            </sql:update>
-            <sql:query var="hwtQ">
-                select id as hardwareTypeId from HardwareType where id=last_insert_id();
-            </sql:query>
-            <c:set var="hardwareType" value="${hwtQ.rows[0]}"/>
-            <sql:update>
-                insert into HardwareGroup set
-                name=?<sql:param value="${param.name}"/>,
-                description=?<sql:param value="singleton group for htype ${param.name}"/>,
-                createdBy=?<sql:param value="${userName}"/>,
-                creationTS=utc_timestamp();
-            </sql:update>
-            <sql:query var="hwgQ">
-                select id as hardwareGroupId from HardwareGroup where id=last_insert_id() ;
-            </sql:query>
-            <c:set var="hardwareGroup" value="${hwgQ.rows[0]}"/>
-            <sql:update>
-                insert into HardwareTypeGroupMapping set
-                hardwareTypeId=?<sql:param value="${hardwareType.hardwareTypeId}"/>,
-                hardwareGroupId=?<sql:param value="${hardwareGroup.hardwareGroupId}"/>,
-                createdBy=?<sql:param value="${userName}"/>,
-                creationTS=utc_timestamp();
-            </sql:update>
+            <ta:createHardwareType var="hardwareTypeId" name="${param.name}"
+                                   width="${param.width}" isBatched="${param.isBatched}"
+                                   description="${param.description}"/>
         </sql:transaction>
         <c:redirect url="/displayHardwareType.jsp" context="/eTraveler">
-            <c:param name="hardwareTypeId" value="${hardwareType.hardwareTypeId}"/>
+            <c:param name="hardwareTypeId" value="${hardwareTypeId}"/>
         </c:redirect>
     </body>
 </html>

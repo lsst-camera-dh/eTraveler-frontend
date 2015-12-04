@@ -9,8 +9,7 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql"%>
 <%@taglib prefix="traveler" tagdir="/WEB-INF/tags"%>
-
-<c:set var="allOk" value="true"/>
+<%@taglib prefix="lims" tagdir="/WEB-INF/tags/lims"%>
 
 <%
     ObjectMapper mapper = new ObjectMapper();
@@ -20,50 +19,58 @@
     request.setAttribute("inputs", inputs);
 %>
 
-<%-- for all but requestId or nextCommand: check if jobid matches an active JH Activity --%>
-<c:if test="${allOk && command != 'requestID' && command != 'nextJob'}">
+<%-- if job-specific: check if jobid matches an active JH Activity --%>
+<c:if test="${command == 'update' || command == 'ingest' || command == 'status'}">
     <sql:query var="creatorQ">
         select createdBy from Activity where id=?<sql:param value="${inputs.jobid}"/>
     </sql:query>
     <c:if test="${empty creatorQ.rows}">
-        <c:set var="allOk" value="false"/>
-        <c:set var="message" value="Bad jobid."/>
+        <traveler:error message="Bad jobid."/>
     </c:if>
 
-    <c:if test="${allOk && empty userName}">
+    <c:if test="${empty userName}">
         <c:set var="userName" value="${creatorQ.rows[0].createdBy}" scope="session"/>
     </c:if>
 </c:if>
+        
+<c:if test="${empty userName}">
+    <c:set var="userName" value="${inputs.operator}" scope="session"/>
+</c:if>
 
-<c:if test="${allOk}">
+<sql:transaction>
 <c:choose>
     <c:when test="${command == 'requestID'}">
-        <traveler:limsRequestId/>
+        <lims:requestId/>
     </c:when>
     <c:when test="${command == 'update'}">
-        <traveler:limsUpdate/>
+        <lims:update/>
     </c:when>
     <c:when test="${command == 'ingest'}">
-        <traveler:limsIngest/>
+        <lims:ingest/>
     </c:when>
     <c:when test="${command == 'nextJob'}">
-        <c:set var="userName" value="${inputs.operator}" scope="session"/>
-        <traveler:limsScript/>
+        <lims:script/>
+    </c:when>
+    <c:when test="${command == 'registerHardware'}">
+        <lims:registerHardware/>
+    </c:when>
+    <c:when test="${command == 'defineHardwareType'}">
+        <lims:defineHardwareType/>
+    </c:when>
+    <c:when test="${command == 'defineRelationshipType'}">
+        <lims:defineRelationshipType/>
+    </c:when>
+    <c:when test="${command == 'runAutomatable'}">
+        <lims:runAutomatable/>
+    </c:when>
+    <c:when test="${command == 'runOneStep'}">
+        <lims:oneStep/>
     </c:when>
     <c:when test="${command == 'status'}">
-        <c:set var="allOk" value="false"/>
-        <c:set var="message" value="status doesn't work yet."/>
+        <traveler:error message="status doesn't work yet."/>
     </c:when>
     <c:otherwise>
-        <c:set var="allOk" value="false"/>
-        <c:set var="message" value="Bad command"/>
+        <traveler:error message="Bad command"/>
     </c:otherwise>
 </c:choose>
-</c:if>
-        
-<c:if test="${! allOk}">
-    {
-        "error": "${message}",
-        "acknowledge": "${message}"
-    }
-</c:if>
+</sql:transaction>

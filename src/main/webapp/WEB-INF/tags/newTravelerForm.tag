@@ -94,6 +94,14 @@
     ;
 </sql:query>
    
+    <sql:query var="jhQ">
+select JH.* 
+from JobHarness JH
+inner join Site S on S.id=JH.siteId
+where S.name=?<sql:param value="${preferences.siteName}"/>
+;
+    </sql:query>
+
 <form METHOD=GET ACTION="operator/createTraveler.jsp">
     <input type="hidden" name="inNCR" value="FALSE">
     <table>
@@ -135,6 +143,18 @@
             <c:out value="${hardwareQ.rows[0].lsstId}"/>
         </c:otherwise>
     </c:choose>
+            </td>
+        </tr>
+        <tr>
+            <td>
+    Job Harness:
+            </td>
+            <td>
+                <select name="jobHarnessId">
+                    <c:forEach var="jhRow" items="${jhQ.rows}">
+                        <option value="${jhRow.id}" <c:if test="${jhRow.name==preferences.jhName}">selected</c:if>>${jhRow.name}</option>
+                    </c:forEach>
+                </select>
             </td>
         </tr>
     </table>

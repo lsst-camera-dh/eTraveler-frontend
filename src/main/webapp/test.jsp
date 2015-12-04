@@ -21,12 +21,12 @@
     <body>
         <traveler:fullRequestString var="here"/>
         ${here}
-  
+        <br> <c:set var="bork" value="<%=response.getContentType()%>"/>
+        =${bork}=
         <c:forEach var="group" items="${gm:getGroupsForUser(pageContext, 'all')}">
             <br>-${group}
         </c:forEach>
-         <c:set var="bork" value="<%=response.getContentType()%>"/>
-               <br> [[${bork}]][[${response.contentType}]]
+        <traveler:test/>
         <br>
         <traveler:hasHarnessedSteps var="foo" processId="121"/>
         [${foo}]

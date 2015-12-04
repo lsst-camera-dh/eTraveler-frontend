@@ -8,7 +8,6 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql"%>
 <%@taglib prefix="ta" tagdir="/WEB-INF/tags/actions"%>
-<%@taglib prefix="traveler" tagdir="/WEB-INF/tags"%>
 
 <c:set var="allOk" value="true"/>
 
@@ -16,7 +15,6 @@
     java.util.Map<String, String> tables = new java.util.HashMap<String, String>();
     tables.put("java.lang.Double", "FloatResultHarnessed");
     tables.put("java.lang.Integer", "IntResultHarnessed");
-    tables.put("java.lang.Boolean", "IntResultHarnessed");
     tables.put("java.lang.String", "StringResultHarnessed");
     request.setAttribute("tables", tables);
 
@@ -26,7 +24,6 @@
 
 <c:if test="${allOk}">
 <%--<c:catch var="didntWork">--%>
-<sql:transaction>
 
 <c:forEach var="summary" items="${inputs.result}">
     <c:set var="schemaTag" value="${summary.schema_name} v${summary.schema_version}" scope="request"/>
@@ -66,9 +63,6 @@ creationTS=UTC_TIMESTAMP();
                     <c:if test="${fieldType == 'java.lang.Double' && fieldValue.isNaN()}">
                         <c:set var="goodData" value="false"/>
                     </c:if>
-                    <c:if test="${! tables.containsKey(fieldType)}">
-                        <traveler:error message="Invalid data type ${fieldType}"/>
-                    </c:if>
                     <sql:update>
 insert into ${tables[fieldType]} set
 name=?<sql:param value="${fieldName}"/>,
@@ -99,7 +93,6 @@ creationTS=UTC_TIMESTAMP();
 
 <ta:setActivityStatus activityId="${inputs.jobid}" status="success"/>
 
-</sql:transaction>
 <%--</c:catch>--%>
 
 </c:if>

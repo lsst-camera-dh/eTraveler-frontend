@@ -21,6 +21,7 @@
         <ta:createTraveler var="activityId"
             hardwareId="${param.hardwareId}" 
             processId="${param.processId}"
+            jobHarnessId="${param.jobHarnessId}"
             inNCR="${param.inNCR}"/>
         </sql:transaction>
         <traveler:redirDA activityId="${activityId}"/>
