@@ -19,6 +19,8 @@
         <title>Test Page</title>
     </head>
     <body>
+<ecl:eclCategories var="categories" version="${appVariables.etravelerELogVersion}"/>
+}${categories}{<br>
         <traveler:fullRequestString var="here"/>
         ${here}
         <br> <c:set var="bork" value="<%=response.getContentType()%>"/>
