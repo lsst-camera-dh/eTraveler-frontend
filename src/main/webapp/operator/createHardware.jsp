@@ -64,7 +64,8 @@ request.setAttribute("manufactureDate", result);
             </sql:query>
             <c:set var="hardware" value="${hardwareQ.rows[0]}"/>
             <ta:setHardwareStatus hardwareId="${hardware.id}" hardwareStatusName="NEW" reason="New Item"/>
-            <ta:setHardwareLocation hardwareId="${hardware.id}" newLocationId="${param.locationId}"/>
+            <ta:setHardwareLocation hardwareId="${hardware.id}" newLocationId="${param.locationId}"
+                                    reason="New component registration"/>
             <c:if test="${! empty param.quantity}">
                 <ta:adjustBatchInventory hardwareId="${hardware.id}" adjustment="${param.quantity}" reason="New batch"/>
             </c:if>
