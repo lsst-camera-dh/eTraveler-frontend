@@ -12,6 +12,7 @@
 <%@attribute name="newLocationId" required="true"%>
 <%@attribute name="hardwareId" required="true"%>
 <%@attribute name="activityId"%>
+<%@attribute name="reason" required="true"%>
 
 <sql:update >
     insert into HardwareLocationHistory set
@@ -20,6 +21,7 @@
     <c:if test="${! empty activityId}">
         activityId=?<sql:param value="${activityId}"/>,
     </c:if>
+    reason=?<sql:param value="${reason}"/>,
     createdBy=?<sql:param value="${userName}"/>,
     creationTS=UTC_TIMESTAMP();
 </sql:update>
@@ -30,5 +32,5 @@
     and end is null;
 </sql:query>
 <c:forEach var="childRow" items="${childrenQ.rows}">
-    <ta:setHardwareLocation newLocationId="${newLocationId}" hardwareId="${childRow.componentId}" activityId="${activityId}"/>
+    <ta:setHardwareLocation newLocationId="${newLocationId}" hardwareId="${childRow.componentId}" activityId="${activityId}" reason="${reason}"/>
 </c:forEach>
