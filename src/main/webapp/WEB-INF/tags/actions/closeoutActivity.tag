@@ -37,7 +37,8 @@ where A.id=?<sql:param value="${activityId}"/>;
             <ta:setHardwareLocation 
                 hardwareId="${activity.hardwareId}" 
                 newLocationId="${newLocationId}" 
-                activityId="${activityId}"/>
+                activityId="${activityId}"
+                reason="Moved by traveler"/>
         </c:otherwise>
     </c:choose>
 </c:if>
