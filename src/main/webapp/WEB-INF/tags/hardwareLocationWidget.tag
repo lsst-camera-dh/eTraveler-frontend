@@ -40,6 +40,7 @@
                     href="displayLocation.jsp" paramId="locationId" paramProperty="locationId"/>
     <display:column property="processName" title="Step" sortable="true" headerClass="sortable"
                     href="displayActivity.jsp" paramId="activityId" paramProperty="activityId"/>
+    <display:column property="reason" sortable="true" headerClass="sortable"/>
     <display:column property="creationTS" title="Date" sortable="true" headerClass="sortable"/>
     <display:column property="createdBy" title="User" sortable="true" headerClass="sortable"/>
 </display:table>
