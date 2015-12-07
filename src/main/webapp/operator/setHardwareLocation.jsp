@@ -46,7 +46,7 @@
 </c:if>
 
 <sql:transaction>
-    <ta:setHardwareLocation hardwareId="${param.hardwareId}" newLocationId="${param.newLocationId}"/>
+    <ta:setHardwareLocation hardwareId="${param.hardwareId}" newLocationId="${param.newLocationId}" reason="${param.reason}"/>
 </sql:transaction>
 
 <c:redirect url="${param.referringPage}"/>

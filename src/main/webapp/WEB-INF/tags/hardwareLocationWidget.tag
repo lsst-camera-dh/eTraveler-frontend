@@ -84,6 +84,7 @@
                 <option value="${lRow.id}">${lRow.siteName} ${lRow.locationName}</option>
             </c:forEach>
         </select>
+        Reason: <textarea name="reason" required="true"></textarea>
         <input type="submit" value="Move it!"
             <c:if test="${! mayOperate}">disabled</c:if>>
     </form>
