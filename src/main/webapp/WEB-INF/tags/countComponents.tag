@@ -27,16 +27,17 @@
     </c:otherwise>
 </c:choose>
 
-<sql:query var="childrenQ" >
-    select 
-    HR.componentId
-    from HardwareRelationship HR
-    where HR.hardwareId=?<sql:param value="${hardwareId}"/>
-    and end is null
-    ;
-</sql:query>
+    <sql:query var="childrenQ" >
+select MRS.hardwareId, MRS.minorId, MRA.name
+from MultiRelationshipSlot MRS
+inner join MultiRelationshipHistory MRH on MRH.multirelationshipSlotId=MRS.id
+        and MRH.id=(select max(id) from MultiRelationshipHistory where multirelationshipSlotId=MRS.id)
+inner join MultiRelationshipAction MRA on MRA.id=MRH.multirelationshipActionId
+where MRS.hardwareId=?<sql:param value="${hardwareId}"/>
+and MRA.name='install';
+    </sql:query>
 
 <c:forEach var="cRow" items="${childrenQ.rows}">
-    <traveler:countComponents var="cComps" hardwareId="${cRow.componentId}" top="false"/>
+    <traveler:countComponents var="cComps" hardwareId="${cRow.minorId}" top="false"/>
     <c:set var="nComps" value="${nComps + cComps}"/>
 </c:forEach>
