@@ -45,11 +45,15 @@
     <display:column property="createdBy" title="User" sortable="true" headerClass="sortable"/>
 </display:table>
     
-<sql:query var="parentsQ" >
-    select * from HardwareRelationship 
-    where componentId=?<sql:param value="${hardwareId}"/>
-    and end is null;
-</sql:query>
+    <sql:query var="parentsQ" >
+select MRS.hardwareId, MRS.minorId, MRA.name
+from MultiRelationshipSlot MRS
+inner join MultiRelationshipHistory MRH on MRH.multirelationshipSlotId=MRS.id
+        and MRH.id=(select max(id) from MultiRelationshipHistory where multirelationshipSlotId=MRS.id)
+inner join MultiRelationshipAction MRA on MRA.id=MRH.multirelationshipActionId
+where MRS.minorId=?<sql:param value="${hardwareId}"/>
+and MRA.name='install';
+    </sql:query>
 
 <sql:query var="locQ">
     select locationId 
