@@ -34,9 +34,13 @@
 </c:if>
 
 <sql:query var="parentsQ" >
-    select * from HardwareRelationship 
-    where componentId=?<sql:param value="${param.hardwareId}"/>
-    and end is null;
+select MRS.hardwareId, MRS.minorId, MRA.name
+from MultiRelationshipSlot MRS
+inner join MultiRelationshipHistory MRH on MRH.multirelationshipSlotId=MRS.id
+        and MRH.id=(select max(id) from MultiRelationshipHistory where multirelationshipSlotId=MRS.id)
+inner join MultiRelationshipAction MRA on MRA.id=MRH.multirelationshipActionId
+where MRS.minorId=?<sql:param value="${param.hardwareId}"/>
+and MRA.name='install';
 </sql:query>
 <c:if test="${! empty parentsQ.rows}">
     <c:url value="displayHardware.jsp" var="parentLink">
