@@ -26,11 +26,15 @@
     creationTS=UTC_TIMESTAMP();
 </sql:update>
 
-<sql:query var="childrenQ" >
-    select * from HardwareRelationship
-    where hardwareId=?<sql:param value="${hardwareId}"/>
-    and end is null;
-</sql:query>
+    <sql:query var="childrenQ" >
+select MRS.hardwareId, MRS.minorId, MRA.name
+from MultiRelationshipSlot MRS
+inner join MultiRelationshipHistory MRH on MRH.multirelationshipSlotId=MRS.id
+        and MRH.id=(select max(id) from MultiRelationshipHistory where multirelationshipSlotId=MRS.id)
+inner join MultiRelationshipAction MRA on MRA.id=MRH.multirelationshipActionId
+where MRS.hardwareId=?<sql:param value="${hardwareId}"/>
+and MRA.name='install';
+    </sql:query>
 <c:forEach var="childRow" items="${childrenQ.rows}">
-    <ta:setHardwareLocation newLocationId="${newLocationId}" hardwareId="${childRow.componentId}" activityId="${activityId}" reason="${reason}"/>
+    <ta:setHardwareLocation newLocationId="${newLocationId}" hardwareId="${childRow.minorId}" activityId="${activityId}" reason="${reason}"/>
 </c:forEach>
