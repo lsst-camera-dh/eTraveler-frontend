@@ -15,7 +15,7 @@
     <c:set var="bug" value="false"/>
 </c:if>
 
-<c:set var="contentType" value="<%=response.getContentType()%>"/>
+<c:set var="contentType" value="${pageContext.response.contentType}"/>
 <c:choose>
     <c:when test="${fn:containsIgnoreCase(contentType, 'json')}">
         <c:set var="errorPage" value="/error.json.jsp"/>

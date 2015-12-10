@@ -25,6 +25,7 @@
         ${here}
         <br> <c:set var="bork" value="<%=response.getContentType()%>"/>
         =${bork}=
+        ${pageContext.response.contentType}<br>
         <c:forEach var="group" items="${gm:getGroupsForUser(pageContext, 'all')}">
             <br>-${group}
         </c:forEach>
