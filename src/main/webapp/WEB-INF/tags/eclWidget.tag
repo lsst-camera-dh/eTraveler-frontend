@@ -21,7 +21,7 @@
 
 <h2>Electronic Logbook</h2>
 
-<ecl:eclCategories var="categories" version="${appVariables.etravelerELogVersion}"/>
+<ecl:eclCategories var="categories" version="${appVariables.etravelerELogVersion}" url="${appVariables.etravelerELogUrl}"/>
 
 <c:set var="version" value="${appVariables.etravelerELogVersion}"/>
 <c:set var="eLogHome" value="${appVariables.etravelerELogUrl}"/>

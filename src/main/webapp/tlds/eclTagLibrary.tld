@@ -89,5 +89,11 @@
         <rtexprvalue>true</rtexprvalue>
         <type>java.lang.String</type>
     </attribute>
+    <attribute>
+        <name>url</name>
+        <required>true</required>
+        <rtexprvalue>true</rtexprvalue>
+        <type>java.lang.String</type>
+    </attribute>
   </tag>
 </taglib>
