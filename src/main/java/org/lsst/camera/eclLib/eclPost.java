@@ -24,6 +24,7 @@ public class eclPost extends SimpleTagSupport {
     private String activityId;
     private String category;
     private String version;
+    private String url;
     
     private ELogConnectionUtils conn;
     private ElogEntry entry;
@@ -37,6 +38,7 @@ public class eclPost extends SimpleTagSupport {
      */
     @Override
     public void doTag() throws JspException {
+        System.setProperty("org.lsst.ccs.elog.xml.url", url);
         JspWriter out = getJspContext().getOut();
         try {
 /**
@@ -104,5 +106,8 @@ public class eclPost extends SimpleTagSupport {
     }
     public void setVersion(String version) {
         this.version = version;
+    }
+    public void setUrl(String url) {
+        this.url = url;
     }
 }

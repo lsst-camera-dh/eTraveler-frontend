@@ -1,7 +1,5 @@
 package org.lsst.camera.eclLib;
 
-import java.lang.System;
-
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspContext;
 import javax.servlet.jsp.tagext.SimpleTagSupport;

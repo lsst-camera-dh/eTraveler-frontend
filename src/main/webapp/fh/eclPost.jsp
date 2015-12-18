@@ -29,6 +29,7 @@
         activityId="${param.activityId}"
         category="${param.category}"
         version="${param.version}"
+        url="${appVariables.etravelerELogUrl}"
         />
     </body>
     
