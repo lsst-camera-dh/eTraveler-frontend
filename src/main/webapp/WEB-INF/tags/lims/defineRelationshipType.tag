@@ -13,8 +13,11 @@
 <lims:checkHardwareType var="minorTypeId"
     inputTypeId="${inputs.minorTypeId}" inputTypeName="${inputs.minorTypeName}"/>
 
-<ta:createRelationshipType slotNames="${inputs.slotNames}" minorTypeId="${minorTypeId}"
+<ta:createRelationshipType var="mrtId" slotNames="${inputs.slotNames}" minorTypeId="${minorTypeId}"
     numItems="${inputs.numItems}" name="${inputs.name}" hardwareTypeId="${hardwareTypeId}"
     description="${inputs.description}"/>
 
-{"acknowledge": null}
+{
+    "acknowledge": null,
+    "id": ${mrtId}
+}
