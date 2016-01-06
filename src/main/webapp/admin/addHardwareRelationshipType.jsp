@@ -17,7 +17,7 @@
     </head>
     <body>
         <sql:transaction>
-            <ta:createRelationshipType slotNames="${param.slotNames}" minorTypeId="${param.minorTypeId}"
+            <ta:createRelationshipType var="mrtId" slotNames="${param.slotNames}" minorTypeId="${param.minorTypeId}"
                 numItems="${param.numItems}" name="${param.name}" hardwareTypeId="${param.hardwareTypeId}"
                 description="${param.description}"/>
         </sql:transaction>

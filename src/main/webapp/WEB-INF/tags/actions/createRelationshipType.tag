@@ -16,6 +16,8 @@
 <%@attribute name="name" required="true"%>
 <%@attribute name="hardwareTypeId" required="true"%>
 <%@attribute name="description" required="true"%>
+<%@attribute name="var" required="true" rtexprvalue="false"%>
+<%@variable name-from-attribute="var" alias="mrtId" scope="AT_BEGIN"%>
 
 <c:set var="slotList" value="${fn:split(slotNames, ',')}"/>
 <c:set var="nSlots" value="${fn:length(slotList)}"/>
