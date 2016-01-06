@@ -19,6 +19,16 @@
 <%@attribute name="var" required="true" rtexprvalue="false"%>
 <%@variable name-from-attribute="var" alias="mrtId" scope="AT_BEGIN"%>
 
+    <sql:query var="dupQ">
+select id 
+from MultiRelationshipType
+where name=?<sql:param value="${name}"/>
+and hardwareTypeId=?<sql:param value="${hardwareTypeId}"/>
+    </sql:query>
+<c:if test="${! empty dupQ.rows}">
+    <traveler:error message="There is already a relationship Type named ${name} for hardware type ${hardwareTypeId}"/>
+</c:if>
+
 <c:set var="slotList" value="${fn:split(slotNames, ',')}"/>
 <c:set var="nSlots" value="${fn:length(slotList)}"/>
 <c:choose>
