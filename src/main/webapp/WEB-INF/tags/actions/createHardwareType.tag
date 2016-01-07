@@ -7,6 +7,7 @@
 <%@tag description="Add a new HardwareType" pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql"%>
+<%@taglib prefix="traveler" tagdir="/WEB-INF/tags"%>
 
 <%@attribute name="name" required="true"%>
 <%@attribute name="width" required="true"%>
@@ -15,6 +16,19 @@
 <%@attribute name="var" required="true" rtexprvalue="false"%>
 <%@variable name-from-attribute="var" alias="hardwareTypeId" scope="AT_BEGIN"%>
 
+    <sql:query var="dupQ">
+select id from HardwareType where name=?<sql:param value="${name}"/>
+    </sql:query>
+<c:if test="${! empty dupQ.rows}">
+    <traveler:error message="There is already a hardware type with name ${name}"/>
+</c:if>
+    <sql:query var="dupQ">
+select id from HardwareGroup where name=?<sql:param value="${name}"/>
+    </sql:query>
+<c:if test="${! empty dupQ.rows}">
+    <traveler:error message="There is already a hardware group with name ${name}"/>
+</c:if>
+        
     <sql:update>
 insert into HardwareType set
 name=?<sql:param value="${name}"/>,
