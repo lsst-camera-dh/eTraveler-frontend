@@ -12,6 +12,10 @@
     
     <body>
         
+        <sql:query var="subsysQ">
+select id, name from Subsystem;
+        </sql:query>
+        
         <sql:query var="siteQ">
 select id, name from Site;
         </sql:query>
@@ -33,6 +37,17 @@ select * from JobHarness where siteId=(select id from Site where name=?<sql:para
         <tr>
             <td>Downgrade your permissions. If this is false, you won't be able to do anything, just look.</td>
             <td>Current Value: <c:out value="${preferences.writeable}"/></td>
+        </tr>
+
+        <preferences:preference name="subsystem" title="<b>Subsystem:</b> ">
+                <c:forEach var="row" items="${subsysQ.rows}">
+                    <preferences:value value="${row.name}"/>
+                </c:forEach>
+            </preferences:preference>
+        <tr>
+            <td>This will filter lists of travelers, components, component types<br>
+            and restrict permissions.</td>
+            <td>Current Value: <c:out value="${preferences.subsystem}"/></td>
         </tr>
 
         <preferences:preference name="siteName" title="<b>Site:</b> ">
