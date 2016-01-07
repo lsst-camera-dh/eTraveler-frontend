@@ -19,6 +19,7 @@
 <%@attribute name="locationId"%>
 <%@attribute name="name"%>
 <%@attribute name="serial"%>
+<%@attribute name="subsystemId"%>
 
 <sql:query var="result" >
     select H.id, H.creationTS, H.lsstId, H.manufacturer, H.manufacturerId, H.model, H.manufactureDate,
@@ -28,7 +29,8 @@
     S.id as siteId, S.name as siteName,
     HI.identifier as nickName,
     count(A.id) as nTravelers,
-    sum(BIH.adjustment) as quantity
+    sum(BIH.adjustment) as quantity,
+    SS.id as subsystemId, SS.name as subsystemName
     from Hardware H
     inner join HardwareType HT on HT.id=H.hardwareTypeId
     <c:if test="${! empty hardwareGroupId}">
@@ -39,6 +41,7 @@
     inner join HardwareLocationHistory HLH on HLH.hardwareId=H.id and HLH.id=(select max(id) from HardwareLocationHistory where hardwareId=H.id)
     inner join Location L on L.id=HLH.locationId
     inner join Site S on S.id=L.siteId
+    inner join Subsystem SS on SS.id=HT.subsystemId
     left join HardwareIdentifier HI on HI.hardwareId=H.id 
         and HI.authorityId=(select id from HardwareIdentifierAuthority where name=?<sql:param value="${preferences.idAuthName}"/>)
     left join Activity A on A.hardwareId=H.id
@@ -67,6 +70,9 @@
     </c:if>
     <c:if test="${! empty locationId}">
         and locationId=?<sql:param value="${locationId}"/>
+    </c:if>
+    <c:if test="${! empty subsystemId}">
+        and SS.id=?<sql:param value="${subsystemId}"/>
     </c:if>
     group by H.id
     ;
@@ -102,7 +108,11 @@
         <display:column property="locationName" title="Location" sortable="true" headerClass="sortable"
                         href="displayLocation.jsp" paramId="locationId" paramProperty="locationId"/>
     </c:if>
-    <display:column property="creationTS" title="Registration Date" sortable="true" headerClass="sortable"/>
+     <c:if test="${empty subsystemId or preferences.showFilteredColumns}">
+        <display:column property="subsystemName" title="Subsystem" sortable="true" headerClass="sortable"
+                        href="displaySubsystem.jsp" paramId="subsystemId" paramProperty="subsystemId"/>
+    </c:if>
+   <display:column property="creationTS" title="Registration Date" sortable="true" headerClass="sortable"/>
     <display:column property="manufacturer" sortable="true" headerClass="sortable"/>
     <display:column property="model" sortable="true" headerClass="sortable"/>
     <display:column property="manuFactureDate" title="Manufacture Date" sortable="true" headerClass="sortable"/>
