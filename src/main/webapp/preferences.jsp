@@ -39,7 +39,8 @@ select * from JobHarness where siteId=(select id from Site where name=?<sql:para
             <td>Current Value: <c:out value="${preferences.writeable}"/></td>
         </tr>
 
-        <preferences:preference name="subsystem" title="<b>Subsystem:</b> ">
+            <preferences:preference name="subsystem" title="<b>Subsystem:</b> ">
+                <preferences:value value="Any"/>
                 <c:forEach var="row" items="${subsysQ.rows}">
                     <preferences:value value="${row.name}"/>
                 </c:forEach>
@@ -50,7 +51,7 @@ select * from JobHarness where siteId=(select id from Site where name=?<sql:para
             <td>Current Value: <c:out value="${preferences.subsystem}"/></td>
         </tr>
 
-        <preferences:preference name="siteName" title="<b>Site:</b> ">
+            <preferences:preference name="siteName" title="<b>Site:</b> ">
                 <c:forEach var="row" items="${siteQ.rows}">
                     <preferences:value value="${row.name}"/>
                 </c:forEach>
@@ -61,7 +62,7 @@ select * from JobHarness where siteId=(select id from Site where name=?<sql:para
             <td>Current Value: <c:out value="${preferences.siteName}"/></td>
         </tr>
 
-        <preferences:preference name="jhName" title="<b>Job Harness Install:</b> ">
+            <preferences:preference name="jhName" title="<b>Job Harness Install:</b> ">
                 <preferences:value value="UNSET"/>
                 <c:forEach var="row" items="${jhQ.rows}">
                     <preferences:value value="${row.name}"/>

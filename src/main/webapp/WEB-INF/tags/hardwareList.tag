@@ -20,6 +20,7 @@
 <%@attribute name="name"%>
 <%@attribute name="serial"%>
 <%@attribute name="subsystemId"%>
+<%@attribute name="subsystemName"%>
 
 <sql:query var="result" >
     select H.id, H.creationTS, H.lsstId, H.manufacturer, H.manufacturerId, H.model, H.manufactureDate,
@@ -71,8 +72,11 @@
     <c:if test="${! empty locationId}">
         and locationId=?<sql:param value="${locationId}"/>
     </c:if>
-    <c:if test="${! empty subsystemId}">
+    <c:if test="${! empty subsystemId && subsystemName != 'Any'}">
         and SS.id=?<sql:param value="${subsystemId}"/>
+    </c:if>
+    <c:if test="${! empty subsystemName && subsystemName != 'Any'}">
+        and SS.name=?<sql:param value="${subsystemName}"/>
     </c:if>
     group by H.id
     ;
@@ -108,7 +112,7 @@
         <display:column property="locationName" title="Location" sortable="true" headerClass="sortable"
                         href="displayLocation.jsp" paramId="locationId" paramProperty="locationId"/>
     </c:if>
-     <c:if test="${(empty subsystemId and empty hardwareTypeId) or preferences.showFilteredColumns}">
+     <c:if test="${(empty subsystemId and (empty subsystemName or subsystemName == 'Any') and empty hardwareTypeId) or preferences.showFilteredColumns}">
         <display:column property="subsystemName" title="Subsystem" sortable="true" headerClass="sortable"
                         href="displaySubsystem.jsp" paramId="subsystemId" paramProperty="subsystemId"/>
     </c:if>

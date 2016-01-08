@@ -42,10 +42,10 @@ select name from Subsystem order by name;
                 </c:forEach>
             </filter:filterSelection>
             <filter:filterSelection title="Subsystem" var="subsystem" defaultValue="${preferences.subsystem}">
-                <filter:filterOption value="any">Any</filter:filterOption>
+                <filter:filterOption value="Any">Any</filter:filterOption>
                 <filter:filterOption value="${preferences.subsystem}">User Pref</filter:filterOption>
-                <c:forEach var="subsysName" items="${subsysQ.rows}">
-                    <filter:filterOption value="${subsysName.name}"><c:out value="${subsysName.name}"/></filter:filterOption>
+                <c:forEach var="subsystem" items="${subsysQ.rows}">
+                    <filter:filterOption value="${subsystem.name}"><c:out value="${subsystem.name}"/></filter:filterOption>
                 </c:forEach>                
             </filter:filterSelection>
             <filter:filterSelection title="Status" var="status" defaultValue='${theStatus}'>
@@ -63,6 +63,7 @@ select name from Subsystem order by name;
                                locationId="${param.locationId}"
                                name="${name}"
                                serial="${serial}"
-                               subsystemId="${param.subsystemId}"/>
+                               subsystemId="${param.subsystemId}"
+                               subsystemName="${subsystem}"/>
     </body>
 </html>
