@@ -46,7 +46,7 @@
                     href="displayHardwareType.jsp" paramId="hardwareTypeId" paramProperty="id"/>
     <display:column property="description" sortable="true" headerClass="sortable"/>
     <display:column property="count" sortable="true" headerClass="sortable"/>
-     <c:if test="${(empty subsystemId and (empty subsystemName or subsystemName == 'Any')) or preferences.showFilteredColumns}">
+    <c:if test="${(empty subsystemId and (empty subsystemName or subsystemName == 'Any')) or preferences.showFilteredColumns}">
         <display:column property="subsystemName" title="Subsystem" sortable="true" headerClass="sortable"
                         href="displaySubsystem.jsp" paramId="subsystemId" paramProperty="subsystemId"/>
     </c:if>

@@ -16,6 +16,8 @@
 <%@attribute name="state"%>
 <%@attribute name="version"%>
 <%@attribute name="name"%>
+<%@attribute name="subsystemId"%>
+<%@attribute name="subsystemName"%>
 
 <c:set var="activeTravelerTypesOnly" value="false"/> <%-- should get this from user pref --%>
 
@@ -37,7 +39,8 @@
         TT.id as travelerTypeId, TT.creationTS,
         TTS.name as state,
         count(A.id)-count(A.end) as inProgress, count(A.id) as total, count(A.end) as completed,
-        max(A.creationTS) as lastUsed
+        max(A.creationTS) as lastUsed,
+        SS.id as subsystemId, SS.name as subsystemName
     from
     Process P
     inner join HardwareGroup HG on HG.id=P.hardwareGroupId
@@ -49,6 +52,7 @@
         TTSH.travelerTypeId=TT.id 
         and TTSH.id=(select max(id) from TravelerTypeStateHistory where travelerTypeId=TT.id)
     inner join TravelerTypeState TTS on TTS.id=TTSH.travelerTypeStateId
+    inner join Subsystem SS on SS.id=TT.subsystemId
     left join Activity A on (A.processId=P.id and A.parentActivityId is null)
     where
     <c:choose>
@@ -64,6 +68,12 @@
     </c:choose>
     <c:if test="${! empty name}">
         and P.name like concat('%', ?<sql:param value="${name}"/>, '%')
+    </c:if>
+    <c:if test="${! empty subsystemId && subsystemName != 'Any'}">
+        and SS.id=?<sql:param value="${subsystemId}"/>
+    </c:if>
+    <c:if test="${! empty subsystemName && subsystemName != 'Any'}">
+        and SS.name=?<sql:param value="${subsystemName}"/>
     </c:if>
     <c:if test="${! empty state && state != 'any'}">
         and TTS.name=?<sql:param value="${state}"/>
@@ -84,6 +94,10 @@
     <c:if test="${empty hardwareGroupId or preferences.showFilteredColumns}">
         <display:column property="hardwareGroupName" title="Component Group" sortable="true" headerClass="sortable"
                         href="displayHardwareGroup.jsp" paramId="hardwareGroupId" paramProperty="hardwareGroupId"/>
+    </c:if>
+    <c:if test="${(empty subsystemId and (empty subsystemName or subsystemName == 'Any')) or preferences.showFilteredColumns}">
+        <display:column property="subsystemName" title="Subsystem" sortable="true" headerClass="sortable"
+                        href="displaySubsystem.jsp" paramId="subsystemId" paramProperty="subsystemId"/>
     </c:if>
     <c:if test="${(empty state || state == 'any') || preferences.showFilteredColumns}">
         <display:column property="state" sortable="true" headerClass="sortable"
