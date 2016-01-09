@@ -30,9 +30,9 @@ select id, name from Subsystem;
     Description:&nbsp;<input type="text" name="description">
     Batched?&nbsp;<input type="radio" name="isBatched" value="0" checked>No&nbsp;<input type="radio" name="isBatched" value="1">Yes<br>
     Subsystem:&nbsp;<select name="subsystemId" required>
-        <option value="0" selected disabled>Select Subsystem</option>
+        <option value="0" <c:if test="${preferences.subsystem != 'Any'}">selected</c:if> disabled>Select Subsystem</option>
         <c:forEach var="subsystem" items="${subsysQ.rows}">
-            <option value="${subsystem.id}">${subsystem.name}</option>
+            <option value="${subsystem.id}" <c:if test="${subsystem.name == preferences.subsystem}">selected</c:if>>${subsystem.name}</option>
         </c:forEach>
     </select>
 </form>

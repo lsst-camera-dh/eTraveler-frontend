@@ -46,8 +46,7 @@ select * from JobHarness where siteId=(select id from Site where name=?<sql:para
                 </c:forEach>
             </preferences:preference>
             <tr>
-                <td>This will filter lists of travelers, components, component types<br>
-                and restrict permissions.</td>
+                <td>This will be the default filter on appropriate lists and be preselected on appropriate forms.</td>
                 <td>Current Value: <c:out value="${preferences.subsystem}"/></td>
             </tr>
 
