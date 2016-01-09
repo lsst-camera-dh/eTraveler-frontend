@@ -116,7 +116,7 @@
         <display:column property="subsystemName" title="Subsystem" sortable="true" headerClass="sortable"
                         href="displaySubsystem.jsp" paramId="subsystemId" paramProperty="subsystemId"/>
     </c:if>
-   <display:column property="creationTS" title="Registration Date" sortable="true" headerClass="sortable"/>
+    <display:column property="creationTS" title="Registration Date" sortable="true" headerClass="sortable"/>
     <display:column property="manufacturer" sortable="true" headerClass="sortable"/>
     <display:column property="model" sortable="true" headerClass="sortable"/>
     <display:column property="manuFactureDate" title="Manufacture Date" sortable="true" headerClass="sortable"/>

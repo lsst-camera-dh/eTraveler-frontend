@@ -24,6 +24,10 @@ select * from Subsystem where id=?<sql:param value="${param.subsystemId}"/>;
     </head>
     <body>
         <h1>Subsystem ${subsystem.name}</h1>
+        Description:&nbsp;<c:out value="${subsystem.description}"/><br>
+        Created by <c:out value="${subsystem.createdBy}"/> at <c:out value="${subsystem.creationTS}"/><br>
+        <traveler:subsystemList subsystemId="${param.subsystemId}" mode="p"/>
+        <traveler:subsystemList subsystemId="${param.subsystemId}" mode="c"/>
         <h2>Component Types</h2>
         <traveler:hardwareTypeList subsystemId="${param.subsystemId}"/>
         <h2>Traveler Types</h2>
