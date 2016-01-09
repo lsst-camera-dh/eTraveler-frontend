@@ -95,7 +95,7 @@
         <display:column property="hardwareGroupName" title="Component Group" sortable="true" headerClass="sortable"
                         href="displayHardwareGroup.jsp" paramId="hardwareGroupId" paramProperty="hardwareGroupId"/>
     </c:if>
-    <c:if test="${(empty subsystemId and (empty subsystemName or subsystemName == 'Any')) or preferences.showFilteredColumns}">
+    <c:if test="${(empty subsystemId and (empty subsystemName or subsystemName == 'Any') and empty hardwareTypeId) or preferences.showFilteredColumns}">
         <display:column property="subsystemName" title="Subsystem" sortable="true" headerClass="sortable"
                         href="displaySubsystem.jsp" paramId="subsystemId" paramProperty="subsystemId"/>
     </c:if>

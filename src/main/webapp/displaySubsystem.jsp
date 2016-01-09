@@ -30,5 +30,7 @@ select * from Subsystem where id=?<sql:param value="${param.subsystemId}"/>;
         <traveler:travelerTypeList subsystemId="${param.subsystemId}"/>
         <h2>Components</h2>
         <traveler:hardwareList  subsystemId="${param.subsystemId}"/>
+        <h2>Travelers</h2>
+        <traveler:activityList travelersOnly="true" subsystemId="${param.subsystemId}"/>
     </body>
 </html>
