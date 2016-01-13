@@ -43,9 +43,22 @@ and H.id=?<sql:param value="${hardwareId}"/>
 ;
     </sql:query>
 
-<c:set var="hasPerm" value="false"/>
+<%-- Is the user in an allowed group? --%>
+<c:set var="inAGroup" value="false"/>
 <c:forEach var="group" items="${groupQ.rows}">
     <c:if test="${gm:isUserInGroup(pageContext, group.name)}">
-        <c:set var="hasPerm" value="true"/>
+        <c:set var="inAGroup" value="true"/>
     </c:if>
 </c:forEach>
+
+<%-- Is the dataSourceMode protected? --%>
+<c:set var="inAMode" value="false"/>
+<c:forTokens var="mode" items="${appVariables.etravelerProtectedModes}" delims=",">
+    <c:if test="${appVariables.dataSourceMode == mode}">
+        <c:set var="inAMode" value="true"/>
+    </c:if>    
+</c:forTokens>
+
+<c:set var="hasPerm" value="${preferences.writeable
+                              &&
+                              (inAGroup || !inAMode)}"/>
