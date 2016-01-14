@@ -10,7 +10,8 @@
 <%@taglib prefix="gm" uri="http://srs.slac.stanford.edu/GroupManager"%>
 <%@taglib prefix="traveler" tagdir="/WEB-INF/tags"%>
 
-<%@attribute name="activityId" required="true"%>
+<%@attribute name="activityId"%>
+<%@attribute name="processId"%>
 <%@attribute name="var" required="true" rtexprvalue="false"%>
 <%@variable name-from-attribute="var" alias="hasPerm" scope="AT_BEGIN"%>
 
@@ -30,34 +31,52 @@
         <c:set var="hasPerm" value="true"/>
     </c:when>
     <c:otherwise>
-        <traveler:findTraveler var="travelerId" activityId="${activityId}"/>
+        <c:choose>
+            <c:when test="${empty processId}">
+                <c:if test="${empty activityId}">
+                    <traveler:error message="Incomplete arguments to checkMask" bug="true"/>
+                </c:if>
+                <traveler:findTraveler var="travelerId" activityId="${activityId}"/>
+                <sql:query var="rootQ">
+select processId from Activity where id=?<sql:param value="${travelerId}"/>
+                </sql:query>
+                <c:set var="rootProcessId" value="${rootQ.rows[0].processId}"/>
+                <sql:query var="processQ">
+select processId from Activity where id=?<sql:param value="${activityId}"/>
+                </sql:query>
+                <c:set var="processId" value="${processQ.rows[0].processId}"/>
+            </c:when>
+            <c:otherwise>
+                <c:set var="rootProcessId" value="${processId}"/>
+            </c:otherwise>
+        </c:choose>
         <sql:query var="subsysQ">
 select SS.shortName
-from Activity A
-left join TravelerType TT on TT.rootProcessId=A.processId
+from TravelerType TT
 inner join Subsystem SS on SS.id=TT.subsystemId
-where A.id=?<sql:param value="${travelerId}"/>
+where TT.rootProcessId=?<sql:param value="${rootProcessId}"/>
 ;
         </sql:query>
         <c:set var="subsysName" value="${subsysQ.rows[0].shortName}"/>
 
         <sql:query var="rolesQ">
 select PG.name
-from Activity A
-inner join Process P on P.id=A.processId
+from Process P
 inner join PermissionGroup PG on (PG.maskBit & P.permissionMask)!=0
-where A.id=?<sql:param value="${activityId}"/>
+where P.id=?<sql:param value="${processId}"/>
 ;
         </sql:query>
 
         <%-- Is the user in an allowed group? --%>
         <c:set var="hasPerm" value="false"/>
         <c:forEach var="role" items="${rolesQ.rows}">
+            ${role.name}
             <c:if test="${! hasPerm}">
                 <c:set var="groupName" value="${subsysName}_${role.name}"/>
                 <c:if test="${gm:isUserInGroup(pageContext, groupName)}">
                     <c:set var="hasPerm" value="true"/>
                 </c:if>
+                ${hasPerm}
             </c:if>
     </c:forEach>
     </c:otherwise>

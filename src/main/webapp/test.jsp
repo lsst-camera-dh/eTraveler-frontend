@@ -19,8 +19,6 @@
         <title>Test Page</title>
     </head>
     <body>
-<ecl:eclCategories var="categories" version="${appVariables.etravelerELogVersion}"/>
-}${categories}{<br>
         <traveler:fullRequestString var="here"/>
         ${here}
         <br> <c:set var="bork" value="<%=response.getContentType()%>"/>
@@ -54,7 +52,7 @@
     <tr><td>${mayWD}</td><td>${maySE}</td><td>${maySoftMan}</td><td>${maySubsMan}</td><td>${mayQA}</td></tr>
 </table>
 
-
+---${gm:isUserInGroup(pageContext, "AintNoSuchGroup")}---
         <h1>Hello World!</h1>
         <br>
         <traveler:checkPerm var="oper" groups="EtravelerOperator,EtravelerAdmin"/>
