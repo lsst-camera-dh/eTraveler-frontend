@@ -15,7 +15,7 @@
 <%@attribute name="processId"%>
 
 <traveler:fullRequestString var="thisPage"/>
-<traveler:checkPerm var="mayOperate" groups="EtravelerOperator,EtravelerSupervisor"/>
+<traveler:checkMask var="mayOperate" activityId="${activityId}"/>
 
     <sql:query var="prereqQ" >
 select PP.*<c:if test="${! empty activityId}">, PI.creationTS as satisfaction, AFS.name as status</c:if>

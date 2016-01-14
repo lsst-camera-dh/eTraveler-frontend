@@ -12,7 +12,7 @@
 <%@attribute name="activityId" required="true"%>
 <%@attribute name="resultsFiled" required="true"%>
 
-<traveler:checkPerm var="mayOperate" groups="EtravelerOperator,EtravelerSupervisor"/>
+<traveler:checkMask var="mayOperate" activityId="${activityId}"/>
 <traveler:checkPerm var="maySupervise" groups="EtravelerSupervisor"/>
 
 <c:choose>
