@@ -10,46 +10,9 @@
 <%@taglib prefix="gm" uri="http://srs.slac.stanford.edu/GroupManager"%>
 <%@taglib prefix="traveler" tagdir="/WEB-INF/tags"%>
 
-<%@attribute name="activityId"%>
-<%@attribute name="processId"%>
-<%@attribute name="hardwareId"%>
+<%@attribute name="activityId" required="true"%>
 <%@attribute name="var" required="true" rtexprvalue="false"%>
 <%@variable name-from-attribute="var" alias="hasPerm" scope="AT_BEGIN"%>
-
-<c:choose>
-    <c:when test="${! empty activityId}">
-        <sql:query var="activityQ">
-select processId, hardwareId from Activity where id=?<sql:param value="${activityId}"/>
-        </sql:query>
-        <c:set var="processId" value="${activityQ.rows[0].processId}"/>
-        <c:set var="hardwareId" value="${activityQ.rows[0].hardwareId}"/>
-    </c:when>
-    <c:otherwise>
-        <c:if test="${empty processId or empty hardwareId}">
-            <traveler:error message="Incomplete checkMask arguments" bug="true"/>
-        </c:if>
-    </c:otherwise>
-</c:choose>
-
-    <sql:query var="groupsQ">
-select concat(SS.shortName, '_', PG.name) as name
-from Process P
-inner join PermissionGroup PG on (PG.maskBit & P.permissionMask)!=0
-cross join Hardware H
-inner join HardwareType HT on HT.id=H.hardwareTypeId
-inner join Subsystem SS on SS.id=HT.subsystemId
-where P.id=?<sql:param value="${processId}"/>
-and H.id=?<sql:param value="${hardwareId}"/>
-;
-    </sql:query>
-
-<%-- Is the user in an allowed group? --%>
-<c:set var="inAGroup" value="false"/>
-<c:forEach var="group" items="${groupQ.rows}">
-    <c:if test="${gm:isUserInGroup(pageContext, group.name)}">
-        <c:set var="inAGroup" value="true"/>
-    </c:if>
-</c:forEach>
 
 <%-- Is the dataSourceMode protected? --%>
 <c:set var="inAMode" value="false"/>
@@ -59,6 +22,43 @@ and H.id=?<sql:param value="${hardwareId}"/>
     </c:if>    
 </c:forTokens>
 
-<c:set var="hasPerm" value="${preferences.writeable
-                              &&
-                              (inAGroup || !inAMode)}"/>
+<c:choose>
+    <c:when test="${! preferences.writeable}">
+        <c:set var="hasPerm" value="false"/>
+    </c:when>
+    <c:when test="${! inAMode}">
+        <c:set var="hasPerm" value="true"/>
+    </c:when>
+    <c:otherwise>
+        <traveler:findTraveler var="travelerId" activityId="${activityId}"/>
+        <sql:query var="subsysQ">
+select SS.shortName
+from Activity A
+left join TravelerType TT on TT.rootProcessId=A.processId
+inner join Subsystem SS on SS.id=TT.subsystemId
+where A.id=?<sql:param value="${travelerId}"/>
+;
+        </sql:query>
+        <c:set var="subsysName" value="${subsysQ.rows[0].shortName}"/>
+
+        <sql:query var="rolesQ">
+select PG.name
+from Activity A
+inner join Process P on P.id=A.processId
+inner join PermissionGroup PG on (PG.maskBit & P.permissionMask)!=0
+where A.id=?<sql:param value="${activityId}"/>
+;
+        </sql:query>
+
+        <%-- Is the user in an allowed group? --%>
+        <c:set var="hasPerm" value="false"/>
+        <c:forEach var="role" items="${rolesQ.rows}">
+            <c:if test="${! hasPerm}">
+                <c:set var="groupName" value="${subsysName}_${role.name}"/>
+                <c:if test="${gm:isUserInGroup(pageContext, groupName)}">
+                    <c:set var="hasPerm" value="true"/>
+                </c:if>
+            </c:if>
+    </c:forEach>
+    </c:otherwise>
+</c:choose>
