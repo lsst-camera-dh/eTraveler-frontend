@@ -13,7 +13,9 @@
 <%@attribute name="activityId" %>
 <%@attribute name="processId" %>
 
-<traveler:checkPerm var="mayOperate" groups="EtravelerOperator,EtravelerSupervisor"/>
+<c:if test="${! empty activityId}">
+    <traveler:checkMask var="mayOperate" activityId="${activityId}"/>
+</c:if>
 
 <c:choose>
     <c:when test="${! empty param.topActivityId}">
