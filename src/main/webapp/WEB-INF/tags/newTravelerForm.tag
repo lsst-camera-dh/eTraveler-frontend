@@ -114,7 +114,10 @@ where S.name=?<sql:param value="${preferences.siteName}"/>
         <c:when test="${empty processId}">
             <select name="processId">
                 <c:forEach var="pRow" items="${processQ.rows}">
-                    <option value="${pRow.id}">${pRow.shortDescription}</option>
+                    <traveler:checkMask var="mayStart" processId="${pRow.id}"/>
+                    <c:if test="${mayStart}">
+                        <option value="${pRow.id}">${pRow.shortDescription}</option>
+                    </c:if>
                 </c:forEach>
             </select>
         </c:when>
