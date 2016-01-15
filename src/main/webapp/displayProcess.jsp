@@ -14,10 +14,12 @@
 <traveler:checkId table="Process" id="${processId}"/>
 
 <sql:query var="processQ" >
-    select P.*, TT.id as travelerTypeId, HG.name as hgName
+    select P.*, TT.id as travelerTypeId, HG.name as hgName,
+    SS.id as subsystemId, SS.name as subsystemName
     from Process P
     inner join HardwareGroup HG on HG.id=P.hardwareGroupId
     left join TravelerType TT on TT.rootProcessId=P.id
+    left join Subsystem SS on SS.id=TT.subsystemId
     where P.id=?<sql:param value="${processId}"/>;
 </sql:query>
 <c:set var="process" value="${processQ.rows[0]}"/>
@@ -35,6 +37,13 @@
                 <td>
         <h2>Process</h2>
         <traveler:processCrumbs processPath="${param.processPath}"/>
+        
+        <c:if test="${! empty process.subsystemId}">
+            <c:url var="subsysUrl" value="displaySubsystem.jsp">
+                <c:param name="subsystemId" value="${process.subsystemId}"/>
+            </c:url>
+            Subsystem: <a href="${subsysUrl}">${process.subsystemName}</a><br>
+        </c:if>
         
         <traveler:countSteps var="nSteps" processId="${processId}"/>
         ${nSteps} steps <br>

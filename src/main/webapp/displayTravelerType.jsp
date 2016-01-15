@@ -14,7 +14,8 @@
     select 
         TT.*,
         TTS.name as state,
-        P.id as processId, concat(P.name, ' v', P.version) as name
+        P.id as processId, concat(P.name, ' v', P.version) as name,
+        SS.id as subsystemId, SS.name as subsystemName
     from
         TravelerType TT
         inner join TravelerTypeStateHistory TTSH on 
@@ -22,6 +23,7 @@
             and TTSH.id=(select max(id) from TravelerTypeStateHistory where travelerTypeId=TT.id)
         inner join TravelerTypeState TTS on TTS.id=TTSH.travelerTypeStateId
         inner join Process P on P.id=TT.rootProcessId
+        inner join Subsystem SS on SS.id=TT.subsystemId
     where
         TT.id=?<sql:param value="${param.travelerTypeId}"/>
     ;
@@ -30,6 +32,10 @@
 
 <c:url var="processLink" value="displayProcess.jsp">
     <c:param name="processPath" value="${travelerType.rootProcessId}"/>
+</c:url>
+
+<c:url var="subsysUrl" value="displaySubsystem.jsp">
+    <c:param name="subsystemId" value="${travelerType.subsystemId}"/>
 </c:url>
 
 <traveler:countSteps var="nSteps" processId="${travelerType.processId}"/>
@@ -42,6 +48,7 @@
     <body>
         <h1>Traveler Type <c:out value="${travelerType.name}"/></h1>
         Root Process: <a href="${processLink}"><c:out value="${travelerType.name}"/></a><br>
+        Subsystem: <a href="${subsysUrl}">${travelerType.subsystemName}</a><br>
         Steps: ${nSteps}<br>
         State: <c:out value="${travelerType.state}"/><br>
         Owner: <c:out value="${travelerType.owner}"/><br>
