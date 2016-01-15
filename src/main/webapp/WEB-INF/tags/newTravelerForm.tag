@@ -14,7 +14,14 @@
 <%@attribute name="processId"%>
 <%@attribute name="hardwareId"%>
 
-<traveler:checkPerm var="mayOperate" groups="EtravelerOperator,EtravelerSupervisor"/>
+<c:choose>
+    <c:when test="${empty processId}">
+        <c:set var="mayOperate" value="true"/>
+    </c:when>
+    <c:otherwise>
+        <traveler:checkMask var="mayOperate" processId="${processId}"/>
+    </c:otherwise>
+</c:choose>
 
 <c:set var="activeTravelerTypesOnly" value="true"/> <%-- should get this from user pref? --%>
 
