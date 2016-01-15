@@ -70,13 +70,11 @@ where P.id=?<sql:param value="${processId}"/>
         <%-- Is the user in an allowed group? --%>
         <c:set var="hasPerm" value="false"/>
         <c:forEach var="role" items="${rolesQ.rows}">
-            ${role.name}
             <c:if test="${! hasPerm}">
                 <c:set var="groupName" value="${subsysName}_${role.name}"/>
                 <c:if test="${gm:isUserInGroup(pageContext, groupName)}">
                     <c:set var="hasPerm" value="true"/>
                 </c:if>
-                ${hasPerm}
             </c:if>
     </c:forEach>
     </c:otherwise>
