@@ -32,31 +32,10 @@
         <traveler:hasHarnessedSteps var="foo" processId="121"/>
         [${foo}]
         <br>
-<traveler:checkPerm var="mayWD" groups="EtravelerWorkflowDevelopers"/>
-<traveler:checkPerm var="maySE" groups="EtravelerSubjectExperts"/>
-<traveler:checkPerm var="maySoftMan" groups="EtravelerSoftwareManagers"/>
-<traveler:checkPerm var="maySubsMan" groups="EtravelerSubsystemManagers"/>
-<traveler:checkPerm var="mayQA" groups="EtravelerQualityAssurance"/>
-<table>
-    <tr><td>${mayWD}</td><td>${maySE}</td><td>${maySoftMan}</td><td>${maySubsMan}</td><td>${mayQA}</td></tr>
-</table>
-
-<%--<preferences:setPreference name="preferences" property="writeable" value="false"/>--%>
-
-<traveler:checkPerm var="mayWD" groups="EtravelerWorkflowDevelopers"/>
-<traveler:checkPerm var="maySE" groups="EtravelerSubjectExperts"/>
-<traveler:checkPerm var="maySoftMan" groups="EtravelerSoftwareManagers"/>
-<traveler:checkPerm var="maySubsMan" groups="EtravelerSubsystemManagers"/>
-<traveler:checkPerm var="mayQA" groups="EtravelerQualityAssurance"/>
-<table>
-    <tr><td>${mayWD}</td><td>${maySE}</td><td>${maySoftMan}</td><td>${maySubsMan}</td><td>${mayQA}</td></tr>
-</table>
 
 ---${gm:isUserInGroup(pageContext, "AintNoSuchGroup")}---
         <h1>Hello World!</h1>
         <br>
-        <traveler:checkPerm var="oper" groups="EtravelerOperator,EtravelerAdmin"/>
-        [${oper}]<br>
         [${appVariables.dataSourceMode}]${preferences.writeable}<br>
         <c:choose>
         <c:when test="${gm:isUserInGroup(pageContext,'EtravelerAdmin')}">

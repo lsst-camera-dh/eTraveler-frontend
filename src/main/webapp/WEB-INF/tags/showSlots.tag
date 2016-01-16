@@ -14,7 +14,9 @@
 <%@attribute name="activityId"%>
 
 <traveler:fullRequestString var="thisPage"/>
-<traveler:checkPerm var="mayOperate" groups="EtravelerOperator,EtravelerSupervisor"/>
+<c:if test="${! empty activityId}">
+    <traveler:checkMask var="mayOperate" activityId="${activityId}"/>
+</c:if>
 
 <traveler:getSlots var="slotList" activityId="${activityId}" processId="${processId}"/>
 
