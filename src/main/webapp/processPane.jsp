@@ -9,8 +9,6 @@
 <%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql"%>
 <%@taglib prefix="traveler" tagdir="/WEB-INF/tags"%>
 
-<traveler:checkMask var="mayOperate" processId="${param.processId}"/>
-
 <!DOCTYPE html>
 <html>
     <head>
@@ -38,6 +36,7 @@ table.datatable th, table.datatable td {
         <c:if test="${! empty param.parentActivityId}">
             <%-- This is only set if this process is the current step and is not instantiated
             which never happens if activities are autocreated --%>
+            <traveler:checkMask var="mayOperate" processId="${param.processId}"/>
             <form METHOD=GET ACTION="operator/createActivity.jsp" target="_top">
                 <input type="hidden" name="parentActivityId" value="${param.parentActivityId}">       
                 <input type="hidden" name="processEdgeId" value="${param.processEdgeId}">       
