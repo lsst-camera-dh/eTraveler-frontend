@@ -10,7 +10,7 @@
     <groupId>org.lsst.camera</groupId>
     <artifactId>org-lsst-camera-etraveler-web</artifactId>
     <packaging>war</packaging>
-    <version>1.1.8</version>
+    <version>1.1.9</version>
     <name>LSST ETraveler Web Application</name>
     <url>http://srs.slac.stanford.edu/eTraveler</url>
     
