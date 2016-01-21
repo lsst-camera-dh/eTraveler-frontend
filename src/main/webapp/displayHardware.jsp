@@ -11,7 +11,7 @@
 <%@taglib prefix="traveler" tagdir="/WEB-INF/tags"%>
 
 <traveler:fullRequestString var="thisPage"/>
-<traveler:checkPerm var="mayOperate" groups="EtravelerOperator,EtravelerSupervisor"/>
+<traveler:checkPerm var="mayOperate" hardwareId="${param.hardwareId}" roles="operator,supervisor"/>
 
 <traveler:checkId table="Hardware" id="${param.hardwareId}"/>
 <sql:query var="hardwareQ">
