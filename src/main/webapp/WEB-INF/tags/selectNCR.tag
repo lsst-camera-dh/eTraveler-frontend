@@ -11,7 +11,7 @@
 
 <%@attribute name="activityId" required="true"%>
 
-<traveler:checkPerm var="maySupervise" activityId="${activityId}" roles="supervisor"/>
+<traveler:checkSsPerm var="maySupervise" activityId="${activityId}" roles="supervisor"/>
 
 <traveler:findPath var="edgePath" activityId="${activityId}"/>
 
