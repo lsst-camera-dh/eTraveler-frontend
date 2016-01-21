@@ -13,7 +13,7 @@
 <%@attribute name="resultsFiled" required="true"%>
 
 <traveler:checkMask var="mayOperate" activityId="${activityId}"/>
-<traveler:checkPerm var="maySupervise" groups="EtravelerSupervisor"/>
+<traveler:checkSsPerm var="maySupervise" activityId="${activityId}" roles="supervisor"/>
 
 <c:choose>
     <c:when test="${! empty param.topActivityId}">

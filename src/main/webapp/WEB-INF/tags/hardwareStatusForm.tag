@@ -12,7 +12,7 @@
 <%@attribute name="hardwareId" required="true"%>
 
 <traveler:fullRequestString var="thisPage"/>
-<traveler:checkPerm var="mayManage" groups="EtravelerSubsystemManagers"/>
+<traveler:checkSsPerm var="mayManage" hardwareId="${hardwareId}" roles="subsystemManager"/>
 
 <sql:query var="statesQ" >
     select * 
