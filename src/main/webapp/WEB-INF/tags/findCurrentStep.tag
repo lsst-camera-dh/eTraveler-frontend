@@ -124,6 +124,8 @@
                     inNCR="${inNCR}" parentActivityId="${lastUnfinished}" processEdgeId="${processEdgeId}"/>
             </c:when>
             <c:when test="${activityAutoCreate}">
+                <traveler:fullRequestString var="reqStr"/>
+                <traveler:error message="Current step should already exist.<br>${reqStr}<br>${processLink}"/>
                 <c:redirect url="${processLink}"/>
             </c:when>
             <c:otherwise>
