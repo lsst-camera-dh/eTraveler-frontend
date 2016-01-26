@@ -22,15 +22,9 @@ where A.id=?<sql:param value="${activityId}"/>
 ;
     </sql:query>
 <c:if test="${activityQ.rows[0].substeps == 'SEQUENCE'}">
-    <sql:query var="childrenQ">
-select count(*) as numChildren from Activity where parentActivityId=?<sql:param value="${activityId}"/>;
-    </sql:query>
-    <c:if test="${childrenQ.rows[0].numChildren == 0}">
-        <traveler:expandActivity var="stepList" activityId="${activityId}"/>
-        <traveler:findCurrentStep scriptMode="true" stepList="${stepList}"
-                                  varStepId="stepId"
-                                  varStepEPath="stepEPath"
-                                  varStepLink="stepLink"/>
-
-    </c:if>
+    <traveler:expandActivity var="stepList" activityId="${activityId}"/>
+    <traveler:findCurrentStep scriptMode="true" stepList="${stepList}"
+                              varStepId="stepId"
+                              varStepEPath="stepEPath"
+                              varStepLink="stepLink"/>
 </c:if>
