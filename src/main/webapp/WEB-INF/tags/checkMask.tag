@@ -30,33 +30,15 @@
         <c:set var="hasPerm" value="true"/>
     </c:when>
     <c:otherwise>
-        <c:choose>
-            <c:when test="${empty processId}">
-                <c:if test="${empty activityId}">
-                    <traveler:error message="Incomplete arguments to checkMask" bug="true"/>
-                </c:if>
-                <traveler:findTraveler var="travelerId" activityId="${activityId}"/>
-                <sql:query var="rootQ">
-select processId from Activity where id=?<sql:param value="${travelerId}"/>
-                </sql:query>
-                <c:set var="rootProcessId" value="${rootQ.rows[0].processId}"/>
-                <sql:query var="processQ">
+        <c:if test="${empty processId}">
+            <c:if test="${empty activityId}">
+                <traveler:error message="Incomplete arguments to checkMask" bug="true"/>
+            </c:if>
+            <sql:query var="processQ">
 select processId from Activity where id=?<sql:param value="${activityId}"/>
-                </sql:query>
-                <c:set var="processId" value="${processQ.rows[0].processId}"/>
-            </c:when>
-            <c:otherwise>
-                <c:set var="rootProcessId" value="${processId}"/>
-            </c:otherwise>
-        </c:choose>
-        <sql:query var="subsysQ">
-select SS.shortName
-from TravelerType TT
-inner join Subsystem SS on SS.id=TT.subsystemId
-where TT.rootProcessId=?<sql:param value="${rootProcessId}"/>
-;
-        </sql:query>
-        <c:set var="subsysName" value="${subsysQ.rows[0].shortName}"/>
+            </sql:query>
+            <c:set var="processId" value="${processQ.rows[0].processId}"/>
+        </c:if>
 
         <sql:query var="rolesQ">
 select PG.name
@@ -70,8 +52,7 @@ where P.id=?<sql:param value="${processId}"/>
         <c:set var="hasPerm" value="false"/>
         <c:forEach var="role" items="${rolesQ.rows}">
             <c:if test="${! hasPerm}">
-                <c:set var="groupName" value="${subsysName}_${role.name}"/>
-                <traveler:checkPerm var="hasPerm" groups="${groupName}"/>
+                <traveler:checkSsPerm var="hasPerm" activityId="${activityId}" processId="${processId}" roles="${role.name}"/>
             </c:if>
     </c:forEach>
     </c:otherwise>

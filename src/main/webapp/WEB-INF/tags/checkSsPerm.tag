@@ -11,6 +11,7 @@
 
 <%@attribute name="activityId"%>
 <%@attribute name="travelerType"%>
+<%@attribute name="processId"%>
 <%@attribute name="hardwareId"%>
 <%@attribute name="hardwareTypeId"%>
 <%@attribute name="var" required="true" rtexprvalue="false"%>
@@ -54,6 +55,18 @@ where TT.id=?<sql:param value="${travelerTypeId}"/>
 ;
                 </sql:query>
             </c:when>
+            <c:when test="${! empty processId}">
+                <sql:query var="subsysQ">
+select SS.shortName
+from TravelerType TT
+inner join Subsystem SS on SS.id=TT.subsystemId
+where TT.rootProcessId=?<sql:param value="${processId}"/>
+;
+                </sql:query>
+                <c:if test="${empty subsysQ.rows}">
+                    <traveler:error message="checkSsPerm called with non-root process ${processId}" bug="true"/>
+                </c:if>
+            </c:when>
             <c:when test="${! empty hardwareId}">
                 <sql:query var="subsysQ">
 select shortName 
@@ -80,7 +93,7 @@ where HT.id=?<sql:param value="${hardwareTypeId}"/>
         <c:set var="subsystemName" value="${subsysQ.rows[0].shortName}"/>
 
         <%-- Is the user in an allowed group? --%>
-        <c:set var="inAGroup" value="false"/>
+        <c:set var="hasPerm" value="false"/>
         <c:forTokens var="role" items="${roles}" delims=",">
             <c:if test="${! hasPerm}">
                 <c:set var="groupName" value="${subsystemName}_${role}"/>
