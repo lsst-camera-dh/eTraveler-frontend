@@ -4,10 +4,9 @@
     Author     : focke
 --%>
 
-<%@tag description="Check permissions" pageEncoding="UTF-8"%>
+<%@tag description="Check permissions against subsystem determined from some argument and supplied list of roles" pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql"%>
-<%@taglib prefix="gm" uri="http://srs.slac.stanford.edu/GroupManager"%>
 <%@taglib prefix="traveler" tagdir="/WEB-INF/tags"%>
 
 <%@attribute name="activityId"%>
@@ -83,9 +82,9 @@ where HT.id=?<sql:param value="${hardwareTypeId}"/>
         <%-- Is the user in an allowed group? --%>
         <c:set var="inAGroup" value="false"/>
         <c:forTokens var="role" items="${roles}" delims=",">
-            <c:set var="groupName" value="${subsystemName}_${role}"/>
-            <c:if test="${gm:isUserInGroup(pageContext, groupName)}">
-                <c:set var="inAGroup" value="true"/>
+            <c:if test="${! hasPerm}">
+                <c:set var="groupName" value="${subsystemName}_${role}"/>
+                <traveler:checkPerm var="hasPerm" groups="${groupName}"/>
             </c:if>
         </c:forTokens>
     </c:otherwise>

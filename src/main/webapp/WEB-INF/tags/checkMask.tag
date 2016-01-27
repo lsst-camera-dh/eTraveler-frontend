@@ -4,10 +4,9 @@
     Author     : focke
 --%>
 
-<%@tag description="Check the user's groups against a bitmask" pageEncoding="UTF-8"%>
+<%@tag description="Check the user's groups against a bitmask obtained from a process" pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql"%>
-<%@taglib prefix="gm" uri="http://srs.slac.stanford.edu/GroupManager"%>
 <%@taglib prefix="traveler" tagdir="/WEB-INF/tags"%>
 
 <%@attribute name="activityId"%>
@@ -72,9 +71,7 @@ where P.id=?<sql:param value="${processId}"/>
         <c:forEach var="role" items="${rolesQ.rows}">
             <c:if test="${! hasPerm}">
                 <c:set var="groupName" value="${subsysName}_${role.name}"/>
-                <c:if test="${gm:isUserInGroup(pageContext, groupName)}">
-                    <c:set var="hasPerm" value="true"/>
-                </c:if>
+                <traveler:checkPerm var="hasPerm" groups="${groupName}"/>
             </c:if>
     </c:forEach>
     </c:otherwise>
