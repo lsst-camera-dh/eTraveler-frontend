@@ -12,11 +12,12 @@
 <%@attribute name="travelerTypeId" required="true"%>
 
 <traveler:fullRequestString var="thisPage"/>
-<traveler:checkPerm var="mayWD" groups="EtravelerWorkflowDevelopers"/>
-<traveler:checkPerm var="maySE" groups="EtravelerSubjectExperts"/>
-<traveler:checkPerm var="maySoftMan" groups="EtravelerSoftwareManagers"/>
-<traveler:checkPerm var="maySubsMan" groups="EtravelerSubsystemManagers"/>
-<traveler:checkPerm var="mayQA" groups="EtravelerQualityAssurance"/>
+
+<traveler:checkSsPerm var="mayWD" travelerTypeId="${travelerTypeId}" roles="workflowDevelopers"/>
+<traveler:checkSsPerm var="maySE" travelerTypeId="${travelerTypeId}" roles="subjectExperts"/>
+<traveler:checkSsPerm var="maySoftMan" travelerTypeId="${travelerTypeId}" roles="softwareManagers"/>
+<traveler:checkSsPerm var="maySubsMan" travelerTypeId="${travelerTypeId}" roles="subsystemManagers"/>
+<traveler:checkSsPerm var="mayQA" travelerTypeId="${travelerTypeId}" roles="qualityAssurance"/>
 
 <sql:query var="oldStateQ">
     select TTS.name

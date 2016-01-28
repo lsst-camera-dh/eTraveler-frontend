@@ -1,5 +1,5 @@
 <%-- 
-    Document   : checkPerm
+    Document   : checkSsPerm
     Created on : Jun 2, 2015, 4:59:09 PM
     Author     : focke
 --%>
@@ -10,7 +10,7 @@
 <%@taglib prefix="traveler" tagdir="/WEB-INF/tags"%>
 
 <%@attribute name="activityId"%>
-<%@attribute name="travelerType"%>
+<%@attribute name="travelerTypeId"%>
 <%@attribute name="processId"%>
 <%@attribute name="hardwareId"%>
 <%@attribute name="hardwareTypeId"%>
@@ -87,7 +87,7 @@ where HT.id=?<sql:param value="${hardwareTypeId}"/>
                 </sql:query>
             </c:when>
             <c:otherwise>
-                <traveler:error message="Insufficient arguments to checkPerm" bug="true"/>
+                <traveler:error message="Insufficient arguments to checkSsPerm" bug="true"/>
             </c:otherwise>
         </c:choose>
         <c:set var="subsystemName" value="${subsysQ.rows[0].shortName}"/>

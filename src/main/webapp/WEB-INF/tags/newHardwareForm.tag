@@ -12,7 +12,7 @@
 
 <%@attribute name="hardwareTypeId" required="true"%>
 
-<traveler:checkPerm var="mayOperate" groups="EtravelerOperator,EtravelerSupervisor"/>
+<traveler:checkSsPerm var="mayOperate" hardwareTypeId="${hardwareTypeId}" roles="operator,supervisor"/>
 
 <sql:query var="typeQ" >
     select * from HardwareType

@@ -14,7 +14,7 @@
 <%@attribute name="hardwareId" required="true"%>
 
 <traveler:fullRequestString var="thisPage"/>
-<traveler:checkPerm var="mayOperate" groups="EtravelerOperator,EtravelerSupervisor"/>
+<traveler:checkSsPerm var="mayOperate" hardwareId="${hardwareId}" roles="operator,supervisor"/>
 
 <sql:query  var="locationHistoryQ">
     select HLH.*,
