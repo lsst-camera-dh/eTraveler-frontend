@@ -96,7 +96,7 @@ creationTS=UTC_TIMESTAMP();
     creationTS=UTC_TIMESTAMP();
 </sql:update>
 
-<ta:setActivityStatus activityId="${inputs.jobid}" status="success"/>
+<ta:closeoutActivity activityId="${inputs.jobid}"/>
 
 <%--</c:catch>--%>
 

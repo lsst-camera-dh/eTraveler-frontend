@@ -8,6 +8,7 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql"%>
 <%@taglib prefix="ta" tagdir="/WEB-INF/tags/actions"%>
+<%@taglib prefix="traveler" tagdir="/WEB-INF/tags"%>
 
 <%@attribute name="activityId" required="true"%>
 
@@ -22,3 +23,13 @@
 <c:forEach var="child" items="${childrenQ.rows}">
     <ta:skipStep activityId="${child.id}"/>
 </c:forEach>
+
+<c:if test="${activityAutoCreate}">
+    <%-- This creates the next step if that's what needs to happen. --%>
+    <traveler:findTraveler var="travelerId" activityId="${activityId}"/>
+    <traveler:expandActivity var="stepList" activityId="${travelerId}"/>
+    <traveler:findCurrentStep scriptMode="true" stepList="${stepList}"
+                              varStepId="stepId"
+                              varStepEPath="stepEPath"
+                              varStepLink="stepLink"/>
+</c:if>

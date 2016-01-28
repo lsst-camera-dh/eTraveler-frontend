@@ -45,8 +45,10 @@ table.datatable th, table.datatable td {
                 <input type="hidden" name="hardwareId" value="${param.hardwareId}">       
                 <input type="hidden" name="processId" value="${param.processId}">       
                 <input type="hidden" name="topActivityId" value="${param.topActivityId}">       
+                Pressing this button should allow you to proceed normally.
                 <INPUT TYPE=SUBMIT value="Start Prep"
                     <c:if test="${! mayOperate}">disabled</c:if>>
+                But you really shouldn't be seeing it. Please report this as a bug.
             </form>
         </c:if>
         <traveler:eclWidget

@@ -16,6 +16,7 @@
         <title>Do NCR</title>
     </head>
     <body>
+<sql:transaction>
         <sql:query var="hardwareQ">
 select hardwareId from Activity where id=?<sql:param value="${param.activityId}"/>
         </sql:query>
@@ -37,7 +38,7 @@ where
             processId="${travelerQ.rows[0].NCRProcessId}"
             inNCR="true"/>
         <sql:update>
-<%-- This should be in a transaction. but createTraveler already uses one :-( --%>
+
 insert into Exception set
 exceptionTypeId=?<sql:param value="${param.exceptionTypeId}"/>,
 exitActivityId=?<sql:param value="${param.activityId}"/>,
@@ -45,6 +46,7 @@ NCRActivityId=?<sql:param value="${NCRActivityId}"/>,
 createdBy=?<sql:param value="${userName}"/>,
 creationTS=UTC_TIMESTAMP();
         </sql:update>
+</sql:transaction>
         <traveler:redirDA activityId="${NCRActivityId}"/>        
     </body>
 </html>
