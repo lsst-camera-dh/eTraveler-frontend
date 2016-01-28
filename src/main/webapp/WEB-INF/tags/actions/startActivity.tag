@@ -21,7 +21,8 @@ inner join Process P on P.id=A.processId
 where A.id=?<sql:param value="${activityId}"/>
 ;
     </sql:query>
-<c:if test="${activityQ.rows[0].substeps == 'SEQUENCE'}">
+
+<c:if test="${activityAutoCreate && activityQ.rows[0].substeps == 'SEQUENCE'}">
     <traveler:expandActivity var="stepList" activityId="${activityId}"/>
     <traveler:findCurrentStep scriptMode="true" stepList="${stepList}"
                               varStepId="stepId"

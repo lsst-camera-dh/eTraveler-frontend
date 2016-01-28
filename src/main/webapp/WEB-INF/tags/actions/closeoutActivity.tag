@@ -44,10 +44,12 @@ where A.id=?<sql:param value="${activityId}"/>;
 
 <ta:closeoutRelationship activityId="${activityId}"/>
 
-<%-- This creates the next step if that's what needs to happen. --%>
-<traveler:findTraveler var="travelerId" activityId="${activityId}"/>
-<traveler:expandActivity var="stepList" activityId="${travelerId}"/>
-<traveler:findCurrentStep scriptMode="true" stepList="${stepList}"
-                          varStepId="stepId"
-                          varStepEPath="stepEPath"
-                          varStepLink="stepLink"/>
+<c:if test="${activityAutoCreate}">
+    <%-- This creates the next step if that's what needs to happen. --%>
+    <traveler:findTraveler var="travelerId" activityId="${activityId}"/>
+    <traveler:expandActivity var="stepList" activityId="${travelerId}"/>
+    <traveler:findCurrentStep scriptMode="true" stepList="${stepList}"
+                              varStepId="stepId"
+                              varStepEPath="stepEPath"
+                              varStepLink="stepLink"/>
+</c:if>

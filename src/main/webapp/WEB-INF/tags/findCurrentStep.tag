@@ -109,8 +109,7 @@
         <c:set var="currentStepActivityId" value="${theId}"/>
     </c:when>
     <c:when test="${mode == 'process'}">
-        <c:set var="processUrl" value="${activityAutoCreate ? 'operator/createActivity.jsp' : 'processPane.jsp'}"/>
-        <c:url var="processLink" value="${processUrl}">
+        <c:url var="processLink" value="processPane.jsp">
             <c:param name="processId" value="${theId}"/>
             <c:param name="topActivityId" value="${topActivityId}"/>
             <c:param name="hardwareId" value="${hardwareId}"/>
@@ -122,11 +121,6 @@
             <c:when test="${scriptMode}">
                 <ta:createActivity var="currentStepActivityId" hardwareId="${hardwareId}" processId="${theId}"
                     inNCR="${inNCR}" parentActivityId="${lastUnfinished}" processEdgeId="${processEdgeId}"/>
-            </c:when>
-            <c:when test="${activityAutoCreate}">
-                <%--<traveler:fullRequestString var="reqStr"/>
-                <traveler:error message="Current step should already exist.<br>${reqStr}<br>${processLink}"/>--%>
-                <c:redirect url="${processLink}"/>
             </c:when>
             <c:otherwise>
                 <c:set var="currentStepLink" value="${processLink}"/>
