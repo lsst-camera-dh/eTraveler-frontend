@@ -8,6 +8,7 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql"%>
 <%@taglib prefix="ta" tagdir="/WEB-INF/tags/actions"%>
+<%@taglib prefix="traveler" tagdir="/WEB-INF/tags"%>
 
 <!DOCTYPE html>
 <html>
@@ -16,6 +17,18 @@
         <title>Add HardwareRelationshipType</title>
     </head>
     <body>
+        <traveler:checkSsPerm var="mayAdmin" hardwareTypeId="${param.hardwareTypeId}" roles="admin"/>
+        <c:if test="${! mayAdmin}">
+            <sql:query var="subsysQ">
+select SS.name
+from HardwareType HT
+inner join Subsystem SS on SS.id=HT.subsystemId
+where HT.id=?<sql:param value="${param.hardwareTypeId}"/>
+;
+            </sql:query>
+            <traveler:error message="This operation requires admin prviledge in subsystem ${subsysQ.rows[0].name}"/>
+        </c:if>
+        
         <sql:transaction>
             <ta:createRelationshipType slotNames="${param.slotNames}" minorTypeId="${param.minorTypeId}"
                 numItems="${param.numItems}" name="${param.name}" hardwareTypeId="${param.hardwareTypeId}"
