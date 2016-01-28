@@ -9,6 +9,7 @@
 <%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql"%>
 <%@taglib prefix="traveler" tagdir="/WEB-INF/tags"%>
 
+<%@attribute name="subsystemId"%>
 <%@attribute name="activityId"%>
 <%@attribute name="travelerTypeId"%>
 <%@attribute name="processId"%>
@@ -35,6 +36,14 @@
     </c:when>
     <c:otherwise>
         <c:choose>
+            <c:when test="${! empty subsystemId}">
+                <sql:query var="subsysQ">
+select SS.shortName
+from Subsystem SS
+where id=?<sql:param value="${subsystemId}"/>
+;
+                </sql:query>
+            </c:when>
             <c:when test="${! empty activityId}">
                 <traveler:findTraveler var="travelerId" activityId="${activityId}"/>
                 <sql:query var="subsysQ">
