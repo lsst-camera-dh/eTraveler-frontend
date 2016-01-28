@@ -1,0 +1,40 @@
+<%-- 
+    Document   : displaySubsystem
+    Created on : Jan 8, 2016, 11:44:44 AM
+    Author     : focke
+--%>
+
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql"%>
+<%@taglib prefix="traveler" tagdir="/WEB-INF/tags"%>
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <sql:query var="subsysQ">
+select * from Subsystem where id=?<sql:param value="${param.subsystemId}"/>;
+        </sql:query>
+<c:if test="${empty subsysQ.rows}">
+    <traveler:error message="No subsystem with id ${param.subsystemId}"/>
+</c:if>
+<c:set var="subsystem" value="${subsysQ.rows[0]}"/>
+        
+        <title>Subsystem ${subsystem.name}</title>
+    </head>
+    <body>
+        <h1>Subsystem ${subsystem.name}</h1>
+        Description:&nbsp;<c:out value="${subsystem.description}"/><br>
+        Created by <c:out value="${subsystem.createdBy}"/> at <c:out value="${subsystem.creationTS}"/><br>
+        <traveler:subsystemList subsystemId="${param.subsystemId}" mode="p"/>
+        <traveler:subsystemList subsystemId="${param.subsystemId}" mode="c"/>
+        <h2>Component Types</h2>
+        <traveler:hardwareTypeList subsystemId="${param.subsystemId}"/>
+        <h2>Traveler Types</h2>
+        <traveler:travelerTypeList subsystemId="${param.subsystemId}"/>
+        <h2>Components</h2>
+        <traveler:hardwareList  subsystemId="${param.subsystemId}"/>
+        <h2>Travelers</h2>
+        <traveler:activityList travelersOnly="true" subsystemId="${param.subsystemId}"/>
+    </body>
+</html>

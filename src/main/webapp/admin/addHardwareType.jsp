@@ -19,7 +19,7 @@
         <sql:transaction>
             <ta:createHardwareType var="hardwareTypeId" name="${param.name}"
                                    width="${param.width}" isBatched="${param.isBatched}"
-                                   description="${param.description}"/>
+                                   description="${param.description}" subsystemId="${param.subsystemId}"/>
         </sql:transaction>
         <c:redirect url="/displayHardwareType.jsp" context="/eTraveler">
             <c:param name="hardwareTypeId" value="${hardwareTypeId}"/>
