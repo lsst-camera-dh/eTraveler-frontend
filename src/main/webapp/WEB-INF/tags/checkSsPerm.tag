@@ -135,6 +135,9 @@ where HT.id=?<sql:param value="${hardwareTypeId}"/>
                             <c:when test="${role == 'workflowDevelopers'}">
                                 <c:set var="groupName" value="EtravelerWorkflowDevelopers"/>
                             </c:when>
+                            <c:otherwise>
+                                <traveler:error message="bad role"/>
+                            </c:otherwise>
                         </c:choose>
                     </c:when>
                     <c:otherwise>
