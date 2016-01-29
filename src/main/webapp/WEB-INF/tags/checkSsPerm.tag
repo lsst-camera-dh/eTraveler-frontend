@@ -105,7 +105,42 @@ where HT.id=?<sql:param value="${hardwareTypeId}"/>
         <c:set var="hasPerm" value="false"/>
         <c:forTokens var="role" items="${roles}" delims=",">
             <c:if test="${! hasPerm}">
-                <c:set var="groupName" value="${subsystemName}_${role}"/>
+                <c:choose>
+                    <c:when test="${subsystemName == 'Legacy' || subsystemName =='Default'}">
+                        <c:choose>
+                            <c:when test="${role == 'admin'}">
+                                <c:set var="groupName" value="EtravelerAdmin"/>
+                            </c:when>
+                            <c:when test="${role == 'approver'}">
+                                <c:set var="groupName" value="EtravelerApprover"/>
+                            </c:when>
+                            <c:when test="${role == 'operator'}">
+                                <c:set var="groupName" value="EtravelerOperator"/>
+                            </c:when>
+                            <c:when test="${role == 'qualityAssurance'}">
+                                <c:set var="groupName" value="EtravelerQualityAssurance"/>
+                            </c:when>
+                            <c:when test="${role == 'softwareMangers'}">
+                                <c:set var="groupName" value="EtravelerSoftwareManagers"/>
+                            </c:when>
+                            <c:when test="${role == 'subjectExperts'}">
+                                <c:set var="groupName" value="EtravelerSubjectExperts"/>
+                            </c:when>
+                            <c:when test="${role == 'subsystemManagers'}">
+                                <c:set var="groupName" value="EtravelerSubsystemManagers"/>
+                            </c:when>
+                            <c:when test="${role == 'supervisor'}">
+                                <c:set var="groupName" value="EtravelerSupervisor"/>
+                            </c:when>
+                            <c:when test="${role == 'workflowDevelopers'}">
+                                <c:set var="groupName" value="EtravelerWorkflowDevelopers"/>
+                            </c:when>
+                        </c:choose>
+                    </c:when>
+                    <c:otherwise>
+                        <c:set var="groupName" value="${subsystemName}_${role}"/>
+                    </c:otherwise>
+                </c:choose>
                 <traveler:checkPerm var="hasPerm" groups="${groupName}"/>
             </c:if>
         </c:forTokens>
