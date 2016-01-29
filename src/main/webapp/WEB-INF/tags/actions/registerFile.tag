@@ -105,26 +105,31 @@
 
 <%-- logicalFolderPath --%>
 
-<c:if test="${mode == 'harnessed'}">
-    <sql:query var="jhSiteQ">
+<c:choose>
+    <c:when test="${mode == 'harnessed'}">
+        <sql:query var="jhSiteQ">
 select S.name as siteName, JH.jhOutputRoot from 
 Activity A
 inner join JobHarness JH on JH.id=A.jobHarnessId
 inner join Site S on S.id=JH.siteId
 where A.id=?<sql:param value="${activityId}"/>
 ;
-    </sql:query>
-    <c:choose>
-        <c:when test="${! empty jhSiteQ.rows}">
-            <c:set var="site" value="${jhSiteQ.rows[0]}"/>
-            <c:set var="siteName" value="${site.siteName}"/>
-            <c:set var="jhOutputRoot" value="${site.jhOutputRoot}"/>
-        </c:when>
-        <c:otherwise>
-            <traveler:error message="Cannot resolve Job Harness info."/>
-        </c:otherwise>
-    </c:choose>
-</c:if>
+        </sql:query>
+        <c:choose>
+            <c:when test="${! empty jhSiteQ.rows}">
+                <c:set var="site" value="${jhSiteQ.rows[0]}"/>
+                <c:set var="siteName" value="${site.siteName}"/>
+                <c:set var="jhOutputRoot" value="${site.jhOutputRoot}"/>
+            </c:when>
+            <c:otherwise>
+                <traveler:error message="Cannot resolve Job Harness info."/>
+            </c:otherwise>
+        </c:choose>
+    </c:when>
+    <c:otherwise>
+        <c:set var="siteName" value="SLAC"/>
+    </c:otherwise>
+</c:choose>
 
 <c:choose>
     <c:when test="${empty activity.userVersionString}">
@@ -162,13 +167,12 @@ where A.id=?<sql:param value="${activityId}"/>
 <c:set var="groupName" value="null"/>
 
 <%-- site, fullFsPath --%>
+<c:set var="dcSite" value="${siteName}"/>
 <c:choose>
     <c:when test="${mode=='harnessed'}">
-        <c:set var="dcSite" value="${siteName}"/>
         <c:set var="fsHead" value="${site.jhOutputRoot}"/>
     </c:when>
     <c:when test="${mode=='manual'}">
-        <c:set var="dcSite" value="SLAC"/>
         <c:set var="fsHead" value="${appVariables.etravelerFileStore}/${initParam['eTravelerFileSubfolder']}/${dataSourceFolder}/${siteName}"/>
     </c:when>
 </c:choose>

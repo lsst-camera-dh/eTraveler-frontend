@@ -23,7 +23,7 @@
     order by conditionString;
 </sql:query>
 
-<c:url var="ncrLink" value="/supervisor/doNCR.jsp" context="/eTraveler"/>
+<c:url var="ncrLink" value="doNCR.jsp"/>
 <form method="get" action="${ncrLink}" target="_top">
     <input type="hidden" name="activityId" value="${activityId}">
     <select name="exceptionTypeId">
