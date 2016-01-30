@@ -18,7 +18,7 @@
     </head>
     <body>
         <traveler:checkMask var="mayStart" processId="${param.processId}"/>
-        <c:if test="${mayStart}">
+        <c:if test="${! mayStart}">
             <traveler:error message="You don't have permission to start this traveler."/>
         </c:if>
         <sql:transaction>
