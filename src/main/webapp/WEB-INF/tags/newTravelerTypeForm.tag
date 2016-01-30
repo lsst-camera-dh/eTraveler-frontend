@@ -11,7 +11,7 @@
 
 <%@attribute name="processId"%>
 
-<traveler:checkPerm var="mayApprove" groups="EtravelerApprover"/>
+<traveler:checkPerm var="mayApprove" groups="EtravelerAllApprovers"/>
 
     <sql:query var="subsysQ">
 select id, name from Subsystem;

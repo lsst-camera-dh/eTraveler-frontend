@@ -16,12 +16,12 @@
         <title>Add Traveler Type</title>
     </head>
     <body>
-        <traveler:checkSsPerm var="mayAdmin" subsystemId="${param.subsystemId}" roles="admin"/>
-        <c:if test="${! mayAdmin}">
+        <traveler:checkSsPerm var="mayApprove" subsystemId="${param.subsystemId}" roles="approver"/>
+        <c:if test="${! mayApprove}">
             <sql:query var="subsysQ">
 select name from Subsystem where id=?<sql:param value="${param.subsystemId}"/>;
             </sql:query>
-            <traveler:error message="This operation requires admin priviledge for subsystem ${subsysQ.rows[0].name}."/>
+            <traveler:error message="Adding this traveler type requires approver priviledge for subsystem ${subsysQ.rows[0].name}."/>
         </c:if>
         
         <sql:query var="processQ">

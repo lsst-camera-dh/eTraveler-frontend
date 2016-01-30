@@ -10,7 +10,7 @@
 <%@taglib prefix="traveler" tagdir="/WEB-INF/tags"%>
 
 <traveler:fullRequestString var="thisPage"/>
-<traveler:checkPerm var="mayAdmin" groups="EtravelerAdmin"/>
+<traveler:checkPerm var="mayAdmin" groups="EtravelerAllAdmin"/>
 
 <!DOCTYPE html>
 
@@ -47,7 +47,10 @@
                 <input type="hidden" name="hardwareGroupId" value="${param.hardwareGroupId}">
                 <select name="hardwareTypeId">
                     <c:forEach var="hwType" items="${hwTypesQ.rows}">
-                        <option value="${hwType.id}"><c:out value="${hwType.name}"/></option>
+                        <traveler:checkSsPerm var="ssPerm" hardwareTypeId="${hwType.id}" roles="admin"/>
+                        <c:if test="${ssPerm}">
+                            <option value="${hwType.id}"><c:out value="${hwType.name}"/></option>
+                        </c:if>
                     </c:forEach>
                 </select>
             </form>
