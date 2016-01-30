@@ -78,19 +78,19 @@ where TT.rootProcessId=?<sql:param value="${processId}"/>
             </c:when>
             <c:when test="${! empty hardwareId}">
                 <sql:query var="subsysQ">
-select shortName 
+select SS.shortName 
 from Hardware H
 inner join HardwareType HT on HT.id=H.hardwareTypeId
-inner join Subsystem SS on SS.id=HT.hardwareTypeId
+inner join Subsystem SS on SS.id=HT.subsystemId
 where H.id=?<sql:param value="${hardwareId}"/>
 ;
                 </sql:query>
             </c:when>
             <c:when test="${! empty hardwareTypeId}">
                 <sql:query var="subsysQ">
-select shortName 
+select SS.shortName 
 from HardwareType HT
-inner join Subsystem SS on SS.id=HT.hardwareTypeId
+inner join Subsystem SS on SS.id=HT.subsystemId
 where HT.id=?<sql:param value="${hardwareTypeId}"/>
 ;
                 </sql:query>

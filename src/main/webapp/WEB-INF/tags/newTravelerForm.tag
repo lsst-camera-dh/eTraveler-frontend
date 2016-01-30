@@ -15,11 +15,17 @@
 <%@attribute name="hardwareId"%>
 
 <c:choose>
-    <c:when test="${empty processId}">
-        <c:set var="mayOperate" value="true"/>
+    <c:when test="${! empty processId}">
+        <traveler:checkMask var="mayOperate" processId="${processId}"/>
+    </c:when>
+    <c:when test="${! empty hardwareId}">
+        <traveler:checkSsPerm var="mayOperate" hardwareId="${hardwareId}" roles="operator,supervisor"/>
+    </c:when>
+    <c:when test="${! empty hardwareTypeId}">
+        <traveler:checkSsPerm var="mayOperate" hardwareTypeId="${hardwareTypeId}" roles="operator,supervisor"/>
     </c:when>
     <c:otherwise>
-        <traveler:checkMask var="mayOperate" processId="${processId}"/>
+        <c:set var="mayOperate" value="true"/>
     </c:otherwise>
 </c:choose>
 
@@ -144,7 +150,10 @@ where S.name=?<sql:param value="${preferences.siteName}"/>
         <c:when test="${empty hardwareId}">
             <select name="hardwareId">
                 <c:forEach var="hRow" items="${hardwareQ.rows}">
-                    <option value="${hRow.id}">${hRow.lsstId}</option>
+                    <traveler:checkSsPerm var="mayStart" hardwareId="${hRow.id}" roles="operator,supervisor"/>
+                    <c:if test="${mayStart}">
+                        <option value="${hRow.id}">${hRow.lsstId}</option>
+                    </c:if>
                 </c:forEach>
             </select>
         </c:when>
