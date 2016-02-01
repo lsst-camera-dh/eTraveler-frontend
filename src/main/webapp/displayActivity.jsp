@@ -26,7 +26,6 @@
         <title>Activity <c:out value="${activity.name}, ${activity.shortDescription}"/></title>
     </head>
     <body>
-        <c:set var="activityAutoCreate" value="true" scope="session"/>
         <traveler:expandActivity var="stepList" activityId="${param.activityId}"/>
         <traveler:findCurrentStep varStepLink="currentStepLink" varStepEPath="currentStepEPath" 
                                   varStepId="currentStepActivityId" stepList="${stepList}"/>

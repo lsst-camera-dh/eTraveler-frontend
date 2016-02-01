@@ -22,7 +22,7 @@ where A.id=?<sql:param value="${activityId}"/>
 ;
     </sql:query>
 
-<c:if test="${activityAutoCreate && activityQ.rows[0].substeps == 'SEQUENCE'}">
+<c:if test="${initParam['activityAutoCreate'] && activityQ.rows[0].substeps == 'SEQUENCE'}">
     <traveler:expandActivity var="stepList" activityId="${activityId}"/>
     <traveler:findCurrentStep scriptMode="true" stepList="${stepList}"
                               varStepId="stepId"
