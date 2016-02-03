@@ -14,6 +14,10 @@
 select name from ActivityFinalStatus order by name;
     </sql:query>
 
+    <sql:query var="subsysQ">
+select name from Subsystem order by name;
+    </sql:query>
+
 <!DOCTYPE html>
 <html>
     <head>
@@ -33,6 +37,13 @@ select name from ActivityFinalStatus order by name;
             <filter:filterInput var="cSerial" title="Camera Serial"/>
             <filter:filterInput var="mSerial" title="Manufacturer Serial"/>
             <filter:filterInput var="type" title="Component Type"/>
+            <filter:filterSelection title="Subsystem" var="subsystem" defaultValue="${preferences.subsystem}">
+                <filter:filterOption value="Any">Any</filter:filterOption>
+                <filter:filterOption value="${preferences.subsystem}">User Pref</filter:filterOption>
+                <c:forEach var="subsystem" items="${subsysQ.rows}">
+                    <filter:filterOption value="${subsystem.name}"><c:out value="${subsystem.name}"/></filter:filterOption>
+                </c:forEach>                
+            </filter:filterSelection>
             <filter:filterInput var="userId" title="User"/>
             <filter:filterSelection title="Status" var="status" defaultValue='any'>
                 <filter:filterOption value="any">Any</filter:filterOption>
@@ -47,6 +58,7 @@ select name from ActivityFinalStatus order by name;
         </filter:filterTable>
         <traveler:activityList travelersOnly="true" version="${version}" processId="${param.processId}" 
                                done="${param.done}" status="${status}" hardwareId="${param.hardwareId}" name="${name}"
-                               camSerial="${cSerial}" manSerial="${mSerial}" type="${type}" userId="${userId}"/>
+                               camSerial="${cSerial}" manSerial="${mSerial}" type="${type}" userId="${userId}"
+                               subsystemName="${subsystem}"/>
     </body>
 </html>

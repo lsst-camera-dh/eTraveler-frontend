@@ -15,7 +15,7 @@
 <%@variable name-from-attribute="var" alias="resultsFiled" scope="AT_BEGIN"%>
 
 <traveler:fullRequestString var="thisPage"/>
-<traveler:checkPerm var="mayOperate" groups="EtravelerOperator,EtravelerSupervisor"/>
+<traveler:checkMask var="mayOperate" activityId="${activityId}"/>
 
 <traveler:getActivityStatus var="status" activityId="${activityId}"/>
 

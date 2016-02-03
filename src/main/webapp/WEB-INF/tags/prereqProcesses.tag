@@ -13,7 +13,7 @@
 <%@attribute name="activityId" required="true"%>
 
 <traveler:fullRequestString var="thisPage"/>
-<traveler:checkPerm var="mayOperate" groups="EtravelerOperator,EtravelerSupervisor"/>
+<traveler:checkMask var="mayOperate" activityId="${activityId}"/>
 
     <sql:query var="prereqsQ" >
 select 

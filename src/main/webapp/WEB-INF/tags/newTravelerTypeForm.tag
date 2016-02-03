@@ -11,16 +11,20 @@
 
 <%@attribute name="processId"%>
 
-<traveler:checkPerm var="mayApprove" groups="EtravelerApprover"/>
+<traveler:checkPerm var="mayApprove" groups="EtravelerAllApprovers"/>
 
-<sql:query var="processQ">
-    select id, name 
-    from Process 
-    where id not in (select rootProcessId from TravelerType)
-    <c:if test="${! empty processId}">and id=?<sql:param value="${processId}"/></c:if>
-    order by name
-    ;
-</sql:query>
+    <sql:query var="subsysQ">
+select id, name from Subsystem;
+    </sql:query>
+
+    <sql:query var="processQ">
+select id, name 
+from Process 
+where id not in (select rootProcessId from TravelerType)
+<c:if test="${! empty processId}">and id=?<sql:param value="${processId}"/></c:if>
+order by name
+;
+    </sql:query>
 
 <c:if test="${! empty processQ.rows}">
     
@@ -51,6 +55,12 @@ The interface here is terrible, if you have ideas on improving it, please share!
             </select>            
         </c:otherwise>
     </c:choose>
+    Subsystem:&nbsp;<select name="subsystemId" required>
+        <option value="0" <c:if test="${preferences.subsystem == 'Any'}">selected</c:if> disabled>Select Subsystem</option>
+        <c:forEach var="subsystem" items="${subsysQ.rows}">
+            <option value="${subsystem.id}" <c:if test="${subsystem.name == preferences.subsystem}">selected</c:if>>${subsystem.name}</option>
+        </c:forEach>
+    </select>
     Owner: <input type="text" name="owner">
     Reason: <textarea name="reason"></textarea>
 </form>

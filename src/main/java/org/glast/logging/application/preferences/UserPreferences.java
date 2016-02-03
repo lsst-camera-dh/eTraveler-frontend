@@ -10,6 +10,7 @@ import org.srs.base.application.preferences.ApplicationPreferences;
 public class UserPreferences implements ApplicationPreferences {
     
     public String writeable = "true";
+    public String subsystem = "Any";
     public String siteName = "SLAC";
     public String jhName = "UNSET";
     public String idAuthName = "null";
@@ -23,7 +24,14 @@ public class UserPreferences implements ApplicationPreferences {
     }
     public void setWriteable(String writeable) {
         this.writeable = writeable;
-    }    
+    }
+    
+    public String getSubsystem() {
+        return subsystem;
+    }
+    public void setSubsystem(String subsystem) {
+        this.subsystem = subsystem;
+    }
 
     public String getSiteName() {
         return siteName;

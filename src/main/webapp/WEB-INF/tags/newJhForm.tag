@@ -12,7 +12,7 @@
 <%@attribute name="siteId"%>
 
 <traveler:fullRequestString var="thisPage"/>
-<traveler:checkPerm var="mayAdmin" groups="EtravelerAdmin"/>
+<traveler:checkPerm var="mayAdmin" groups="EtravelerAllAdmin"/>
 
     <sql:query var="siteQ">
 select id, name from Site

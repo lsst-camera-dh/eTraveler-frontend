@@ -10,7 +10,7 @@
 <%@taglib prefix="traveler" tagdir="/WEB-INF/tags"%>
 
 <traveler:fullRequestString var="thisPage"/>
-<traveler:checkPerm var="mayAdmin" groups="EtravelerAdmin"/>
+<traveler:checkPerm var="mayAdmin" groups="EtravelerAllAdmin"/>
 
 <!DOCTYPE html>
 <html>
@@ -45,21 +45,7 @@
 
 <hr>
 <h2>Hardware Types</h2>
-    <form method="get" action="admin/addHardwareType.jsp">
-        <input type="submit" value="Add Hardware Type"
-           <c:if test="${! mayAdmin}">disabled</c:if>>
-        Name or Drawing #:&nbsp;<input type="text" name="name" required>
-        Sequence width - set to zero if not automatic:&nbsp;<select name="width">
-            <option value="0">0</option>
-            <option value="1">1</option>
-            <option value="2">2</option>
-            <option value="3">3</option>
-            <option value="4" selected>4</option>
-            <option value="5">5</option>
-        </select><br>
-        Description:&nbsp;<input type="text" name="description">
-        Batched?&nbsp;<input type="radio" name="isBatched" value="0" checked>No&nbsp;<input type="radio" name="isBatched" value="1">Yes<br>
-    </form>
+   <traveler:newHardwareTypeForm/>
 
 <hr>
 <h2>Hardware Relationship Types</h2>

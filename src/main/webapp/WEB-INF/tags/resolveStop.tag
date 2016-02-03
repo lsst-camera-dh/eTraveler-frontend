@@ -11,7 +11,7 @@
 <%@attribute name="activityId" required="true"%>
 <%@attribute name="travelerId" required="true"%>
 
-<traveler:checkPerm var="maySupervise" groups="EtravelerSupervisor"/>
+<traveler:checkSsPerm var="maySupervise" activityId="${activityId}" roles="supervisor"/>
 
 <table border="1">
     <tr>

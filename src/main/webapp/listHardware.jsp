@@ -12,6 +12,10 @@ select name from HardwareStatus order by name;
 select name from Site order by name;
     </sql:query>
 
+    <sql:query var="subsysQ">
+select name from Subsystem order by name;
+    </sql:query>
+
 <!DOCTYPE html>
 <html>
     <head>
@@ -37,6 +41,13 @@ select name from Site order by name;
                     <filter:filterOption value="${siteName.name}"><c:out value="${siteName.name}"/></filter:filterOption>
                 </c:forEach>
             </filter:filterSelection>
+            <filter:filterSelection title="Subsystem" var="subsystem" defaultValue="${preferences.subsystem}">
+                <filter:filterOption value="Any">Any</filter:filterOption>
+                <filter:filterOption value="${preferences.subsystem}">User Pref</filter:filterOption>
+                <c:forEach var="subsystem" items="${subsysQ.rows}">
+                    <filter:filterOption value="${subsystem.name}"><c:out value="${subsystem.name}"/></filter:filterOption>
+                </c:forEach>                
+            </filter:filterSelection>
             <filter:filterSelection title="Status" var="status" defaultValue='${theStatus}'>
                 <filter:filterOption value="any">Any</filter:filterOption>
                 <c:forEach var="statusName" items="${statesQ.rows}">
@@ -51,6 +62,8 @@ select name from Site order by name;
                                siteName="${site}"
                                locationId="${param.locationId}"
                                name="${name}"
-                               serial="${serial}"/>
+                               serial="${serial}"
+                               subsystemId="${param.subsystemId}"
+                               subsystemName="${subsystem}"/>
     </body>
 </html>
