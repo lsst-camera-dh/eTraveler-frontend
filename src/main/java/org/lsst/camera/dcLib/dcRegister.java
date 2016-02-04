@@ -39,14 +39,11 @@ public class dcRegister extends SimpleTagSupport {
             String defaultUserName = System.getProperty("org.lsst.eTraveler.default_username");
             
             if(srsClientId == null){
-                throw new IOException("eTraveler requires a Client ID for it's datacat requests");
+                headers.put("x-client-id", srsClientId); // This web applications has a clientId which should be trusted
             }
             if(defaultUserName == null){
-                throw new IOException("eTraveler requires a default username for it's datacat requests");
+                headers.put("x-cas-username", defaultUserName); // This machine should be trusted (this won't work locally)
             }
-            
-            headers.put("x-client-id", srsClientId); // This web applications has a clientId which should be trusted
-            headers.put("x-cas-username", defaultUserName); // This machine should be trusted (this won't work locally)
 
             return ClientBuilder.newBuilder()
                     .setUrl(datacatUrl)
