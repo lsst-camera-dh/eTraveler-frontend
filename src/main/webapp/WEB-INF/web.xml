@@ -38,7 +38,7 @@
     
     <context-param>
         <param-name>org.lsst.eTraveler.default_username</param-name>
-        <param-value>${defaultUsername}</param-value>
+        <param-value>lsstprod</param-value>
     </context-param>
 
     <context-param>
