@@ -24,7 +24,7 @@
     <ta:skipStep activityId="${child.id}"/>
 </c:forEach>
 
-<c:if test="${activityAutoCreate}">
+<c:if test="${initParam['activityAutoCreate']}">
     <%-- This creates the next step if that's what needs to happen. --%>
     <traveler:findTraveler var="travelerId" activityId="${activityId}"/>
     <traveler:expandActivity var="stepList" activityId="${travelerId}"/>
