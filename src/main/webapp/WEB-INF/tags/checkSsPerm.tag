@@ -120,23 +120,23 @@ where HT.id=?<sql:param value="${hardwareTypeId}"/>
                             <c:when test="${role == 'qualityAssurance'}">
                                 <c:set var="groupName" value="EtravelerQualityAssurance"/>
                             </c:when>
-                            <c:when test="${role == 'softwareMangers'}">
+                            <c:when test="${role == 'softwareManger'}">
                                 <c:set var="groupName" value="EtravelerSoftwareManagers"/>
                             </c:when>
-                            <c:when test="${role == 'subjectExperts'}">
+                            <c:when test="${role == 'subjectExpert'}">
                                 <c:set var="groupName" value="EtravelerSubjectExperts"/>
                             </c:when>
-                            <c:when test="${role == 'subsystemManagers'}">
+                            <c:when test="${role == 'subsystemManager'}">
                                 <c:set var="groupName" value="EtravelerSubsystemManagers"/>
                             </c:when>
                             <c:when test="${role == 'supervisor'}">
                                 <c:set var="groupName" value="EtravelerSupervisor"/>
                             </c:when>
-                            <c:when test="${role == 'workflowDevelopers'}">
+                            <c:when test="${role == 'workflowDeveloper'}">
                                 <c:set var="groupName" value="EtravelerWorkflowDevelopers"/>
                             </c:when>
                             <c:otherwise>
-                                <traveler:error message="bad role"/>
+                                <traveler:error message="bad role [${role}]"/>
                             </c:otherwise>
                         </c:choose>
                     </c:when>

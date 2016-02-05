@@ -13,10 +13,10 @@
 
 <traveler:fullRequestString var="thisPage"/>
 
-<traveler:checkSsPerm var="mayWD" travelerTypeId="${travelerTypeId}" roles="workflowDevelopers"/>
-<traveler:checkSsPerm var="maySE" travelerTypeId="${travelerTypeId}" roles="subjectExperts"/>
-<traveler:checkSsPerm var="maySoftMan" travelerTypeId="${travelerTypeId}" roles="softwareManagers"/>
-<traveler:checkSsPerm var="maySubsMan" travelerTypeId="${travelerTypeId}" roles="subsystemManagers"/>
+<traveler:checkSsPerm var="mayWD" travelerTypeId="${travelerTypeId}" roles="workflowDeveloper"/>
+<traveler:checkSsPerm var="maySE" travelerTypeId="${travelerTypeId}" roles="subjectExpert"/>
+<traveler:checkSsPerm var="maySoftMan" travelerTypeId="${travelerTypeId}" roles="softwareManager"/>
+<traveler:checkSsPerm var="maySubsMan" travelerTypeId="${travelerTypeId}" roles="subsystemManager"/>
 <traveler:checkSsPerm var="mayQA" travelerTypeId="${travelerTypeId}" roles="qualityAssurance"/>
 
 <sql:query var="oldStateQ">
