@@ -84,7 +84,8 @@ select id from Hardware where id=LAST_INSERT_ID();
 <c:set var="hardware" value="${hardwareQ.rows[0]}"/>
 <c:set var="hardwareId" value="${hardware.id}"/>
 <ta:setHardwareStatus hardwareId="${hardwareId}" hardwareStatusName="NEW" reason="New Item"/>
-<ta:setHardwareLocation hardwareId="${hardwareId}" newLocationId="${locationId}"/>
+<ta:setHardwareLocation hardwareId="${hardwareId}" newLocationId="${locationId}"
+                        reason="New component registration"/>
 <c:if test="${hType.isBatched != 0}">
     <ta:adjustBatchInventory hardwareId="${hardwareId}" adjustment="${quantity}" reason="New batch"/>
 </c:if>
