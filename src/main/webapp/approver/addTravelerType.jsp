@@ -23,6 +23,7 @@ select name from Subsystem where id=?<sql:param value="${param.subsystemId}"/>;
             </sql:query>
             <traveler:error message="Adding this traveler type requires approver priviledge for subsystem ${subsysQ.rows[0].name}."/>
         </c:if>
+
         <traveler:checkFreshness formToken="${param.freshnessToken}"/>        
         
         <sql:query var="processQ">
