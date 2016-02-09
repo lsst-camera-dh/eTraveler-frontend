@@ -15,6 +15,7 @@
 <%@attribute name="activityId" required="true"%>
 <%@attribute name="fileItem" type="org.apache.commons.fileupload.FileItem"%>
 <%@attribute name="name"%>
+<%@attribute name="limsMetadata" type="java.util.Map"%>
 <%@attribute name="mode" required="true"%>
 <%@attribute name="varFsPath" required="true" rtexprvalue="false"%>
 <%@variable name-from-attribute="varFsPath" alias="fullFsPath" scope="AT_BEGIN"%>
@@ -55,19 +56,22 @@
 </sql:query>
 <c:set var="activity" value="${activityQ.rows[0]}"/>
 
-<%--
-<traveler:mapCreate var="metaData"/>
-<traveler:mapAdd theMap="${metaData}" key="nActivityId" value="${activityId}"/>
-<traveler:mapAdd theMap="metaData" key="nProcessId" value="${activity.processId}"/>
-<traveler:mapAdd theMap="metaData" key="" value=""/>
-<traveler:mapAdd theMap="metaData" key="nHardwareId" value="${activity.hardwareId}"/>
-<traveler:mapAdd theMap="metaData" key="" value=""/>
-<traveler:mapAdd theMap="metaData" key="nHardwareTypeId" value="${activity.hardwareTypeId}"/>
-<traveler:mapAdd theMap="metaData" key="" value=""/>
-<traveler:mapAdd theMap="metaData" key="nHardwareGroupId" value="${activity.hardwareGroupId}"/>
-<traveler:mapAdd theMap="metaData" key="" value=""/>
-<traveler:mapAdd theMap="metaData" key="" value=""/>
---%>
+<c:set var="dcMetadata" value="<%=new java.util.HashMap()%>"/>
+<traveler:mapAdd theMap="${dcMetadata}" key="ActivityId" value="${activityId}"/>
+<traveler:mapAdd theMap="${dcMetadata}" key="ProcessId" value="${activity.processId}"/>
+<traveler:mapAdd theMap="${dcMetadata}" key="ProcessName" value="${activity.processName}"/>
+<traveler:mapAdd theMap="${dcMetadata}" key="HardwareId" value="${activity.hardwareId}"/>
+<traveler:mapAdd theMap="${dcMetadata}" key="LsstId" value="${activity.lsstId}"/>
+<traveler:mapAdd theMap="${dcMetadata}" key="HardwareTypeId" value="${activity.hardwareTypeId}"/>
+<traveler:mapAdd theMap="${dcMetadata}" key="HardwareTypeName" value="${activity.hardwareTypeName}"/>
+<traveler:mapAdd theMap="${dcMetadata}" key="HardwareGroupId" value="${activity.hardwareGroupId}"/>
+<traveler:mapAdd theMap="${dcMetadata}" key="HardwareGroupName" value="${activity.hardwareGroupName}"/>
+<traveler:mapAdd theMap="${dcMetadata}" key="DataSourceMode" value="${appVariables.dataSourceMode}"/>
+<c:if test="${mode == 'harnessed' && ! empty limsMetadata}">
+    <c:forEach var="metaItem" items="${limsMetadata}">
+        <traveler:mapAdd theMap="${dcMetadata}" key="${metaItem.key}" value="${metaItem.value}"/>
+    </c:forEach>
+</c:if>
 
 <%-- dataCatalogDb --%>
 <c:set var="dataCatalogDb" value="${appVariables.dataCatalogDb}"/>
@@ -204,16 +208,17 @@ replaceExisting: <c:out value="${replaceExisting}"/><br>
         </c:if>
     </c:if>
     <c:catch var="ex">
-    <dc:dcRegister dataCatalogDb="${dataCatalogDb}"
-        name="${name}" fileFormat="${fileFormat}" dataType="${dataType}"
-                   logicalFolderPath="${logicalFolderPath}" 
-                   site="${dcSite}" location="${fullFsPath}" replaceExisting="${replaceExisting}"
-                   var="dcPk"/>
+        <dc:dcRegister dataCatalogDb="${dataCatalogDb}"
+            name="${name}" fileFormat="${fileFormat}" dataType="${dataType}"
+            logicalFolderPath="${logicalFolderPath}" 
+            site="${dcSite}" location="${fullFsPath}" replaceExisting="${replaceExisting}"
+            var="dcPk" metadata="${dcMetadata}"/>
     </c:catch>
     <c:if test="${!empty ex}">
         <traveler:error message="Couldn't register file ${fullFsPath}.<br>
 Perhaps the file format (${fileFormat}) is not on the data catalog's list?<br>
-Check <a href='http://srs.slac.stanford.edu/DataCatalog/datasetfileformat.jsp' target='_'>here</a>."/>
+Check <a href='http://srs.slac.stanford.edu/DataCatalog/datasetfileformat.jsp' target='_'>here</a>.
+${ex} ${ex.cause}"/>
     </c:if>
 </c:if>
 <c:set var="fullVirtualPath" value="${logicalFolderPath}/${name}"/>

@@ -15,6 +15,7 @@ import org.srs.datacat.client.auth.HeaderFilter;
 import org.srs.datacat.model.DatasetModel;
 import org.srs.datacat.shared.Dataset;
 import org.srs.datacat.shared.Provider;
+import java.math.BigDecimal;
 
 /**
  *
@@ -27,13 +28,14 @@ public class dcRegister extends SimpleTagSupport {
     private String logicalFolderPath;
     private String site;
     private String location;
+    private Map<String,Object> metadata;
     private String var;
     
     public static Client getClient() throws IOException{
         String datacatUrl = "http://srs.slac.stanford.edu/datacat-v0.4/r";
         try {
             
-            Map<String, Object> headers = new HashMap<>();
+            Map<String, Object> headers = new HashMap<String, Object>();
 
             String srsClientId = System.getProperty("org.lsst.eTraveler.srs_client_id");
             String defaultUserName = System.getProperty("org.lsst.eTraveler.default_username");
@@ -74,6 +76,7 @@ public class dcRegister extends SimpleTagSupport {
             DatasetModel retDs = c.createDataset(logicalFolderPath, builder.build());
             getJspContext().setAttribute(var, retDs.getPk());
         } catch (Exception ex) {
+            ex.printStackTrace();
             throw new JspException("Error in dcRegister tag", ex);
         }
     }
@@ -96,7 +99,23 @@ public class dcRegister extends SimpleTagSupport {
     public void setLocation(String location) {
         this.location = location;
     }
+
+    public void setMetadata(Map<String,Object> metadata) {
+        this.metadata = metadata;
+        //numerify();
+    }
+    
     public void setVar(String var) {
         this.var = var;
+    }
+    
+    private void numerify() {
+        for (String key : metadata.keySet()) {
+            try {
+                metadata.put(key, new BigDecimal(metadata.get(key).toString()));
+            } catch (NumberFormatException ex) {
+                // chill
+            }
+        }
     }
 }
