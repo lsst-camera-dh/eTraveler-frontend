@@ -77,7 +77,6 @@ public class dcRegister extends SimpleTagSupport {
                 c.createContainer(parentPath, newFolder, true);
             }
             
-            Map<String,Object> metadata = null;
             Dataset.Builder builder = (Dataset.Builder) provider.getDatasetBuilder()
                     .name(name)
                     .fileFormat(fileFormat)
