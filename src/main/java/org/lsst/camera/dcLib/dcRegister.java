@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.tagext.SimpleTagSupport;
+import javax.servlet.jsp.PageContext;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -31,19 +32,19 @@ public class dcRegister extends SimpleTagSupport {
     private Map<String,Object> metadata;
     private String var;
     
-    public static Client getClient() throws IOException{
+    public Client getClient() throws IOException{
         String datacatUrl = "http://srs.slac.stanford.edu/datacat-v0.4/r";
         try {
             
             Map<String, Object> headers = new HashMap<String, Object>();
 
-            String srsClientId = System.getProperty("org.lsst.eTraveler.srs_client_id");
-            String defaultUserName = System.getProperty("org.lsst.eTraveler.default_username");
-            
-            if(srsClientId == null){
+            String srsClientId = ((PageContext)getJspContext()).getServletContext().getInitParameter("org.lsst.eTraveler.srs_client_id");
+            String defaultUserName = ((PageContext)getJspContext()).getServletContext().getInitParameter("org.lsst.eTraveler.default_username");
+
+            if(srsClientId != null){
                 headers.put("x-client-id", srsClientId); // This web applications has a clientId which should be trusted
             }
-            if(defaultUserName == null){
+            if(defaultUserName != null){
                 headers.put("x-cas-username", defaultUserName); // This machine should be trusted (this won't work locally)
             }
 
