@@ -17,6 +17,12 @@ import org.srs.datacat.client.auth.HeaderFilter;
 import org.srs.datacat.model.DatasetModel;
 import org.srs.datacat.shared.Dataset;
 import org.srs.datacat.shared.Provider;
+import java.math.BigDecimal;
+import org.srs.datacat.client.exception.DcClientException;
+import org.srs.datacat.client.exception.DcRequestException;
+import org.srs.datacat.model.DatasetContainer;
+import org.srs.datacat.model.DatasetView;
+import org.srs.vfs.PathUtils;
 
 /**
  *
@@ -78,6 +84,7 @@ public class dcRegister extends SimpleTagSupport {
                     .dataType(dataType)
                     .site(site)
                     .resource(location)
+                    .versionId(DatasetView.NEW_VER)
                     .versionMetadata(metadata);
             
             DatasetModel retDs = c.createDataset(logicalFolderPath, builder.build());
