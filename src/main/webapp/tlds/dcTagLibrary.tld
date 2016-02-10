@@ -9,12 +9,6 @@
     <tag-class>org.lsst.camera.dcLib.dcRegister</tag-class>
     <body-content>empty</body-content>
     <attribute>
-        <name>dataCatalogDb</name>
-        <required>true</required>
-        <rtexprvalue>true</rtexprvalue>
-        <type>java.lang.String</type>
-    </attribute>
-    <attribute>
         <name>name</name>
         <required>true</required>
         <rtexprvalue>true</rtexprvalue>
@@ -61,12 +55,6 @@
         <required>true</required>
         <rtexprvalue>true</rtexprvalue>
         <type>java.util.Map</type>
-    </attribute>
-    <attribute>
-        <name>replaceExisting</name>
-        <required>true</required>
-        <rtexprvalue>true</rtexprvalue>
-        <type>java.lang.boolean</type>
     </attribute>
     <attribute>
         <name>var</name>

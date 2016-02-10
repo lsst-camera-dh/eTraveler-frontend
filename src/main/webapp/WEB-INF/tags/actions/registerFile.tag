@@ -182,9 +182,6 @@ where A.id=?<sql:param value="${activityId}"/>
 </c:choose>
 <c:set var="fullFsPath" value="${fsHead}/${commonPath}/${name}"/>
 
-<%-- replaceExisting --%>
-<c:set var="replaceExisting" value="false"/>
-
 <c:set var="doRegister" value="true"/>
 <c:if test="${not doRegister}">
 <br>
@@ -196,7 +193,6 @@ logicalFolderPath: <c:out value="${logicalFolderPath}"/><br>
 groupName: <c:out value="${groupName}"/><br>
 site: <c:out value="${dcSite}"/><br>
 location: <c:out value="${fullFsPath}"/><br>
-replaceExisting: <c:out value="${replaceExisting}"/><br>
 </c:if>
 <c:if test="${doRegister}">
     <c:if test="${mode == 'manual'}">
@@ -207,13 +203,13 @@ replaceExisting: <c:out value="${replaceExisting}"/><br>
             <traveler:error message="Couldn't save file ${fullFsPath}."/>
         </c:if>
     </c:if>
-    <c:catch var="ex">
-        <dc:dcRegister dataCatalogDb="${dataCatalogDb}"
+<%--    <c:catch var="ex">--%>
+        <dc:dcRegister 
             name="${name}" fileFormat="${fileFormat}" dataType="${dataType}"
             logicalFolderPath="${logicalFolderPath}" 
-            site="${dcSite}" location="${fullFsPath}" replaceExisting="${replaceExisting}"
+            site="${dcSite}" location="${fullFsPath}" 
             var="dcPk" metadata="${dcMetadata}"/>
-    </c:catch>
+<%--    </c:catch>>--%>
     <c:if test="${!empty ex}">
         <traveler:error message="Couldn't register file ${fullFsPath}.<br>
 Perhaps the file format (${fileFormat}) is not on the data catalog's list?<br>
