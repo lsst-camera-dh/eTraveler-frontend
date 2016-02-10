@@ -64,6 +64,14 @@ public class dcRegister extends SimpleTagSupport {
         try {
             Client c = getClient();
             Provider provider = new Provider();
+            
+            if(!c.exists(logicalFolderPath)){
+                String parentPath = PathUtils.getParentPath(logicalFolderPath);
+                DatasetContainer newFolder = provider.getContainerBuilder()
+                        .name(PathUtils.getFileName(logicalFolderPath)).build();
+                c.createContainer(parentPath, newFolder, true);
+            }
+            
             Map<String,Object> metadata = null;
             Dataset.Builder builder = (Dataset.Builder) provider.getDatasetBuilder()
                     .name(name)
@@ -75,6 +83,13 @@ public class dcRegister extends SimpleTagSupport {
             
             DatasetModel retDs = c.createDataset(logicalFolderPath, builder.build());
             getJspContext().setAttribute(var, retDs.getPk());
+        } catch (DcRequestException ex) {
+            System.out.println("Something went wrong communicating with the Datacat: " + ex);
+            throw new JspException("Something went wrong communicating with the Datacat, "
+                    + "check configuration and verify datacat is up: ", ex);
+        } catch (DcClientException ex) {
+            System.out.println("A Client Error occurred. Please check input: " + ex);
+            throw new JspException("A Client Error occurred. Please check input", ex);
         } catch (Exception ex) {
             ex.printStackTrace();
             throw new JspException("Error in dcRegister tag", ex);
