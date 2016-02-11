@@ -120,6 +120,12 @@ public class dcRegister extends SimpleTagSupport {
     public void setLocation(String location) {
         this.location = location;
     }
+
+    public void setMetadata(Map<String,Object> metadata) {
+        this.metadata = metadata;
+        numerify();
+    }
+    
     public void setVar(String var) {
         this.var = var;
     }
