@@ -13,25 +13,23 @@
 
 <c:set var="allOk" value="true"/>
 
+<c:set var="tables" value="<%=new java.util.HashMap<String, String>()%>"/>
+<traveler:mapAdd theMap="${tables}" key="java.lang.Double" value="FloatResultHarnessed"/>
+<traveler:mapAdd theMap="${tables}" key="java.lang.Integer" value="IntResultHarnessed"/>
+<traveler:mapAdd theMap="${tables}" key="java.lang.Boolean" value="IntResultHarnessed"/>
+<traveler:mapAdd theMap="${tables}" key="java.lang.String" value="StringResultHarnessed"/>
 <%
-    java.util.Map<String, String> tables = new java.util.HashMap<String, String>();
-    tables.put("java.lang.Double", "FloatResultHarnessed");
-    tables.put("java.lang.Integer", "IntResultHarnessed");
-    tables.put("java.lang.Boolean", "IntResultHarnessed");
-    tables.put("java.lang.String", "StringResultHarnessed");
-    request.setAttribute("tables", tables);
-
-    java.util.Map<String, Integer> instances = new java.util.HashMap<String, Integer>();
-    request.setAttribute("instances", instances);
+    java.util.Map<String, Integer> instances = new java.util.HashMap<>();
+    jspContext.setAttribute("instances", instances);
 %>
 
 <c:if test="${allOk}">
 <%--<c:catch var="didntWork">--%>
 
 <c:forEach var="summary" items="${inputs.result}">
-    <c:set var="schemaTag" value="${summary.schema_name} v${summary.schema_version}" scope="request"/>
+    <c:set var="schemaTag" value="${summary.schema_name} v${summary.schema_version}"/>
     <%
-        String sTag = request.getAttribute("schemaTag").toString();
+        String sTag = jspContext.getAttribute("schemaTag").toString();
         instances.put(sTag, (instances.containsKey(sTag) ? instances.get(sTag) + 1 : 1));
     %>
     <c:choose>
