@@ -5,6 +5,7 @@
 --%>
 
 <%@tag description="Ingest result summarys from the job harness" pageEncoding="UTF-8"%>
+<%@tag import="com.fasterxml.jackson.databind.ObjectMapper,com.fasterxml.jackson.core.JsonParser,java.util.Map"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql"%>
 <%@taglib prefix="ta" tagdir="/WEB-INF/tags/actions"%>
@@ -36,8 +37,19 @@
     <c:choose>
 
         <c:when test="${summary.schema_name == 'fileref'}">
+            <c:if test="${! empty summary.metadata}">
+                <c:set var="mdStr" value="${summary.metadata}"/>
+<%
+    ObjectMapper mapper = new ObjectMapper();
+    mapper.configure(JsonParser.Feature.ALLOW_NON_NUMERIC_NUMBERS, true);
+    String jo = jspContext.getAttribute("mdStr").toString();
+    Map<String, Object> metadata = mapper.readValue(jo, Map.class);
+    jspContext.setAttribute("metadata", metadata);
+%>                
+            </c:if>
+            
             <ta:registerFile activityId="${inputs.jobid}" name="${summary.path}" mode="harnessed" 
-                             dataType="${summary.datatype}" limsMetadata="${summary.metadata}"
+                             dataType="${summary.datatype}" limsMetadata="${metadata}"
                              varFsPath="fsPath" varDcPath="dcPath" varDcPk="dcPk"/>            
             <sql:update>
 insert into FilepathResultHarnessed set
