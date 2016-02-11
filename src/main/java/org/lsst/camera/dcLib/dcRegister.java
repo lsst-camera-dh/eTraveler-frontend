@@ -123,7 +123,7 @@ public class dcRegister extends SimpleTagSupport {
 
     public void setMetadata(Map<String,Object> metadata) {
         this.metadata = metadata;
-        //numerify();
+        numerify();
     }
     
     public void setVar(String var) {
