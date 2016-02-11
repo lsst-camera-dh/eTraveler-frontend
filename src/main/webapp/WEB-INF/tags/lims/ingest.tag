@@ -19,7 +19,7 @@
 <traveler:mapAdd theMap="${tables}" key="java.lang.Boolean" value="IntResultHarnessed"/>
 <traveler:mapAdd theMap="${tables}" key="java.lang.String" value="StringResultHarnessed"/>
 <%
-    java.util.Map<String, Integer> instances = new java.util.HashMap<>();
+    java.util.Map<String, Integer> instances = new java.util.HashMap<String, Integer>();
     jspContext.setAttribute("instances", instances);
 %>
 
