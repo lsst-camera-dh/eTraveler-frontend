@@ -36,6 +36,7 @@ public class dcRegister extends SimpleTagSupport {
     private String site;
     private String location;
     private String var;
+    private Map<String, Object> metadata;
     
     public Client getClient() throws IOException{
         String datacatUrl = "http://srs.slac.stanford.edu/datacat-v0.4/r";
