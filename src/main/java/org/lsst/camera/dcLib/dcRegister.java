@@ -35,14 +35,14 @@ public class dcRegister extends SimpleTagSupport {
     private String logicalFolderPath;
     private String site;
     private String location;
+    private Map<String,Object> metadata;
     private String var;
-    private Map<String, Object> metadata;
     
     public Client getClient() throws IOException{
         String datacatUrl = "http://srs.slac.stanford.edu/datacat-v0.4/r";
         try {
             
-            Map<String, Object> headers = new HashMap<>();
+            Map<String, Object> headers = new HashMap<String, Object>();
 
             String srsClientId = ((PageContext)getJspContext()).getServletContext().getInitParameter("org.lsst.eTraveler.srs_client_id");
             String defaultUserName = ((PageContext)getJspContext()).getServletContext().getInitParameter("org.lsst.eTraveler.default_username");
