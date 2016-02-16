@@ -16,6 +16,8 @@
         <title>Add Traveler Type</title>
     </head>
     <body>
+        <traveler:checkFreshness formToken="${param.freshnessToken}"/>        
+
         <traveler:checkSsPerm var="mayApprove" subsystemId="${param.subsystemId}" roles="approver"/>
         <c:if test="${! mayApprove}">
             <sql:query var="subsysQ">
