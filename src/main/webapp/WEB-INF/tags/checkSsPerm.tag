@@ -120,7 +120,7 @@ where HT.id=?<sql:param value="${hardwareTypeId}"/>
                             <c:when test="${role == 'qualityAssurance'}">
                                 <c:set var="groupName" value="EtravelerQualityAssurance"/>
                             </c:when>
-                            <c:when test="${role == 'softwareManger'}">
+                            <c:when test="${role == 'softwareManager'}">
                                 <c:set var="groupName" value="EtravelerSoftwareManagers"/>
                             </c:when>
                             <c:when test="${role == 'subjectExpert'}">
