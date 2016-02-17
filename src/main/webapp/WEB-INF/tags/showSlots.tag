@@ -42,6 +42,7 @@
                     <c:otherwise>
                         <traveler:checkMask var="mayOperate" activityId="${activityId}"/>
                         <form method="get" action="operator/createRelationship.jsp">
+                            <input type="hidden" name="freshnessToken" value="${freshnessToken}">
                             <input type="hidden" name="referringPage" value="${thisPage}">
                             <input type="hidden" name="slotTypeId" value="${row.mrstId}">
                             <input type="hidden" name="activityId" value="${activityId}">

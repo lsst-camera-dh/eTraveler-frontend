@@ -17,6 +17,8 @@
         <title>Restart Traveler</title>
     </head>
     <body>
+        <traveler:checkFreshness formToken="${param.freshnessToken}"/>
+
         <traveler:findTraveler var="travelerId" activityId="${param.activityId}"/>
         <traveler:isStopped var="isStopped" activityId="${travelerId}"/>
         

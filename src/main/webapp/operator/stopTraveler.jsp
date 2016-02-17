@@ -17,6 +17,8 @@
         <title>Stop Traveler</title>
     </head>
     <body>
+        <traveler:checkFreshness formToken="${param.freshnessToken}"/>        
+
         <traveler:findTraveler var="travelerId" activityId="${param.activityId}"/>
         
         <c:set var="mask" value="15"/>

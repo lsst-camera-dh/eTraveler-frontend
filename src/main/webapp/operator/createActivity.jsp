@@ -18,6 +18,8 @@
         <title>Create Activity</title>
     </head>
     <body>
+        <traveler:checkFreshness formToken="${param.freshnessToken}"/>
+        
         <c:set var="allOk" value="true"/>
         <c:set var="message" value="Tell the developers you ran into bug #282805"/>
         

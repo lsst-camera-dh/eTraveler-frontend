@@ -17,6 +17,8 @@
         <title>Add HardwareType</title>
     </head>
     <body>
+        <traveler:checkFreshness formToken="${param.freshnessToken}"/>
+        
         <traveler:checkSsPerm var="mayAdmin" subsystemId="${param.subsystemId}" roles="admin"/>
         <c:if test="${! mayAdmin}">
             <sql:query var="subsysQ">

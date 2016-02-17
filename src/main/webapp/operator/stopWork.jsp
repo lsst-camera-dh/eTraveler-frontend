@@ -17,8 +17,11 @@
         <title>Stop Work</title>
     </head>
     <body>
+        <traveler:checkFreshness formToken="${param.freshnessToken}"/>        
+
         <h1>Stopping Work for Activity ${param.activityId}</h1>
         <form method="get" action="stopTraveler.jsp">
+            <input type="hidden" name="freshnessToken" value="${freshnessToken}">
             <input type="hidden" name="activityId" value="${param.activityId}">       
             <input type="hidden" name="topActivityId" value="${param.topActivityId}">
             <table>

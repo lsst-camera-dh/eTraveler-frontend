@@ -38,6 +38,7 @@ table.datatable th, table.datatable td {
             which never happens if activities are autocreated --%>
             <traveler:checkMask var="mayOperate" processId="${param.processId}"/>
             <form METHOD=GET ACTION="operator/createActivity.jsp" target="_top">
+                <input type="hidden" name="freshnessToken" value="${freshnessToken}">
                 <input type="hidden" name="parentActivityId" value="${param.parentActivityId}">       
                 <input type="hidden" name="processEdgeId" value="${param.processEdgeId}">       
                 <input type="hidden" name="inNCR" value="${param.inNCR}">       

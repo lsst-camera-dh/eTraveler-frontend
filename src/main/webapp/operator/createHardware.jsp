@@ -17,6 +17,8 @@
         <title>Create Hardware</title>
     </head>
     <body>
+        <traveler:checkFreshness formToken="${param.freshnessToken}"/>        
+        
         <traveler:checkSsPerm var="mayOperate" hardwareTypeId="${param.hardwareTypeId}" roles="operator,supervisor"/>
         <c:if test="${! mayOperate}">
             <sql:query var="hardwareTypeQ">

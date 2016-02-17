@@ -81,6 +81,7 @@ order by abs(PE.step);
             <c:choose>
                 <c:when test="${numChosen == 0 && ! empty childRow.begin}">
                     <form method="get" action="operator/createActivity.jsp" target="_top">
+                        <input type="hidden" name="freshnessToken" value="${freshnessToken}">
                         <input type="hidden" name="parentActivityId" value="${activityId}">
                         <input type="hidden" name="hardwareId" value="${childRow.hardwareId}">
                         <input type="hidden" name="inNCR" value="${childRow.inNCR}">

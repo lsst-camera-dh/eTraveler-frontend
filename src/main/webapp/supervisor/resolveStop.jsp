@@ -13,6 +13,8 @@
         <title>Resolve Stop Work condition</title>
     </head>
     <body>
+        <traveler:checkFreshness formToken="${param.freshnessToken}"/>        
+
         <traveler:findTraveler var="travelerId" activityId="${param.activityId}"/>
         <traveler:resolveStop activityId="${param.activityId}" travelerId="${travelerId}"/>
         </body>

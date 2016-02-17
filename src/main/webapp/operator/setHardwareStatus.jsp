@@ -17,6 +17,8 @@
         <title>Set Hardware Status</title>
     </head>
     <body>
+        <traveler:checkFreshness formToken="${param.freshnessToken}"/>        
+        
         <c:set var="allOk" value="true"/>
         
         <c:if test="${allOk}">

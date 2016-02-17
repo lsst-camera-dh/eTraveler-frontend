@@ -23,6 +23,7 @@
 </sql:query>
 
 <form action="operator/setHardwareStatus.jsp">
+    <input type="hidden" name="freshnessToken" value="${freshnessToken}">
     <input type="hidden" name="referringPage" value="${thisPage}">
     <input type="hidden" name="hardwareId" value="${hardwareId}">
     <select name="hardwareStatusId" required>

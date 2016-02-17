@@ -37,6 +37,7 @@
 <hr>
 <h2>Hardware Groups</h2>
     <form method="get" action="admin/addHardwareGroup.jsp">
+        <input type="hidden" name="freshnessToken" value="${freshnessToken}">
         <input type="submit" value="Add Hardware Group"
            <c:if test="${! mayAdmin}">disabled</c:if>>
         Name: <input name="name" type="text" required>
@@ -55,6 +56,7 @@
 <hr>
 <h2>Sites</h2>
     <form method="get" action="admin/addSite.jsp">
+        <input type="hidden" name="freshnessToken" value="${freshnessToken}">
         <input type="submit" value="Add Site"
            <c:if test="${! mayAdmin}">disabled</c:if>>
         Name: <input type="text" name="name" required>
@@ -72,6 +74,7 @@
 <hr>
 <h2>Hardware Identifier Authorities</h2>
     <form method="get" action="admin/addHardwareIdentifierAuthority.jsp">
+        <input type="hidden" name="freshnessToken" value="${freshnessToken}">
         <input type="hidden" name="referringPage" value="${thisPage}">
         <input type="submit" value="Add Hardware Identifier Authority"
            <c:if test="${! mayAdmin}">disabled</c:if>>

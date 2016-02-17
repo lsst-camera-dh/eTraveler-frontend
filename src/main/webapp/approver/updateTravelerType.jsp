@@ -17,7 +17,7 @@
         <title>Update tt${param.travelerTypeId} status ${param.stateId}</title>
     </head>
     <body>
-        
+        <traveler:checkFreshness formToken="${param.freshnessToken}"/>
         
         <sql:query var="ttQ">
 select id from TravelerType where id=?<sql:param value="${param.travelerTypeId}"/>;

@@ -16,6 +16,7 @@ select id, name from Subsystem;
     </sql:query>
 
 <form method="get" action="admin/addHardwareType.jsp">
+    <input type="hidden" name="freshnessToken" value="${freshnessToken}">
     <input type="submit" value="Add Hardware Type"
        <c:if test="${! mayAdmin}">disabled</c:if>>
     Name or Drawing #:&nbsp;<input type="text" name="name" required>

@@ -133,6 +133,7 @@ order by ipId;
                         </c:otherwise>
                     </c:choose>
                     <form method="post"  action="operator/inputResult.jsp" enctype="multipart/form-data">
+                        <input type="hidden" name="freshnessToken" value="${freshnessToken}">
                         <input type="hidden" name="referringPage" value="${thisPage}">
                         <input type="hidden" name="activityId" value="${activityId}">
                         <input type="hidden" name="inputPatternId" value="${row.id}">

@@ -34,6 +34,7 @@
 
     <h2>Register new <c:if test="${hType.isBatched != 0}">batch of</c:if> ${hType.name}</h2>
 <form METHOD=GET ACTION="operator/createHardware.jsp" name="hwSpex">
+    <input type="hidden" name="freshnessToken" value="${freshnessToken}">
 
     <table>
         <c:if test="${hType.autoSequenceWidth==0}">

@@ -56,6 +56,7 @@
 </sql:query>
 
 <form action="approver/updateTravelerType.jsp" method="get">
+    <input type="hidden" name="freshnessToken" value="${freshnessToken}">
     <input type="hidden" name="referringPage" value="${thisPage}">
     <input type="hidden" name="travelerTypeId" value="${travelerTypeId}">
     New Status:

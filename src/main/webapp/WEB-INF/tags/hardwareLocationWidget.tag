@@ -80,6 +80,7 @@ and MRA.name='install';
     </sql:query>
 
     <form action="operator/setHardwareLocation.jsp" method="GET">
+        <input type="hidden" name="freshnessToken" value="${freshnessToken}">
         <input type="hidden" name="referringPage" value="${thisPage}">
         <input type="hidden" name="hardwareId" value="${hardwareId}">
         <select name="newLocationId" required>

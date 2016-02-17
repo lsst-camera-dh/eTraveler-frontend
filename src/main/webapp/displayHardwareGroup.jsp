@@ -41,6 +41,7 @@
             ;
         </sql:query>
             <form method="get" action="admin/addTypeToGroup.jsp">
+                <input type="hidden" name="freshnessToken" value="${freshnessToken}">
                 <input type="hidden" name="referringPage" value="${thisPage}">
                 <input type="submit" value="Add Member Type"
                     <c:if test="${! mayAdmin}">disabled</c:if>>

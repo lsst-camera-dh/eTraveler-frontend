@@ -17,6 +17,8 @@
         <title>Set Hardware Location</title>
     </head>
     <body>
+<traveler:checkFreshness formToken="${param.freshnessToken}"/>        
+        
 <c:if test="${empty param.newLocationId}">
     <traveler:error message="Go back and select a location."/>
 </c:if>

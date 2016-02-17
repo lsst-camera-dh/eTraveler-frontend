@@ -16,6 +16,7 @@
         <title>Add HardwareType to HardwareGroup</title>
     </head>
     <body>
+<traveler:checkFreshness formToken="${param.freshnessToken}"/>
 <traveler:checkSsPerm var="mayAdmin" hardwareTypeId="${param.hardwareTypeId}" roles="admin"/>
 <c:if test="${! mayAdmin}">
     <sql:query var="htQ">

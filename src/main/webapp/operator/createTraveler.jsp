@@ -17,6 +17,8 @@
         <title>Create Traveler</title>
     </head>
     <body>
+        <traveler:checkFreshness formToken="${param.freshnessToken}"/>        
+        
         <traveler:checkMask var="mayStart" processId="${param.processId}"/>
         <c:if test="${! mayStart}">
             <traveler:error message="You don't have permission to start this traveler."/>

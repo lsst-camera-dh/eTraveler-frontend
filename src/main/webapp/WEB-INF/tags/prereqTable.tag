@@ -54,6 +54,7 @@ order by PP.id
                     </c:when>
                     <c:otherwise>
                         <form method="get" action="operator/satisfyPrereq.jsp">
+                            <input type="hidden" name="freshnessToken" value="${freshnessToken}">
                             <input type="hidden" name="referringPage" value="${thisPage}">
                             <input type="hidden" name="prerequisitePatternId" value="${row.id}">
                             <input type="hidden" name="activityId" value="${activityId}">

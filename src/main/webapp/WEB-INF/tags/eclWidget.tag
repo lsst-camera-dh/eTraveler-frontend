@@ -87,6 +87,7 @@
     <tr>
         <td>
 <form method="GET" action="fh/eclPost.jsp">
+    <input type="hidden" name="freshnessToken" value="${freshnessToken}">
     <input type="hidden" name="referringPage" value="${thisPage}">
     <input type="hidden" name="displayLink" value="${displayLink}">
     <input type="hidden" name="author" value="${author}">

@@ -7,6 +7,7 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@taglib uri="/tlds/eclTagLibrary.tld" prefix="ecl"%>
+<%@taglib prefix="traveler" tagdir="/WEB-INF/tags"%>
 
 <!DOCTYPE html>
 <html>
@@ -15,6 +16,7 @@
         <title>Post to eLog</title>
     </head>
     <body>
+    <traveler:checkFreshness formToken="${param.freshnessToken}"/>
     
     <c:set var="text" value="${param.text}<br>${param.displayLink}"/>
         

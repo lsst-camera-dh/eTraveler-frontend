@@ -21,6 +21,7 @@ select id, name from Site
     </sql:query>
 
 <form method="get" action="admin/addJhInstall.jsp">
+    <input type="hidden" name="freshnessToken" value="${freshnessToken}">
     <input type="hidden" name="referringPage" value="${thisPage}">
     <input type="submit" value="Add JH Install"
            <c:if test="${! mayAdmin}">disabled</c:if>>
