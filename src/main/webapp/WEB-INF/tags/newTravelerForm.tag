@@ -151,10 +151,7 @@ where S.name=?<sql:param value="${preferences.siteName}"/>
         <c:when test="${empty hardwareId}">
             <select name="hardwareId">
                 <c:forEach var="hRow" items="${hardwareQ.rows}">
-                    <traveler:checkSsPerm var="mayStart" hardwareId="${hRow.id}" roles="operator,supervisor"/>
-                    <c:if test="${mayStart}">
-                        <option value="${hRow.id}">${hRow.lsstId}</option>
-                    </c:if>
+                    <option value="${hRow.id}">${hRow.lsstId}</option>
                 </c:forEach>
             </select>
         </c:when>
