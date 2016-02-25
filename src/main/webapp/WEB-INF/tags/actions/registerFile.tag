@@ -156,7 +156,7 @@ where A.id=?<sql:param value="${activityId}"/>
     </c:otherwise>
 </c:choose>
 
-<c:set var="dcHead" value="${initParam['datacatFolder']}/${modePath}/${siteName}-${dataSourceFolder}/${dataSourceFolder}"/>
+<c:set var="dcHead" value="${appVariables.etravelerDatacatRoot}/${modePath}/${siteName}-${dataSourceFolder}/${dataSourceFolder}"/>
 
 <c:set var="commonPath" value=
 "${activity.hardwareTypeName}/${activity.lsstId}/${activity.processName}${processVersion}/${activityId}"
