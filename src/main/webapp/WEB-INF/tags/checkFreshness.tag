@@ -11,7 +11,8 @@
 <%@attribute name="formToken" required="true"%>
 
 <c:if test="${formToken != freshnessToken}">
-    <traveler:error message="You have submitted a form from a stale page had ${formToken} needed ${freshnessToken}."/>
+    <traveler:error message="You have submitted a form from a stale page had ${formToken} needed ${freshnessToken}.
+                    Please go back and reload the page."/>
 </c:if>
 
 <c:set var="freshnessToken" value="${freshnessGenerator.nextLong()}" scope="session"/>
