@@ -28,6 +28,8 @@
         and HG.name like concat('%', ?<sql:param value="${name}"/>, '%')
     </c:if>
     group by HG.id
+    order by name
+    ;
 </sql:query>
 
 <display:table name="${groupsQ.rows}" class="datatable" sort="list"
