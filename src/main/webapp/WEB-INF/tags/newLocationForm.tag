@@ -11,7 +11,7 @@
 
 <%@attribute name="siteId"%>
 
-<traveler:checkPerm var="mayAdmin" groups="EtravelerAdmin"/>
+<traveler:checkPerm var="mayAdmin" groups="EtravelerAllAdmin"/>
 
 <sql:query var="sitesQ" >
     select id, name from Site
@@ -20,6 +20,7 @@
 </sql:query>
     
 <form method="get" action="admin/addLocation.jsp">
+    <input type="hidden" name="freshnessToken" value="${freshnessToken}">
     <input type="submit" value="Add Location"
        <c:if test="${! mayAdmin}">disabled</c:if>>
     Name: <input type="text" name="name" required>

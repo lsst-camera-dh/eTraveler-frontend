@@ -10,12 +10,13 @@
 <%@taglib prefix="traveler" tagdir="/WEB-INF/tags"%>
 
 <traveler:fullRequestString var="thisPage"/>
-<traveler:checkPerm var="mayAdmin" groups="EtravelerAdmin"/>
+<traveler:checkPerm var="mayAdmin" groups="EtravelerAllAdmin"/>
 
 <sql:query var="hardwareTypesQ" >
     select id, name from HardwareType order by name;
 </sql:query>
 <form method="get" action="admin/addHardwareRelationshipType.jsp">
+    <input type="hidden" name="freshnessToken" value="${freshnessToken}">
     <input type="hidden" name="referringPage" value="${thisPage}">
     <table>
         <tr>

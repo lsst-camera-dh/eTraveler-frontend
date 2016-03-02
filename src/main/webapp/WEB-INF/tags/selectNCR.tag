@@ -11,7 +11,7 @@
 
 <%@attribute name="activityId" required="true"%>
 
-<traveler:checkPerm var="maySupervise" groups="EtravelerSupervisor"/>
+<traveler:checkSsPerm var="maySupervise" activityId="${activityId}" roles="supervisor"/>
 
 <traveler:findPath var="edgePath" activityId="${activityId}"/>
 
@@ -25,6 +25,7 @@
 
 <c:url var="ncrLink" value="doNCR.jsp"/>
 <form method="get" action="${ncrLink}" target="_top">
+    <input type="hidden" name="freshnessToken" value="${freshnessToken}">
     <input type="hidden" name="activityId" value="${activityId}">
     <select name="exceptionTypeId">
         <c:forEach var="et" items="${ncrQ.rows}">

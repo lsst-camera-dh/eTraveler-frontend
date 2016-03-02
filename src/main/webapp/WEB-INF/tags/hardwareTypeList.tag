@@ -12,11 +12,15 @@
 
 <%@attribute name="hardwareGroupId"%>
 <%@attribute name="name"%>
+<%@attribute name="subsystemId"%>
+<%@attribute name="subsystemName"%>
 
 <sql:query var="result" >
-    select HT.id, HT.name, HT.description, count(H.id) as count
+    select HT.id, HT.name, HT.description, count(H.id) as count,
+    SS.id as subsystemId, SS.name as subsystemName
     from
     HardwareType HT
+    inner join Subsystem SS on SS.id=HT.subsystemId
     <c:if test="${! empty hardwareGroupId}">
         inner join HardwareTypeGroupMapping HTGM on HTGM.hardwareTypeId=HT.id
     </c:if>
@@ -28,6 +32,12 @@
     <c:if test="${! empty name}">
         and HT.name like concat('%', ?<sql:param value="${name}"/>, '%')
     </c:if>
+    <c:if test="${! empty subsystemId && subsystemName != 'Any'}">
+        and SS.id=?<sql:param value="${subsystemId}"/>
+    </c:if>
+    <c:if test="${! empty subsystemName && subsystemName != 'Any'}">
+        and SS.name=?<sql:param value="${subsystemName}"/>
+    </c:if>
     group by HT.id;
 </sql:query>
 <display:table name="${result.rows}" class="datatable" sort="list"
@@ -36,4 +46,8 @@
                     href="displayHardwareType.jsp" paramId="hardwareTypeId" paramProperty="id"/>
     <display:column property="description" sortable="true" headerClass="sortable"/>
     <display:column property="count" sortable="true" headerClass="sortable"/>
+    <c:if test="${(empty subsystemId and (empty subsystemName or subsystemName == 'Any')) or preferences.showFilteredColumns}">
+        <display:column property="subsystemName" title="Subsystem" sortable="true" headerClass="sortable"
+                        href="displaySubsystem.jsp" paramId="subsystemId" paramProperty="subsystemId"/>
+    </c:if>
 </display:table>

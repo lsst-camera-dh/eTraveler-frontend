@@ -17,7 +17,6 @@
 <%@attribute name="activityId"%>
 
 <traveler:fullRequestString var="thisPage"/>
-<traveler:checkPerm var="mayTravel" groups="EtravelerAdmin,EtravelerApprover,EtravelerOperator,EtravelerSupervisor"/>
 
 <h2>Electronic Logbook</h2>
 
@@ -88,6 +87,7 @@
     <tr>
         <td>
 <form method="GET" action="fh/eclPost.jsp">
+    <input type="hidden" name="freshnessToken" value="${freshnessToken}">
     <input type="hidden" name="referringPage" value="${thisPage}">
     <input type="hidden" name="displayLink" value="${displayLink}">
     <input type="hidden" name="author" value="${author}">
@@ -116,8 +116,7 @@
                     </tr>
                     <tr>
                         <td>
-    <input type="SUBMIT" value="Post a comment"
-        <c:if test="${! mayTravel}">disabled</c:if>>
+    <input type="SUBMIT" value="Post a comment">
                         </td>
                     </tr>
                 </table>

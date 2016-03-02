@@ -8,6 +8,8 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql"%>
 <%@taglib prefix="ta" tagdir="/WEB-INF/tags/actions"%>
+<%@taglib prefix="traveler" tagdir="/WEB-INF/tags"%>
+
 <!DOCTYPE html>
 <html>
     <head>
@@ -15,55 +17,44 @@
         <title>Set Hardware Location</title>
     </head>
     <body>
-        <c:set var="allOk" value="true"/>
+<traveler:checkFreshness formToken="${param.freshnessToken}"/>        
         
-        <c:if test="${allOk}">
-            <c:if test="${empty param.newLocationId}">
-                <c:set var="allOk" value="false"/>
-                <c:set var="message" value="Go back and select a location."/>
-            </c:if>
-        </c:if>
-        
-        <c:if test="${allOk}">
-            <sql:query var="locQ">
-                select locationId 
-                from HardwareLocationHistory 
-                where hardwareId=?<sql:param value="${param.hardwareId}"/>
-                order by creationTS desc limit 1;
-            </sql:query>
-            <c:if test="${! empty locQ.rows}">
-                <c:if test="${param.newLocationId == locQ.rows[0].locationId}">
-                    <c:set var="allOk" value="false"/>
-                    <c:set var="message" value="You can't move component to where it already is."/>
-                </c:if>
-            </c:if>
-        </c:if>
-        
-        <c:if test="${allOk}">
-            <sql:query var="parentsQ" >
-                select * from HardwareRelationship 
-                where componentId=?<sql:param value="${param.hardwareId}"/>
-                and end is null;
-            </sql:query>
-            <c:if test="${! empty parentsQ.rows}">
-                <c:set var="allOk" value="false"/>
-                <c:url value="displayHardware.jsp" var="parentLink">
-                    <c:param name="hardwareId" value="${parentsQ.rows[0].hardwareId}"/>
-                </c:url>
-                <c:set var="message" value="Sorry, this item cannot be moved because it is part of <a href='${parentLink}'>this</a>."/>
-            </c:if>
-        </c:if>
-                
-        <c:choose>
-            <c:when test="${allOk}">
+<c:if test="${empty param.newLocationId}">
+    <traveler:error message="Go back and select a location."/>
+</c:if>
+
+<sql:query var="locQ">
+    select locationId 
+    from HardwareLocationHistory 
+    where hardwareId=?<sql:param value="${param.hardwareId}"/>
+    order by creationTS desc limit 1;
+</sql:query>
+<c:if test="${! empty locQ.rows}">
+    <c:if test="${param.newLocationId == locQ.rows[0].locationId}">
+        <traveler:error message="You can't move component to where it already is."/>
+    </c:if>
+</c:if>
+
+<sql:query var="parentsQ" >
+select MRS.hardwareId, MRS.minorId, MRA.name
+from MultiRelationshipSlot MRS
+inner join MultiRelationshipHistory MRH on MRH.multirelationshipSlotId=MRS.id
+        and MRH.id=(select max(id) from MultiRelationshipHistory where multirelationshipSlotId=MRS.id)
+inner join MultiRelationshipAction MRA on MRA.id=MRH.multirelationshipActionId
+where MRS.minorId=?<sql:param value="${param.hardwareId}"/>
+and MRA.name='install';
+</sql:query>
+<c:if test="${! empty parentsQ.rows}">
+    <c:url value="displayHardware.jsp" var="parentLink">
+        <c:param name="hardwareId" value="${parentsQ.rows[0].hardwareId}"/>
+    </c:url>
+    <traveler:error message="Sorry, this item cannot be moved because it is part of <a href='${parentLink}'>this</a>."/>
+</c:if>
+
 <sql:transaction>
-                <ta:setHardwareLocation hardwareId="${param.hardwareId}" newLocationId="${param.newLocationId}"/>
+    <ta:setHardwareLocation hardwareId="${param.hardwareId}" newLocationId="${param.newLocationId}" reason="${param.reason}"/>
 </sql:transaction>
-                <c:redirect url="${param.referringPage}"/>
-            </c:when>
-            <c:otherwise>
-                ${message}
-            </c:otherwise>
-        </c:choose>
+
+<c:redirect url="${param.referringPage}"/>
     </body>
 </html>

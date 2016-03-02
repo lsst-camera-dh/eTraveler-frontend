@@ -12,6 +12,7 @@
 <%@attribute name="width" required="true"%>
 <%@attribute name="isBatched" required="true"%>
 <%@attribute name="description" required="true"%>
+<%@attribute name="subsystemId" required="true"%>
 <%@attribute name="var" required="true" rtexprvalue="false"%>
 <%@variable name-from-attribute="var" alias="hardwareTypeId" scope="AT_BEGIN"%>
 
@@ -21,6 +22,7 @@ name=?<sql:param value="${name}"/>,
 autoSequenceWidth=?<sql:param value="${width}"/>,
 isBatched=?<sql:param value="${isBatched}"/>,
 description=?<sql:param value="${description}"/>,
+subsystemId=?<sql:param value="${subsystemId}"/>,
 createdBy=?<sql:param value="${userName}"/>,
 creationTS=utc_timestamp();
     </sql:update>

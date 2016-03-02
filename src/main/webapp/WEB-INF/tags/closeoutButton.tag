@@ -12,8 +12,8 @@
 <%@attribute name="activityId" required="true"%>
 <%@attribute name="resultsFiled" required="true"%>
 
-<traveler:checkPerm var="mayOperate" groups="EtravelerOperator,EtravelerSupervisor"/>
-<traveler:checkPerm var="maySupervise" groups="EtravelerSupervisor"/>
+<traveler:checkMask var="mayOperate" activityId="${activityId}"/>
+<traveler:checkSsPerm var="maySupervise" activityId="${activityId}" roles="supervisor"/>
 
 <c:choose>
     <c:when test="${! empty param.topActivityId}">
@@ -111,6 +111,7 @@ and A.end is not null
 <c:out value="${message}"/><br>
 
 <form METHOD=GET ACTION="operator/closeoutActivity.jsp" target="_top">
+    <input type="hidden" name="freshnessToken" value="${freshnessToken}">
     <c:if test="${activity.setsLocation != 0 && readyToClose}">
         <sql:query var="locsQ">
 select L.id, L.name 
@@ -156,6 +157,7 @@ Make a new version of the Traveler."/>
         <c:choose>
             <c:when test="${activity.status == 'paused'}">
                 <form METHOD=GET ACTION="operator/unPauseTraveler.jsp" target="_top">
+                    <input type="hidden" name="freshnessToken" value="${freshnessToken}">
                     <input type="hidden" name="activityId" value="${activityId}">       
                     <INPUT TYPE=SUBMIT value="Resume paused Traveler"
                        <c:if test="${! mayOperate}">disabled</c:if>>
@@ -163,6 +165,7 @@ Make a new version of the Traveler."/>
             </c:when>
             <c:otherwise>
                 <form METHOD=GET ACTION="operator/pauseTraveler.jsp" target="_top">
+                    <input type="hidden" name="freshnessToken" value="${freshnessToken}">
                     <input type="hidden" name="activityId" value="${activityId}">       
                     <INPUT TYPE=SUBMIT value="Pause Traveler"
                            <c:if test="${(! active) || (! mayOperate)}">disabled</c:if>>
@@ -172,6 +175,7 @@ Make a new version of the Traveler."/>
         </td>
         <td>
             <form METHOD=GET ACTION="operator/retryActivity.jsp" target="_top">
+                <input type="hidden" name="freshnessToken" value="${freshnessToken}">
                 <input type="hidden" name="activityId" value="${activityId}">       
                 <input type="hidden" name="topActivityId" value="${topActivityId}">       
                 <INPUT TYPE=SUBMIT value="Retry Step"
@@ -182,6 +186,7 @@ Make a new version of the Traveler."/>
             <c:choose>
                 <c:when test="${hasOpenSWH}">
                     <form METHOD=GET ACTION="supervisor/resolveStop.jsp" target="_top">
+                        <input type="hidden" name="freshnessToken" value="${freshnessToken}">
                         <input type="hidden" name="activityId" value="${activityId}">       
                         <INPUT TYPE=SUBMIT value="Resolve Stop Work"
                             <c:if test="${! maySupervise}">disabled</c:if>>
@@ -189,6 +194,7 @@ Make a new version of the Traveler."/>
                 </c:when>
                 <c:otherwise>
                     <form METHOD=GET ACTION="operator/stopWork.jsp" target="_top">
+                        <input type="hidden" name="freshnessToken" value="${freshnessToken}">
                         <input type="hidden" name="activityId" value="${activityId}">       
                         <input type="hidden" name="topActivityId" value="${topActivityId}">       
                         <%--<input type="hidden" name="status" value="stopped">--%>
@@ -200,6 +206,7 @@ Make a new version of the Traveler."/>
         </td>
         <td>
             <form METHOD=GET ACTION="supervisor/skipStep.jsp" target="_top">
+                <input type="hidden" name="freshnessToken" value="${freshnessToken}">
                 <input type="hidden" name="activityId" value="${activityId}">       
                 <input type="hidden" name="topActivityId" value="${topActivityId}">       
                 <INPUT TYPE=SUBMIT value="Skip Step"

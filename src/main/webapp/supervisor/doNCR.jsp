@@ -16,6 +16,8 @@
         <title>Do NCR</title>
     </head>
     <body>
+<traveler:checkFreshness formToken="${param.freshnessToken}"/>
+
 <sql:transaction>
         <sql:query var="hardwareQ">
 select hardwareId from Activity where id=?<sql:param value="${param.activityId}"/>

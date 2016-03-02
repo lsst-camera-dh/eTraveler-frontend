@@ -12,7 +12,7 @@
 
 <%@attribute name="hardwareTypeId" required="true"%>
 
-<traveler:checkPerm var="mayOperate" groups="EtravelerOperator,EtravelerSupervisor"/>
+<traveler:checkSsPerm var="mayOperate" hardwareTypeId="${hardwareTypeId}" roles="operator,supervisor"/>
 
 <sql:query var="typeQ" >
     select * from HardwareType
@@ -34,6 +34,7 @@
 
     <h2>Register new <c:if test="${hType.isBatched != 0}">batch of</c:if> ${hType.name}</h2>
 <form METHOD=GET ACTION="operator/createHardware.jsp" name="hwSpex">
+    <input type="hidden" name="freshnessToken" value="${freshnessToken}">
 
     <table>
         <c:if test="${hType.autoSequenceWidth==0}">

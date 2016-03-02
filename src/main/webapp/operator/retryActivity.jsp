@@ -16,6 +16,7 @@
         <title>Retry Activity</title>
     </head>
     <body>
+<traveler:checkFreshness formToken="${param.freshnessToken}"/>        
 
 <sql:transaction>
         <ta:retryActivity activityId="${param.activityId}"/>

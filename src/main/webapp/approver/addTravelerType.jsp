@@ -7,6 +7,7 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql"%>
+<%@taglib prefix="traveler" tagdir="/WEB-INF/tags"%>
 
 <!DOCTYPE html>
 <html>
@@ -15,6 +16,16 @@
         <title>Add Traveler Type</title>
     </head>
     <body>
+        <traveler:checkFreshness formToken="${param.freshnessToken}"/>        
+
+        <traveler:checkSsPerm var="mayApprove" subsystemId="${param.subsystemId}" roles="approver"/>
+        <c:if test="${! mayApprove}">
+            <sql:query var="subsysQ">
+select name from Subsystem where id=?<sql:param value="${param.subsystemId}"/>;
+            </sql:query>
+            <traveler:error message="Adding this traveler type requires approver priviledge for subsystem ${subsysQ.rows[0].name}."/>
+        </c:if>
+        
         <sql:query var="processQ">
 select id from Process where id=?<sql:param value="${param.rootProcessId}"/>;
         </sql:query>
@@ -31,6 +42,7 @@ insert into TravelerType set
 rootProcessId=?<sql:param value="${param.rootProcessId}"/>,
 owner=?<sql:param value="${param.owner}"/>,
 reason=?<sql:param value="${param.reason}"/>,
+subsystemId=?<sql:param value="${param.subsystemId}"/>,
 createdBy=?<sql:param value="${userName}"/>,
 creationTS=UTC_TIMESTAMP();
     </sql:update>

@@ -15,6 +15,8 @@
         <title>Skip a step</title>
     </head>
     <body>
+        <traveler:checkFreshness formToken="${param.freshnessToken}"/>        
+
         <sql:transaction>
             <traveler:findTraveler var="travelerId" activityId="${param.activityId}"/>
             <ta:resumeActivity activityId="${travelerId}"/>

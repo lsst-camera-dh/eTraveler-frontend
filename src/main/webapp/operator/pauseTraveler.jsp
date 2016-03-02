@@ -16,6 +16,8 @@
         <title>Pause Traveler</title>
     </head>
     <body>
+<traveler:checkFreshness formToken="${param.freshnessToken}"/>        
+
 <traveler:findTraveler var="travelerId" activityId="${param.activityId}"/>
 
 <sql:transaction>

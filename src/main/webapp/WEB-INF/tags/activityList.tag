@@ -22,6 +22,9 @@
 <%@attribute name="type"%>
 <%@attribute name="status"%>
 <%@attribute name="perHw"%>
+<%@attribute name="subsystemId"%>
+<%@attribute name="subsystemName"%>
+
 <c:if test="${empty perHw}"><c:set var="perHw" value="false"/></c:if>
 
     <sql:query var="result" >
@@ -32,11 +35,13 @@ select A.id as activityId, A.begin, A.end, A.createdBy, A.closedBy,
     P.shortDescription,
     H.id as hardwareId, H.lsstId, H.manufacturerId,
     HT.name as hardwareName, HT.id as hardwareTypeId,
+    SS.id as subsystemId, SS.name as subsystemName,
     HI.identifier as nickName
 from Activity A
     inner join Process P on A.processId=P.id
     inner join Hardware H on A.hardwareId=H.id
     inner join HardwareType HT on H.hardwareTypeId=HT.id
+    inner join Subsystem SS on SS.id=HT.subsystemId
     inner join ActivityStatusHistory ASH on ASH.activityId=A.id and ASH.id=(select max(id) from ActivityStatusHistory where activityId=A.id)
     inner join ActivityFinalStatus AFS on AFS.id=ASH.activityStatusId
     left join HardwareIdentifier HI on HI.hardwareId=H.id 
@@ -79,6 +84,12 @@ where true
         and A.id=(select max(id) from Activity where hardwareId=H.id)
         group by H.id
     </c:if>
+    <c:if test="${! empty subsystemId && subsystemName != 'Any'}">
+        and SS.id=?<sql:param value="${subsystemId}"/>
+    </c:if>
+    <c:if test="${! empty subsystemName && subsystemName != 'Any'}">
+        and SS.name=?<sql:param value="${subsystemName}"/>
+    </c:if>
 order by A.id desc
 ;
     </sql:query>
@@ -100,6 +111,10 @@ order by A.id desc
     <c:if test="${(empty processId && empty hardwareId) || preferences.showFilteredColumns}">
         <display:column property="hardwareName" title="Component Type" sortable="true" headerClass="sortable"
                         href="displayHardwareType.jsp" paramId="hardwareTypeId" paramProperty="hardwareTypeId"/>
+    </c:if>
+    <c:if test="${(empty subsystemId and (empty subsystemName or subsystemName == 'Any') and empty hardwareId and empty processId) or preferences.showFilteredColumns}">
+        <display:column property="subsystemName" title="Subsystem" sortable="true" headerClass="sortable"
+                        href="displaySubsystem.jsp" paramId="subsystemId" paramProperty="subsystemId"/>
     </c:if>
     <display:column property="begin" sortable="true" headerClass="sortable"/>
     <display:column property="createdBy" sortable="true" headerClass="sortable"/>

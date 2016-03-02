@@ -46,6 +46,10 @@ table.datatable th, table.datatable td {
                 </td>
             </tr>
         </table>
+        <c:if test="${empty freshnessGenerator}">
+            <c:set var="freshnessGenerator" value="<%= new java.util.Random() %>" scope="session"/>
+            <c:set var="freshnessToken" value="${freshnessGenerator.nextLong()}" scope="session"/>
+        </c:if>
     </body>
 </html>
 

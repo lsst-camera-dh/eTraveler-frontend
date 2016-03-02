@@ -30,6 +30,16 @@
             ${pom.version}
         </param-value>
     </context-param>
+    
+    <context-param>
+        <param-name>org.lsst.eTraveler.srs_client_id</param-name>
+        <param-value>${srsClientId}</param-value>
+    </context-param>
+    
+    <context-param>
+        <param-name>org.lsst.eTraveler.default_username</param-name>
+        <param-value>lsstprod</param-value>
+    </context-param>
 
     <context-param>
         <param-name>
@@ -67,10 +77,6 @@
     <context-param>
         <param-name>eTravelerFileSubfolder</param-name>
         <param-value>userFiles</param-value>
-    </context-param>
-    <context-param>
-        <param-name>datacatFolder</param-name>
-        <param-value>/LSST</param-value>
     </context-param>
     <context-param>
         <param-name>mirroredSubfolder</param-name>

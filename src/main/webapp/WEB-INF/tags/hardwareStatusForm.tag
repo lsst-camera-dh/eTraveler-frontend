@@ -12,7 +12,7 @@
 <%@attribute name="hardwareId" required="true"%>
 
 <traveler:fullRequestString var="thisPage"/>
-<traveler:checkPerm var="mayManage" groups="EtravelerSubsystemManagers"/>
+<traveler:checkSsPerm var="mayManage" hardwareId="${hardwareId}" roles="subsystemManager"/>
 
 <sql:query var="statesQ" >
     select * 
@@ -23,6 +23,7 @@
 </sql:query>
 
 <form action="operator/setHardwareStatus.jsp">
+    <input type="hidden" name="freshnessToken" value="${freshnessToken}">
     <input type="hidden" name="referringPage" value="${thisPage}">
     <input type="hidden" name="hardwareId" value="${hardwareId}">
     <select name="hardwareStatusId" required>

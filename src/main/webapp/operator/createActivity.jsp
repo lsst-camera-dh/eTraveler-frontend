@@ -18,22 +18,14 @@
         <title>Create Activity</title>
     </head>
     <body>
-        <c:set var="allOk" value="true"/>
-        <c:set var="message" value="Tell the developers you ran into bug #282805"/>
+        <traveler:checkFreshness formToken="${param.freshnessToken}"/>
         
-        <c:choose>
-            <c:when test="${allOk}">
 <sql:transaction>
-                <ta:createActivity hardwareId="${param.hardwareId}" processId="${param.processId}"
-                    parentActivityId="${param.parentActivityId}" processEdgeId="${param.processEdgeId}"
-                    inNCR="${param.inNCR}" var="newActivityId"/>
+        <ta:createActivity hardwareId="${param.hardwareId}" processId="${param.processId}"
+            parentActivityId="${param.parentActivityId}" processEdgeId="${param.processEdgeId}"
+            inNCR="${param.inNCR}" var="newActivityId"/>
 </sql:transaction>
 
-                <traveler:redirDA/>
-            </c:when>
-            <c:otherwise>
-                <c:out value="${message}"/>
-            </c:otherwise>
-        </c:choose>
+        <traveler:redirDA/>
     </body>
 </html>

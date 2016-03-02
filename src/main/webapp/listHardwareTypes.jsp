@@ -5,8 +5,14 @@
 --%>
 
 <%@page contentType="text/html" pageEncoding="US-ASCII"%>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql"%>
 <%@taglib prefix="filter" uri="http://srs.slac.stanford.edu/filter"%>
 <%@taglib prefix="traveler" tagdir="/WEB-INF/tags"%>
+
+    <sql:query var="subsysQ">
+select name from Subsystem order by name;
+    </sql:query>
 
 <!DOCTYPE html>
 <html>
@@ -18,7 +24,14 @@
         <h1>Hardware Types</h1>
         <filter:filterTable>
             <filter:filterInput var="name" title="Name (substring search)"/>
+            <filter:filterSelection title="Subsystem" var="subsystem" defaultValue="${preferences.subsystem}">
+                <filter:filterOption value="Any">Any</filter:filterOption>
+                <filter:filterOption value="${preferences.subsystem}">User Pref</filter:filterOption>
+                <c:forEach var="subsystem" items="${subsysQ.rows}">
+                    <filter:filterOption value="${subsystem.name}"><c:out value="${subsystem.name}"/></filter:filterOption>
+                </c:forEach>                
+            </filter:filterSelection>
         </filter:filterTable>
-        <traveler:hardwareTypeList name="${name}"/>
+        <traveler:hardwareTypeList name="${name}" subsystemName="${subsystem}"/>
     </body>
 </html>

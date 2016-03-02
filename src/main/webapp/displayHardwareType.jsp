@@ -12,9 +12,12 @@
 <!DOCTYPE html>
 <traveler:checkId table="HardwareType" id="${param.hardwareTypeId}"/>
         
-<sql:query var="hardwareTypeQ" >
-    select * from HardwareType where id=?<sql:param value="${param.hardwareTypeId}"/>;
-</sql:query>
+    <sql:query var="hardwareTypeQ" >
+select H.*, SS.name as subsystemName
+from HardwareType H
+inner join Subsystem SS on SS.id=H.subsystemId
+where H.id=?<sql:param value="${param.hardwareTypeId}"/>;
+    </sql:query>
 <c:set var="hardwareType" value="${hardwareTypeQ.rows[0]}"/>
 <html>
     <head>
@@ -24,6 +27,10 @@
     <body>
         <h1>Component type <c:out value="${hardwareType.name}"/></h1>
         Description: <c:out value="${hardwareType.description}"/><br>
+        <c:url var="subsysUrl" value="displaySubsystem.jsp">
+            <c:param name="subsystemId" value="${hardwareType.subsystemId}"/>
+        </c:url>
+        Subsystem: <a href="${subsysUrl}">${hardwareType.subsystemName}</a><br>
         Added by <c:out value="${hardwareType.createdBy}"/><br>
         At <c:out value="${hardwareType.creationTS}"/><br>
     

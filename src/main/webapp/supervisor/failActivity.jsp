@@ -16,6 +16,8 @@
         <title>Fail Activity</title>
     </head>
     <body>
+<traveler:checkFreshness formToken="${param.freshnessToken}"/>
+
 <sql:transaction>
         <ta:failActivity activityId="${param.activityId}" status="${param.status}"/>
 </sql:transaction>

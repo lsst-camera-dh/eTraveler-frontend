@@ -17,45 +17,29 @@
         <title>Set Hardware Status</title>
     </head>
     <body>
-        <c:set var="allOk" value="true"/>
+        <traveler:checkFreshness formToken="${param.freshnessToken}"/>        
         
-        <c:if test="${allOk}">
-            <c:if test="${empty param.hardwareId}">
-                <c:set var="allOk" value="false"/>
-                <c:set var="message" value="You must specifiy which component to operate on."/>
-            </c:if>
+        <c:if test="${empty param.hardwareId}">
+            <traveler:error message="You must specifiy which component to operate on."/>
         </c:if>
         
-        <c:if test="${allOk}">
-            <c:if test="${empty param.hardwareStatusId}">
-                <c:set var="allOk" value="false"/>
-                <c:set var="message" value="You must specifiy a new component status."/>
-            </c:if>
+        <c:if test="${empty param.hardwareStatusId}">
+            <traveler:error message="You must specifiy a new component status."/>
         </c:if>
         
-        <c:if test="${allOk}">
-            <sql:query var="statusQ">
+        <sql:query var="statusQ">
 select hardwareStatusId 
 from HardwareStatusHistory 
 where hardwareId=?<sql:param value="${param.hardwareId}"/>
 order by id desc limit 1;
-            </sql:query>
-            <c:if test="${statusQ.rows[0].hardwareStatusId == param.hardwareStatusId}">
-                <c:set var="allOk" value="false"/>
-                <c:set var="message" value="You can't set the status to the same thing it already is."/>
-            </c:if>
+        </sql:query>
+        <c:if test="${statusQ.rows[0].hardwareStatusId == param.hardwareStatusId}">
+            <traveler:error message="You can't set the status to the same thing it already is."/>
         </c:if>
         
-        <c:choose>
-            <c:when test="${allOk}">
-<sql:transaction>
-                <ta:setHardwareStatus hardwareStatusId="${param.hardwareStatusId}" hardwareId="${param.hardwareId}" reason="${param.reason}"/>
-</sql:transaction>
-                <c:redirect url="${param.referringPage}"/>
-            </c:when>
-            <c:otherwise>
-                <traveler:error message="${message}"/>
-            </c:otherwise>
-        </c:choose>
+        <sql:transaction>
+            <ta:setHardwareStatus hardwareStatusId="${param.hardwareStatusId}" hardwareId="${param.hardwareId}" reason="${param.reason}"/>
+        </sql:transaction>
+        <c:redirect url="${param.referringPage}"/>
 </body>
 </html>

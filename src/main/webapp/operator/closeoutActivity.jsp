@@ -17,6 +17,7 @@
         <title>Closeout Activity</title>
     </head>
     <body>
+        <traveler:checkFreshness formToken="${param.freshnessToken}"/>        
 
         <sql:transaction >
             <ta:closeoutActivity activityId="${param.activityId}" newLocationId="${param.newLocationId}"/>

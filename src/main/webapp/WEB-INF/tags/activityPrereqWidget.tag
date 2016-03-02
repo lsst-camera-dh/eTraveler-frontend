@@ -13,7 +13,7 @@
 <%@attribute name="activityId" required="true"%>
 
 <traveler:fullRequestString var="thisPage"/>
-<traveler:checkPerm var="mayOperate" groups="EtravelerOperator,EtravelerSupervisor"/>
+<traveler:checkMask var="mayOperate" activityId="${activityId}"/>
 
 <c:choose>
     <c:when test="${! empty param.topActivityId}">
@@ -67,6 +67,7 @@ order by PP.id
                 </c:when>
                 <c:when test="${(empty row.componentId) and (empty row.satisfaction)}">
                     <form method="get" action="operator/satisfyPrereq.jsp">
+                        <input type="hidden" name="freshnessToken" value="${freshnessToken}">
                         <input type="hidden" name="referringPage" value="${thisPage}">
                         <input type="hidden" name="prerequisitePatternId" value="${row.id}">
                         <input type="hidden" name="activityId" value="${activityId}">
@@ -120,6 +121,7 @@ order by PP.id
 <traveler:showSlots activityId="${activityId}"/>
 
 <form method="get" action="operator/startActivity.jsp" target="_top">
+    <input type="hidden" name="freshnessToken" value="${freshnessToken}">
     <input type="hidden" name="activityId" value="${activityId}">
     <input type="hidden" name="topActivityId" value="${topActivityId}">
     <input type="submit" value="Start Step"

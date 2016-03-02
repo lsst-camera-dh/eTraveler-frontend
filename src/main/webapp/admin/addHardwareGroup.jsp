@@ -7,6 +7,8 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@taglib prefix="traveler" tagdir="/WEB-INF/tags"%>
+
 <!DOCTYPE html>
 <html>
     <head>
@@ -14,6 +16,8 @@
         <title>Add Hardware Group</title>
     </head>
     <body>
+        <traveler:checkFreshness formToken="${param.freshnessToken}"/>
+        
         <sql:transaction>
             <sql:update>
                 insert into HardwareGroup set

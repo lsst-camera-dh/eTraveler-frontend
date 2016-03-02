@@ -38,9 +38,10 @@
         <h2>Process</h2>
         <traveler:processCrumbs processPath="${processPath}"/>
         <traveler:processWidget processId="${activity.processId}"/>
-        
         <h2>Activity</h2>
+--%>
         <traveler:activityCrumbs activityPath="${activityPath}"/>
+<%--
         <traveler:activityHeader activityId="${param.activityId}"/>
                 </td>
                 <td>

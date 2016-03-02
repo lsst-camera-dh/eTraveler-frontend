@@ -5,6 +5,7 @@
 --%>
 
 <%@tag description="Ingest result summarys from the job harness" pageEncoding="UTF-8"%>
+<%@tag import="com.fasterxml.jackson.databind.ObjectMapper,com.fasterxml.jackson.core.JsonParser,java.util.Map"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql"%>
 <%@taglib prefix="ta" tagdir="/WEB-INF/tags/actions"%>
@@ -12,32 +13,41 @@
 
 <c:set var="allOk" value="true"/>
 
+<c:set var="tables" value="<%=new java.util.HashMap<String, String>()%>"/>
+<traveler:mapAdd theMap="${tables}" key="java.lang.Double" value="FloatResultHarnessed"/>
+<traveler:mapAdd theMap="${tables}" key="java.lang.Integer" value="IntResultHarnessed"/>
+<traveler:mapAdd theMap="${tables}" key="java.lang.Boolean" value="IntResultHarnessed"/>
+<traveler:mapAdd theMap="${tables}" key="java.lang.String" value="StringResultHarnessed"/>
 <%
-    java.util.Map<String, String> tables = new java.util.HashMap<String, String>();
-    tables.put("java.lang.Double", "FloatResultHarnessed");
-    tables.put("java.lang.Integer", "IntResultHarnessed");
-    tables.put("java.lang.Boolean", "IntResultHarnessed");
-    tables.put("java.lang.String", "StringResultHarnessed");
-    request.setAttribute("tables", tables);
-
     java.util.Map<String, Integer> instances = new java.util.HashMap<String, Integer>();
-    request.setAttribute("instances", instances);
+    jspContext.setAttribute("instances", instances);
 %>
 
 <c:if test="${allOk}">
 <%--<c:catch var="didntWork">--%>
 
 <c:forEach var="summary" items="${inputs.result}">
-    <c:set var="schemaTag" value="${summary.schema_name} v${summary.schema_version}" scope="request"/>
+    <c:set var="schemaTag" value="${summary.schema_name} v${summary.schema_version}"/>
     <%
-        String sTag = request.getAttribute("schemaTag").toString();
+        String sTag = jspContext.getAttribute("schemaTag").toString();
         instances.put(sTag, (instances.containsKey(sTag) ? instances.get(sTag) + 1 : 1));
     %>
     <c:choose>
 
         <c:when test="${summary.schema_name == 'fileref'}">
+            <c:if test="${! empty summary.metadata}">
+                <c:set var="mdStr" value="${summary.metadata}"/>
+<%
+    ObjectMapper mapper = new ObjectMapper();
+    mapper.configure(JsonParser.Feature.ALLOW_NON_NUMERIC_NUMBERS, true);
+    String jo = jspContext.getAttribute("mdStr").toString();
+    Map<String, Object> metadata = mapper.readValue(jo, Map.class);
+    jspContext.setAttribute("metadata", metadata);
+%>                
+            </c:if>
+            
             <ta:registerFile activityId="${inputs.jobid}" name="${summary.path}" mode="harnessed" 
-                             dataType="${summary.datatype}"
+                             dataType="${summary.datatype}" limsMetadata="${metadata}"
                              varFsPath="fsPath" varDcPath="dcPath" varDcPk="dcPk"/>            
             <sql:update>
 insert into FilepathResultHarnessed set

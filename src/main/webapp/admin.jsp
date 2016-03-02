@@ -10,7 +10,7 @@
 <%@taglib prefix="traveler" tagdir="/WEB-INF/tags"%>
 
 <traveler:fullRequestString var="thisPage"/>
-<traveler:checkPerm var="mayAdmin" groups="EtravelerAdmin"/>
+<traveler:checkPerm var="mayAdmin" groups="EtravelerAllAdmin"/>
 
 <!DOCTYPE html>
 <html>
@@ -37,6 +37,7 @@
 <hr>
 <h2>Hardware Groups</h2>
     <form method="get" action="admin/addHardwareGroup.jsp">
+        <input type="hidden" name="freshnessToken" value="${freshnessToken}">
         <input type="submit" value="Add Hardware Group"
            <c:if test="${! mayAdmin}">disabled</c:if>>
         Name: <input name="name" type="text" required>
@@ -45,21 +46,7 @@
 
 <hr>
 <h2>Hardware Types</h2>
-    <form method="get" action="admin/addHardwareType.jsp">
-        <input type="submit" value="Add Hardware Type"
-           <c:if test="${! mayAdmin}">disabled</c:if>>
-        Name or Drawing #:&nbsp;<input type="text" name="name" required>
-        Sequence width - set to zero if not automatic:&nbsp;<select name="width">
-            <option value="0">0</option>
-            <option value="1">1</option>
-            <option value="2">2</option>
-            <option value="3">3</option>
-            <option value="4" selected>4</option>
-            <option value="5">5</option>
-        </select><br>
-        Description:&nbsp;<input type="text" name="description">
-        Batched?&nbsp;<input type="radio" name="isBatched" value="0" checked>No&nbsp;<input type="radio" name="isBatched" value="1">Yes<br>
-    </form>
+   <traveler:newHardwareTypeForm/>
 
 <hr>
 <h2>Hardware Relationship Types</h2>
@@ -69,6 +56,7 @@
 <hr>
 <h2>Sites</h2>
     <form method="get" action="admin/addSite.jsp">
+        <input type="hidden" name="freshnessToken" value="${freshnessToken}">
         <input type="submit" value="Add Site"
            <c:if test="${! mayAdmin}">disabled</c:if>>
         Name: <input type="text" name="name" required>
@@ -86,6 +74,7 @@
 <hr>
 <h2>Hardware Identifier Authorities</h2>
     <form method="get" action="admin/addHardwareIdentifierAuthority.jsp">
+        <input type="hidden" name="freshnessToken" value="${freshnessToken}">
         <input type="hidden" name="referringPage" value="${thisPage}">
         <input type="submit" value="Add Hardware Identifier Authority"
            <c:if test="${! mayAdmin}">disabled</c:if>>

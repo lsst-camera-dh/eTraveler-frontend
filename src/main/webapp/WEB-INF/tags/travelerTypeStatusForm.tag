@@ -12,11 +12,12 @@
 <%@attribute name="travelerTypeId" required="true"%>
 
 <traveler:fullRequestString var="thisPage"/>
-<traveler:checkPerm var="mayWD" groups="EtravelerWorkflowDevelopers"/>
-<traveler:checkPerm var="maySE" groups="EtravelerSubjectExperts"/>
-<traveler:checkPerm var="maySoftMan" groups="EtravelerSoftwareManagers"/>
-<traveler:checkPerm var="maySubsMan" groups="EtravelerSubsystemManagers"/>
-<traveler:checkPerm var="mayQA" groups="EtravelerQualityAssurance"/>
+
+<traveler:checkSsPerm var="mayWD" travelerTypeId="${travelerTypeId}" roles="workflowDeveloper"/>
+<traveler:checkSsPerm var="maySE" travelerTypeId="${travelerTypeId}" roles="subjectExpert"/>
+<traveler:checkSsPerm var="maySoftMan" travelerTypeId="${travelerTypeId}" roles="softwareManager"/>
+<traveler:checkSsPerm var="maySubsMan" travelerTypeId="${travelerTypeId}" roles="subsystemManager"/>
+<traveler:checkSsPerm var="mayQA" travelerTypeId="${travelerTypeId}" roles="qualityAssurance"/>
 
 <sql:query var="oldStateQ">
     select TTS.name
@@ -55,6 +56,7 @@
 </sql:query>
 
 <form action="approver/updateTravelerType.jsp" method="get">
+    <input type="hidden" name="freshnessToken" value="${freshnessToken}">
     <input type="hidden" name="referringPage" value="${thisPage}">
     <input type="hidden" name="travelerTypeId" value="${travelerTypeId}">
     New Status:

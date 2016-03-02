@@ -8,7 +8,7 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@taglib prefix="traveler" tagdir="/WEB-INF/tags"%>
 
-<traveler:checkPerm var="mayOperate" groups="EtravelerOperator,EtravelerSupervisor"/>
+<traveler:checkMask var="mayOperate" activityId="${param.activityId}"/>
 
 <!DOCTYPE html>
 <html>
@@ -17,8 +17,11 @@
         <title>Stop Work</title>
     </head>
     <body>
+        <traveler:checkFreshness formToken="${param.freshnessToken}"/>        
+
         <h1>Stopping Work for Activity ${param.activityId}</h1>
         <form method="get" action="stopTraveler.jsp">
+            <input type="hidden" name="freshnessToken" value="${freshnessToken}">
             <input type="hidden" name="activityId" value="${param.activityId}">       
             <input type="hidden" name="topActivityId" value="${param.topActivityId}">
             <table>

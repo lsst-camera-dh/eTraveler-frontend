@@ -11,12 +11,13 @@
 <%@attribute name="activityId" required="true"%>
 <%@attribute name="travelerId" required="true"%>
 
-<traveler:checkPerm var="maySupervise" groups="EtravelerSupervisor"/>
+<traveler:checkSsPerm var="maySupervise" activityId="${activityId}" roles="supervisor"/>
 
 <table border="1">
     <tr>
         <td>
             <form method="get" action="resumeTraveler.jsp" target="_top">
+                <input type="hidden" name="freshnessToken" value="${freshnessToken}">
                 <input type="hidden" name="activityId" value="${travelerId}">
                 <input type="submit" value="Resume Work"
                     <c:if test="${! maySupervise}">disabled</c:if>>
@@ -25,6 +26,7 @@
         <td>
         <c:url var="retryLink" value="/operator/retryActivity.jsp" context="/eTraveler"/>
             <form METHOD=GET ACTION="${retryLink}" target="_top">
+                <input type="hidden" name="freshnessToken" value="${freshnessToken}">
                 <input type="hidden" name="activityId" value="${activityId}">       
                 <input type="hidden" name="topActivityId" value="${travelerId}">       
                 <INPUT TYPE=SUBMIT value="Retry Step"
@@ -33,6 +35,7 @@
         </td>
         <td>
             <form METHOD=GET ACTION="skipStep.jsp" target="_top">
+                <input type="hidden" name="freshnessToken" value="${freshnessToken}">
                 <input type="hidden" name="activityId" value="${activityId}">       
                 <input type="hidden" name="topActivityId" value="${travelerId}">       
                 <INPUT TYPE=SUBMIT value="Skip Step"
@@ -44,6 +47,7 @@
         </td>
         <td>
             <form METHOD=GET ACTION="failActivity.jsp" target="_top">
+                <input type="hidden" name="freshnessToken" value="${freshnessToken}">
                 <input type="hidden" name="activityId" value="${activityId}">       
                 <input type="hidden" name="topActivityId" value="${travelerId}">
                 <input type="hidden" name="status" value="failure">

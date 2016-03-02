@@ -14,7 +14,7 @@
 <%@attribute name="hardwareId" required="true"%>
 
 <traveler:fullRequestString var="thisPage"/>
-<traveler:checkPerm var="mayOperate" groups="EtravelerOperator,EtravelerSupervisor"/>
+<traveler:checkSsPerm var="mayOperate" hardwareId="${hardwareId}" roles="operator,supervisor"/>
 
 <sql:query  var="locationHistoryQ">
     select HLH.*,
@@ -40,15 +40,20 @@
                     href="displayLocation.jsp" paramId="locationId" paramProperty="locationId"/>
     <display:column property="processName" title="Step" sortable="true" headerClass="sortable"
                     href="displayActivity.jsp" paramId="activityId" paramProperty="activityId"/>
+    <display:column property="reason" sortable="true" headerClass="sortable"/>
     <display:column property="creationTS" title="Date" sortable="true" headerClass="sortable"/>
     <display:column property="createdBy" title="User" sortable="true" headerClass="sortable"/>
 </display:table>
     
-<sql:query var="parentsQ" >
-    select * from HardwareRelationship 
-    where componentId=?<sql:param value="${hardwareId}"/>
-    and end is null;
-</sql:query>
+    <sql:query var="parentsQ" >
+select MRS.hardwareId, MRS.minorId, MRA.name
+from MultiRelationshipSlot MRS
+inner join MultiRelationshipHistory MRH on MRH.multirelationshipSlotId=MRS.id
+        and MRH.id=(select max(id) from MultiRelationshipHistory where multirelationshipSlotId=MRS.id)
+inner join MultiRelationshipAction MRA on MRA.id=MRH.multirelationshipActionId
+where MRS.minorId=?<sql:param value="${hardwareId}"/>
+and MRA.name='install';
+    </sql:query>
 
 <sql:query var="locQ">
     select locationId 
@@ -75,6 +80,7 @@
     </sql:query>
 
     <form action="operator/setHardwareLocation.jsp" method="GET">
+        <input type="hidden" name="freshnessToken" value="${freshnessToken}">
         <input type="hidden" name="referringPage" value="${thisPage}">
         <input type="hidden" name="hardwareId" value="${hardwareId}">
         <select name="newLocationId" required>
@@ -83,6 +89,7 @@
                 <option value="${lRow.id}">${lRow.siteName} ${lRow.locationName}</option>
             </c:forEach>
         </select>
+        Reason: <textarea name="reason" required="true"></textarea>
         <input type="submit" value="Move it!"
             <c:if test="${! mayOperate}">disabled</c:if>>
     </form>

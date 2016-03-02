@@ -11,7 +11,7 @@
 <%@taglib prefix="traveler" tagdir="/WEB-INF/tags"%>
 
 <traveler:fullRequestString var="thisPage"/>
-<traveler:checkPerm var="mayOperate" groups="EtravelerOperator,EtravelerSupervisor"/>
+<traveler:checkSsPerm var="mayOperate" hardwareId="${param.hardwareId}" roles="operator,supervisor"/>
 
 <traveler:checkId table="Hardware" id="${param.hardwareId}"/>
 <sql:query var="hardwareQ">
@@ -39,6 +39,7 @@
             <h2>Inventory History</h2>
             <traveler:inventoryHistory hardwareId="${param.hardwareId}" varTotal="quantity"/>
             <form action="operator/adjustBatchInventory.jsp">
+                <input type="hidden" name="freshnessToken" value="${freshnessToken}">
                 <input type="hidden" name="referringPage" value="${thisPage}">
                 <input type="hidden" name="hardwareId" value="${param.hardwareId}">
                 <input type="hidden" name="sign" value="-1">
@@ -47,6 +48,7 @@
                 Why?&nbsp;<input type="text" name="reason">
             </form>
             <form action="operator/adjustBatchInventory.jsp">
+                <input type="hidden" name="freshnessToken" value="${freshnessToken}">
                 <input type="hidden" name="referringPage" value="${thisPage}">
                 <input type="hidden" name="hardwareId" value="${param.hardwareId}">
                 <input type="hidden" name="sign" value="1">
@@ -88,6 +90,7 @@
         </sql:query>
         <c:if test="${not empty idAuthQ.rows}">
             <form METHOD=GET ACTION="operator/addIdentifier.jsp">
+                <input type="hidden" name="freshnessToken" value="${freshnessToken}">
                 <input type="hidden" name="referringPage" value="${thisPage}">
                 <input type="hidden" name="hardwareId" value="${param.hardwareId}">
                 <input type="hidden" name="hardwareTypeId" value="${hardwareTypeId}">

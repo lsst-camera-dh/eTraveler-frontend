@@ -7,6 +7,8 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql"%>
+<%@taglib prefix="traveler" tagdir="/WEB-INF/tags"%>
+
 <!DOCTYPE html>
 <html>
     <head>
@@ -14,6 +16,19 @@
         <title>Add HardwareType to HardwareGroup</title>
     </head>
     <body>
+<traveler:checkFreshness formToken="${param.freshnessToken}"/>
+<traveler:checkSsPerm var="mayAdmin" hardwareTypeId="${param.hardwareTypeId}" roles="admin"/>
+<c:if test="${! mayAdmin}">
+    <sql:query var="htQ">
+select HT.name as hardwareTypeName, SS.name as subsystemName
+from HardwareType HT
+inner join Subsystem SS on SS.id=HT.subsystemId
+where HT.id=?<sql:param value="${param.hardwareTypeId}"/>
+;
+    </sql:query>
+    <c:set var="ht" value="${htQ.rows[0]}"/>
+    <traveler:error message="Adding hardware type ${ht.hardwareTypeName} to a group requires admin priviledge in subsystem ${ht.subsystemName}"/>
+</c:if>
 <sql:transaction>        
         <sql:update>
             insert into HardwareTypeGroupMapping set

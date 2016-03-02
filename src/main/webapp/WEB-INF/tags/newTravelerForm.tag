@@ -14,7 +14,20 @@
 <%@attribute name="processId"%>
 <%@attribute name="hardwareId"%>
 
-<traveler:checkPerm var="mayOperate" groups="EtravelerOperator,EtravelerSupervisor"/>
+<c:choose>
+    <c:when test="${! empty processId}">
+        <traveler:checkMask var="mayOperate" processId="${processId}"/>
+    </c:when>
+    <c:when test="${! empty hardwareId}">
+        <traveler:checkSsPerm var="mayOperate" hardwareId="${hardwareId}" roles="operator,supervisor"/>
+    </c:when>
+    <c:when test="${! empty hardwareTypeId}">
+        <traveler:checkSsPerm var="mayOperate" hardwareTypeId="${hardwareTypeId}" roles="operator,supervisor"/>
+    </c:when>
+    <c:otherwise>
+        <c:set var="mayOperate" value="true"/>
+    </c:otherwise>
+</c:choose>
 
 <c:set var="activeTravelerTypesOnly" value="true"/> <%-- should get this from user pref? --%>
 
@@ -103,6 +116,7 @@ where S.name=?<sql:param value="${preferences.siteName}"/>
     </sql:query>
 
 <form METHOD=GET ACTION="operator/createTraveler.jsp">
+    <input type="hidden" name="freshnessToken" value="${freshnessToken}">
     <input type="hidden" name="inNCR" value="FALSE">
     <table>
         <tr>
@@ -114,7 +128,10 @@ where S.name=?<sql:param value="${preferences.siteName}"/>
         <c:when test="${empty processId}">
             <select name="processId">
                 <c:forEach var="pRow" items="${processQ.rows}">
-                    <option value="${pRow.id}">${pRow.shortDescription}</option>
+                    <traveler:checkMask var="mayStart" processId="${pRow.id}"/>
+                    <c:if test="${mayStart}">
+                        <option value="${pRow.id}">${pRow.shortDescription}</option>
+                    </c:if>
                 </c:forEach>
             </select>
         </c:when>

@@ -10,7 +10,7 @@
 <%@taglib prefix="traveler" tagdir="/WEB-INF/tags"%>
 
 <traveler:fullRequestString var="thisPage"/>
-<traveler:checkPerm var="mayAdmin" groups="EtravelerAdmin"/>
+<traveler:checkPerm var="mayAdmin" groups="EtravelerAllAdmin"/>
 
 <!DOCTYPE html>
 
@@ -41,13 +41,17 @@
             ;
         </sql:query>
             <form method="get" action="admin/addTypeToGroup.jsp">
+                <input type="hidden" name="freshnessToken" value="${freshnessToken}">
                 <input type="hidden" name="referringPage" value="${thisPage}">
                 <input type="submit" value="Add Member Type"
                     <c:if test="${! mayAdmin}">disabled</c:if>>
                 <input type="hidden" name="hardwareGroupId" value="${param.hardwareGroupId}">
                 <select name="hardwareTypeId">
                     <c:forEach var="hwType" items="${hwTypesQ.rows}">
-                        <option value="${hwType.id}"><c:out value="${hwType.name}"/></option>
+                        <traveler:checkSsPerm var="ssPerm" hardwareTypeId="${hwType.id}" roles="admin"/>
+                        <c:if test="${ssPerm}">
+                            <option value="${hwType.id}"><c:out value="${hwType.name}"/></option>
+                        </c:if>
                     </c:forEach>
                 </select>
             </form>
