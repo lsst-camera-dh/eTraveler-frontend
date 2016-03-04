@@ -11,7 +11,8 @@
 <%@taglib prefix="preferences" uri="http://srs.slac.stanford.edu/preferences"%>
 <%@taglib prefix="traveler" tagdir="/WEB-INF/tags"%>
 <%@taglib prefix="ta" tagdir="/WEB-INF/tags/actions"%>
-<%@taglib uri="/tlds/eclTagLibrary.tld" prefix="ecl"%>
+<%@taglib prefix="ecl" uri="/tlds/eclTagLibrary.tld"%>
+<%@taglib prefix="lims" tagdir="/WEB-INF/tags/lims"%>
 
 <!DOCTYPE html>
 <html>
@@ -21,5 +22,12 @@
     </head>
     <body>
         <traveler:test/>
+        <c:set var="map" value="<%= new java.util.HashMap<String, String>() %>"/>
+        <traveler:mapAdd theMap="${map}" key="one" value="1"/>
+        <traveler:mapAdd theMap="${map}" key="two" value="arglebartgle"/>
+        ${map}
+        <lims:encode var="str" input="${map}"/>
+        ${str}
+        ${response}
     </body>
 </html>

@@ -3,7 +3,6 @@
   <tlib-version>1.0</tlib-version>
   <short-name>uploads</short-name>
   <uri>/tlds/uploads</uri>
-
   <tag>
     <name>uploadParser</name>
     <tag-class>eTraveler.uploadParser</tag-class>
@@ -42,7 +41,7 @@
       <rtexprvalue>false</rtexprvalue>
       <type>java.lang.String</type>
     </attribute>
-    <variable>        
+    <variable>
       <name-from-attribute>varSize</name-from-attribute>
       <variable-class>java.lang.Long</variable-class>
       <scope>AT_BEGIN</scope>
@@ -51,15 +50,14 @@
       <name>varSha1</name>
       <required>true</required>
       <rtexprvalue>false</rtexprvalue>
-      <type>java.lang.String</type>        
+      <type>java.lang.String</type>
     </attribute>
-    <variable>        
+    <variable>
       <name-from-attribute>varSha1</name-from-attribute>
       <variable-class>java.lang.String</variable-class>
       <scope>AT_BEGIN</scope>
     </variable>
   </tag>
-
   <tag>
     <name>uploadSaver</name>
     <tag-class>eTraveler.uploadSaver</tag-class>
@@ -77,7 +75,6 @@
       <type>java.lang.String</type>
     </attribute>
   </tag>
-
   <tag>
     <name>jhParser</name>
     <tag-class>eTraveler.JhParser</tag-class>
@@ -101,5 +98,26 @@
       <type>String</type>
     </attribute>
   </tag>
-
+  <tag>
+    <name>yamlUploader</name>
+    <tag-class>eTraveler.yamlUploader</tag-class>
+    <body-content>scriptless</body-content>
+    <attribute>
+      <name>parms</name>
+      <required>true</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.util.Map</type>
+    </attribute>
+    <attribute>
+      <name>var</name>
+      <required>true</required>
+      <rtexprvalue>false</rtexprvalue>
+      <type>String</type>
+    </attribute>
+    <variable>
+      <name-from-attribute>var</name-from-attribute>
+      <variable-class>String</variable-class>
+      <scope>AT_BEGIN</scope>
+    </variable>
+  </tag>
 </taglib>
