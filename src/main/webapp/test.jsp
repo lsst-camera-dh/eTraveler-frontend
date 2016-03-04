@@ -22,12 +22,5 @@
     </head>
     <body>
         <traveler:test/>
-        <c:set var="map" value="<%= new java.util.HashMap<String, String>() %>"/>
-        <traveler:mapAdd theMap="${map}" key="one" value="1"/>
-        <traveler:mapAdd theMap="${map}" key="two" value="arglebartgle"/>
-        ${map}
-        <lims:encode var="str" input="${map}"/>
-        ${str}
-        ${response}
     </body>
 </html>

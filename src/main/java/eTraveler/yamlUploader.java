@@ -7,9 +7,6 @@ import javax.servlet.jsp.PageContext;
 import javax.servlet.jsp.tagext.SimpleTagSupport;
 import javax.servlet.http.HttpServletRequest;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.core.JsonProcessingException;
-
 import org.lsst.camera.etraveler.backend.node.Traveler;
 
 /**
@@ -22,16 +19,10 @@ public class yamlUploader extends SimpleTagSupport {
 
     @Override
     public void doTag() throws JspException {
-        String response;
         PageContext context = (PageContext) getJspContext();
         HttpServletRequest req = (HttpServletRequest) context.getRequest();
         Map<String, String> resMap = Traveler.ingest(req, parms);
-        try {
-            response = new ObjectMapper().writeValueAsString(resMap);
-        } catch (JsonProcessingException ex) {
-            throw new JspException("Error in yamlUploader tag", ex);
-        }
-        context.setAttribute(var, response);
+        context.setAttribute(var, resMap);
     }
     
     public void setParms(Map<String, String> parms) {
