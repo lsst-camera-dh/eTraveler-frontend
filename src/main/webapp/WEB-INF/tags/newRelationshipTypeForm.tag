@@ -28,7 +28,7 @@
                 <div>Name:</div> <input type="text" name="name" required>
             </td>
             <td>
-                <div>Hardware Type:</div>
+                <div>Assembly Type:</div>
                 <select name="hardwareTypeId">
                     <c:forEach var="htRow" items="${hardwareTypesQ.rows}">
                         <option value="${htRow.id}">${htRow.name}</option>

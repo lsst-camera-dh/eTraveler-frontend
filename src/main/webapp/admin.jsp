@@ -31,10 +31,6 @@
     <a href="${backendUrl}">Upload a new Traveler Type or version</a>
 
 <hr>
-<h2>Traveler Types</h2>
-    <traveler:newTravelerTypeForm/>
-
-<hr>
 <h2>Hardware Groups</h2>
     <form method="get" action="admin/addHardwareGroup.jsp">
         <input type="hidden" name="freshnessToken" value="${freshnessToken}">
@@ -81,6 +77,10 @@
         Name: <input type="text" name="name" required>
     </form>
     <traveler:hardwareIdentifierAuthorityList/>
+
+<hr>
+<h2>Traveler Types</h2>
+    <traveler:newTravelerTypeForm/>
 <hr>
     </body>
 </html>
