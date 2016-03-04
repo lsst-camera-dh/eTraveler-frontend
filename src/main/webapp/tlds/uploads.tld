@@ -116,7 +116,7 @@
     </attribute>
     <variable>
       <name-from-attribute>var</name-from-attribute>
-      <variable-class>String</variable-class>
+      <variable-class>java.util.Map</variable-class>
       <scope>AT_BEGIN</scope>
     </variable>
   </tag>
