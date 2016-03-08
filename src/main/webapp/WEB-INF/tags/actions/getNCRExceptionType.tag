@@ -1,5 +1,5 @@
 <%-- 
-    Document   : addExceptionType
+    Document   : getNCRExceptionType
     Created on : Mar 4, 2016, 4:10:11 PM
     Author     : focke
 --%>
