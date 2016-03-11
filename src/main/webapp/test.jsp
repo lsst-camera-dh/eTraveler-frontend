@@ -21,5 +21,7 @@
     </head>
     <body>
         <traveler:test/>
+        ${gm:groupExists(pageContext,'UserAdmin')}
+        ${gm:groupExists(pageContext,'fred')}
     </body>
 </html>
