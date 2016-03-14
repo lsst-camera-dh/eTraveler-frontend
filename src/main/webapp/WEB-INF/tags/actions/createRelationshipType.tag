@@ -60,6 +60,7 @@ select last_insert_id() as mrtId;
 
 <%-- now add slots --%>
 <c:forEach var="slotName" items="${slotList}">
+    <c:set var="slotName" value="${fn:trim(slotName)}"/>
     <sql:update>
 insert into MultiRelationshipSlotType set
 multiRelationshipTypeId=?<sql:param value="${mrtId}"/>,
