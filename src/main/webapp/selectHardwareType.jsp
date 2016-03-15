@@ -16,8 +16,6 @@
         <title>Select HardwareType</title>
     </head>
     <body>
-        <traveler:checkFreshness formToken="${param.freshnessToken}"/>
-        
         <h1>Pick a Hardware type.</h1>
         
         <sql:query var="hwTypesQ" >
