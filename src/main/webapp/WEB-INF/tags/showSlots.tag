@@ -37,7 +37,10 @@
             <display:column title="Component">
                 <c:choose>
                     <c:when test="${! empty row.lsstId}">
-                        <c:out value="${row.lsstId}"/>
+                        <c:url var="componentLink" value="displayHardware.jsp">
+                            <c:param name="hardwareId" value="${row.minorId}"/>
+                        </c:url>
+                        <a href="${componentLink}"><c:out value="${row.lsstId}"/></a>
                     </c:when>
                     <c:otherwise>
                         <traveler:checkMask var="mayOperate" activityId="${activityId}"/>
