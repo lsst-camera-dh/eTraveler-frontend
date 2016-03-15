@@ -11,7 +11,8 @@
 <%@taglib prefix="preferences" uri="http://srs.slac.stanford.edu/preferences"%>
 <%@taglib prefix="traveler" tagdir="/WEB-INF/tags"%>
 <%@taglib prefix="ta" tagdir="/WEB-INF/tags/actions"%>
-<%@taglib uri="/tlds/eclTagLibrary.tld" prefix="ecl"%>
+<%@taglib prefix="ecl" uri="/tlds/eclTagLibrary.tld"%>
+<%@taglib prefix="lims" tagdir="/WEB-INF/tags/lims"%>
 
 <!DOCTYPE html>
 <html>
