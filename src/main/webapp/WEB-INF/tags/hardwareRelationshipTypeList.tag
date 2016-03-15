@@ -28,6 +28,7 @@
     <c:if test="${! empty componentTypeId}">
         and MRT.minorTypeId=?<sql:param value="${componentTypeId}"/>
     </c:if>
+    order by MRT.name, MRST.id
     ;
 </sql:query>
 
