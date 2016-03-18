@@ -71,7 +71,7 @@ where
         P.id = ?<sql:param value="${processId}"/>
     </c:otherwise>
 </c:choose>
-order by PRT.id
+order by PRT.id, MRST.id
 ;
     </sql:query>
 <c:set var="slotList" value="${slotsQ.rows}"/>

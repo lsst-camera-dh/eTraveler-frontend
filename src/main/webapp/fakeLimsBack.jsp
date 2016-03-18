@@ -66,6 +66,9 @@
     <c:when test="${command == 'runOneStep'}">
         <lims:oneStep/>
     </c:when>
+    <c:when test="${command == 'uploadYaml'}">
+        <lims:upload/>
+    </c:when>
     <c:when test="${command == 'status'}">
         <traveler:error message="status doesn't work yet."/>
     </c:when>

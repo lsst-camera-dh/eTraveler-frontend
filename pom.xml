@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <parent>
-        <groupId>srs</groupId>
-        <artifactId>org-srs-maven-project-war</artifactId>
-        <version>4.6</version>
+        <groupId>org.lsst.camera</groupId>
+<artifactId>org-lsst-camera-maven-project-war</artifactId>
+        <version>1.0.3</version>
     </parent>
 
 
@@ -11,7 +11,7 @@
     <groupId>org.lsst.camera</groupId>
     <artifactId>org-lsst-camera-etraveler-web</artifactId>
     <packaging>war</packaging>
-    <version>1.2.6</version>
+    <version>1.2.7-SNAPSHOT</version>
     <name>LSST ETraveler Web Application</name>
     <url>http://srs.slac.stanford.edu/eTraveler</url>
     
@@ -44,6 +44,11 @@
             <name>LSST Maven 2 central repository</name>
             <url>http://dev.lsstcorp.org:8081/nexus/content/groups/ccs-maven2-public/</url>
         </repository>    
+        <repository>
+            <id>lsst-dh-maven2-public</id>
+            <name>LSST Data Handling Maven Central repository</name>
+<url>http://srs.slac.stanford.edu/nexus/content/groups/lsst-dh-maven2-public/</url>
+        </repository>
     </repositories>
 
 
@@ -89,14 +94,6 @@
             <version>1.2</version>
         </dependency>
 
-        <!--
-        <dependency>
-            <groupId>org.lsst.camera</groupId>
-            <artifactId>org-lsst-camera-eclapp</artifactId>
-            <version>1.0-SNAPSHOT</version>
-        </dependency>
-        -->
-
         <!-- This might not be needed -->
         <dependency>
             <groupId>org.lsst</groupId>
@@ -104,9 +101,21 @@
             <version>1.0.3</version>        
         </dependency>
 
+       <dependency>
+            <groupId>org.lsst.camera</groupId>
+<artifactId>org-lsst-camera-etraveler-backend-core</artifactId>
+            <version>1.32.0</version>
+        </dependency>
     </dependencies>
+
     <properties>
         <netbeans.hint.deploy.server>Tomcat</netbeans.hint.deploy.server>
         <experiment.name>LSST-CAMERA</experiment.name>
     </properties>
+
+    <scm>
+<url>https://github.com/lsst-camera-dh/eTraveler-frontend</url>
+<connection>scm:git:git://github.com/lsst-camera-dh/eTraveler-frontend.git</connection>
+<developerConnection>scm:git:ssh://git@github.com/lsst-camera-dh/eTraveler-frontend.git</developerConnection>
+    </scm>
 </project>
