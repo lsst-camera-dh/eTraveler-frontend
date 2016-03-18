@@ -24,10 +24,6 @@ select id, name from Site;
 select id, name from HardwareIdentifierAuthority;
         </sql:query>
 
-        <sql:query var="jhQ">
-select * from JobHarness where siteId=(select id from Site where name=?<sql:param value="${preferences.siteName}"/>);
-        </sql:query>
-
         <preferences:preferences name="preferences">
 
             <preferences:preference name="writeable" title="<b>Write:</b> ">
@@ -60,6 +56,10 @@ select * from JobHarness where siteId=(select id from Site where name=?<sql:para
                 You can only move components to locations at your site.</td>
                 <td>Current Value: <c:out value="${preferences.siteName}"/></td>
             </tr>
+
+            <sql:query var="jhQ">
+select * from JobHarness where siteId=(select id from Site where name=?<sql:param value="${preferences.siteName}"/>);
+            </sql:query>
 
             <preferences:preference name="jhName" title="<b>Job Harness Install:</b> ">
                 <preferences:value value="UNSET"/>
