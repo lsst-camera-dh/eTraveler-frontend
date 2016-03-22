@@ -28,9 +28,11 @@
         </c:if>
         
         <sql:query var="statusQ">
-select hardwareStatusId 
-from HardwareStatusHistory 
-where hardwareId=?<sql:param value="${param.hardwareId}"/>
+select HSH.hardwareStatusId 
+from HardwareStatusHistory HSH
+inner join HardwareStatus HS on HS.id=HSH.hardwareStatusId
+where HSH.hardwareId=?<sql:param value="${param.hardwareId}"/>
+and HS.isStatusValue=1
 order by id desc limit 1;
         </sql:query>
         <c:if test="${statusQ.rows[0].hardwareStatusId == param.hardwareStatusId}">
