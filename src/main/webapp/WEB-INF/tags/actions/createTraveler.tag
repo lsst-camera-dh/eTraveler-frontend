@@ -39,7 +39,7 @@
 <sql:query var="hardwareQ">
     select H.*, HS.name
     from Hardware H
-    inner join HardwareStatusHistory HSH on HSH.hardwareId=H.id and HSH.id=(select max(id) from HardwareStatusHistory where hardwareId=H.id)
+    inner join HardwareStatusHistory HSH on HSH.hardwareId=H.id and HSH.id=(select max(HSH2.id) from HardwareStatusHistory HSH2 inner join HardwareStatus HS on HS.id=HSH2.hardwareStatusId where HSH2.hardwareId=H.id and HS.isStatusValue=1)
     inner join HardwareStatus HS on HS.id=HSH.hardwareStatusId
     where H.id=?<sql:param value="${hardwareId}"/>;
 </sql:query>
