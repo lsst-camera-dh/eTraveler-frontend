@@ -37,7 +37,7 @@
     <c:if test="${! empty hardwareGroupId}">
         inner join HardwareTypeGroupMapping HTGM on HTGM.hardwareTypeId=HT.id
     </c:if>
-    inner join HardwareStatusHistory HSH on HSH.hardwareId=H.id and HSH.id=(select max(id) from HardwareStatusHistory where hardwareId=H.id)
+    inner join HardwareStatusHistory HSH on HSH.hardwareId=H.id and HSH.id=(select max(HSH2.id) from HardwareStatusHistory HSH2 inner join HardwareStatus HS on HS.id=HSH2.hardwareStatusId where HSH2.hardwareId=H.id and HS.isStatusValue=1)
     inner join HardwareStatus HS on HS.id=HSH.hardwareStatusId
     inner join HardwareLocationHistory HLH on HLH.hardwareId=H.id and HLH.id=(select max(id) from HardwareLocationHistory where hardwareId=H.id)
     inner join Location L on L.id=HLH.locationId
