@@ -35,6 +35,9 @@
         <h2>Status</h2>
         <traveler:hardwareStatusWidget hardwareId="${param.hardwareId}"/>
         
+        <h2>Labels</h2>
+        <traveler:hardwareLabelWidget hardwareId="${param.hardwareId}"/>
+
         <c:if test="${hardware.isBatched != 0}">
             <h2>Inventory History</h2>
             <traveler:inventoryHistory hardwareId="${param.hardwareId}" varTotal="quantity"/>
