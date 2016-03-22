@@ -81,7 +81,7 @@
     <c:if test="${(empty hardwareGroupId) and (!empty processId)}">
         inner join Process P on P.hardwareGroupId=HTGM.hardwareGroupId
     </c:if>
-    inner join HardwareStatusHistory HSH on HSH.hardwareId=H.id and HSH.id=(select max(id) from HardwareStatusHistory where hardwareId=H.id)
+    inner join HardwareStatusHistory HSH on HSH.hardwareId=H.id and HSH.id=(select max(HSH2.id) from HardwareStatusHistory HSH2 inner join HardwareStatus HS on HS.id=HSH2.hardwareStatusId where HSH2.hardwareId=H.id and HS.isStatusValue=1)
     inner join HardwareStatus HS on HS.id=HSH.hardwareStatusId
     where 
     HS.name not in ('REJECTED', 'USED', 'PENDING')
