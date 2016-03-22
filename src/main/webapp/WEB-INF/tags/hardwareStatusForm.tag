@@ -18,7 +18,12 @@
     select * 
     from HardwareStatus 
     where name!='NEW'
-    and id!=(select hardwareStatusId from HardwareStatusHistory where hardwareId=?<sql:param value="${hardwareId}"/> order by id desc limit 1)
+    and id!=(select HSH.hardwareStatusId from HardwareStatusHistory HSH 
+            inner join HardwareStatus HS on HS.id=HSH.hardwareStatusId
+            where HSH.hardwareId=?<sql:param value="${hardwareId}"/> 
+            and HS.isStatusValue=1 
+            order by HSH.id desc limit 1)
+    and isStatusValue=1
     order by name;
 </sql:query>
 
