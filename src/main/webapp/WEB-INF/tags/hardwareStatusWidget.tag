@@ -20,7 +20,8 @@
     left join (Activity A
     inner join Process P on P.id=A.processId) on A.id=HSH.activityId
     where HSH.hardwareId=?<sql:param value="${hardwareId}"/>
-    order by HSH.creationTS desc;
+    and HS.isStatusValue=1
+    order by HSH.id desc;
 </sql:query>
     
 <display:table name="${statusHistoryQ.rows}" class="datatable" sort="list"
