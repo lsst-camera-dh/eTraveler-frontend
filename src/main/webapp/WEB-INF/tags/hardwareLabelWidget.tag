@@ -13,8 +13,11 @@
 
 <%@attribute name="hardwareId" required="true"%>
 
+<traveler:fullRequestString var="thisPage"/>
+<traveler:checkSsPerm var="mayManage" hardwareId="${hardwareId}" roles="subsystemManager"/>
+
 <sql:query var="labelQ">
-select HS.name as statusName, HSH.*, P.name as processName
+select HS.name as statusName, HS.id as statusId, HSH.*, P.name as processName
 from HardwareStatusHistory HSH
 inner join HardwareStatus HS on HS.id=HSH.hardwareStatusId
     left join (Activity A
@@ -30,3 +33,18 @@ order by HSH.id desc
     
 <traveler:hardwareStatusTable result="${labelQ}"/>
 
+<form action="operator/setHardwareStatus.jsp">
+    <input type="hidden" name="freshnessToken" value="${freshnessToken}">
+    <input type="hidden" name="referringPage" value="${thisPage}">
+    <input type="hidden" name="hardwareId" value="${hardwareId}">
+    <input type="hidden" name="removeLabel" value="true">
+    <select name="hardwareStatusId" required>
+        <option value="" selected>Pick a label to remove</option>
+        <c:forEach var="sRow" items="${labelQ.rows}">
+            <option value="${sRow.statusId}"><c:out value="${sRow.statusName}"/></option>
+        </c:forEach>        
+    </select>
+    Reason: <textarea name="reason" required="true"></textarea>
+    <input type="submit" value="Remove Label"
+           <c:if test="${! mayManage}">disabled</c:if>>
+</form>
