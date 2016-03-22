@@ -33,14 +33,14 @@ from HardwareStatusHistory HSH
 inner join HardwareStatus HS on HS.id=HSH.hardwareStatusId
 where HSH.hardwareId=?<sql:param value="${param.hardwareId}"/>
 and HS.isStatusValue=1
-order by id desc limit 1;
+order by HSH.id desc limit 1;
         </sql:query>
         <c:if test="${statusQ.rows[0].hardwareStatusId == param.hardwareStatusId}">
             <traveler:error message="You can't set the status to the same thing it already is."/>
         </c:if>
         
         <sql:transaction>
-            <ta:setHardwareStatus hardwareStatusId="${param.hardwareStatusId}" hardwareId="${param.hardwareId}" reason="${param.reason}"/>
+            <ta:setHardwareStatus hardwareStatusId="${param.hardwareStatusId}" hardwareId="${param.hardwareId}" reason="${param.reason}" removeLabel="${param.removeLabel}"/>
         </sql:transaction>
         <c:redirect url="${param.referringPage}"/>
 </body>
