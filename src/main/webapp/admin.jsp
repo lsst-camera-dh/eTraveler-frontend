@@ -68,6 +68,10 @@
 <traveler:jhList/>
 
 <hr>
+<h2>Hardware Labels</h2>
+<traveler:newLabelTypeForm/>
+
+<hr>
 <h2>Hardware Identifier Authorities</h2>
     <form method="get" action="admin/addHardwareIdentifierAuthority.jsp">
         <input type="hidden" name="freshnessToken" value="${freshnessToken}">
