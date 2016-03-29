@@ -39,6 +39,7 @@
 
 <sql:transaction>
 <c:choose>
+    <%-- job harness --%>
     <c:when test="${command == 'requestID'}">
         <lims:requestId/>
     </c:when>
@@ -48,9 +49,11 @@
     <c:when test="${command == 'ingest'}">
         <lims:ingest/>
     </c:when>
+    <%-- scripting --%>
     <c:when test="${command == 'nextJob'}">
         <lims:script/>
     </c:when>
+    <%-- client --%>
     <c:when test="${command == 'registerHardware'}">
         <lims:registerHardware/>
     </c:when>
@@ -69,6 +72,10 @@
     <c:when test="${command == 'uploadYaml'}">
         <lims:upload/>
     </c:when>
+    <c:when test="${command == 'setHardwareStatus'}">
+        <lims:setHardwareStatus/>
+    </c:when>
+    <%-- unimplemented JH --%>
     <c:when test="${command == 'status'}">
         <traveler:error message="status doesn't work yet."/>
     </c:when>
