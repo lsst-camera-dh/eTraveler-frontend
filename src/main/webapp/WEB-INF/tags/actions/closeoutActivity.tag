@@ -18,6 +18,10 @@
     <sql:query var="activityQ">
 select A.*, 
 P.travelerActionMask&(select maskBit from InternalAction where name='setHardwareLocation') as setsLocation,
+P.travelerActionMask&(select maskBit from InternalAction where name='setHardwareStatus') as setsStatus,
+P.travelerActionMask&(select maskBit from InternalAction where name='addLabel') as addsLabel,
+P.travelerActionMask&(select maskBit from InternalAction where name='removeLabel') as removesLabel,
+P.newHardwareStatusId,
 MRA.name as relationshipAction
 from Activity A
 inner join Process P on P.id=A.processId
@@ -41,6 +45,13 @@ where A.id=?<sql:param value="${activityId}"/>;
                 reason="Moved by traveler"/>
         </c:otherwise>
     </c:choose>
+</c:if>
+
+<c:if test="${activity.setsStatus!=0 || activity.addsLabel!=0 || activity.removesLabel!=0}">
+    <c:set var="removeLabel" value="${activity.removesLabel!=0 ? true : false}"/>
+    <ta:setHardwareStatus activityId="${activityId}" hardwareId="${activity.hardwareId}"
+                          hardwareStatusId="${activity.newHardwareStatusId}" reason="Set by traveler step"
+                          removeLabel="${removeLabel}"/>
 </c:if>
 
 <ta:closeoutRelationship activityId="${activityId}"/>
