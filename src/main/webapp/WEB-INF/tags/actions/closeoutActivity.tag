@@ -12,6 +12,7 @@
 
 <%@attribute name="activityId" required="true"%>
 <%@attribute name="newLocationId"%>
+<%@attribute name="newStatusId"%>
 
 <ta:setActivityStatus activityId="${activityId}" status="success"/>
 
@@ -33,24 +34,24 @@ where A.id=?<sql:param value="${activityId}"/>;
 <c:set var="activity" value="${activityQ.rows[0]}"/>
 
 <c:if test="${activity.setsLocation != 0}">
-    <c:choose>
-        <c:when test="${empty newLocationId}">
+    <c:if test="${empty newLocationId}">
             <traveler:error message="No location supplied." bug="true"/>
-        </c:when>
-        <c:otherwise>
-            <ta:setHardwareLocation 
-                hardwareId="${activity.hardwareId}" 
-                newLocationId="${newLocationId}" 
-                activityId="${activityId}"
-                reason="Moved by traveler"/>
-        </c:otherwise>
-    </c:choose>
+    </c:if>
+    <ta:setHardwareLocation 
+        hardwareId="${activity.hardwareId}" 
+        newLocationId="${newLocationId}" 
+        activityId="${activityId}"
+        reason="Moved by traveler"/>
 </c:if>
 
 <c:if test="${activity.setsStatus!=0 || activity.addsLabel!=0 || activity.removesLabel!=0}">
+    <c:set var="newStatusId" value="${!empty activity.newHardwareStatusId ? activity.newHardwareStatusId : newStatusId}"/>
+    <c:if test="${empty newStatusId}">
+        <traveler:error message="No hardware status supplied"/>
+    </c:if>
     <c:set var="removeLabel" value="${activity.removesLabel!=0 ? true : false}"/>
     <ta:setHardwareStatus activityId="${activityId}" hardwareId="${activity.hardwareId}"
-                          hardwareStatusId="${activity.newHardwareStatusId}" reason="Set by traveler step"
+                          hardwareStatusId="${newStatusId}" reason="Set by traveler step"
                           removeLabel="${removeLabel}"/>
 </c:if>
 

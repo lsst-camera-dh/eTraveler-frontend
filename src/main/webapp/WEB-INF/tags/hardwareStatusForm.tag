@@ -6,7 +6,6 @@
 
 <%@tag description="Provide a form to change the status of a component" pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql"%>
 <%@taglib prefix="traveler" tagdir="/WEB-INF/tags"%>
 
 <%@attribute name="hardwareId" required="true"%>
@@ -14,19 +13,7 @@
 <traveler:fullRequestString var="thisPage"/>
 <traveler:checkSsPerm var="mayManage" hardwareId="${hardwareId}" roles="subsystemManager"/>
 
-<sql:query var="statesQ" >
-    select * 
-    from HardwareStatus 
-    where name!='NEW'
-    and id!=(select HSH.hardwareStatusId from HardwareStatusHistory HSH 
-            inner join HardwareStatus HS on HS.id=HSH.hardwareStatusId
-            where HSH.hardwareId=?<sql:param value="${hardwareId}"/> 
-            and HS.isStatusValue=1 
-            order by HSH.id desc limit 1)
-    and isStatusValue=1
-    order by name;
-</sql:query>
-
+<traveler:getAvailableStates var="statesQ" hardwareId="${hardwareId}"/>
 <form action="operator/setHardwareStatus.jsp">
     <input type="hidden" name="freshnessToken" value="${freshnessToken}">
     <input type="hidden" name="referringPage" value="${thisPage}">
