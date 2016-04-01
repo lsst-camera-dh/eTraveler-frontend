@@ -25,10 +25,13 @@
 </c:choose>
 
     <sql:query var="activityQ" >
-select A.*, P.substeps, P.maxIteration, P.newLocation,
+select A.*, P.substeps, P.maxIteration, P.newLocation, P.newHardwareStatusId,
 P.travelerActionMask&(select maskBit from InternalAction where name='harnessedJob') as isHarnessed,
 P.travelerActionMask&(select maskBit from InternalAction where name='async') as isAsync,
 P.travelerActionMask&(select maskBit from InternalAction where name='setHardwareLocation') as setsLocation,
+P.travelerActionMask&(select maskBit from InternalAction where name='setHardwareStatus') as setsStatus,
+P.travelerActionMask&(select maskBit from InternalAction where name='addLabel') as addsLabel,
+P.travelerActionMask&(select maskBit from InternalAction where name='removeLabel') as removesLabel,
 AFS.name as status, AFS.isFinal
 from Activity A
 inner join Process P on P.id=A.processId
@@ -112,6 +115,7 @@ and A.end is not null
 
 <form METHOD=GET ACTION="operator/closeoutActivity.jsp" target="_top">
     <input type="hidden" name="freshnessToken" value="${freshnessToken}">
+
     <c:if test="${activity.setsLocation != 0 && readyToClose}">
         <sql:query var="locsQ">
 select L.id, L.name 
@@ -144,6 +148,39 @@ Make a new version of the Traveler."/>
             </c:otherwise>
         </c:choose>
     </c:if>
+
+    <c:if test="${empty activity.newHardwareStatusId && readyToClose}">
+        <c:choose>
+            <c:when test="${activity.setsStatus != 0}">
+                <traveler:getAvailableStates var="statesQ" hardwareId="${activity.hardwareId}"/>
+                <select name="hardwareStatusId" required>
+                    <option value="" selected>Pick a new status</option>
+                    <c:forEach var="sRow" items="${statesQ.rows}">
+                        <option value="${sRow.id}"><c:out value="${sRow.name}"/></option>
+                    </c:forEach>        
+                </select>
+            </c:when>
+            <c:when test="${activity.removesLabel != 0}">
+                <traveler:getSetLabels var="labelQ" hardwareId="${activity.hardwareId}"/>
+                <select name="hardwareStatusId" required>
+                    <option value="" selected>Pick a label to remove</option>
+                    <c:forEach var="sRow" items="${labelQ.rows}">
+                        <option value="${sRow.statusId}"><c:out value="${sRow.statusName}"/></option>
+                    </c:forEach>        
+                </select>
+            </c:when>
+            <c:when test="${activity.addsLabel != 0}">
+                <traveler:getUnsetLabels var="unsetQ" hardwareId="${activity.hardwareId}"/>
+                <select name="hardwareStatusId" required>
+                    <option value="" selected>Pick a label to add</option>
+                    <c:forEach var="sRow" items="${unsetQ.rows}">
+                        <option value="${sRow.id}"><c:out value="${sRow.name}"/></option>
+                    </c:forEach>        
+                </select>
+            </c:when>
+        </c:choose>
+    </c:if>
+
 <table>
     <tr>
         <td>
