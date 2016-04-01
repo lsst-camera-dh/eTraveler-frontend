@@ -149,36 +149,27 @@ Make a new version of the Traveler."/>
         </c:choose>
     </c:if>
 
-    <c:if test="${empty activity.newHardwareStatusId && readyToClose}">
+    <c:if test="${(activity.setsStatus != 0 || activity.removesLabel != 0 || activity.addsLabel != 0) && empty activity.newHardwareStatusId && readyToClose}">
         <c:choose>
             <c:when test="${activity.setsStatus != 0}">
                 <traveler:getAvailableStates var="statesQ" hardwareId="${activity.hardwareId}"/>
-                <select name="hardwareStatusId" required>
-                    <option value="" selected>Pick a new status</option>
-                    <c:forEach var="sRow" items="${statesQ.rows}">
-                        <option value="${sRow.id}"><c:out value="${sRow.name}"/></option>
-                    </c:forEach>        
-                </select>
+                <c:set var="stateInstruction" value="Pick a new status"/>
             </c:when>
             <c:when test="${activity.removesLabel != 0}">
-                <traveler:getSetLabels var="labelQ" hardwareId="${activity.hardwareId}"/>
-                <select name="hardwareStatusId" required>
-                    <option value="" selected>Pick a label to remove</option>
-                    <c:forEach var="sRow" items="${labelQ.rows}">
-                        <option value="${sRow.statusId}"><c:out value="${sRow.statusName}"/></option>
-                    </c:forEach>        
-                </select>
+                <traveler:getSetLabels var="statesQ" hardwareId="${activity.hardwareId}"/>
+                <c:set var="stateInstruction" value="Pick a label to remove"/>
             </c:when>
             <c:when test="${activity.addsLabel != 0}">
-                <traveler:getUnsetLabels var="unsetQ" hardwareId="${activity.hardwareId}"/>
-                <select name="hardwareStatusId" required>
-                    <option value="" selected>Pick a label to add</option>
-                    <c:forEach var="sRow" items="${unsetQ.rows}">
-                        <option value="${sRow.id}"><c:out value="${sRow.name}"/></option>
-                    </c:forEach>        
-                </select>
+                <traveler:getUnsetLabels var="statesQ" hardwareId="${activity.hardwareId}"/>
+                <c:set var="stateInstruction" value="Pick a label to add"/>
             </c:when>
         </c:choose>
+        <select name="hardwareStatusId" required>
+            <option value="" selected disabled>${stateInstruction}</option>
+            <c:forEach var="sRow" items="${statesQ.rows}">
+                <option value="${sRow.id}"><c:out value="${sRow.name}"/></option>
+            </c:forEach>        
+        </select>
     </c:if>
 
 <table>
