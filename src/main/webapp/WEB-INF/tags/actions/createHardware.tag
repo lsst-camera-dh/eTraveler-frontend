@@ -30,7 +30,7 @@ and hardwareTypeId=?<sql:param value="${hardwareTypeId}"/>
 ;
     </sql:query>
     <c:if test="${! empty dupQ.rows}">
-        <traveler:error message="Duplicate experiment serial number ${lsstId}"/>
+        <traveler:error message="A component with experiment serial number ${lsstId} and typeId ${hardwareTypeId} already exists."/>
     </c:if>
 </c:if>
 
