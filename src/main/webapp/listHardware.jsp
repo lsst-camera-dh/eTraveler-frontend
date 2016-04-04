@@ -33,7 +33,7 @@ select name from Subsystem order by name;
         
         <filter:filterTable>
             <filter:filterInput var="name" title="Type (substring search)"/>
-            <filter:filterInput var="serial" title="Serial # (substring search)"/>
+            <filter:filterInput var="serial" title="Serial Number (substring search)"/>
             <filter:filterSelection title="Site" var="site" defaultValue='${preferences.siteName}'>
                 <filter:filterOption value="any">Any</filter:filterOption>
                 <filter:filterOption value="${preferences.siteName}">User Pref</filter:filterOption>
