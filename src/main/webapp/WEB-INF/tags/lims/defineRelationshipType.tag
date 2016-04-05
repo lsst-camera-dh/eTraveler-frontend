@@ -17,4 +17,4 @@
     numItems="${inputs.numItems}" name="${inputs.name}" hardwareTypeId="${hardwareTypeId}"
     description="${inputs.description}" var="mrtId"/>
 
-{"id": "${mrtId}", "acknowledge": null}
+{"id": ${mrtId}, "acknowledge": null}
