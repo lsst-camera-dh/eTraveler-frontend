@@ -42,8 +42,8 @@ select name from Subsystem order by name;
                 </c:forEach>
             </filter:filterSelection>
             <filter:filterSelection title="Subsystem" var="subsystem" defaultValue="${preferences.subsystem}">
-                <filter:filterOption value="Any">Any</filter:filterOption>
                 <filter:filterOption value="${preferences.subsystem}">User Pref</filter:filterOption>
+                <filter:filterOption value="Any">Any</filter:filterOption>
                 <c:forEach var="subsystem" items="${subsysQ.rows}">
                     <filter:filterOption value="${subsystem.name}"><c:out value="${subsystem.name}"/></filter:filterOption>
                 </c:forEach>                
