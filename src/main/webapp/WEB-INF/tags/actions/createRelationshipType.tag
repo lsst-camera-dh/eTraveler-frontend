@@ -16,6 +16,8 @@
 <%@attribute name="name" required="true"%>
 <%@attribute name="hardwareTypeId" required="true"%>
 <%@attribute name="description" required="true"%>
+<%@attribute name="var" required="true" rtexprvalue="false"%>
+<%@variable name-from-attribute="var" alias="mrtId" scope="AT_BEGIN"%>
 
 <sql:query var="slotQ">
     select id from MultiRelationshipType where name=?<sql:param value="${name}"/> and hardwareTypeId=?<sql:param value="${hardwareTypeId}"/>;

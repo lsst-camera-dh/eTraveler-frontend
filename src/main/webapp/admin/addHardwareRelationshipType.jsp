@@ -34,7 +34,7 @@ where HT.id=?<sql:param value="${param.hardwareTypeId}"/>
         <sql:transaction>
             <ta:createRelationshipType slotNames="${param.slotNames}" minorTypeId="${param.minorTypeId}"
                 numItems="${param.numItems}" name="${param.name}" hardwareTypeId="${param.hardwareTypeId}"
-                description="${param.description}"/>
+                description="${param.description}" var="mrtId"/>
         </sql:transaction>
         <c:redirect url="${param.referringPage}"/>
     </body>
