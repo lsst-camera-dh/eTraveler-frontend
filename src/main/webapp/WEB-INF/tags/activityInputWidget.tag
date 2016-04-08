@@ -30,7 +30,7 @@
 
     <sql:query var="inputQ" >
 (select A.begin, A.end, IP.*, IP.id as ipId,
-    RM.value, null as catalogKey,
+    RM.value, null as catalogKey, RM.createdBy, RM.creationTS,
     ISm.name as ISName
 from Activity A
 inner join InputPattern IP on IP.processId=A.processId
@@ -40,7 +40,7 @@ where A.id=?<sql:param value="${activityId}"/>
 and ISm.name='float')
 union
 (select A.begin, A.end, IP.*, IP.id as ipId,
-    RM.value, null as catalogKey,
+    RM.value, null as catalogKey, RM.createdBy, RM.creationTS,
     ISm.name as ISName
 from Activity A
 inner join InputPattern IP on IP.processId=A.processId
@@ -50,7 +50,7 @@ where A.id=?<sql:param value="${activityId}"/>
 and ISm.name='int')
 union
 (select A.begin, A.end, IP.*, IP.id as ipId,
-    if(RM.value is not null, if(RM.value=0,'False','True'), null) as value, null as catalogKey,
+    if(RM.value is not null, if(RM.value=0,'False','True'), null) as value, null as catalogKey, RM.createdBy, RM.creationTS,
     ISm.name as ISName
 from Activity A
 inner join InputPattern IP on IP.processId=A.processId
@@ -60,7 +60,7 @@ where A.id=?<sql:param value="${activityId}"/>
 and ISm.name='boolean')
 union
 (select A.begin, A.end, IP.*, IP.id as ipId,
-    RM.value, null as catalogKey,
+    RM.value, null as catalogKey, RM.createdBy, RM.creationTS,
     ISm.name as ISName
 from Activity A
 inner join InputPattern IP on IP.processId=A.processId
@@ -70,7 +70,7 @@ where A.id=?<sql:param value="${activityId}"/>
 and ISm.name='string')
 union
 (select A.begin, A.end, IP.*, IP.id as ipId,
-    RM.value, RM.catalogKey,
+    RM.value, RM.catalogKey, RM.createdBy, RM.creationTS,
     ISm.name as ISName
 from Activity A
 inner join InputPattern IP on IP.processId=A.processId
@@ -157,5 +157,7 @@ order by ipId;
                 </c:otherwise>
             </c:choose>
         </display:column>
+        <display:column property="createdBy" title="Who" sortable="true" headerClass="sortable"/>
+        <display:column property="creationTS" title="When" sortable="true" headerClass="sortable"/>
     </display:table>
 </c:if>
