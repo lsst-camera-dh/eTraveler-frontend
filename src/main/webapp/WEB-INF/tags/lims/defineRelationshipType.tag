@@ -15,6 +15,6 @@
 
 <ta:createRelationshipType slotNames="${inputs.slotNames}" minorTypeId="${minorTypeId}"
     numItems="${inputs.numItems}" name="${inputs.name}" hardwareTypeId="${hardwareTypeId}"
-    description="${inputs.description}"/>
+    description="${inputs.description}" var="mrtId"/>
 
-{"acknowledge": null}
+{"id": ${mrtId}, "acknowledge": null}

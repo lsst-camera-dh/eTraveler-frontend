@@ -24,7 +24,7 @@ select H.id, H.lsstId
     , sum(BIH.adjustment) as nAvailable
 </c:if>
 from Hardware H
-    inner join HardwareStatusHistory HSH on HSH.hardwareId=H.id and HSH.id=(select max(id) from HardwareStatusHistory where hardwareId=H.id)
+    inner join HardwareStatusHistory HSH on HSH.hardwareId=H.id and HSH.id=(select max(HSH2.id) from HardwareStatusHistory HSH2 inner join HardwareStatus HS on HS.id=HSH2.hardwareStatusId where HSH2.hardwareId=H.id and HS.isStatusValue=1)
 <c:if test="${isBatched}">
     inner join BatchedInventoryHistory BIH on BIH.hardwareId=H.id
 </c:if>
