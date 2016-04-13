@@ -70,7 +70,7 @@
     </tr>
     <tr><td>End:</td>
         <td>
-            <traveler:closeoutButton activityId="${activityId}" resultsFiled="${resultsFiled}"/>
+            <traveler:closeoutButton activityId="${activityId}" resultsFiled="${resultsFiled and signedOff}"/>
         </td></tr>
         <c:if test="${! empty activity.statusName}">
         <tr><td>Status:</td><td>${activity.statusName}</td></tr>
