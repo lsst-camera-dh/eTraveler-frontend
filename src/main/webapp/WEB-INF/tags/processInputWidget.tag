@@ -16,6 +16,7 @@
     from InputPattern IP
     inner join InputSemantics ISm on ISm.id=IP.inputSemanticsId
     where IP.processId=?<sql:param value="${processId}"/>
+    and ISm.name!='signature'
     order by IP.id;
 </sql:query>
 
