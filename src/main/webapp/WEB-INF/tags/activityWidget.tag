@@ -52,6 +52,8 @@
 <c:if test="${activityQ.rows[0].substeps == 'SELECTION'}"><traveler:selectionWidget activityId="${activityId}"/></c:if>
 
 <traveler:activityInputWidget activityId="${activityId}" var="resultsFiled"/>
+<traveler:activitySignatureWidget var="signedOff" activityId="${activityId}" resultsFiled="${resultsFiled}"/>
+
 <table>
     <tr>
         <td>Started:</td>
