@@ -85,28 +85,43 @@ and ISM.name="signature"
 order by IP.id
 ;
     </sql:query>
-<display:table name="${sigQ.rows}" id="row" class="datatable">
+<display:table name="${sigQ.rows}" id="sig" class="datatable">
     <display:column property="label" title="Label" sortable="true" headerClass="sortable"/>
     <display:column title="Role or User" sortable="true" headerClass="sortable">
-        ${empty row.name ? row.signerRequest : row.name}
+        ${empty sig.name ? sig.signerRequest : sig.name}
     </display:column>
     <display:column property="signerValue" title="Signed By" sortable="true" headerClass="sortable"/>
     <display:column property="signatureTS" title="Date" sortable="true" headerClass="sortable"/>
     <c:if test="${status == 'inProgress' and resultsFiled}">
         <display:column title="Sign Here">
+            <c:choose>
+                <c:when test="${empty sig.signatureTS}">
             <form action="operator/signSignature.jsp">
 <input type="hidden" name="freshnessToken" value="${freshnessToken}">
 <input type="hidden" name="referringPage" value="${thisPage}">
+<input type="hidden" name="signatureId" value="${sig.id}">
 <c:choose>
-    <c:when test="${empty row.name}">
-        <c:set var="maySign" value="${row.signerRequest == userName}"/>
+    <c:when test="${empty sig.name}">
+        <c:set var="maySign" value="${sig.signerRequest == userName}"/>
     </c:when>
     <c:otherwise>
-        <traveler:checkSsPerm var="maySign" activityId="${activityId}" roles="${row.name}"/>
+        <traveler:checkSsPerm var="maySign" activityId="${activityId}" roles="${sig.name}"/>
     </c:otherwise>
 </c:choose>
 <input type='submit' value='Sign It!' <c:if test="${! maySign}">disabled</c:if>>
             </form>
+                </c:when>
+                <c:otherwise>
+                    scribble
+                </c:otherwise>
+            </c:choose>
         </display:column>
     </c:if>
 </display:table>
+
+<c:set var="signedOff" value="true"/>
+<c:forEach var="sig" items="${sigQ.rows}">
+    <c:if test="${empty sig.signatureTs}">
+        <c:set var="signedOff" value="false"/>
+    </c:if>
+</c:forEach>
