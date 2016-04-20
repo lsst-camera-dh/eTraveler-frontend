@@ -11,10 +11,12 @@
 <%@attribute name="activityId" required="true"%>
 <%@attribute name="var" required="true" rtexprvalue="false"%>
 <%@variable name-from-attribute="var" alias="status" scope="AT_BEGIN"%>
+<%@attribute name="varFinal" required="true" rtexprvalue="false"%>
+<%@variable name-from-attribute="varFinal" alias="isFinal" scope="AT_BEGIN"%>
 
 <sql:query var="statusQ">
     select 
-        AFS.name
+        AFS.name, AFS.isFinal
     from 
         ActivityFinalStatus AFS
         inner join ActivityStatusHistory ASH on ASH.activityStatusId=AFS.id
@@ -25,3 +27,4 @@
     ;
 </sql:query>
 <c:set var="status" value="${statusQ.rows[0].name}"/>
+<c:set var="isFinal" value="${statusQ.rows[0].isFinal}"/>

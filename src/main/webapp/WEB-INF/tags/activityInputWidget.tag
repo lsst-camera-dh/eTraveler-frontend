@@ -17,7 +17,7 @@
 <traveler:fullRequestString var="thisPage"/>
 <traveler:checkMask var="mayOperate" activityId="${activityId}"/>
 
-<traveler:getActivityStatus var="status" activityId="${activityId}"/>
+<traveler:getActivityStatus var="status" varFinal="isFinal" activityId="${activityId}"/>
 
 <c:choose>
     <c:when test="${status == 'inProgress'}">

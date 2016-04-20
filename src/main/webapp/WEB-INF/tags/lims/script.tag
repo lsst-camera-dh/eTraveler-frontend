@@ -15,7 +15,7 @@
 <c:set var="message" value="Error #681399"/>
 
 <c:if test="${allOk}">
-    <traveler:getActivityStatus var="status" activityId="${inputs.containerid}"/>
+    <traveler:getActivityStatus var="status" varFinal="isFinal" activityId="${inputs.containerid}"/>
     <c:choose>
         <c:when test="${status == 'new'}">
             <ta:startActivity activityId="${inputs.containerid}"/>
