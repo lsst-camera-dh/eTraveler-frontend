@@ -21,7 +21,7 @@
 <traveler:getActivityStatus var="status" varFinal="isFinal" activityId="${activityId}"/>
 
 <%-- Add static records to signature table --%>
-<c:if test="${status == 'new'}">
+<c:if test="${! isFinal}">
     <sql:query var="staticPatternsQ">
 select IP.id, IP.label, IP.roleBitmask
 from Activity A
