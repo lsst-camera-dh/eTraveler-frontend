@@ -19,14 +19,17 @@
 select * from Activity where id=?<sql:param value="${activityId}"/>;
 </sql:query>
 <c:set var="processId" value="${activityQ.rows[0].processId}"/>
+p:${processId}<br>
 
 <traveler:findTraveler var="travelerId" activityId="${activityId}"/>
 <sql:query var="travelerQ">
 select * from Activity where id=?<sql:param value="${travelerId}"/>;
 </sql:query>
 <c:set var="rootProcessId" value="${travelerQ.rows[0].processId}"/>
+t:${travelerId} rp:${rootProcessId}<br>
 
 <traveler:findPath var="edgePath" activityId="${activityId}"/>
+path:${edgePath}<br>
 
 <sql:query var="ncrQ">
 select P.id
@@ -44,6 +47,7 @@ limit 1
 ;
 </sql:query>
 <c:set var="ncrProcessId" value="${ncrQ.rows[0].id}"/>
+n:${ncrProcessId}<br>
 
 <sql:query var="etQ">
 select id from ExceptionType
@@ -56,9 +60,10 @@ and returnProcessId=?<sql:param value="${processId}"/>
 and status='ENABLED'
 ;
 </sql:query>
-<c:if test="${! empty etQ.rows}">
+<c:if test="${empty etQ.rows}">
     <sql:update>
 insert into ExceptionType set
+conditionString="NCR",
 exitProcessPath=?<sql:param value="${edgePath}"/>,
 returnProcessPath=?<sql:param value="${edgePath}"/>,
 exitProcessId=?<sql:param value="${processId}"/>,
@@ -75,3 +80,4 @@ select last_insert_id() as id;
     </sql:query>
 </c:if>
 <c:set var="exceptionTypeId" value="${etQ.rows[0].id}"/>
+e:${exceptionTypeId}<br>

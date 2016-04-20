@@ -235,11 +235,18 @@ Make a new version of the Traveler."/>
         <td>
             <form METHOD=GET ACTION="supervisor/skipStep.jsp" target="_top">
                 <input type="hidden" name="freshnessToken" value="${freshnessToken}">
-                <input type="hidden" name="activityId" value="${activityId}">       
-                <input type="hidden" name="topActivityId" value="${topActivityId}">       
+                <input type="hidden" name="activityId" value="${activityId}">
+                <input type="hidden" name="topActivityId" value="${topActivityId}">
                 <INPUT TYPE=SUBMIT value="Skip Step"
                        <c:if test="${(! active) || (! maySupervise)}">disabled</c:if>>
-            </form>            
+            </form>
+        </td>
+        <td>
+            <form method="get" action="supervisor/doNCRInitial.jsp" target="_top">
+                <input type="hidden" name="freshnessToken" value="${freshnessToken}">
+                <input type="hidden" name="activityId" value="${activityId}">
+                <INPUT TYPE=SUBMIT value="NCR">
+            </form>
         </td>
     </tr>
 </table>

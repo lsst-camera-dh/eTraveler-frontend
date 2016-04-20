@@ -18,7 +18,7 @@
 
 <traveler:fullRequestString var="thisPage"/>
 
-<traveler:getActivityStatus var="status" activityId="${activityId}"/>
+<traveler:getActivityStatus var="status" varFinal="isFinal" activityId="${activityId}"/>
 
 <%-- Add static records to signature table --%>
 <c:if test="${status == 'new'}">
