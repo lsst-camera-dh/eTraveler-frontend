@@ -26,7 +26,7 @@ select * from Activity where id=?<sql:param value="${activityId}"/>;
 </c:if>
 
     <sql:query var="slotsQ">
-select MRT.name as relName, MRT.minorTypeId, if(MRT.singleBatch != 0, MRT.nMinorItems, 1) as nMinorItems,
+select MRT.name as relName, MRT.description, MRT.minorTypeId, if(MRT.singleBatch != 0, MRT.nMinorItems, 1) as nMinorItems,
     HTminor.name as minorTypeName,
     MRST.id as mrstId, MRST.slotName,
     PRT.id as prtId, PRT.multiRelationshipActionId as intendedActionId, 
