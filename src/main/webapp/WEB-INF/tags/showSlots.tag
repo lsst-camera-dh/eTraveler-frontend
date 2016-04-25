@@ -20,7 +20,7 @@
 <c:if test="${! empty slotList}">
     <c:if test="${! empty activityId}">
         <sql:query var="hardwareQ">
-    select hardwareID from Activity where id=?<sql:param value="${activityId}"/>;
+select hardwareID from Activity where id=?<sql:param value="${activityId}"/>;
         </sql:query>
         <c:set var="hardwareId" value="${hardwareQ.rows[0].hardwareId}"/>
     </c:if>
@@ -57,6 +57,8 @@
                     </c:otherwise>
                 </c:choose>
             </display:column>
+            <display:column property="processName" title="Step" sortable="true" headerClass="sortable"
+                            href="displayActivity.jsp" paramId="activityId" paramProperty="activityId"/>
             <display:column property="date" sortable="true" headerClass="sortable"/>
         </c:if>
     </display:table>

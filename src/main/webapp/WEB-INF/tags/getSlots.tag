@@ -33,8 +33,8 @@ select MRT.name as relName, MRT.description, MRT.minorTypeId, if(MRT.singleBatch
     MRAint.name as intName 
     <c:if test="${! empty activityId}">,
         MRS.id as mrsId, Hminor.lsstId, Hminor.id as minorId,
-        MRH.id as mrhId, MRH.activityId, MRH.multiRelationshipActionId as actualActionId, MRH.creationTS as date,
-        MRAact.name as actName
+        MRH.id as mrhId, MRH.activityId, MRH.creationTS as date,
+        Pact.name as processName
     </c:if>
 from 
 <c:choose>
@@ -56,11 +56,20 @@ from
     inner join MultiRelationshipAction MRAint on MRAint.id=PRT.multiRelationshipActionId
     inner join MultiRelationshipSlotType MRST on MRST.multiRelationshipTypeId = MRT.id
 <c:if test="${! empty activityId}">
-    left join (MultiRelationshipSlot MRS
-        inner join Hardware Hminor on Hminor.id=MRS.minorId) on MRS.multiRelationshipSlotTypeId=MRST.id and MRS.hardwareId=A.hardwareId
-    left join (MultiRelationshipHistory MRH
-        inner join MultiRelationshipAction MRAact on MRAact.id=MRH.multiRelationshipActionId) 
-        on MRH.multiRelationshipSlotId = MRS.id and MRH.multiRelationshipActionId=PRT.multiRelationshipActionId
+    left join MultiRelationshipSlot MRS
+        inner join Hardware Hminor on Hminor.id=MRS.minorId
+        inner join MultiRelationshipHistory MRH on MRH.multiRelationshipSlotId = MRS.id
+        left join Activity Aact 
+            inner join Process Pact on Pact.id=Aact.processId 
+            on Aact.id=MRH.activityId
+        on MRS.multiRelationshipSlotTypeId=MRST.id and MRS.hardwareId=A.hardwareId and MRH.multiRelationshipActionId=PRT.multiRelationshipActionId
+        and MRH.id > (select if(max(MRHu.id) is null, 0, max(MRHu.id))
+            from MultiRelationshipHistory MRHu 
+            inner join MultiRelationshipAction MRAu on MRAu.id=MRHu.multiRelationshipActionId
+            inner join MultiRelationshipSlot MRSu on MRSu.id=MRHu.multiRelationshipSlotId
+            where MRSu.hardwareId=A.hardwareId
+            and MRSu.multiRelationshipSlotTypeId=MRST.id
+            and MRAu.name='uninstall')
 </c:if>
 where 
 <c:choose>
@@ -71,11 +80,11 @@ where
         P.id = ?<sql:param value="${processId}"/>
     </c:otherwise>
 </c:choose>
-order by PRT.id, MRST.id
+order by PRT.id, MRST.id<c:if test="${! empty activityId}">, MRH.id</c:if>
 ;
     </sql:query>
 <c:set var="slotList" value="${slotsQ.rows}"/>
-
+<%--
 <c:if test="${! empty activityId}">
 <c:forEach var="row" items="${slotList}">
     <c:if test="${row.actName == 'install' && row.activityId != activityId}">
@@ -83,3 +92,4 @@ order by PRT.id, MRST.id
     </c:if>
 </c:forEach>
 </c:if>
+--%>
