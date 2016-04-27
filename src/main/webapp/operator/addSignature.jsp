@@ -19,10 +19,13 @@
     <body>
 <traveler:checkFreshness formToken="${param.freshnessToken}"/>
 
+<%--
 <c:if test="${(empty param.sigUser and empty param.sigRoleBit) or (! empty param.sigUser and ! empty param.sigRoleBit)}">
         <traveler:error message="You must supply a username or a role, but not both."/>
 </c:if>
 <c:set var="signerRequest" value="${empty param.sigUser ? param.sigRoleBit : param.sigUser}"/>
+--%>
+<c:set var="signerRequest" value="${param.sigGroup}"/>
 
 <sql:transaction>
     <ta:addSignature activityId="${param.activityId}" 

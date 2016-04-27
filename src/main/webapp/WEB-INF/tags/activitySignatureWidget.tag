@@ -21,7 +21,8 @@
 <traveler:getActivityStatus var="status" varFinal="isFinal" activityId="${activityId}"/>
 
 <%-- Add static records to signature table --%>
-<c:if test="${status == 'new'}">
+<c:if test="${! isFinal}">
+    <%--
     <sql:query var="staticPatternsQ">
 select IP.id, IP.label, IP.roleBitmask
 from Activity A
@@ -39,33 +40,47 @@ and IP.roleBitmask!=0
                          inputPatternId="${sigPattern.id}" 
                          signerRequest="${sigPattern.roleBitmask}"/>
     </c:forEach>
-
+    --%>
 <%-- a form to add dynamics ones if requested --%>
     <sql:query var="dynamicPatternsQ">
-select IP.id, IP.label, IP.roleBitmask
+select IP.id, IP.label
 from Activity A
 inner join InputPattern IP on IP.processId=A.processId
 inner join InputSemantics ISM on IP.inputSemanticsId=ISM.id
 where A.id=?<sql:param value="${activityId}"/>
 and ISM.name='signature'
-and IP.roleBitmask=0
 ;
     </sql:query>
     <c:if test="${! empty dynamicPatternsQ.rows}">
         <c:set var="sigPattern" value="${dynamicPatternsQ.rows[0]}"/>
+        <%--
         <sql:query var="rolesQ">
     select * from PermissionGroup order by maskBit;
+        </sql:query>
+        --%>
+        <sql:query var="subSysQ">
+select * from Subsystem where shortName not in ('Legacy', 'Default') order by name;
         </sql:query>
         <form action='operator/addSignature.jsp'>
 <input type="hidden" name="freshnessToken" value="${freshnessToken}">
 <input type="hidden" name="referringPage" value="${thisPage}">
 <input type="hidden" name="activityId" value="${activityId}">
 <input type="hidden" name="inputPatternId" value="${sigPattern.id}">
+<%--
 Username: <input type="text" name='sigUser'>
 Role: <select name="sigRoleBit">
     <option value="">Select Role</option>
     <c:forEach var="role" items="${rolesQ.rows}">
         <option value="${role.maskBit}">${role.name}</option>
+    </c:forEach>
+</select>
+--%>
+Group: <select name="sigGroup" required>
+    <option value="" selected disabled>Select Role</option>
+    <option value="EtravelerSubsystemManagers">Default Managers</option>
+    <option value="EtravelerSubsystemManagers">Legacy Managers</option>
+    <c:forEach var="subSys" items="${subSysQ.rows}">
+        <option value="${subSys.shortName}_Manager">${subSys.name} Managers</option>
     </c:forEach>
 </select>
 <input type='submit' value='Add Signature Requirement'>
@@ -75,11 +90,10 @@ Role: <select name="sigRoleBit">
 
 <%-- display any signature records --%>
     <sql:query var="sigQ">
-select SRM.*, IP.label, PG.name
+select SRM.*, IP.label
 from SignatureResultManual SRM
 inner join InputPattern IP on IP.id=SRM.inputPatternId
 inner join InputSemantics ISM on ISM.id=IP.inputSemanticsId
-left join PermissionGroup PG on PG.maskBit=SRM.signerRequest
 where SRM.activityId=?<sql:param value="${activityId}"/>
 and ISM.name="signature"
 order by IP.id
@@ -87,9 +101,7 @@ order by IP.id
     </sql:query>
 <display:table name="${sigQ.rows}" id="sig" class="datatable">
     <display:column property="label" title="Label" sortable="true" headerClass="sortable"/>
-    <display:column title="Role or User" sortable="true" headerClass="sortable">
-        ${empty sig.name ? sig.signerRequest : sig.name}
-    </display:column>
+    <display:column property="signerRequest" title="Group" sortable="true" headerClass="sortable"/>
     <display:column property="signerValue" title="Signed By" sortable="true" headerClass="sortable"/>
     <display:column property="signatureTS" title="Date" sortable="true" headerClass="sortable"/>
     <c:if test="${status == 'inProgress' and resultsFiled}">
@@ -100,14 +112,17 @@ order by IP.id
 <input type="hidden" name="freshnessToken" value="${freshnessToken}">
 <input type="hidden" name="referringPage" value="${thisPage}">
 <input type="hidden" name="signatureId" value="${sig.id}">
+<%--
 <c:choose>
     <c:when test="${empty sig.name}">
         <c:set var="maySign" value="${sig.signerRequest == userName}"/>
     </c:when>
     <c:otherwise>
-        <traveler:checkSsPerm var="maySign" activityId="${activityId}" roles="${sig.name}"/>
+        <traveler:checkPerm var="maySign" groups="${sig.name}"/>
     </c:otherwise>
 </c:choose>
+--%>
+<traveler:checkPerm var="maySign" groups="${sig.signerRequest}"/>
 <input type='submit' value='Sign It!' <c:if test="${! maySign}">disabled</c:if>>
             </form>
                 </c:when>
