@@ -31,8 +31,7 @@ and MRH.id is null
 
 <c:set var="isSane" value="true"/>
 <c:forEach var="action" items="${actionsQ.rows}">
-    <%-- last history entry for any slot matching parent component and slot type
-    that was not done by this Activity --%>
+    <%-- last history entry for any slot matching parent component and slot type --%>
     <sql:query var="lastActionQ">
 select MRH.id, MRA.name
 from MultiRelationshipSlot MRS
