@@ -20,11 +20,12 @@ from Activity A
 inner join ProcessRelationshipTag PRT on PRT.processId = A.processId
 inner join MultiRelationshipAction MRA on MRA.id = PRT.multiRelationshipActionId
 inner join MultiRelationshipSlotType MRST on MRST.multiRelationshipTypeId = PRT.multiRelationshipTypeId
-left join MultiRelationshipSlot MRS on MRS.multirelationshipSlotTypeId = MRST.id 
-    and MRS.hardwareId = A.hardwareId
-left join MultiRelationshipHistory MRH on MRH.multiRelationshipSlotId = MRS.id 
-    and MRH.multiRelationshipActionId = MRA.id
-    and MRH.activityId = A.id
+left join MultiRelationshipSlot MRS 
+    left join MultiRelationshipHistory MRH on MRH.multiRelationshipSlotId = MRS.id 
+    on MRS.multirelationshipSlotTypeId = MRST.id 
+        and MRS.hardwareId = A.hardwareId
+        and MRH.multiRelationshipActionId = MRA.id
+        and MRH.activityId = A.id
 where A.id = ?<sql:param value="${activityId}"/>
 and MRH.id is null
 ;
@@ -37,7 +38,7 @@ and MRH.id is null
 select MRH.id, MRH.creationTS as date, MRA.name as actName,
 HT.name as minorTypeName, HT.id as minorTypeId,
 MRT.name as relName, MRT.description, MRT.nMinorItems,
-MRST.name as slotName,
+MRST.slotname as slotName,
 H.id as minorId, H.lsstId,
 P.name as processName, MRH.activityId
 from MultiRelationshipSlot MRS
@@ -68,7 +69,7 @@ order by MRH.id desc
                 </c:when>
             </c:choose>
         </c:when>
-        <c:when test="${(action.actName == 'unassign' and lastAction.actName != 'assign')}">
+        <c:when test="${(action.actName == 'deassign' and lastAction.actName != 'assign')}">
             <c:set var="message" value="Unassign requested, but last action was not assign."/>
         </c:when>
         <c:when test="${action.actName == 'install'}">

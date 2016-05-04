@@ -19,21 +19,21 @@ select MRT.name as relName, MRT.description, MRT.minorTypeId, if(MRT.singleBatch
     MRST.id as mrstId, MRST.slotName,
     PRT.id as prtId, PRT.multiRelationshipActionId as intendedActionId, 
     MRA.name as actName, 
-    MRS.id as mrsId, Hminor.lsstId, Hminor.id as minorId,
-    MRH.id as mrhId, MRH.activityId, MRH.creationTS as date,
-    P.name as processName
+    MRS.id as mrsId, 
+    Hminor.lsstId, Hminor.id as minorId,
+    MRH.id as mrhId, MRH.activityId, MRH.creationTS as date
 from 
     Activity A
-    inner join Process P on P.id = A.processId
-    inner join ProcessRelationshipTag PRT on PRT.processId = P.id
+    inner join ProcessRelationshipTag PRT on PRT.processId = A.processId
     inner join MultiRelationshipType MRT on MRT.id = PRT.multiRelationshipTypeId
     inner join HardwareType HT on HT.id = MRT.minorTypeId
     inner join MultiRelationshipAction MRA on MRA.id = PRT.multiRelationshipActionId
     inner join MultiRelationshipSlotType MRST on MRST.multiRelationshipTypeId = MRT.id
-    left join MultiRelationshipSlot MRS on MRS.multiRelationshipSlotTypeId = MRST.id 
+    left join MultiRelationshipSlot MRS
+        inner join Hardware Hminor on Hminor.id = MRS.minorId
+        left join MultiRelationshipHistory MRH on MRH.multiRelationshipSlotId = MRS.id
+    on MRS.multiRelationshipSlotTypeId = MRST.id 
         and MRS.hardwareId = A.hardwareId 
-    left join Hardware Hminor on Hminor.id = MRS.minorId
-    left join MultiRelationshipHistory MRH on MRH.multiRelationshipSlotId = MRS.id
         and MRH.multiRelationshipActionId = PRT.multiRelationshipActionId
         and MRH.activityId = A.id
 where 
