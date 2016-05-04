@@ -15,7 +15,7 @@
 
 <traveler:fullRequestString var="thisPage"/>
 
-<traveler:getSlots var="slotList" activityId="${activityId}" processId="${processId}"/>
+<traveler:getActivitySlots var="slotList" activityId="${activityId}"/>
 
 <c:if test="${! empty slotList}">
     <c:if test="${! empty activityId}">
@@ -33,7 +33,7 @@ select hardwareID from Activity where id=?<sql:param value="${activityId}"/>;
         <display:column property="description" title="Description" sortable="true" headerClass="sortable"/>
         <display:column property="slotname" title="Slot" sortable="true" headerClass="sortable"/>
         <display:column property="nMinorItems" title="# Items" sortable="true" headerClass="sortable"/>
-        <display:column property="intName" title="Action" sortable="true" headerClass="sortable"/>
+        <display:column property="actName" title="Action" sortable="true" headerClass="sortable"/>
         <c:if test="${! empty activityId}">
             <display:column title="Component">
                 <c:choose>

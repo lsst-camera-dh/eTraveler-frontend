@@ -14,7 +14,7 @@
 
 <%@attribute name="activityId" required="true"%>
 
-<traveler:getSlots activityId="${activityId}" var="slotList"/>
+<traveler:getActivitySlots activityId="${activityId}" var="slotList"/>
 
 <c:forEach var="slot" items="${slotList}">
     <c:if test="${(slot.intName == 'install') || (slot.intName == 'uninstall')}">
