@@ -15,8 +15,10 @@
 
 <traveler:fullRequestString var="thisPage"/>
 
-<traveler:getActivitySlots var="slotList" activityId="${activityId}"/>
+<traveler:checkSlots var="isSane" activityId="${activityId}"/>
+<c:if test="${isSane}">
 
+<traveler:getActivitySlots var="slotList" activityId="${activityId}"/>
 <c:if test="${! empty slotList}">
     <c:if test="${! empty activityId}">
         <sql:query var="hardwareQ">
@@ -57,10 +59,14 @@ select hardwareID from Activity where id=?<sql:param value="${activityId}"/>;
                     </c:otherwise>
                 </c:choose>
             </display:column>
+<%--
             <display:column property="processName" title="Step" sortable="true" headerClass="sortable"
                             href="displayActivity.jsp" paramId="activityId" paramProperty="activityId"/>
+--%>
             <display:column property="date" sortable="true" headerClass="sortable"/>
         </c:if>
     </display:table>
     
 </c:if>
+</c:if>
+                        
