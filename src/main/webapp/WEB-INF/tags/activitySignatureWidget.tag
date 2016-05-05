@@ -19,45 +19,46 @@
 <traveler:fullRequestString var="thisPage"/>
 
 <traveler:getActivityStatus var="status" varFinal="isFinal" activityId="${activityId}"/>
+<traveler:getSsName var="subsystemName" activityId="${activityId}"/>
 
 <%-- Add static records to signature table --%>
 <c:if test="${! isFinal}">
-    <%--
     <sql:query var="staticPatternsQ">
-select IP.id, IP.label, IP.roleBitmask
+select IP.id, IP.label,
+PG.name as role
 from Activity A
-inner join InputPattern IP on IP.processId=A.processId
-inner join InputSemantics ISM on IP.inputSemanticsId=ISM.id
-left join SignatureResultManual SRM on SRM.inputPatternId=IP.id and SRM.activityId=A.id
-where A.id=?<sql:param value="${activityId}"/>
-and ISM.name='signature'
+inner join InputPattern IP on IP.processId = A.processId
+inner join InputSemantics ISM on IP.inputSemanticsId = ISM.id
+inner join PermissionGroup PG on PG.id = IP.permissionGroupId
+left join SignatureResultManual SRM on SRM.inputPatternId = IP.id and SRM.activityId = A.id
+where A.id = ?<sql:param value="${activityId}"/>
+and ISM.name = 'signature'
 and SRM.id is null
-and IP.roleBitmask!=0
 ;
     </sql:query>
     <c:forEach var="sigPattern" items="${staticPatternsQ.rows}">
+        <traveler:getPermGroup var="groupName" subsystem="${subsystemName}" role="${sigPattern.role}"/>
         <ta:addSignature activityId="${activityId}" 
                          inputPatternId="${sigPattern.id}" 
-                         signerRequest="${sigPattern.roleBitmask}"/>
+                         signerRequest="${groupName}"/>
     </c:forEach>
-    --%>
+
 <%-- a form to add dynamics ones if requested --%>
     <sql:query var="dynamicPatternsQ">
 select IP.id, IP.label
 from Activity A
-inner join InputPattern IP on IP.processId=A.processId
-inner join InputSemantics ISM on IP.inputSemanticsId=ISM.id
-where A.id=?<sql:param value="${activityId}"/>
-and ISM.name='signature'
+inner join InputPattern IP on IP.processId = A.processId
+inner join InputSemantics ISM on IP.inputSemanticsId = ISM.id
+where A.id = ?<sql:param value="${activityId}"/>
+and ISM.name = 'signature'
+and IP.permissionGroupId is null
 ;
     </sql:query>
     <c:if test="${! empty dynamicPatternsQ.rows}">
         <c:set var="sigPattern" value="${dynamicPatternsQ.rows[0]}"/>
-        <%--
         <sql:query var="rolesQ">
-    select * from PermissionGroup order by maskBit;
+select * from PermissionGroup order by maskBit;
         </sql:query>
-        --%>
         <sql:query var="subSysQ">
 select * from Subsystem where shortName not in ('Legacy', 'Default') order by name;
         </sql:query>
@@ -68,15 +69,16 @@ select * from Subsystem where shortName not in ('Legacy', 'Default') order by na
 <input type="hidden" name="inputPatternId" value="${sigPattern.id}">
 <%--
 Username: <input type="text" name='sigUser'>
-Role: <select name="sigRoleBit">
+--%>
+Role: <select name="sigRole">
     <option value="">Select Role</option>
     <c:forEach var="role" items="${rolesQ.rows}">
-        <option value="${role.maskBit}">${role.name}</option>
+        <traveler:getPermGroup var="groupName" subsystem="${subsystemName}" role="${role.name}"/>
+        <option value="${groupName}">${role.name}</option>
     </c:forEach>
 </select>
---%>
-Group: <select name="sigGroup" required>
-    <option value="" selected disabled>Select Role</option>
+Group: <select name="sigGroup">
+    <option value="" selected>Select Group</option>
     <option value="EtravelerSubsystemManagers">Default Managers</option>
     <option value="EtravelerSubsystemManagers">Legacy Managers</option>
     <c:forEach var="subSys" items="${subSysQ.rows}">
@@ -92,10 +94,10 @@ Group: <select name="sigGroup" required>
     <sql:query var="sigQ">
 select SRM.*, IP.label
 from SignatureResultManual SRM
-inner join InputPattern IP on IP.id=SRM.inputPatternId
-inner join InputSemantics ISM on ISM.id=IP.inputSemanticsId
-where SRM.activityId=?<sql:param value="${activityId}"/>
-and ISM.name="signature"
+inner join InputPattern IP on IP.id = SRM.inputPatternId
+inner join InputSemantics ISM on ISM.id = IP.inputSemanticsId
+where SRM.activityId = ?<sql:param value="${activityId}"/>
+and ISM.name = "signature"
 order by IP.id
 ;
     </sql:query>
