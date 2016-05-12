@@ -82,7 +82,7 @@ Group: <select name="sigGroup">
     <option value="EtravelerSubsystemManagers">Default Managers</option>
     <option value="EtravelerSubsystemManagers">Legacy Managers</option>
     <c:forEach var="subSys" items="${subSysQ.rows}">
-        <option value="${subSys.shortName}_Manager">${subSys.name} Managers</option>
+        <option value="${subSys.shortName}_subsystemManager">${subSys.name} Managers</option>
     </c:forEach>
 </select>
 <input type='submit' value='Add Signature Requirement'>
