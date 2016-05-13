@@ -39,7 +39,7 @@ inner join TravelerTypeStateHistory TTSH on TTSH.travelerTypeId=TT.id
     and TTSH.id=(select max(id) from TravelerTypeStateHistory where travelerTypeId=TT.id)
 inner join TravelerTypeState TTS on TTS.id=TTSH.travelerTypeStateId
 inner join HardwareGroup HG on HG.id=P.hardwareGroupId
-where P.name='NCR' 
+where P.name=?<sql:param value="${appVariables.ncrTraveler}"/>
 and HG.name='Anything'
 and TTS.name='active'
 order by P.id desc
