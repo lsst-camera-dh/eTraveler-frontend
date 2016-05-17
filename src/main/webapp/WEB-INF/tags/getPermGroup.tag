@@ -44,7 +44,8 @@
                 <c:set var="groupName" value="EtravelerWorkflowDevelopers"/>
             </c:when>
             <c:otherwise>
-                <traveler:error message="bad role [${role}]"/>
+                <%--<traveler:error message="bad role [${role}]"/>--%>
+                <c:set var="groupName" value="NoSuchGroup"/>
             </c:otherwise>
         </c:choose>
     </c:when>

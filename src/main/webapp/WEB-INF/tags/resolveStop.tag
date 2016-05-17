@@ -12,6 +12,8 @@
 <%@attribute name="travelerId" required="true"%>
 
 <traveler:checkSsPerm var="maySupervise" activityId="${activityId}" roles="supervisor"/>
+<traveler:checkSsPerm var="maySkip" activityId="${activityId}" roles="nobody"/>
+<c:set var="isTop" value="${travelerId == activityId}"/>
 
 <table border="1">
     <tr>
@@ -30,7 +32,7 @@
                 <input type="hidden" name="activityId" value="${activityId}">       
                 <input type="hidden" name="topActivityId" value="${travelerId}">       
                 <INPUT TYPE=SUBMIT value="Retry Step"
-                    <c:if test="${! maySupervise}">disabled</c:if>>
+                    <c:if test="${(! maySkip) || (isTop)}">disabled</c:if>>
             </form>
         </td>
         <td>
@@ -39,7 +41,7 @@
                 <input type="hidden" name="activityId" value="${activityId}">       
                 <input type="hidden" name="topActivityId" value="${travelerId}">       
                 <INPUT TYPE=SUBMIT value="Skip Step"
-                    <c:if test="${! maySupervise}">disabled</c:if>>
+                    <c:if test="${(! maySkip) || (isTop)}">disabled</c:if>>
             </form>            
         </td>
         <td>
