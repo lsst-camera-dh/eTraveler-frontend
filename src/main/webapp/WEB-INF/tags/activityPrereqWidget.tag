@@ -110,6 +110,7 @@ order by PP.id
             inner join Activity A on A.processId=PP.processId
             left join Prerequisite PR on PR.activityId=A.id and PR.prerequisitePatternId=PP.id
             where A.id=?<sql:param value="${activityId}"/>
+                and PP.prerequisiteTypeId != (select id from PrerequisiteType where name = 'COMPONENT')
         </sql:query>
         <c:set var="readyToStart" value="${prereqQ.rows[0].prsRemaining==0}"/>
     </c:when>
