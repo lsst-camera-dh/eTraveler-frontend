@@ -52,8 +52,12 @@
         </table>
         <h2>Steps</h2>
 --%>
+
 <c:url var="hwLink" value="displayHardware.jsp"><c:param name="hardwareId" value="${activity.hardwareId}"/></c:url>
 <h2>Process: <c:out value="${activity.name}"/> Component: <a href="${hwLink}"><c:out value="${activity.lsstId}"/></a></h2>
+
+<traveler:ncrContainingTraveler activityId="${param.activityId}"/>
+
     <div id="theFold"/>        
         <table>
             <tr>
