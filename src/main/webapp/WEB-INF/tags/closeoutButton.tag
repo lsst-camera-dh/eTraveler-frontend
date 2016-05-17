@@ -241,7 +241,8 @@ Make a new version of the Traveler."/>
             <form method="get" action="supervisor/doNCRInitial.jsp" target="_top">
                 <input type="hidden" name="freshnessToken" value="${freshnessToken}">
                 <input type="hidden" name="activityId" value="${activityId}">
-                <INPUT TYPE=SUBMIT value="NCR">
+                <INPUT TYPE=SUBMIT value="NCR"
+                       <c:if test="${isTop || ! active}">disabled</c:if>>
             </form>
         </td>
     </tr>
