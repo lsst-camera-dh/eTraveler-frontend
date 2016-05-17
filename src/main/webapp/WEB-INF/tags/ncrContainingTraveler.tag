@@ -11,15 +11,13 @@
 
 <%@attribute name="activityId" required="true"%>
 
-fred ${activityId}
-
-<sql:query var="activityQ">
-    select A.inNCR
-    from Activity A
-    where A.id = ?<sql:param value="${activityId}"/>
-</sql:query>
+    <sql:query var="activityQ">
+select A.inNCR
+from Activity A
+where A.id = ?<sql:param value="${activityId}"/>
+    </sql:query>
 <c:set var="activity" value="${activityQ.rows[0]}"/>
-${activity.inNCR}
+
 <c:if test="${activity.inNCR}">
     <traveler:findTraveler var="ncrId" activityId="${activityId}"/>
     <sql:query var="exceptionQ">
@@ -39,5 +37,5 @@ where A.id = ?<sql:param value="${travelerId}"/>
     <c:url var="travelerLink" value="displayActivity.jsp">
         <c:param name="activityId" value="${travelerId}"/>
     </c:url>
-    Traveler: <a href="${travelerLink}">${process.name}</a>
+    <h2>This is an NCR for traveler: <a href="${travelerLink}">${process.name}</a></h2>
 </c:if>
