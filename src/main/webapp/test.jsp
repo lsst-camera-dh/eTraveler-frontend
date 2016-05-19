@@ -13,6 +13,7 @@
 <%@taglib prefix="ta" tagdir="/WEB-INF/tags/actions"%>
 <%@taglib prefix="ecl" uri="/tlds/eclTagLibrary.tld"%>
 <%@taglib prefix="lims" tagdir="/WEB-INF/tags/lims"%>
+<%@taglib prefix="relationships" tagdir="/WEB-INF/tags/relationships"%>
 
 <!DOCTYPE html>
 <html>
@@ -21,6 +22,7 @@
         <title>Test Page</title>
     </head>
     <body>
+        <relationships:showSlotHistory slotId="12"/>
         <traveler:test/>
     </body>
 </html>
