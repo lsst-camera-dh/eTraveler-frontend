@@ -59,4 +59,12 @@ createdBy=?<sql:param value="${userName}"/>,
 creationTS=utc_timestamp();
     </sql:update>
 
+    <sql:update>
+insert into HardwareTypeGroupMapping set
+hardwareTypeId=?<sql:param value="${hardwareType.hardwareTypeId}"/>,
+hardwareGroupId=(select id from HardwareGroup where name = 'Anything'),
+createdBy=?<sql:param value="${userName}"/>,
+creationTS=utc_timestamp();
+    </sql:update>
+
 <c:set var="hardwareTypeId" value="${hardwareType.hardwareTypeId}"/>
