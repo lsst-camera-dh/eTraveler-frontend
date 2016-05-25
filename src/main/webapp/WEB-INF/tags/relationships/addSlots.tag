@@ -26,5 +26,5 @@ and MRS.id is null
 
 <%-- make slots --%>
 <c:forEach var="slot" items="${slotsQ.rows}">
-    <relationships:createSlot var="slotId" slotTypeId="" hardwareId=""/>
+    <relationships:createSlot var="slotId" slotTypeId="${slot.slotTypeId}" hardwareId="${slot.hardwareId}"/>
 </c:forEach>

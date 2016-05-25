@@ -9,6 +9,7 @@
 <%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql"%>
 <%@taglib prefix="display" uri="http://displaytag.sf.net"%>
 <%@taglib prefix="traveler" tagdir="/WEB-INF/tags"%>
+<%@taglib prefix="relationships" tagdir="/WEB-INF/tags/relationships"%>
 
 <%@attribute name="activityId" required="true"%>
 
@@ -119,12 +120,12 @@ order by PP.id
     </c:otherwise>
 </c:choose>
 
-<traveler:showSlots activityId="${activityId}"/>
+<relationships:showSlotsActivity var="slotsOk" activityId="${activityId}"/>
 
 <form method="get" action="operator/startActivity.jsp" target="_top">
     <input type="hidden" name="freshnessToken" value="${freshnessToken}">
     <input type="hidden" name="activityId" value="${activityId}">
     <input type="hidden" name="topActivityId" value="${topActivityId}">
     <input type="submit" value="Start Step"
-           <c:if test="${(! readyToStart) || (! mayOperate)}">disabled</c:if>>
+           <c:if test="${(! readyToStart) || (! mayOperate) || (! slotsOk)}">disabled</c:if>>
 </form>                    

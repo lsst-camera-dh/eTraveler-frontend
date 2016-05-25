@@ -13,14 +13,25 @@
 <%@attribute name="var" required="true" rtexprvalue="false"%>
 <%@variable name-from-attribute="var" alias="slotId" scope="AT_BEGIN"%>
 
+    <sql:query var="slotQ">
+select id as slotId
+from MultiRelationshipSlot
+where multiRelationshipSlotTypeId = ?<sql:param value="${slotTypeId}"/>
+    and hardwareId = ?<sql:param value="${hardwareId}"/>
+;
+    </sql:query>
+
+<c:if test="${empty slotQ.rows}">
     <sql:update>
 insert into MultiRelationshipSlot set
-multirelationshipTypeId = ?<sql:param value="${slotTypeId}"/>,
+multiRelationshipSlotTypeId = ?<sql:param value="${slotTypeId}"/>,
 hardwareId = ?<sql:param value="${hardwareId}"/>,
 createdBy = ?<sql:param value="${userName}"/>,
-creationTS = utc_timestap();
+creationTS = utc_timestamp();
     </sql:update>
     <sql:query var="slotQ">
 select last_insert_id() as slotId;
     </sql:query>
+</c:if>
+
 <c:set var="slotId" value="${slotQ.rows[0].slotId}"/>

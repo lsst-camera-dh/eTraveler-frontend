@@ -16,53 +16,26 @@
 <%@variable name-from-attribute="var" alias="isSane" scope="AT_BEGIN"%>
 
 <%-- find any requested actions which have not been done by this activity --%>
-<%-- Assume corresponding slots exist, but may no have history --%>
+<%-- Assume corresponding slots exist --%>
     <sql:query var="actionsQ">
-select MRS.id as slotId, reqMRA.name as reqName, lastMRA.name as lastName
+select MRS.id as slotId, MRA.name
 from Activity A
 inner join ProcessRelationshipTag PRT on PRT.processId = A.processId
-inner join MultiRelationshipAction reqMRA on reqMRA.id = PRT.multiRelationshipActionId
+inner join MultiRelationshipAction MRA on MRA.id = PRT.multiRelationshipActionId
 inner join MultiRelationshipSlotType MRST on MRST.multiRelationshipTypeId = PRT.multiRelationshipTypeId
 inner join MultiRelationshipSlot MRS on MRS.multiRelationshipSlotTypeId = MRST.id
     and MRS.hardwareId = A.hardwareId
-left join MultiRelationshipHistory reqMRH on reqMRH.multiRelationshipSlotId = MRS.id 
-    and reqMRH.multiRelationshipActionId = reqMRA.id
-    and reqMRH.activityId = A.id
-left join MultiRelationshipHistory lastMRH 
-    inner join MultiRelationshipAction lastMRA on lastMRA.id = lastMRH.multiRelationshipActionId
-    on lastMRH.multiRelationshipSlotId = MRS.id 
-        and lastMRH.id = (select max(id) from MultiRelationshipHistory where multiRelationshipSlotId = MRS.id)
+left join MultiRelationshipHistory MRH on MRH.multiRelationshipSlotId = MRS.id 
+    and MRH.multiRelationshipActionId = MRA.id
+    and MRH.activityId = A.id
 where A.id = ?<sql:param value="${activityId}"/>
-and reqMRH.id is null
+and MRH.id is null
 ;
     </sql:query>
 
 <c:set var="isSane" value="true"/>
 <c:forEach var="action" items="${actionsQ.rows}">
-    <c:set var="message" value=""/>
-    <c:choose> 
-        <c:when test="${action.reqName == 'assign'}">
-            <c:choose>
-                <c:when test="${action.lastName == 'assign'}">
-                    <c:set var="message" value="Assign requested, but a component is already assigned."/>
-                </c:when>
-                <c:when test="${action.lastName == 'install'}">
-                    <c:set var="message" value="Assign requested, but a component is already installed."/>
-                </c:when>
-            </c:choose>
-        </c:when>
-        <c:when test="${(action.reqName == 'deassign' and action.lastName != 'assign')}">
-            <c:set var="message" value="Unassign requested, but last action was not assign."/>
-        </c:when>
-        <c:when test="${action.reqName == 'install'}">
-            <c:if test="${action.lastName == 'install'}">
-                <c:set var="message" value="Install requested, but a component is already installed."/>
-            </c:if>
-        </c:when>
-        <c:when test="${(action.reqName == 'uninstall' and action.lastName != 'install')}">
-            <c:set var="message" value="Uninstall requested, but nothing is installed."/>
-        </c:when>
-    </c:choose>
+    <relationships:checkAction var="message" action="${action.name}" slotId="${action.slotId}"/>
     <c:if test="${! empty message}">
         <c:set var="isSane" value="false"/>
         <h1>Relationship error!</h1>
