@@ -17,21 +17,7 @@
 
 <%-- find any requested actions which have not been done by this activity --%>
 <%-- Assume corresponding slots exist --%>
-    <sql:query var="actionsQ">
-select MRS.id as slotId, MRA.name
-from Activity A
-inner join ProcessRelationshipTag PRT on PRT.processId = A.processId
-inner join MultiRelationshipAction MRA on MRA.id = PRT.multiRelationshipActionId
-inner join MultiRelationshipSlotType MRST on MRST.multiRelationshipTypeId = PRT.multiRelationshipTypeId
-inner join MultiRelationshipSlot MRS on MRS.multiRelationshipSlotTypeId = MRST.id
-    and MRS.hardwareId = A.hardwareId
-left join MultiRelationshipHistory MRH on MRH.multiRelationshipSlotId = MRS.id 
-    and MRH.multiRelationshipActionId = MRA.id
-    and MRH.activityId = A.id
-where A.id = ?<sql:param value="${activityId}"/>
-and MRH.id is null
-;
-    </sql:query>
+<relationships:findUndoneActions var="actionsQ" activityId="${activityId}"/>
 
 <c:set var="isSane" value="true"/>
 <c:forEach var="action" items="${actionsQ.rows}">
