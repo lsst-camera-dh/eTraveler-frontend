@@ -7,7 +7,7 @@
 <%@tag description="Count the components in an assembly and its children" pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql"%>
-<%@taglib prefix="traveler" tagdir="/WEB-INF/tags"%>
+<%@taglib prefix="relationships" tagdir="/WEB-INF/tags/relationships"%>
 
 <%@attribute name="hardwareId" required="true"%>
 <%@attribute name="top"%>
@@ -28,7 +28,7 @@
 </c:choose>
 
     <sql:query var="childrenQ" >
-select MRS.hardwareId, MRS.minorId, MRA.name
+select MRS.hardwareId, MRH.minorId, MRA.name
 from MultiRelationshipSlot MRS
 inner join MultiRelationshipHistory MRH on MRH.multirelationshipSlotId=MRS.id
         and MRH.id=(select max(id) from MultiRelationshipHistory where multirelationshipSlotId=MRS.id)
@@ -38,6 +38,6 @@ and MRA.name='install';
     </sql:query>
 
 <c:forEach var="cRow" items="${childrenQ.rows}">
-    <traveler:countComponents var="cComps" hardwareId="${cRow.minorId}" top="false"/>
+    <relationships:countComponents var="cComps" hardwareId="${cRow.minorId}" top="false"/>
     <c:set var="nComps" value="${nComps + cComps}"/>
 </c:forEach>
