@@ -9,6 +9,7 @@
 <%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql"%>
 <%@taglib prefix="display" uri="http://displaytag.sf.net"%>
 <%@taglib prefix="traveler" tagdir="/WEB-INF/tags"%>
+<%@taglib prefix="relationships" tagdir="/WEB-INF/tags/relationships"%>
 
 <traveler:fullRequestString var="thisPage"/>
 <traveler:checkSsPerm var="mayOperate" hardwareId="${param.hardwareId}" roles="operator,supervisor"/>
@@ -113,6 +114,7 @@
         
         <h2>Component of</h2>
         <traveler:componentTable hardwareId="${param.hardwareId}" mode="p"/>
+        <relationships:parentHistory hardwareId="${param.hardwareId}"/>
                 
         <h2>Components</h2>
         <traveler:componentTable hardwareId="${param.hardwareId}" mode="c"/>
