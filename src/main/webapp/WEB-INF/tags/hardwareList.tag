@@ -10,6 +10,7 @@
 <%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql"%>
 <%@taglib prefix="display" uri="http://displaytag.sf.net"%>
 <%@taglib prefix="traveler" tagdir="/WEB-INF/tags"%>
+<%@taglib prefix="relationships" tagdir="/WEB-INF/tags/relationships"%>
 
 <%@attribute name="hardwareGroupId"%>
 <%@attribute name="hardwareTypeId"%>
@@ -101,7 +102,7 @@
     <display:column property="nTravelers" title="# Travelers" sortable="true" headerClass="sortable"
                     href="listTravelers.jsp" paramId="hardwareId" paramProperty="id"/>
     <display:column title="# Components" sortable="true" headerClass="sortable">
-        <traveler:countComponents var="nComps" hardwareId="${row.id}"/>
+        <relationships:countComponents var="nComps" hardwareId="${row.id}"/>
         <c:out value="${nComps}"/>
     </display:column>
     <c:if test="${(empty siteId and empty locationId and (empty siteName or siteName == 'any')) or preferences.showFilteredColumns}">
