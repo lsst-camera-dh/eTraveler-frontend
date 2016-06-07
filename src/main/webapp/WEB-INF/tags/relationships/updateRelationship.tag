@@ -63,7 +63,7 @@ where MRS.id = ?<sql:param value="${slotId}"/>
             <c:when test="${action == 'assign'}">
                 <c:set var="batch" value="${minorId}"/>
                 <c:set var="adjustment" value="${-1 * slot.nMinorItems}"/>
-           </c:when>
+            </c:when>
             <c:when test="${action == 'deassign' || action == 'uninstall'}">
                 <ta:getPendingBatch var="batch" hardwareId="${minorId}" activityId="${activityId}"/>
                 <c:set var="adjustment" value="${slot.nMinorItems}"/>
