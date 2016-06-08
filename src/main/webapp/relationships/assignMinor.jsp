@@ -19,10 +19,9 @@
 <traveler:checkFreshness formToken="${param.freshnessToken}"/>
 
 <sql:transaction>
-    <relationships:updateRelationship slotId="${param.slotId}" 
-                                      minorId="${param.minorId}" 
-                                      activityId="${param.activityId}" 
-                                      action="assign"/>
+    <relationships:assignMinor slotId="${param.slotId}" 
+                               minorId="${param.minorId}" 
+                               activityId="${param.activityId}"/>
 </sql:transaction>
 <c:redirect url="${param.referringPage}"/>
     </body>
