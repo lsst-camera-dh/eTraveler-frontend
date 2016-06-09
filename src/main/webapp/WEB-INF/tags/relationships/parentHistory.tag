@@ -27,7 +27,7 @@ left join Activity A
     inner join Process P on P.id = A.processId
     on A.id = MRH.activityId
 where MRH.minorId = ?<sql:param value="${hardwareId}"/>
-order by MRS.hardwareId asc, MRH.id desc
+order by MRH.id desc
 ;
     </sql:query>
 

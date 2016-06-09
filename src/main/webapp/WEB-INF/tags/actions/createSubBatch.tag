@@ -11,7 +11,7 @@
 <%@taglib prefix="ta" tagdir="/WEB-INF/tags/actions"%>
 
 <%@attribute name="parentId" required="true"%>
-<%@attribute name="nItems" required="true"%>
+<%@attribute name="numItems" required="true"%>
 <%@attribute name="activityId"%>
 <%@attribute name="var" required="true" rtexprvalue="false"%>
 <%@variable name-from-attribute="var" alias="childId" scope="AT_BEGIN"%>
@@ -32,8 +32,13 @@ order by HLH.id desc limit 1
 </c:if>
 <c:set var="parent" value="${parentQ.rows[0]}"/>
 
-<%-- TODO: check that parent is a batch --%>
-<%-- TODO: check that parent has enough items --%>
+<c:if test="${parent.isBatched == 0}">
+    <traveler:error message="Parent ${parentId} is not a batched type"/>
+</c:if>
+
+<c:if test="${parent.count < numItems}">
+    <traveler:error message="Not enough items in parent batch ${parentId} (${parent.count} < ${numItems})"/>
+</c:if>
 
 <%-- TODO: make up a name --%>
 
@@ -42,7 +47,7 @@ order by HLH.id desc limit 1
 <ta:createHardware var="childId"
                    hardwareTypeId="${parent.hardwareTypeId}"
                    lsstId=""
-                   quantity="${nItems}"
+                   quantity="${numItems}"
                    manufacturer="${parent.manufacturer}"
                    manufacturerId="${parent.manufacturerId}"
                    model="${parent.model}"
@@ -52,6 +57,6 @@ order by HLH.id desc limit 1
 <c:set var="reason" value="Moved to child batch ${childId}"/>
 
 <ta:adjustBatchInventory hardwareId="${parentId}"
-                         adjustment="${-1 * nItems}"
+                         adjustment="${-1 * numItems}"
                          reason="${reason}"
                          activityId="${activityId}"/>

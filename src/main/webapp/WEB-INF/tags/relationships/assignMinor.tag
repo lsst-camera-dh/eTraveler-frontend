@@ -33,7 +33,7 @@ where MRS.id = ?<sql:param value="${slotId}"/>;
 
     <c:set var="nItems" value="${slot.singleBatch == 0 ? 1 : slot.nMinorItems}"/>
     
-    <ta:createSubBatch var="minorId" parentId="${minorId}" nItems="${nItems}" activityId="${activityId}"/>
+    <ta:createSubBatch var="minorId" parentId="${minorId}" numItems="${nItems}" activityId="${activityId}"/>
 </c:if>
 
 <relationships:updateRelationship slotId="${slotId}" 

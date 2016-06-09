@@ -19,6 +19,7 @@
 <%@attribute name="model"%>
 <%@attribute name="manufactureDateStr"%>
 <%@attribute name="locationId" required="true"%>
+<%@attribute name="autoName"%>
 <%@attribute name="var" required="true" rtexprvalue="false"%>
 <%@variable name-from-attribute="var" alias="hardwareId" scope="AT_BEGIN"%>
 
@@ -48,6 +49,8 @@ select * from HardwareType
 where id=?<sql:param value="${hardwareTypeId}"/>;
     </sql:query>
 <c:set var="hType" value="${typeQ.rows[0]}"/>
+
+<c:set var="autoName" value="${autoName || hType.autoSequenceWidth != 0}"/>
 
 <c:if test="${hType.autoSequenceWidth != 0}">
     <sql:update>
