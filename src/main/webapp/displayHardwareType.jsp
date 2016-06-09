@@ -47,10 +47,10 @@ where H.id=?<sql:param value="${param.hardwareTypeId}"/>;
         <traveler:newTravelerForm hardwareTypeId="${param.hardwareTypeId}"/>
    
         <h2>Relations</h2>
-        <h3>Parent</h3>
-        <traveler:hardwareRelationshipTypeList assemblyTypeId="${param.hardwareTypeId}"/>
-        <h3>Child</h3>
+        <h3>Component of</h3>
         <traveler:hardwareRelationshipTypeList componentTypeId="${param.hardwareTypeId}"/>
+        <h3>Components</h3>
+        <traveler:hardwareRelationshipTypeList assemblyTypeId="${param.hardwareTypeId}"/>
         
         <traveler:eclWidget
             author="${userName}"
