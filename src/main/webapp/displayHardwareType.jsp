@@ -8,6 +8,7 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql"%>
 <%@taglib prefix="traveler" tagdir="/WEB-INF/tags"%>
+<%@taglib prefix="relationships" tagdir="/WEB-INF/tags/relationships"%>
 
 <!DOCTYPE html>
 <traveler:checkId table="HardwareType" id="${param.hardwareTypeId}"/>
@@ -48,9 +49,9 @@ where H.id=?<sql:param value="${param.hardwareTypeId}"/>;
    
         <h2>Relations</h2>
         <h3>Component of</h3>
-        <traveler:hardwareRelationshipTypeList componentTypeId="${param.hardwareTypeId}"/>
+        <relationships:relationshipTypeList componentTypeId="${param.hardwareTypeId}"/>
         <h3>Components</h3>
-        <traveler:hardwareRelationshipTypeList assemblyTypeId="${param.hardwareTypeId}"/>
+        <relationships:relationshipTypeList assemblyTypeId="${param.hardwareTypeId}"/>
         
         <traveler:eclWidget
             author="${userName}"

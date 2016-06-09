@@ -1,5 +1,5 @@
 <%-- 
-    Document   : hardwareRelationshipTypeList
+    Document   : relationshipTypeList
     Created on : Jan 7, 2015, 2:12:43 PM
     Author     : focke
 --%>
