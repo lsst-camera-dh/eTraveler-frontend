@@ -34,22 +34,31 @@ where MRS.id = ?<sql:param value="${slotId}"/>
 </h3>
 
     <sql:query var="historyQ">
-select MRA.name as actName, H.id as minorId, H.lsstId, MRH.activityId, P.name as processName, MRH.creationTS
-from MultiRelationshipHistory MRH
+select MRA.name as actName, H.id as minorId, H.lsstId, MRH.activityId, P.name as processName, MRH.creationTS,
+MRT.name as relName, MRT.description, MRST.slotName, 
+if(MRT.singleBatch, MRT.nMinorItems, 1) as nMinorItems
+from MultiRelationshipSlot MRS
+inner join MultiRelationshipHistory MRH on MRH.multiRelationshipSlotId = MRS.id
 inner join Hardware H on H.id = MRH.minorId
 inner join MultiRelationshipAction MRA on MRA.id = MRH.multiRelationshipActionId
+inner join MultiRelationshipSlotType MRST on MRST.id = MRS.multiRelationshipSlotTypeId
+inner join MultiRelationshipType MRT on MRT.id = MRST.multiRelationshipTypeId
 left join Activity A
     inner join Process P on P.id = A.processId
     on A.id = MRH.activityId
-where MRH.multiRelationshipSlotId = ?<sql:param value="${slotId}"/>
+where MRS.id = ?<sql:param value="${slotId}"/>
 order by MRH.id desc
 ;
     </sql:query>
         
-<display:table id="row" name="${historyQ.rows}" class="datatable">
+<display:table name="${historyQ.rows}" id="row" class="datatable" sort="list">
+    <display:column property="lsstId" title="${appVariables.experiment} Serial Number" sortable="true" headerClass="sortable" 
+                    href="displayHardware.jsp" paramId="hardwareId" paramProperty="hardwareId"/>
+    <display:column property="relName" title="Relationship" sortable="true" headerClass="sortable"/>
+    <display:column property="description" title="Description" sortable="true" headerClass="sortable"/>
+    <display:column property="slotname" title="Slot" sortable="true" headerClass="sortable"/>
+    <display:column property="nMinorItems" title="# Items" sortable="true" headerClass="sortable"/>
     <display:column property="actName" title="Action" sortable="true" headerClass="sortable"/>
-    <display:column property="lsstId" title="Component" sortable="true" headerClass="sortable"
-                    href="displayHardware.jsp" paramId="hardwareId" paramProperty="minorId"/>
     <display:column property="processName" title="Step" sortable="true" headerClass="sortable"
                     href="displayActivity.jsp" paramId="activityId" paramProperty="activityId"/>
     <display:column property="creationTS" title="Date" sortable="true" headerClass="sortable"/>
