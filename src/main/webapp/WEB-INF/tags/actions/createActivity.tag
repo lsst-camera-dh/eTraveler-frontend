@@ -13,7 +13,6 @@
 <%@attribute name="inNCR" required="true"%>
 <%@attribute name="parentActivityId"%>
 <%@attribute name="processEdgeId"%>
-<%@attribute name="hardwareRelationshipId"%>
 <%@attribute name="iteration"%>
 <%@attribute name="jobHarnessId"%>
 <%@attribute name="var" required="true" rtexprvalue="false"%>
@@ -29,9 +28,6 @@ select jobHarnessId from Activity where id=?<sql:param value="${parentActivityId
     <sql:update >
 insert into Activity set
 hardwareId=?<sql:param value="${hardwareId}"/>,
-<c:if test="${! empty hardwareRelationshipId}">
-    hardwareRelationshipId=?<sql:param value="${hardwareRelationshipId}"/>,
-</c:if>
 processId=?<sql:param value="${processId}"/>,
 <c:if test="${! empty parentActivityId}">
     parentActivityId=?<sql:param value="${parentActivityId}"/>,
