@@ -112,12 +112,9 @@
             </form>
         </c:if>
         
-        <h2>Component of</h2>
-        <traveler:componentTable hardwareId="${param.hardwareId}" mode="p"/>
         <relationships:parentHistory hardwareId="${param.hardwareId}"/>
                 
-        <h2>Components</h2>
-        <traveler:componentTable hardwareId="${param.hardwareId}" mode="c"/>
+        <relationships:childHistory hardwareId="${param.hardwareId}"/>
 
         <h2>Recent Activities</h2>
         <traveler:activityList hardwareId="${param.hardwareId}"/>
