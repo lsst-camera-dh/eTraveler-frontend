@@ -4,7 +4,7 @@
     Author     : focke
 --%>
 
-<%@tag description="Add a new HardwareRelationshipType" pageEncoding="UTF-8"%>
+<%@tag description="Add a new MultiRelationshipType" pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql"%>

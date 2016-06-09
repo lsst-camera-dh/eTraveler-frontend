@@ -15,7 +15,7 @@
 <sql:query var="hardwareTypesQ" >
     select id, name from HardwareType order by name;
 </sql:query>
-<form method="get" action="admin/addHardwareRelationshipType.jsp">
+<form method="get" action="relationships/addRelationshipType.jsp">
     <input type="hidden" name="freshnessToken" value="${freshnessToken}">
     <input type="hidden" name="referringPage" value="${thisPage}">
     <table>

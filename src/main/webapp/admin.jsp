@@ -8,6 +8,7 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql"%>
 <%@taglib prefix="traveler" tagdir="/WEB-INF/tags"%>
+<%@taglib prefix="relationships" tagdir="/WEB-INF/tags/relationships"%>
 
 <traveler:fullRequestString var="thisPage"/>
 <traveler:checkPerm var="mayAdmin" groups="EtravelerAllAdmin"/>
@@ -46,8 +47,8 @@
 
 <hr>
 <h2>Hardware Relationship Types</h2>
-<traveler:newRelationshipTypeForm/>
-<traveler:hardwareRelationshipTypeList/>
+<relationships:newRelationshipTypeForm/>
+<relationships:relationshipTypeList/>
 
 <hr>
 <h2>Sites</h2>
