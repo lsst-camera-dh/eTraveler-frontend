@@ -60,7 +60,7 @@ where A.id = ?<sql:param value="${activityId}"/>
             <c:otherwise>
                 <relationships:getSlotStatus var="status" varId="minorId" slotId="${action.slotId}"/>
                 <c:choose>
-                    <c:when test="${status == 'free'}">
+                    <c:when test="${status == 'free' && (action.actName == 'assign' || action.actName == 'install')}">
                         <%-- TODO: don't display form if action is install and this step has an assign --%>
                         <c:set var="allAssigned" value="false"/>
                         <traveler:checkMask var="mayOperate" activityId="${activityId}"/>
