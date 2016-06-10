@@ -68,5 +68,5 @@ order by HLH.id desc limit 1;
     <ta:setHardwareLocation newLocationId="${parentLocQ.rows[0].locationId}" 
                             hardwareId="${minorId}" 
                             activityId="${activityId}" 
-                            reason="Moved to parent assembly location on install"/>
+                            reason="Moved to parent location on install"/>
 </c:if>
