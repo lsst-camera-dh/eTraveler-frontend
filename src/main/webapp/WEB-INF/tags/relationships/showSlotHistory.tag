@@ -53,7 +53,7 @@ order by MRH.id desc
         
 <display:table name="${historyQ.rows}" id="row" class="datatable" sort="list">
     <display:column property="lsstId" title="${appVariables.experiment} Serial Number" sortable="true" headerClass="sortable" 
-                    href="displayHardware.jsp" paramId="hardwareId" paramProperty="hardwareId"/>
+                    href="displayHardware.jsp" paramId="hardwareId" paramProperty="minorId"/>
     <display:column property="relName" title="Relationship" sortable="true" headerClass="sortable"/>
     <display:column property="description" title="Description" sortable="true" headerClass="sortable"/>
     <display:column property="slotname" title="Slot" sortable="true" headerClass="sortable"/>
