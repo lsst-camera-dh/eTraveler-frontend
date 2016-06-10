@@ -36,5 +36,8 @@ where MRS.hardwareId = ?<sql:param value="${hardwareId}"/>
 and MRA.name = 'install';
     </sql:query>
 <c:forEach var="childRow" items="${childrenQ.rows}">
-    <ta:setHardwareLocation newLocationId="${newLocationId}" hardwareId="${childRow.minorId}" activityId="${activityId}" reason="${reason}"/>
+    <ta:setHardwareLocation newLocationId="${newLocationId}" 
+                            hardwareId="${childRow.minorId}" 
+                            activityId="${activityId}" 
+                            reason="Moved with parent assembly"/>
 </c:forEach>
