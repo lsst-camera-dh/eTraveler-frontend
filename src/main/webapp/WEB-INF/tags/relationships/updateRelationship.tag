@@ -56,3 +56,17 @@ where A.id = ?<sql:param value="${activityId}"/>
                           activityId="${activityId}" 
                           reason="${reason}"/>
 </c:if>
+
+<c:if test="${action == 'install'}">
+    <sql:query var="parentLocQ">
+select HLH.locationId
+from MultiRelationshipSlot MRS
+inner join HardwareLocationHistory HLH on HLH.hardwareId = MRS.hardwareId
+where MRS.id = ?<sql:param value="${slotId}"/>
+order by HLH.id desc limit 1;
+    </sql:query>
+    <ta:setHardwareLocation newLocationId="${parentLocQ.rows[0].locationId}" 
+                            hardwareId="${minorId}" 
+                            activityId="${activityId}" 
+                            reason="Moved to parent assembly location on install"/>
+</c:if>
