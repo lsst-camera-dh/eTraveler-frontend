@@ -7,8 +7,8 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql"%>
-<%@taglib prefix="ta" tagdir="/WEB-INF/tags/actions"%>
 <%@taglib prefix="traveler" tagdir="/WEB-INF/tags"%>
+<%@taglib prefix="batch" tagdir="/WEB-INF/tags/batches"%>
 
 <!DOCTYPE html>
 <html>
@@ -20,7 +20,7 @@
 <traveler:checkFreshness formToken="${param.freshnessToken}"/>
 
 <sql:transaction>
-    <ta:adjustBatchInventory hardwareId="${param.hardwareId}" adjustment="${param.adjustment * param.sign}" reason="${param.reason}"/>
+    <batch:adjustInventory hardwareId="${param.hardwareId}" adjustment="${param.adjustment * param.sign}" reason="${param.reason}"/>
 </sql:transaction>        
 <c:redirect url="${param.referringPage}"/>
     </body>

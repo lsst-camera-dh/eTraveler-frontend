@@ -1,0 +1,15 @@
+<%-- 
+    Document   : batchWidget
+    Created on : Jun 17, 2016, 4:12:59 PM
+    Author     : focke
+--%>
+
+<%@tag description="display stuff for batches" pageEncoding="UTF-8"%>
+<%@taglib prefix="batch" tagdir="/WEB-INF/tags/batches"%>
+
+<%@attribute name="hardwareId" required="true"%>
+<%@attribute name="varTotal" required="true" rtexprvalue="false"%>
+<%@variable name-from-attribute="varTotal" alias="total" scope="AT_BEGIN"%>
+
+<batch:inventoryHistory var="total" hardwareId="${hardwareId}"/>
+<batch:inventoryForm hardwareId="${hardwareId}" quantity="${total}"/>
