@@ -11,8 +11,10 @@
 <%@taglib prefix="display" uri="http://displaytag.sf.net"%>
 
 <%@attribute name="hardwareId" required="true"%>
-<%@attribute name="varTotal" required="true" rtexprvalue="false"%>
-<%@variable name-from-attribute="varTotal" alias="total" scope="AT_BEGIN"%>
+<%@attribute name="var" required="true" rtexprvalue="false"%>
+<%@variable name-from-attribute="var" alias="total" scope="AT_BEGIN"%>
+
+<h2>Inventory History</h2>
 
     <sql:query var="historyQ">
 select BIH.*, P.name as processName

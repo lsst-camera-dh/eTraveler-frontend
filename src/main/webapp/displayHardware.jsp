@@ -9,6 +9,7 @@
 <%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql"%>
 <%@taglib prefix="display" uri="http://displaytag.sf.net"%>
 <%@taglib prefix="traveler" tagdir="/WEB-INF/tags"%>
+<%@taglib prefix="batch" tagdir="/WEB-INF/tags/batches"%>
 <%@taglib prefix="relationships" tagdir="/WEB-INF/tags/relationships"%>
 
 <traveler:fullRequestString var="thisPage"/>
@@ -40,26 +41,7 @@
         <traveler:hardwareLabelWidget hardwareId="${param.hardwareId}"/>
 
         <c:if test="${hardware.isBatched != 0}">
-            <h2>Inventory History</h2>
-            <traveler:inventoryHistory hardwareId="${param.hardwareId}" varTotal="quantity"/>
-            <form action="operator/adjustBatchInventory.jsp">
-                <input type="hidden" name="freshnessToken" value="${freshnessToken}">
-                <input type="hidden" name="referringPage" value="${thisPage}">
-                <input type="hidden" name="hardwareId" value="${param.hardwareId}">
-                <input type="hidden" name="sign" value="-1">
-                <input type="submit" value="Remove Some">
-                How many?&nbsp;<input type="number" name="adjustment" min="1" max="${quantity}" required>
-                Why?&nbsp;<input type="text" name="reason">
-            </form>
-            <form action="operator/adjustBatchInventory.jsp">
-                <input type="hidden" name="freshnessToken" value="${freshnessToken}">
-                <input type="hidden" name="referringPage" value="${thisPage}">
-                <input type="hidden" name="hardwareId" value="${param.hardwareId}">
-                <input type="hidden" name="sign" value="1">
-                <input type="submit" value="Add Some">
-                How many?&nbsp;<input type="number" name="adjustment" min="1" required>
-                Why?&nbsp;<input type="text" name="reason">
-            </form>
+            <batch:batchWidget varTotal="quantity" hardwareId="${param.hardwareId}"/>
         </c:if>
         
         <h2>Location</h2>
