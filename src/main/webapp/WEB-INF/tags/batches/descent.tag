@@ -7,3 +7,5 @@
 <%@tag description="display info about parent and child batches" pageEncoding="UTF-8"%>
 
 <%@attribute name="hardwareId" required="true"%>
+
+info about parent and child batches for batch ${hardwareId}

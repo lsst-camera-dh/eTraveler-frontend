@@ -10,6 +10,7 @@
 <%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql"%>
 <%@taglib prefix="ta" tagdir="/WEB-INF/tags/actions"%>
 <%@taglib prefix="traveler" tagdir="/WEB-INF/tags"%>
+<%@taglib prefix="batch" tagdir="/WEB-INF/tags/batches"%>
 
 <%@attribute name="hardwareTypeId" required="true"%>
 <%@attribute name="lsstId"%>
@@ -90,5 +91,5 @@ select id from Hardware where id=LAST_INSERT_ID();
 <ta:setHardwareLocation hardwareId="${hardwareId}" newLocationId="${locationId}"
                         reason="New component registration"/>
 <c:if test="${hType.isBatched != 0}">
-    <ta:adjustBatchInventory hardwareId="${hardwareId}" adjustment="${quantity}" reason="New batch"/>
+    <batch:adjustInventory hardwareId="${hardwareId}" adjustment="${quantity}" reason="New batch"/>
 </c:if>

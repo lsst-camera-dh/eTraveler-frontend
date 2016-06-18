@@ -7,7 +7,7 @@
 <%@tag description="assign component to slot" pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql"%>
-<%@taglib prefix="ta" tagdir="/WEB-INF/tags/actions"%>
+<%@taglib prefix="batch" tagdir="/WEB-INF/tags/batches"%>
 <%@taglib prefix="relationships" tagdir="/WEB-INF/tags/relationships"%>
 
 <%@attribute name="slotId" required="true"%>
@@ -33,7 +33,7 @@ where MRS.id = ?<sql:param value="${slotId}"/>;
 
     <c:set var="nItems" value="${slot.singleBatch == 0 ? 1 : slot.nMinorItems}"/>
     
-    <ta:createSubBatch var="minorId" parentId="${minorId}" numItems="${nItems}" activityId="${activityId}"/>
+    <batch:createSubBatch var="minorId" parentId="${minorId}" numItems="${nItems}" activityId="${activityId}"/>
 </c:if>
 
 <relationships:updateRelationship slotId="${slotId}" 

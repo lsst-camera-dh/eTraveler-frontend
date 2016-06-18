@@ -8,6 +8,7 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql"%>
 <%@taglib prefix="traveler" tagdir="/WEB-INF/tags"%>
+<%@taglib prefix="batch" tagdir="/WEB-INF/tags/batches"%>
 <%@taglib prefix="ta" tagdir="/WEB-INF/tags/actions"%>
 
 <%@attribute name="parentId" required="true"%>
@@ -56,7 +57,7 @@ order by HLH.id desc limit 1
 
 <c:set var="reason" value="Moved to child batch ${childId}"/>
 
-<ta:adjustBatchInventory hardwareId="${parentId}"
-                         adjustment="${-1 * numItems}"
-                         reason="${reason}"
-                         activityId="${activityId}"/>
+<batch:adjustInventory hardwareId="${parentId}"
+                       adjustment="${-1 * numItems}"
+                       reason="${reason}"
+                       activityId="${activityId}"/>
