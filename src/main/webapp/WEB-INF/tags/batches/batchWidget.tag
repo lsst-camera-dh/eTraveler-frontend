@@ -13,3 +13,5 @@
 
 <batch:inventoryHistory var="total" hardwareId="${hardwareId}"/>
 <batch:inventoryForm hardwareId="${hardwareId}" quantity="${total}"/>
+
+<batch:descent hardwareId="${hardwareId}"/>

@@ -13,7 +13,7 @@
 
 <traveler:fullRequestString var="thisPage"/>
 
-<form action="batches/adjustBatchInventory.jsp">
+<form action="batches/adjustInventory.jsp">
     <input type="hidden" name="freshnessToken" value="${freshnessToken}">
     <input type="hidden" name="referringPage" value="${thisPage}">
     <input type="hidden" name="hardwareId" value="${hardwareId}">
@@ -22,7 +22,7 @@
     How many?&nbsp;<input type="number" name="adjustment" min="1" max="${quantity}" required>
     Why?&nbsp;<input type="text" name="reason">
 </form>
-<form action="batches/adjustBatchInventory.jsp">
+<form action="batches/adjustInventory.jsp">
     <input type="hidden" name="freshnessToken" value="${freshnessToken}">
     <input type="hidden" name="referringPage" value="${thisPage}">
     <input type="hidden" name="hardwareId" value="${hardwareId}">
