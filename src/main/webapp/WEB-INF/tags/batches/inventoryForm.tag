@@ -7,7 +7,6 @@
 <%@tag description="show forms to add or remove items from a batch" pageEncoding="UTF-8"%>
 <%@taglib prefix="traveler" tagdir="/WEB-INF/tags"%>
 
-<%-- The list of normal or fragment attributes can be specified here: --%>
 <%@attribute name="hardwareId" required="true"%>
 <%@attribute name="quantity" required="true"%>
 
@@ -22,6 +21,7 @@
     How many?&nbsp;<input type="number" name="adjustment" min="1" max="${quantity}" required>
     Why?&nbsp;<input type="text" name="reason">
 </form>
+
 <form action="batches/adjustInventory.jsp">
     <input type="hidden" name="freshnessToken" value="${freshnessToken}">
     <input type="hidden" name="referringPage" value="${thisPage}">
