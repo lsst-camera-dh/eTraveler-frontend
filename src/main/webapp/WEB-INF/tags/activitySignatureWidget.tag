@@ -129,7 +129,7 @@ order by IP.id
             </form>
                 </c:when>
                 <c:otherwise>
-                    scribble
+                    signed
                 </c:otherwise>
             </c:choose>
         </display:column>
