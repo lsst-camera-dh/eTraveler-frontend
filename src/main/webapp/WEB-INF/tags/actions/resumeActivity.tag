@@ -17,7 +17,7 @@
 </sql:query>
 <c:set var="activity" value="${activityQ.rows[0]}"/>
 
-<traveler:getActivityStatus var="status" activityId="${activityId}"/>
+<traveler:getActivityStatus var="status" varFinal="isFinal" activityId="${activityId}"/>
 
 <sql:query var="lastStatusQ">
     select AFS.id, AFS.name

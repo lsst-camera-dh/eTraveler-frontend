@@ -14,15 +14,11 @@
 
 <traveler:checkMask var="mayOperate" activityId="${activityId}"/>
 <traveler:checkSsPerm var="maySupervise" activityId="${activityId}" roles="supervisor"/>
+<traveler:checkSsPerm var="maySkip" activityId="${activityId}" roles="nobody"/>
 
-<c:choose>
-    <c:when test="${! empty param.topActivityId}">
-        <c:set var="topActivityId" value="${param.topActivityId}"/>
-    </c:when>
-    <c:otherwise>
-        <traveler:findTraveler var="topActivityId" activityId="${activityId}"/>
-    </c:otherwise>
-</c:choose>
+<traveler:findTraveler var="travelerId" activityId="${activityId}"/>
+<c:set var="isTop" value="${travelerId == activityId}"/>
+<c:set var="topActivityId" value="${! empty param.topActivityId ? param.topActivityId : travelerId}"/>
 
     <sql:query var="activityQ" >
 select A.*, P.substeps, P.maxIteration, P.newLocation, P.newHardwareStatusId,
@@ -207,7 +203,7 @@ Make a new version of the Traveler."/>
                 <input type="hidden" name="activityId" value="${activityId}">       
                 <input type="hidden" name="topActivityId" value="${topActivityId}">       
                 <INPUT TYPE=SUBMIT value="Retry Step"
-                       <c:if test="${((! retryable) || (! mayOperate)) && ((! active) || (! maySupervise))}">disabled</c:if>>
+                       <c:if test="${isTop || (((! retryable) || (! mayOperate)) && ((! active) || (! maySkip)))}">disabled</c:if>>
             </form>
         </td>
         <td>
@@ -235,11 +231,19 @@ Make a new version of the Traveler."/>
         <td>
             <form METHOD=GET ACTION="supervisor/skipStep.jsp" target="_top">
                 <input type="hidden" name="freshnessToken" value="${freshnessToken}">
-                <input type="hidden" name="activityId" value="${activityId}">       
-                <input type="hidden" name="topActivityId" value="${topActivityId}">       
+                <input type="hidden" name="activityId" value="${activityId}">
+                <input type="hidden" name="topActivityId" value="${topActivityId}">
                 <INPUT TYPE=SUBMIT value="Skip Step"
-                       <c:if test="${(! active) || (! maySupervise)}">disabled</c:if>>
-            </form>            
+                       <c:if test="${isTop || ((! active) || (! maySkip))}">disabled</c:if>>
+            </form>
+        </td>
+        <td>
+            <form method="get" action="supervisor/doNCRInitial.jsp" target="_top">
+                <input type="hidden" name="freshnessToken" value="${freshnessToken}">
+                <input type="hidden" name="activityId" value="${activityId}">
+                <INPUT TYPE=SUBMIT value="NCR"
+                       <c:if test="${isTop || ! active}">disabled</c:if>>
+            </form>
         </td>
     </tr>
 </table>

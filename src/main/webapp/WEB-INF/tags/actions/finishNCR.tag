@@ -28,9 +28,10 @@
         E.NCRActivityId=?<sql:param value="${ncrActivityId}"/>
     ;
 </sql:query>
+<c:set var="nExceptions" value="${fn:length(exceptionQ.rows)}"/>
 <c:choose>
-    <c:when test="${fn:length(exceptionQ.rows) != 1}">
-        <traveler:error message="Inconceivable! #253795" bug="true"/>
+    <c:when test="${nExceptions != 1}">
+        <traveler:error message="Expected 1 exception, found ${nExceptions}" bug="true"/>
     </c:when>
     <c:otherwise>
         <c:set var="exception" value="${exceptionQ.rows[0]}"/>
