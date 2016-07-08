@@ -82,7 +82,7 @@ order by ipId;
     </sql:query>
 
 <c:if test="${! empty inputQ.rows}">
-    <h2>Results</h2>
+    <h2>Instructions and Results</h2>
     <display:table name="${inputQ.rows}" id="row" class="datatable">
         <display:column property="label" title="Name" sortable="true" headerClass="sortable"/>
         <display:column property="description" sortable="true" headerClass="sortable"/>
