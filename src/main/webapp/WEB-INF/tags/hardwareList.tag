@@ -30,8 +30,9 @@
     L.id as locationId, L.name as locationName,
     S.id as siteId, S.name as siteName,
     HI.identifier as nickName,
-    count(A.id) as nTravelers,
-    sum(BIH.adjustment) as quantity,
+    (select count(*) from Activity where hardwareId = H.id and parentActivityId is null) as nTravelers,
+    ((select sum(adjustment) from BatchedInventoryHistory where hardwareId = H.id)
+        - ifnull((select sum(adjustment) from BatchedInventoryHistory where sourceBatchId = H.id), 0)) as quantity,
     SS.id as subsystemId, SS.name as subsystemName
     from Hardware H
     inner join HardwareType HT on HT.id=H.hardwareTypeId
@@ -46,9 +47,7 @@
     inner join Subsystem SS on SS.id=HT.subsystemId
     left join HardwareIdentifier HI on HI.hardwareId=H.id 
         and HI.authorityId=(select id from HardwareIdentifierAuthority where name=?<sql:param value="${preferences.idAuthName}"/>)
-    left join Activity A on A.hardwareId=H.id
-    left join BatchedInventoryHistory BIH on BIH.hardwareId=H.id
-    where A.parentActivityId is null
+    where 1
     <c:if test="${! empty hardwareGroupId}">
         and HTGM.hardwareGroupId=?<sql:param value="${hardwareGroupId}"/>
     </c:if>
@@ -79,7 +78,6 @@
     <c:if test="${! empty subsystemName && subsystemName != 'Any'}">
         and SS.name=?<sql:param value="${subsystemName}"/>
     </c:if>
-    group by H.id
     ;
 </sql:query>
 <display:table name="${result.rows}" id="row" class="datatable" sort="list"
