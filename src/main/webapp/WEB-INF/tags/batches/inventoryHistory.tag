@@ -22,7 +22,7 @@ select BIH.reason,
 (if(BIH.hardwareId = H.id, Hf.lsstId, Ht.lsstId)) as otherLsstId, 
 (if(BIH.hardwareId = H.id, BIH.adjustment, -1 * BIH.adjustment)) as adjustment,
 BIH.createdBy, BIH.creationTS,
-P.name as processName
+A.id as activityId, P.name as processName
 from Hardware H
 inner join BatchedInventoryHistory BIH on BIH.hardwareId = H.id or BIH.sourceBatchId = H.id
 inner join Hardware Ht on Ht.id = BIH.hardwareId
@@ -37,7 +37,7 @@ order by BIH.id desc;
                pagesize="${fn:length(historyQ.rows) > preferences.pageLength ? preferences.pageLength : 0}">
     <display:column property="reason" sortable="true" headerClass="sortable"/>
     <display:column property="adjustment" sortable="true" headerClass="sortable" total="true"/>
-    <display:column title="Other Batch" property="otherLsstId" sortable="true" headerClass="sortable"
+    <display:column property="otherLsstId" title="Other Batch" sortable="true" headerClass="sortable"
                     href="displayHardware.jsp" paramId="hardwareId" paramProperty="otherId"/>
     <display:column property="processName" title="Step" sortable="true" headerClass="sortable"
                     href="displayActivity.jsp" paramId="activityId" paramProperty="activityId"/>
