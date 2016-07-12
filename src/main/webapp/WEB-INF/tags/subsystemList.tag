@@ -24,14 +24,10 @@
 </c:choose>
 
     <sql:query var="result">
-select S.* 
-<c:if test="${mode != 'c'}">
-    ,Sp.id as parentId, Sp.name as parentName
-</c:if>
+select S.* ,
+Sp.id as parentId, Sp.name as parentName
 from Subsystem S
-<c:if test="${mode != 'c'}">
-    left join Subsystem Sp on Sp.id = S.parentId
-</c:if>
+left join Subsystem Sp on Sp.id = S.parentId
 <c:choose>
     <c:when test="${mode == 'p'}">
 where S.id=(select parentId from Subsystem where id=?<sql:param value="${subsystemId}"/>)
@@ -60,7 +56,7 @@ order by S.name;
                     href="displaySubsystem.jsp" paramId="subsystemId" paramProperty="id"/>
     <display:column property="shortName" title="Short Name" sortable="true" headerClass="sortable"/>
     <display:column property="description" title="Description" sortable="true" headerClass="sortable"/>
-    <c:if test="${mode != 'c'}">
+    <c:if test="${(mode != 'c') || (preferences.showFilteredColumns)}">
         <display:column property="parentName" title="Parent" sortable="true" headerClass="sortable"
                         href="displaySubsystem.jsp" paramId="subsystemId" paramProperty="parentId"/>
     </c:if>
