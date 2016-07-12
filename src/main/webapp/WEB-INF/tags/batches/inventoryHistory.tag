@@ -17,11 +17,19 @@
 <h2>Inventory History</h2>
 
     <sql:query var="historyQ">
-select BIH.*, P.name as processName
-from BatchedInventoryHistory BIH
-left join (Activity A inner join Process P on P.id=A.processId) on A.id=BIH.activityId
-where BIH.hardwareId=?<sql:param value="${hardwareId}"/> 
-order by id desc;
+select BIH.reason, 
+(if(BIH.hardwareId = H.id, BIH.sourceBatchId, BIH.hardwareId)) as otherId, 
+(if(BIH.hardwareId = H.id, Hf.lsstId, Ht.lsstId)) as otherLsstId, 
+(if(BIH.hardwareId = H.id, BIH.adjustment, -1 * BIH.adjustment)) as adjustment,
+BIH.createdBy, BIH.creationTS,
+P.name as processName
+from Hardware H
+inner join BatchedInventoryHistory BIH on BIH.hardwareId = H.id or BIH.sourceBatchId = H.id
+inner join Hardware Ht on Ht.id = BIH.hardwareId
+left join Hardware Hf on Hf.id = BIH.sourceBatchId
+left join (Activity A inner join Process P on P.id = A.processId) on A.id = BIH.activityId
+where H.id = ?<sql:param value="${hardwareId}"/> 
+order by BIH.id desc;
     </sql:query>
 
 <display:table name="${historyQ.rows}" id="row" varTotals="totals"
@@ -29,8 +37,10 @@ order by id desc;
                pagesize="${fn:length(historyQ.rows) > preferences.pageLength ? preferences.pageLength : 0}">
     <display:column property="reason" sortable="true" headerClass="sortable"/>
     <display:column property="adjustment" sortable="true" headerClass="sortable" total="true"/>
+    <display:column title="Other Batch" property="otherLsstId" sortable="true" headerClass="sortable"
+                    href="displayHardware.jsp" paramId="hardwareId" paramProperty="otherId"/>
     <display:column property="processName" title="Step" sortable="true" headerClass="sortable"
-                      href="displayActivity.jsp" paramId="activityId" paramProperty="activityId"/>
+                    href="displayActivity.jsp" paramId="activityId" paramProperty="activityId"/>
     <display:column property="createdBy" title="Who" sortable="true" headerClass="sortable"/>
     <display:column property="creationTS" title="When" sortable="true" headerClass="sortable"/>
     <display:footer>
