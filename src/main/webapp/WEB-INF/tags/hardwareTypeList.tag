@@ -38,7 +38,8 @@
     <c:if test="${! empty subsystemName && subsystemName != 'Any'}">
         and SS.name=?<sql:param value="${subsystemName}"/>
     </c:if>
-    group by HT.id;
+    group by HT.id
+    order by HT.name;
 </sql:query>
 <display:table name="${result.rows}" class="datatable" sort="list"
                pagesize="${fn:length(result.rows) > preferences.pageLength ? preferences.pageLength : 0}">

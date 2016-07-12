@@ -33,7 +33,7 @@ where id=(select parentId from Subsystem where id=?<sql:param value="${subsystem
 where parentId=?<sql:param value="${subsystemId}"/>
     </c:when>
 </c:choose>
-;
+order by name;
     </sql:query>
 
 <c:if test="${! empty result.rows}">

@@ -27,7 +27,7 @@ where 1
     and S.id=?<sql:param value="${siteId}"/>
 </c:if>
 group by L.id
-;
+order by S.name, L.name;
     </sql:query>
 
 <display:table name="${locationQ.rows}" class="datatable" sort="list"

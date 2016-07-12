@@ -21,7 +21,7 @@ from
                on HLH.locationId=L.id
 
 group by S.id
-;
+order by S.name;
     </sql:query>
 
 <display:table name="${siteQ.rows}" class="datatable" sort="list"

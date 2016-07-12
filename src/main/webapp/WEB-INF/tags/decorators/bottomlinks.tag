@@ -29,9 +29,9 @@
 
             <srs_utils:conditionalLink name="List&nbsp;Sites" url="listSites.jsp" /> |
 
-            <srs_utils:conditionalLink name="List&nbsp;Subsystems" url="listSubsystems.jsp" /> |
-
             <srs_utils:conditionalLink name="List&nbsp;Locations" url="listLocations.jsp" /> |
+
+            <srs_utils:conditionalLink name="List&nbsp;Subsystems" url="listSubsystems.jsp" /> |
 
             <srs_utils:conditionalLink name="Preferences" url="preferences.jsp"/> |
 
