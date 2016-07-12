@@ -78,7 +78,7 @@
     <c:if test="${! empty subsystemName && subsystemName != 'Any'}">
         and SS.name=?<sql:param value="${subsystemName}"/>
     </c:if>
-    ;
+    order by H.lsstId, HT.name;
 </sql:query>
 <display:table name="${result.rows}" id="row" class="datatable" sort="list"
                pagesize="${fn:length(result.rows) > preferences.pageLength ? preferences.pageLength : 0}">
