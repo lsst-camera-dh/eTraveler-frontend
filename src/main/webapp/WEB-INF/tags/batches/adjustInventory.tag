@@ -9,6 +9,7 @@
 <%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql"%>
 
 <%@attribute name="hardwareId" required="true"%>
+<%@attribute name="sourceBatchId"%>
 <%@attribute name="adjustment" required="true"%>
 <%@attribute name="reason"%>
 <%@attribute name="activityId"%>
@@ -16,6 +17,7 @@
     <sql:update>
 insert into BatchedInventoryHistory set 
 hardwareId=?<sql:param value="${hardwareId}"/>,
+sourceBatchId=?<sql:param value="${sourceBatchId}"/>,
 adjustment=?<sql:param value="${adjustment}"/>,
 <c:if test="${! empty reason}">
     reason=?<sql:param value="${reason}"/>,
