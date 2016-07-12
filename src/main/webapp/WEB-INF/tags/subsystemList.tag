@@ -24,16 +24,23 @@
 </c:choose>
 
     <sql:query var="result">
-select * from Subsystem
+select S.* 
+<c:if test="${mode != 'c'}">
+    ,Sp.id as parentId, Sp.name as parentName
+</c:if>
+from Subsystem S
+<c:if test="${mode != 'c'}">
+    left join Subsystem Sp on Sp.id = S.parentId
+</c:if>
 <c:choose>
     <c:when test="${mode == 'p'}">
-where id=(select parentId from Subsystem where id=?<sql:param value="${subsystemId}"/>)
+where S.id=(select parentId from Subsystem where id=?<sql:param value="${subsystemId}"/>)
     </c:when>
     <c:when test="${mode == 'c'}">
-where parentId=?<sql:param value="${subsystemId}"/>
+where S.parentId=?<sql:param value="${subsystemId}"/>
     </c:when>
 </c:choose>
-order by name;
+order by S.name;
     </sql:query>
 
 <c:if test="${! empty result.rows}">
@@ -50,10 +57,14 @@ order by name;
 <display:table name="${result.rows}" id="row" class="datatable" sort="list"
                pagesize="${fn:length(result.rows) > preferences.pageLength ? preferences.pageLength : 0}">
     <display:column property="name" title="Name" sortable="true" headerClass="sortable"
-                    href="displaySubsystem.jsp" paramId="subsystemId" paramProperty="id"/>    
-    <display:column property="shortName" title="Short Name" sortable="true" headerClass="sortable"/>    
-    <display:column property="description" title="Description" sortable="true" headerClass="sortable"/>    
-    <display:column property="createdBy" title="Creator" sortable="true" headerClass="sortable"/>    
+                    href="displaySubsystem.jsp" paramId="subsystemId" paramProperty="id"/>
+    <display:column property="shortName" title="Short Name" sortable="true" headerClass="sortable"/>
+    <display:column property="description" title="Description" sortable="true" headerClass="sortable"/>
+    <c:if test="${mode != 'c'}">
+        <display:column property="parentName" title="Parent" sortable="true" headerClass="sortable"
+                        href="displaySubsystem.jsp" paramId="subsystemId" paramProperty="parentId"/>
+    </c:if>
+    <display:column property="createdBy" title="Creator" sortable="true" headerClass="sortable"/>
     <display:column property="creationTS" title="Registration Date" sortable="true" headerClass="sortable"/>
 </display:table>
     
