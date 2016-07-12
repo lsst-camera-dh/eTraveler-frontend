@@ -20,7 +20,7 @@
 <%@attribute name="model"%>
 <%@attribute name="manufactureDateStr"%>
 <%@attribute name="locationId" required="true"%>
-<%@attribute name="autoName"%>
+<%@attribute name="subBatch"%>
 <%@attribute name="var" required="true" rtexprvalue="false"%>
 <%@variable name-from-attribute="var" alias="hardwareId" scope="AT_BEGIN"%>
 
@@ -51,8 +51,6 @@ where id=?<sql:param value="${hardwareTypeId}"/>;
     </sql:query>
 <c:set var="hType" value="${typeQ.rows[0]}"/>
 
-<c:set var="autoName" value="${autoName || hType.autoSequenceWidth != 0}"/>
-
 <c:if test="${hType.autoSequenceWidth != 0}">
     <sql:update>
         update HardwareType set autoSequence=LAST_INSERT_ID(autoSequence+1)
@@ -62,6 +60,9 @@ where id=?<sql:param value="${hardwareTypeId}"/>;
     <sql:update>
 insert into Hardware set
 <c:choose>
+    <c:when test="${subBatch}">
+lsstId='DO_NOT_EVER_NAME_A_COMPONENT_THIS', <%-- placeholder --%>
+    </c:when>
     <c:when test="${hType.autoSequenceWidth == 0}">
 lsstId=?<sql:param value="${lsstId}"/>,
     </c:when>
@@ -87,9 +88,18 @@ select id from Hardware where id=LAST_INSERT_ID();
     </sql:query>
 <c:set var="hardware" value="${hardwareQ.rows[0]}"/>
 <c:set var="hardwareId" value="${hardware.id}"/>
+
+<c:if test="${subBatch}"> <%-- replace placeholder --%>
+    <sql:update>
+update Hardware set
+lsstId=concat(?<sql:param value="${hType.name}"/>, '-S', ?<sql:param value="${hardwareId}"/>)
+where id=?<sql:param value="${hardwareId}"/>;
+    </sql:update>
+</c:if>
+
 <ta:setHardwareStatus hardwareId="${hardwareId}" hardwareStatusName="NEW" reason="New Item"/>
 <ta:setHardwareLocation hardwareId="${hardwareId}" newLocationId="${locationId}"
                         reason="New component registration"/>
-<c:if test="${hType.isBatched != 0}">
+<c:if test="${(hType.isBatched != 0) && (! subBatch)}">
     <batch:adjustInventory hardwareId="${hardwareId}" adjustment="${quantity}" reason="New batch"/>
 </c:if>

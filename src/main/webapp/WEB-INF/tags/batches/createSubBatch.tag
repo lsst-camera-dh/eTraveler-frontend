@@ -47,7 +47,7 @@ order by HLH.id desc limit 1
 
 <ta:createHardware var="childId"
                    hardwareTypeId="${parent.hardwareTypeId}"
-                   lsstId=""
+                   subBatch="true"
                    quantity="${numItems}"
                    manufacturer="${parent.manufacturer}"
                    manufacturerId="${parent.manufacturerId}"
@@ -57,7 +57,8 @@ order by HLH.id desc limit 1
 
 <c:set var="reason" value="Moved to child batch ${childId}"/>
 
-<batch:adjustInventory hardwareId="${parentId}"
-                       adjustment="${-1 * numItems}"
+<batch:adjustInventory hardwareId="${childId}"
+                       sourceBatchId="${parentId}"
+                       adjustment="${numItems}"
                        reason="${reason}"
                        activityId="${activityId}"/>
