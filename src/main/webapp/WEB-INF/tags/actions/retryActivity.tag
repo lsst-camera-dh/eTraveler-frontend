@@ -34,7 +34,6 @@
 
 <ta:createActivity var="newActivityId"
     hardwareId="${activity.hardwareId}"
-    hardwareRelationshipId="${activity.hardwareRelationshipId}"
     processId="${activity.processId}"
     processEdgeId="${activity.processEdgeId}"
     parentActivityId="${activity.parentActivityId}"
