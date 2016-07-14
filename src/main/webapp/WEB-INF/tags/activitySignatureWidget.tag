@@ -79,6 +79,17 @@ Role: <select name="sigRole">
 </select>
 Group: <select name="sigGroup">
     <option value="" selected>Select Group</option>
+    <option value="NCR-CameraProjectManager">NCR-CameraProjectManager</option>
+    <option value="NCR-CameraProjectScientist">NCR-CameraProjectScientist</option>
+    <option value="NCR-ChiefElectricalEngineer">NCR-ChiefElectricalEngineer</option>
+    <option value="NCR-ChiefMechanicalEngineer">NCR-ChiefMechanicalEngineer</option>
+    <option value="NCR-CRScientist">NCR-CRScientist</option>
+    <option value="NCR-IandTScientist">NCR-IandTScientist</option>
+    <option value="NCR-QA">NCR-QA</option>
+    <option value="NCR-Requirements">NCR-Requirements</option>
+    <option value="NCR-Safety">NCR-Safety</option>
+    <option value="NCR-SRScientist">NCR-SRScientist</option>
+    <option value="NCR-SystemIntegration">NCR-SystemIntegration</option>
     <option value="EtravelerSubsystemManagers">Default Managers</option>
     <option value="EtravelerSubsystemManagers">Legacy Managers</option>
     <c:forEach var="subSys" items="${subSysQ.rows}">
