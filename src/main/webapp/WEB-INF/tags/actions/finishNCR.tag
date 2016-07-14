@@ -30,14 +30,19 @@
 </sql:query>
 <c:set var="nExceptions" value="${fn:length(exceptionQ.rows)}"/>
 <c:choose>
-    <c:when test="${nExceptions != 1}">
-        <traveler:error message="Expected 1 exception, found ${nExceptions}" bug="true"/>
+    <c:when test="${nExceptions == 0}">
+        <c:set var="activityId" value="ncrActivityId"/>
+        <c:set var="travelerId" value="ncrActivityId"/>
+    </c:when>
+    <c:when test="${nExceptions == 1}">
+        <c:set var="exception" value="${exceptionQ.rows[0]}"/>
     </c:when>
     <c:otherwise>
-        <c:set var="exception" value="${exceptionQ.rows[0]}"/>
+        <traveler:error message="Too many exceptions, found ${nExceptions}" bug="true"/>
     </c:otherwise>
 </c:choose>
 
+<c:if test="${! empty exception}">
 <traveler:findTraveler activityId="${exception.exitActivityId}" var="travelerId"/>
 <sql:query var="activityQ">
     select * from Activity where id=?<sql:param value="${travelerId}"/>;
@@ -84,3 +89,4 @@
     update Exception set returnActivityId=?<sql:param value="${activityId}"/> 
     where id=?<sql:param value="${exception.exceptionId}"/>
 </sql:update>
+</c:if>
