@@ -24,12 +24,15 @@
                                  newStatusId="${param.hardwareStatusId}"/>
 
             <sql:query var="activityQ">
-select * from Activity where id=?<sql:param value="${param.activityId}"/>;
+select A.*, P.name
+from Activity A
+inner join Process P on P.id = A.processId
+where A.id=?<sql:param value="${param.activityId}"/>;
             </sql:query>
             <c:set var="activity" value="${activityQ.rows[0]}"/>
         </sql:transaction>
         
-        <c:if test="${activity.inNCR && empty activity.parentActivityId}">
+        <c:if test="${activity.inNCR && empty activity.parentActivityId && activity.name != appVariables.ncrTraveler}">
             <c:url var="ncrUrl" value="finishNCR.jsp">
                 <c:param name="activityId" value="${param.activityId}"/>
             </c:url>
