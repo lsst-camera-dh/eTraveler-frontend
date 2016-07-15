@@ -12,8 +12,6 @@
 
 <%@attribute name="hardwareId" required="true"%>
 
-info about child batches for batch ${hardwareId}
-
     <sql:query var="childrenQ">
 select BIH.*, H.id as hardwareId, H.lsstId
 from BatchedInventoryHistory BIH

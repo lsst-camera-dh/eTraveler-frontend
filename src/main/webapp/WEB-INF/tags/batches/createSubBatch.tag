@@ -14,6 +14,7 @@
 <%@attribute name="parentId" required="true"%>
 <%@attribute name="numItems" required="true"%>
 <%@attribute name="activityId"%>
+<%@attribute name="reason"%>
 <%@attribute name="var" required="true" rtexprvalue="false"%>
 <%@variable name-from-attribute="var" alias="childId" scope="AT_BEGIN"%>
 
@@ -41,10 +42,6 @@ order by HLH.id desc limit 1
     <traveler:error message="Not enough items in parent batch ${parentId} (${parent.count} < ${numItems})"/>
 </c:if>
 
-<%-- TODO: make up a name --%>
-
-<%-- TODO: tie to parent how? --%>
-
 <ta:createHardware var="childId"
                    hardwareTypeId="${parent.hardwareTypeId}"
                    subBatch="true"
@@ -55,7 +52,9 @@ order by HLH.id desc limit 1
                    manufactureDateStr="${parent.manufactureDate}"
                    locationId="${parent.locationId}"/>
 
-<c:set var="reason" value="Moved to child batch ${childId}"/>
+<c:if test="${empty reason}">
+    <c:set var="reason" value="Moved to child batch ${childId}"/>
+</c:if>
 
 <batch:adjustInventory hardwareId="${childId}"
                        sourceBatchId="${parentId}"
