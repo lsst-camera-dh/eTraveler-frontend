@@ -13,16 +13,9 @@
 <%@attribute name="varTotal" required="true" rtexprvalue="false"%>
 <%@variable name-from-attribute="varTotal" alias="total" scope="AT_BEGIN"%>
 
-    <sql:query var="rootQ">
-select id, lsstId from Hardware where id = rootBatchId(?<sql:param value="${hardwareId}"/>);
-    </sql:query>
-<c:set var="rootBatch" value="${rootQ.rows[0]}"/>
-<c:url var="rootUrl" value="displayHardware.jsp">
-    <c:param name="hardwareId" value="${rootBatch.id}"/>
-</c:url>
-Root Batch: <a href="${rootUrl}">${rootBatch.lsstId}</a>
-
 <batch:inventoryHistory var="total" hardwareId="${hardwareId}"/>
+<batch:findRootBatch hardwareId="${hardwareId}"/>
+<batch:childBatches hardwareId="${hardwareId}"/>
 <%--
 <batch:inventoryForm hardwareId="${hardwareId}" quantity="${total}"/>
 <batch:descent hardwareId="${hardwareId}"/>
