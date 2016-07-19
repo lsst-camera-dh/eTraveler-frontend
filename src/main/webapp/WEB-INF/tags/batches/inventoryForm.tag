@@ -16,26 +16,55 @@
 
 <c:if test="${empty quantity}">
     <sql:query var="sourceQ">
-        select null;
+((select sum(adjustment) from BatchedInventoryHistory where hardwareId = H.id)
+        - ifnull((select sum(adjustment) from BatchedInventoryHistory where sourceBatchId = H.id), 0)) as quantity
     </sql:query>
+    <c:set var="quantity" value="${sourceQ.rows[0].quantity}"/>
 </c:if>
 
-<form action="batches/adjustInventory.jsp">
-    <input type="hidden" name="freshnessToken" value="${freshnessToken}">
-    <input type="hidden" name="referringPage" value="${thisPage}">
-    <input type="hidden" name="hardwareId" value="${hardwareId}">
-    <input type="hidden" name="sign" value="-1">
-    <input type="submit" value="Remove Some">
-    How many?&nbsp;<input type="number" name="adjustment" min="1" max="${quantity}" required>
-    Why?&nbsp;<input type="text" name="reason">
-</form>
+    <sql:query var="parentQ">
+select BIH.sourceBatchId, Hc.lsstId as childLsstId, Hp.lsstId as parentLsstId
+from BatchedInventoryHistory BIH
+inner join Hardware Hc on Hc.id = BIH.hardwareId
+left join Hardware Hp on Hp.id = BIH.sourceBatchId
+where BIH.hardwareId = ?<sql:param value="${hardwareId}"/>
+order by BIH.id limit 1;
+    </sql:query>
+<c:set var="parent" value="${parentQ.rows[0]}"/>
 
-<form action="batches/adjustInventory.jsp">
-    <input type="hidden" name="freshnessToken" value="${freshnessToken}">
-    <input type="hidden" name="referringPage" value="${thisPage}">
-    <input type="hidden" name="hardwareId" value="${hardwareId}">
-    <input type="hidden" name="sign" value="1">
-    <input type="submit" value="Add Some">
-    How many?&nbsp;<input type="number" name="adjustment" min="1" required>
-    Why?&nbsp;<input type="text" name="reason">
-</form>
+<c:if test="${! empty parent.sourceBatchId}">
+    <form action="batches/adjustInventory.jsp">
+        <input type="hidden" name="freshnessToken" value="${freshnessToken}">
+        <input type="hidden" name="referringPage" value="${thisPage}">
+        <input type="hidden" name="hardwareId" value="${parent.sourceBatchId}">
+        <input type="hidden" name="sourceBatchId" value="${hardwareId}">
+        <input type="submit" value="Transfer to Parent">
+        How many?&nbsp;<input type="number" name="adjustment" min="1" max="${quantity}" required>
+        Why?&nbsp;<input type="text" name="reason">
+    </form>
+</c:if>
+
+    <sql:query var="childrenQ">
+select H.id, H.lsstId
+from BatchedInventoryHistory BIH
+inner join Hardware H on H.id = BIH.hardwareId
+where BIH.sourceBatchId = ?<sql:param value="${hardwareId}"/>
+and BIH.id = (select min(id) from BatchedInventoryHistory where hardwareId = BIH.hardwareId and sourceBatchId = BIH.sourceBatchId);
+    </sql:query>
+
+<c:if test="${! empty childrenQ.rows}">
+    <form action="batches/adjustInventory.jsp">
+        <input type="hidden" name="freshnessToken" value="${freshnessToken}">
+        <input type="hidden" name="referringPage" value="${thisPage}">
+        <input type="hidden" name="sourceBatchId" value="${hardwareId}">
+        <input type="submit" value="Transfer to Child">
+        <select name="hardwareId" required>
+            <option vale="" selected disabled>Select Child</option>
+            <c:forEach var="child" items="${childrenQ.rows}">
+                <option value="${child.id}">${child.lsstId}</option>
+            </c:forEach>
+        </select>
+        How many?&nbsp;<input type="number" name="adjustment" min="1" max="${quantity}" required>
+        Why?&nbsp;<input type="text" name="reason">
+    </form>
+</c:if>

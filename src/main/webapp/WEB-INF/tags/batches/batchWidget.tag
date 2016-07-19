@@ -17,7 +17,4 @@
 <batch:findRootBatch hardwareId="${hardwareId}"/>
 <batch:childBatches hardwareId="${hardwareId}"/>
 <batch:subBatchForm hardwareId="${hardwareId}"/>
-<%--
 <batch:inventoryForm hardwareId="${hardwareId}" quantity="${total}"/>
-<batch:descent hardwareId="${hardwareId}"/>
---%>
