@@ -21,7 +21,8 @@
     <sql:query var="parentQ">
 select H.*, HLH.locationId, 
 HT.name, HT.isBatched, 
-(select sum(adjustment) from BatchedInventoryHistory where hardwareId = H.id) as count
+((select sum(adjustment) from BatchedInventoryHistory where hardwareId = H.id)
+        - ifnull((select sum(adjustment) from BatchedInventoryHistory where sourceBatchId = H.id), 0)) as count
 from Hardware H
 inner join HardwareType HT on HT.id = H.hardwareTypeId
 left join HardwareLocationHistory HLH on HLH.hardwareId = H.id
