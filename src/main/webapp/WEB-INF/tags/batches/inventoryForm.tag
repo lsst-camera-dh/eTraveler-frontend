@@ -5,12 +5,20 @@
 --%>
 
 <%@tag description="show forms to add or remove items from a batch" pageEncoding="UTF-8"%>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql"%>
 <%@taglib prefix="traveler" tagdir="/WEB-INF/tags"%>
 
 <%@attribute name="hardwareId" required="true"%>
-<%@attribute name="quantity" required="true"%>
+<%@attribute name="quantity"%>
 
 <traveler:fullRequestString var="thisPage"/>
+
+<c:if test="${empty quantity}">
+    <sql:query var="sourceQ">
+        select null;
+    </sql:query>
+</c:if>
 
 <form action="batches/adjustInventory.jsp">
     <input type="hidden" name="freshnessToken" value="${freshnessToken}">

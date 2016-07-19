@@ -21,7 +21,8 @@ select isBatched from HardwareType where id=?<sql:param value="${hardwareTypeId}
     <sql:query var="componentsQ">
 select H.id, H.lsstId
 <c:if test="${isBatched}">
-    , sum(BIH.adjustment) as nAvailable
+    , ((select sum(adjustment) from BatchedInventoryHistory where hardwareId = H.id)
+        - ifnull((select sum(adjustment) from BatchedInventoryHistory where sourceBatchId = H.id), 0)) as nAvailable
 </c:if>
 from Hardware H
 inner join HardwareStatusHistory HSH 
@@ -32,9 +33,6 @@ inner join HardwareStatusHistory HSH
                         on HS.id=HSH2.hardwareStatusId 
                     where HSH2.hardwareId=H.id 
                         and HS.isStatusValue=1)
-<c:if test="${isBatched}">
-    inner join BatchedInventoryHistory BIH on BIH.hardwareId=H.id
-</c:if>
 where H.hardwareTypeId=?<sql:param value="${hardwareTypeId}"/>
 and HSH.hardwareStatusId=(select id from HardwareStatus where name='READY')
 <c:if test="${isBatched}">
