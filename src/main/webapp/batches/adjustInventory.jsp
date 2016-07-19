@@ -20,7 +20,10 @@
 <traveler:checkFreshness formToken="${param.freshnessToken}"/>
 
 <sql:transaction>
-    <batch:adjustInventory hardwareId="${param.hardwareId}" sourceBatchId="${param.sourceBatchId}" adjustment="${param.adjustment}" reason="${param.reason}"/>
+    <batch:adjustInventory hardwareId="${param.hardwareId}" 
+                           sourceBatchId="${param.sourceBatchId}" 
+                           adjustment="${param.adjustment}" 
+                           reason="${param.reason}"/>
 </sql:transaction>        
 <c:redirect url="${param.referringPage}"/>
     </body>
