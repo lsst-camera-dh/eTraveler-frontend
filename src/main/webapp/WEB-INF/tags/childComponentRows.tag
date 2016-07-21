@@ -22,7 +22,7 @@ select
     Hc.lsstId as child_experimentSN,
     HTc.name as child_hardwareTypeName,
     Hc.id as child_id,
-    MRT.name as relationshipName,
+    MRT.name as relationshipTypeName,
     MRST.slotname as slotname
 from Hardware Hp
     inner join HardwareType HTp on HTp.id = Hp.hardwareTypeId
