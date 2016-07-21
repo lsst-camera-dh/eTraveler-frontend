@@ -10,6 +10,7 @@
 <%@taglib prefix="traveler" tagdir="/WEB-INF/tags"%>
 
 <%@attribute name="hardwareId" required="true"%>
+<%@attribute name="noBatched"%>
 <%@attribute name="var" required="true" rtexprvalue="false"%>
 <%@variable name-from-attribute="var" alias="compList" scope="AT_BEGIN"%>
 
@@ -18,4 +19,7 @@
     jspContext.setAttribute("compList", compList);
 %>
 
-<traveler:childComponentRows hardwareId="${hardwareId}" level="0" compList="${compList}"/>
+<traveler:childComponentRows hardwareId="${hardwareId}" 
+                             level="0" 
+                             noBatched="${noBatched}" 
+                             compList="${compList}"/>
