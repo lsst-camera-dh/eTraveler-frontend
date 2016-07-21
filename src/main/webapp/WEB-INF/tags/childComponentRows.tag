@@ -1,5 +1,5 @@
 <%-- 
-    Document   : compOfRows
+    Document   : childComponentRows
     Created on : Apr 9, 2013, 2:01:16 PM
     Author     : focke
 --%>
@@ -47,7 +47,5 @@ where
     <%
         ((java.util.List)jspContext.getAttribute("compList")).add(jspContext.getAttribute("cRow"));
     %>
-    <c:if test="${newDepth > 0}">
-        <traveler:childComponentRows hardwareId="${cRow.itemId}" level="${nextLevel}" compList="${compList}"/>
-    </c:if>
+    <traveler:childComponentRows hardwareId="${cRow.child_id}" level="${nextLevel}" compList="${compList}"/>
 </c:forEach>
