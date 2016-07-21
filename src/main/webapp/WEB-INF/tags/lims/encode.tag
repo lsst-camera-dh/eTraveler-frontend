@@ -8,7 +8,7 @@
 <%@tag import="com.fasterxml.jackson.databind.ObjectMapper"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
-<%@attribute name="input" required="true" type="java.util.Map"%>
+<%@attribute name="input" required="true" type="java.lang.Object"%>
 <%@attribute name="var" required="true" rtexprvalue="false"%>
 <%@variable name-from-attribute="var" alias="output" scope="AT_BEGIN"%>
 
