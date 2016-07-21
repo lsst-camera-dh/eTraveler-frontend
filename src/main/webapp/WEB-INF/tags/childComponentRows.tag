@@ -24,7 +24,7 @@ select
     HTc.name as child_hardwareTypeName,
     Hc.id as child_id,
     MRT.name as relationshipTypeName,
-    MRST.slotname as slotname
+    MRST.slotname as slotName
 from Hardware Hp
     inner join HardwareType HTp on HTp.id = Hp.hardwareTypeId
     inner join MultiRelationshipSlot MRS on MRS.hardwareId = Hp.id
