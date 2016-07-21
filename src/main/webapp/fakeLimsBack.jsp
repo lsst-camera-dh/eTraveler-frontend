@@ -49,6 +49,9 @@
     <c:when test="${command == 'ingest'}">
         <lims:ingest/>
     </c:when>
+    <c:when test="${command == 'getHardwareHierarchy'}">
+        <lims:getHardwareHierarchy/>
+    </c:when>
     <%-- scripting --%>
     <c:when test="${command == 'nextJob'}">
         <lims:script/>

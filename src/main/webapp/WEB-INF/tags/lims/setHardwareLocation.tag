@@ -13,17 +13,7 @@
 
 <lims:checkHardwareType var="htId" inputTypeName="${inputs.hardwareTypeName}" inputTypeId="${inputs.hardwareTypeId}"/>
 
-<sql:query var="hardwareQ">
-select id 
-from Hardware
-where lsstId=?<sql:param value="${inputs.experimentSN}"/>
-and hardwareTypeId=?<sql:param value="${htId}"/>
-;
-</sql:query>
-<c:if test="${empty hardwareQ.rows}">
-    <traveler:error message="No component with serial '${inputs.experimentSN}' and type '${inputs.hardwareTypeName}' found"/>
-</c:if>
-<c:set var="hardwareId" value="${hardwareQ.rows[0].id}"/>
+<traveler:findComponent var="hardwareId" serial="${inputs.experimentSN}" typeName="${inputs.hardwareTypeName}"/>
 
 <c:choose>
     <c:when test="${empty inputs.siteName}">
