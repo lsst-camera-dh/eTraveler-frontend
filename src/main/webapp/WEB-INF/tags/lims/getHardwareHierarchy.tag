@@ -13,7 +13,7 @@
 
 <traveler:findComponent var="hardwareId" serial="${inputs.experimentSN}" typeName="${inputs.hardwareTypeName}"/>
 
-<traveler:childComponentList var="compList" hardwareId="${hardwareId}"/>
+<traveler:childComponentList var="compList" hardwareId="${hardwareId}" noBatched="${inputs.noBatched}"/>
 
 <lims:encode var="clStr" input="${compList}"/>
 

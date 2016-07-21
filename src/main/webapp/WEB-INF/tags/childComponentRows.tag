@@ -11,6 +11,7 @@
 
 <%@attribute name="hardwareId" required="true"%>
 <%@attribute name="level" required="true"%>
+<%@attribute name="noBatched"%>
 <%@attribute name="compList" required="true" type="java.util.List"%>
 
     <sql:query var="componentsQ">
@@ -33,7 +34,7 @@ from Hardware Hp
         and MRH.id = (select max(id) from MultiRelationshipHistory where multiRelationshipSlotId = MRS.id)
     inner join MultiRelationshipAction MRA on MRA.id = MRH.multiRelationshipActionId
     inner join Hardware Hc on Hc.id = MRH.minorId
-    inner join HardwareType HTc on HTc.id = Hc.hardwareTypeId
+    inner join HardwareType HTc on HTc.id = Hc.hardwareTypeId <c:if test="${noBatched}">and HTc.isBatched = 0</c:if>
 where 
     Hp.id = ?<sql:param value="${hardwareId}"/>
     and 
@@ -47,5 +48,8 @@ where
     <%
         ((java.util.List)jspContext.getAttribute("compList")).add(jspContext.getAttribute("cRow"));
     %>
-    <traveler:childComponentRows hardwareId="${cRow.child_id}" level="${nextLevel}" compList="${compList}"/>
+    <traveler:childComponentRows hardwareId="${cRow.child_id}" 
+                                 level="${nextLevel}" 
+                                 noBatched="${noBatched}"
+                                 compList="${compList}"/>
 </c:forEach>
