@@ -23,7 +23,7 @@
 <sql:query var="childQ">
     select
         A.id as activityId, A.begin, A.end, A.hardwareId, A.inNCR,
-        P.id as processId, P.name, P.hardwareRelationshipTypeId, P.substeps, P.shortDescription,
+        P.id as processId, P.name, P.substeps, P.shortDescription,
         P.travelerActionMask&(select maskBit from InternalAction where name='async') as isAsync,
         PE.id as processEdgeId, PE.step,
         AFS.name as statusName,

@@ -117,7 +117,6 @@ where S.name=?<sql:param value="${preferences.siteName}"/>
 
 <form METHOD=GET ACTION="operator/createTraveler.jsp">
     <input type="hidden" name="freshnessToken" value="${freshnessToken}">
-    <input type="hidden" name="inNCR" value="FALSE">
     <table>
         <tr>
             <td>

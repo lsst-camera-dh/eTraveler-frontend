@@ -17,7 +17,7 @@
 <traveler:fullRequestString var="thisPage"/>
 <traveler:checkMask var="mayOperate" activityId="${activityId}"/>
 
-<traveler:getActivityStatus var="status" activityId="${activityId}"/>
+<traveler:getActivityStatus var="status" varFinal="isFinal" activityId="${activityId}"/>
 
 <c:choose>
     <c:when test="${status == 'inProgress'}">
@@ -82,7 +82,7 @@ order by ipId;
     </sql:query>
 
 <c:if test="${! empty inputQ.rows}">
-    <h2>Results</h2>
+    <h2>Instructions and Results</h2>
     <display:table name="${inputQ.rows}" id="row" class="datatable">
         <display:column property="label" title="Name" sortable="true" headerClass="sortable"/>
         <display:column property="description" sortable="true" headerClass="sortable"/>

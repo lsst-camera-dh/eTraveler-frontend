@@ -19,7 +19,17 @@
 <%@variable name-from-attribute="var" alias="activityId" scope="AT_BEGIN"%>
 
 <c:if test="${empty inNCR}">
-    <c:set var="inNCR" value="false"/>
+    <sql:query var="travelerQ">
+        select name from Process where id = ?<sql:param value="${processId}"/>;
+    </sql:query>
+    <c:choose>
+        <c:when test="${travelerQ.rows[0].name == appVariables.ncrTraveler}">
+            <c:set var="inNCR" value="true"/>
+        </c:when>
+        <c:otherwise>
+            <c:set var="inNCR" value="false"/>
+        </c:otherwise>
+    </c:choose>
 </c:if>
 
 <%-- check if there are any harnessed steps in traveler --%>

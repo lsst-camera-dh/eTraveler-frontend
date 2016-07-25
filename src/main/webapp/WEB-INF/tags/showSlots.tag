@@ -30,6 +30,7 @@
         <display:column property="minorTypeName" title="Component Type" sortable="true" headerClass="sortable"
                         href="displayHardwareType.jsp" paramId="hardwareTypeId" paramProperty="minorTypeId"/>
         <display:column property="relName" title="Relationship" sortable="true" headerClass="sortable"/>
+        <display:column property="description" title="Description" sortable="true" headerClass="sortable"/>
         <display:column property="slotname" title="Slot" sortable="true" headerClass="sortable"/>
         <display:column property="nMinorItems" title="# Items" sortable="true" headerClass="sortable"/>
         <display:column property="intName" title="Action" sortable="true" headerClass="sortable"/>
