@@ -9,6 +9,7 @@
 <%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql"%>
 <%@taglib prefix="display" uri="http://displaytag.sf.net"%>
 <%@taglib prefix="traveler" tagdir="/WEB-INF/tags"%>
+<%@taglib prefix="relationships" tagdir="/WEB-INF/tags/relationships"%>
 
 <%@attribute name="processId" required="true"%>
 
@@ -55,4 +56,4 @@ order by PP.id
 <traveler:prereqTable prereqTypeName="CONSUMABLE" processId="${processId}"/>
 <traveler:prereqTable prereqTypeName="PREPARATION" processId="${processId}"/>
 
-<traveler:showSlots processId="${processId}"/>
+<relationships:showSlotsProcess processId="${processId}"/>
