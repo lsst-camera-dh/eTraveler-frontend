@@ -49,6 +49,9 @@
     <c:when test="${command == 'ingest'}">
         <lims:ingest/>
     </c:when>
+    <c:when test="${command == 'getHardwareHierarchy'}">
+        <lims:getHardwareHierarchy/>
+    </c:when>
     <%-- scripting --%>
     <c:when test="${command == 'nextJob'}">
         <lims:script/>
@@ -74,6 +77,9 @@
     </c:when>
     <c:when test="${command == 'setHardwareStatus'}">
         <lims:setHardwareStatus/>
+    </c:when>
+    <c:when test="${command == 'setHardwareLocation'}">
+        <lims:setHardwareLocation/>
     </c:when>
     <%-- unimplemented JH --%>
     <c:when test="${command == 'status'}">
