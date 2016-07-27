@@ -14,17 +14,17 @@
 <%@attribute name="activityId"%>
 <%@attribute name="reason" required="true"%>
 
-<sql:update >
-    insert into HardwareLocationHistory set
-    locationId=?<sql:param value="${newLocationId}"/>,
-    hardwareId=?<sql:param value="${hardwareId}"/>,
-    <c:if test="${! empty activityId}">
-        activityId=?<sql:param value="${activityId}"/>,
-    </c:if>
-    reason=?<sql:param value="${reason}"/>,
-    createdBy=?<sql:param value="${userName}"/>,
-    creationTS=UTC_TIMESTAMP();
-</sql:update>
+    <sql:update >
+insert into HardwareLocationHistory set
+locationId=?<sql:param value="${newLocationId}"/>,
+hardwareId=?<sql:param value="${hardwareId}"/>,
+<c:if test="${! empty activityId}">
+    activityId=?<sql:param value="${activityId}"/>,
+</c:if>
+reason=?<sql:param value="${reason}"/>,
+createdBy=?<sql:param value="${userName}"/>,
+creationTS=UTC_TIMESTAMP();
+    </sql:update>
 
     <sql:query var="childrenQ" >
 select MRS.hardwareId, MRH.minorId, MRA.name

@@ -18,12 +18,12 @@
 <c:choose>
     <c:when test="${empty inputs.siteName}">
         <sql:query var="siteQ">
-            select siteId 
-            from Location 
-            where id = (select locationId 
-                        from HardwareLocationHistory 
-                        where hardwareId = ?<sql:param value="${hardwareId}"/>
-                        order by id desc limit 1);
+select siteId 
+from Location 
+where id = (select locationId 
+            from HardwareLocationHistory 
+            where hardwareId = ?<sql:param value="${hardwareId}"/>
+            order by id desc limit 1);
         </sql:query>
     </c:when>
     <c:otherwise>
