@@ -37,6 +37,7 @@ left join MultiRelationshipHistory MRH
         and MRH.multiRelationshipSlotId = MRS.id
         and MRH.activityId = A.id
 where A.id = ?<sql:param value="${activityId}"/>
+order by MRT.id, MRST.id
 ;
     </sql:query>
 
