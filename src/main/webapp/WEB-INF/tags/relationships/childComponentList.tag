@@ -7,7 +7,7 @@
 <%@tag description="Make a list representing the tree of child components in an assembly" pageEncoding="US-ASCII"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql"%>
-<%@taglib prefix="traveler" tagdir="/WEB-INF/tags"%>
+<%@taglib prefix="relationships" tagdir="/WEB-INF/tags/relationships"%>
 
 <%@attribute name="hardwareId" required="true"%>
 <%@attribute name="noBatched"%>
@@ -19,7 +19,7 @@
     jspContext.setAttribute("compList", compList);
 %>
 
-<traveler:childComponentRows hardwareId="${hardwareId}" 
+<relationships:childComponentRows hardwareId="${hardwareId}" 
                              level="0" 
                              noBatched="${noBatched}" 
                              compList="${compList}"/>

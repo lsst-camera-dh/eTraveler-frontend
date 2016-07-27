@@ -7,7 +7,7 @@
 <%@tag description="Put rows in componentTable" pageEncoding="US-ASCII"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql"%>
-<%@taglib prefix="traveler" tagdir="/WEB-INF/tags"%>
+<%@taglib prefix="relationships" tagdir="/WEB-INF/tags/relationships"%>
 
 <%@attribute name="hardwareId" required="true"%>
 <%@attribute name="level" required="true"%>
@@ -48,7 +48,7 @@ where
     <%
         ((java.util.List)jspContext.getAttribute("compList")).add(jspContext.getAttribute("cRow"));
     %>
-    <traveler:childComponentRows hardwareId="${cRow.child_id}" 
+    <relationships:childComponentRows hardwareId="${cRow.child_id}" 
                                  level="${nextLevel}" 
                                  noBatched="${noBatched}"
                                  compList="${compList}"/>

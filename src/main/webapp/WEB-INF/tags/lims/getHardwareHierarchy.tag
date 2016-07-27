@@ -10,10 +10,11 @@
 <%@taglib prefix="traveler" tagdir="/WEB-INF/tags"%>
 <%@taglib prefix="ta" tagdir="/WEB-INF/tags/actions"%>
 <%@taglib prefix="lims" tagdir="/WEB-INF/tags/lims"%>
+<%@taglib prefix="relationships" tagdir="/WEB-INF/tags/relationships"%>
 
 <traveler:findComponent var="hardwareId" serial="${inputs.experimentSN}" typeName="${inputs.hardwareTypeName}"/>
 
-<traveler:childComponentList var="compList" hardwareId="${hardwareId}" noBatched="${inputs.noBatched}"/>
+<relationships:childComponentList var="compList" hardwareId="${hardwareId}" noBatched="${inputs.noBatched}"/>
 
 <lims:encode var="clStr" input="${compList}"/>
 
