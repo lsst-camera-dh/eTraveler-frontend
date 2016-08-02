@@ -14,27 +14,30 @@
 <%@attribute name="activityId"%>
 <%@attribute name="reason" required="true"%>
 
-<sql:update >
-    insert into HardwareLocationHistory set
-    locationId=?<sql:param value="${newLocationId}"/>,
-    hardwareId=?<sql:param value="${hardwareId}"/>,
-    <c:if test="${! empty activityId}">
-        activityId=?<sql:param value="${activityId}"/>,
-    </c:if>
-    reason=?<sql:param value="${reason}"/>,
-    createdBy=?<sql:param value="${userName}"/>,
-    creationTS=UTC_TIMESTAMP();
-</sql:update>
+    <sql:update >
+insert into HardwareLocationHistory set
+locationId=?<sql:param value="${newLocationId}"/>,
+hardwareId=?<sql:param value="${hardwareId}"/>,
+<c:if test="${! empty activityId}">
+    activityId=?<sql:param value="${activityId}"/>,
+</c:if>
+reason=?<sql:param value="${reason}"/>,
+createdBy=?<sql:param value="${userName}"/>,
+creationTS=UTC_TIMESTAMP();
+    </sql:update>
 
     <sql:query var="childrenQ" >
-select MRS.hardwareId, MRS.minorId, MRA.name
+select MRS.hardwareId, MRH.minorId, MRA.name
 from MultiRelationshipSlot MRS
-inner join MultiRelationshipHistory MRH on MRH.multirelationshipSlotId=MRS.id
-        and MRH.id=(select max(id) from MultiRelationshipHistory where multirelationshipSlotId=MRS.id)
-inner join MultiRelationshipAction MRA on MRA.id=MRH.multirelationshipActionId
-where MRS.hardwareId=?<sql:param value="${hardwareId}"/>
-and MRA.name='install';
+inner join MultiRelationshipHistory MRH on MRH.multirelationshipSlotId = MRS.id
+        and MRH.id = (select max(id) from MultiRelationshipHistory where multirelationshipSlotId = MRS.id)
+inner join MultiRelationshipAction MRA on MRA.id = MRH.multirelationshipActionId
+where MRS.hardwareId = ?<sql:param value="${hardwareId}"/>
+and MRA.name = 'install';
     </sql:query>
 <c:forEach var="childRow" items="${childrenQ.rows}">
-    <ta:setHardwareLocation newLocationId="${newLocationId}" hardwareId="${childRow.minorId}" activityId="${activityId}" reason="${reason}"/>
+    <ta:setHardwareLocation newLocationId="${newLocationId}" 
+                            hardwareId="${childRow.minorId}" 
+                            activityId="${activityId}" 
+                            reason="Moved with parent assembly"/>
 </c:forEach>

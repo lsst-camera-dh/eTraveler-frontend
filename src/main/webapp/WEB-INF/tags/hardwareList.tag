@@ -10,6 +10,7 @@
 <%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql"%>
 <%@taglib prefix="display" uri="http://displaytag.sf.net"%>
 <%@taglib prefix="traveler" tagdir="/WEB-INF/tags"%>
+<%@taglib prefix="relationships" tagdir="/WEB-INF/tags/relationships"%>
 
 <%@attribute name="hardwareGroupId"%>
 <%@attribute name="hardwareTypeId"%>
@@ -29,8 +30,9 @@
     L.id as locationId, L.name as locationName,
     S.id as siteId, S.name as siteName,
     HI.identifier as nickName,
-    count(A.id) as nTravelers,
-    sum(BIH.adjustment) as quantity,
+    (select count(*) from Activity where hardwareId = H.id and parentActivityId is null) as nTravelers,
+    ((select sum(adjustment) from BatchedInventoryHistory where hardwareId = H.id)
+        - ifnull((select sum(adjustment) from BatchedInventoryHistory where sourceBatchId = H.id), 0)) as quantity,
     SS.id as subsystemId, SS.name as subsystemName
     from Hardware H
     inner join HardwareType HT on HT.id=H.hardwareTypeId
@@ -45,9 +47,7 @@
     inner join Subsystem SS on SS.id=HT.subsystemId
     left join HardwareIdentifier HI on HI.hardwareId=H.id 
         and HI.authorityId=(select id from HardwareIdentifierAuthority where name=?<sql:param value="${preferences.idAuthName}"/>)
-    left join Activity A on A.hardwareId=H.id
-    left join BatchedInventoryHistory BIH on BIH.hardwareId=H.id
-    where A.parentActivityId is null
+    where 1
     <c:if test="${! empty hardwareGroupId}">
         and HTGM.hardwareGroupId=?<sql:param value="${hardwareGroupId}"/>
     </c:if>
@@ -78,8 +78,7 @@
     <c:if test="${! empty subsystemName && subsystemName != 'Any'}">
         and SS.name=?<sql:param value="${subsystemName}"/>
     </c:if>
-    group by H.id
-    ;
+    order by H.lsstId, HT.name;
 </sql:query>
 <display:table name="${result.rows}" id="row" class="datatable" sort="list"
                pagesize="${fn:length(result.rows) > preferences.pageLength ? preferences.pageLength : 0}">
@@ -101,7 +100,7 @@
     <display:column property="nTravelers" title="# Travelers" sortable="true" headerClass="sortable"
                     href="listTravelers.jsp" paramId="hardwareId" paramProperty="id"/>
     <display:column title="# Components" sortable="true" headerClass="sortable">
-        <traveler:countComponents var="nComps" hardwareId="${row.id}"/>
+        <relationships:countComponents var="nComps" hardwareId="${row.id}"/>
         <c:out value="${nComps}"/>
     </display:column>
     <c:if test="${(empty siteId and empty locationId and (empty siteName or siteName == 'any')) or preferences.showFilteredColumns}">

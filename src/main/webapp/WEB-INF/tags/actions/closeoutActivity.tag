@@ -9,6 +9,7 @@
 <%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql"%>
 <%@taglib prefix="traveler" tagdir="/WEB-INF/tags"%>
 <%@taglib prefix="ta" tagdir="/WEB-INF/tags/actions"%>
+<%@taglib prefix="relationships" tagdir="/WEB-INF/tags/relationships"%>
 
 <%@attribute name="activityId" required="true"%>
 <%@attribute name="newLocationId"%>
@@ -55,7 +56,7 @@ where A.id=?<sql:param value="${activityId}"/>;
                           removeLabel="${removeLabel}"/>
 </c:if>
 
-<ta:closeoutRelationship activityId="${activityId}"/>
+<relationships:closeoutRelationship activityId="${activityId}"/>
 
 <c:if test="${initParam['activityAutoCreate']}">
     <%-- This creates the next step if that's what needs to happen. --%>

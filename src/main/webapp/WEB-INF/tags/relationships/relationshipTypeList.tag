@@ -1,10 +1,10 @@
 <%-- 
-    Document   : hardwareRelationshipTypeList
+    Document   : relationshipTypeList
     Created on : Jan 7, 2015, 2:12:43 PM
     Author     : focke
 --%>
 
-<%@tag description="List HardwareRelationshipTypes" pageEncoding="UTF-8"%>
+<%@tag description="List MultiRelationshipTypes" pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql"%>
