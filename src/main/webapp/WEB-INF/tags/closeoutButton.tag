@@ -14,7 +14,7 @@
 
 <traveler:checkMask var="mayOperate" activityId="${activityId}"/>
 <traveler:checkSsPerm var="maySupervise" activityId="${activityId}" roles="supervisor"/>
-<traveler:checkSsPerm var="maySkip" activityId="${activityId}" roles="nobody"/>
+<c:set var="maySkip" value="${maySupervise}"/>
 
 <traveler:findTraveler var="travelerId" activityId="${activityId}"/>
 <c:set var="isTop" value="${travelerId == activityId}"/>
