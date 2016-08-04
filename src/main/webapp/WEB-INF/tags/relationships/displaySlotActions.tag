@@ -18,6 +18,9 @@
 
 <traveler:fullRequestString var="thisPage"/>
 
+<traveler:getActivityStatus var="activityStatus" varFinal="isFinal" activityId="${activityId}"/>
+<c:set var="isNew" value="${activityStatus == 'new'}"/>
+
     <sql:query var="actionsQ">
 select MRA.name as actName, 
 MRT.name as relName, MRT.description, MRT.minorTypeId, if(MRT.singleBatch != 0, MRT.nMinorItems, 1) as nMinorItems, 
@@ -73,7 +76,8 @@ order by MRT.id, MRST.id
                             <relationships:componentSelector var="gotSome"
                                                              hardwareTypeId="${action.minorTypeId}" 
                                                              quantity="${action.nMinorItems}"/>
-                            <input type="submit" value="Assign" <c:if test="${(! gotSome) || (! mayOperate) || (! enabled)}">disabled</c:if>>
+                            <input type="submit" value="Assign" 
+                                   <c:if test="${(! gotSome) || (! mayOperate) || (! enabled) || (! isNew)}">disabled</c:if>>
                         </form>
                     </c:when>
                      <c:otherwise>
