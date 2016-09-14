@@ -46,7 +46,7 @@ order by section, schemaName, schemaVersion, schemaInstance, name
                 <c:otherwise>
                     <c:url var="dcLink" value="http://srs.slac.stanford.edu/DataCatalog/">
                         <c:param name="dataset" value="${row.catalogKey}"/>
-                        <c:param name="experiment" value="LSST-CAMERA"/>
+                        <c:param name="experiment" value="${appVariables.experiment}"/>
                     </c:url>
                     <a href="${dcLink}" target="_blank"><c:out value="${row.value}"/></a>
                 </c:otherwise>

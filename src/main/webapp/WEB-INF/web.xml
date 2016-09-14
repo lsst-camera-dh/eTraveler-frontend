@@ -142,6 +142,15 @@
     </filter-mapping>
 
     <filter>
+        <filter-name>ExperimentContextFilter</filter-name>
+        <filter-class>org.srs.web.base.filters.experimentcontext.ExperimentContextFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>ExperimentContextFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
+    <filter>
         <filter-name>GroupCheckerFilter</filter-name>
         <filter-class>org.srs.groupmanager.filter.GroupCheckerFilter</filter-class>
         <init-param>
@@ -258,14 +267,6 @@
 <servlet-name>ExperimentContextServlet</servlet-name>
       <url-pattern>/exp/*</url-pattern>
     </servlet-mapping>
-    <filter>
-<filter-name>ExperimentContextFilter</filter-name>
-<filter-class>org.srs.web.base.filters.experimentcontext.ExperimentContextFilter</filter-class>
-    </filter>
-    <filter-mapping>
-<filter-name>ExperimentContextFilter</filter-name>
-      <url-pattern>/*</url-pattern>
-    </filter-mapping>
 
     <context-param>
         <param-name>
