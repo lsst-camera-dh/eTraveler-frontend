@@ -28,7 +28,7 @@
 <c:if test="${empty perHw}"><c:set var="perHw" value="false"/></c:if>
 
     <sql:query var="result" >
-select A.id as activityId, A.begin, A.end, A.createdBy, A.closedBy,
+select A.id as activityId, A.begin, A.end, A.createdBy, A.closedBy, A.creationTS,
     AFS.name as status,
     P.id as processId, 
     concat(P.name, ' v', P.version) as processName,
@@ -116,8 +116,9 @@ order by A.id desc
         <display:column property="subsystemName" title="Subsystem" sortable="true" headerClass="sortable"
                         href="displaySubsystem.jsp" paramId="subsystemId" paramProperty="subsystemId"/>
     </c:if>
-    <display:column property="begin" sortable="true" headerClass="sortable"/>
+    <display:column property="creationTS" title="creation" sortable="true" headerClass="sortable"/>
     <display:column property="createdBy" sortable="true" headerClass="sortable"/>
+    <display:column property="begin" sortable="true" headerClass="sortable"/>
     <c:if test="${(empty status || status == 'any') || preferences.showFilteredColumns}">
         <display:column property="status" sortable="true" headerClass="sortable"/>
     </c:if>
