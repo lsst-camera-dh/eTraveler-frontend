@@ -168,12 +168,12 @@
     </filter-mapping>
 
     <filter>
-<filter-name>BlankLineFilter</filter-name>
-<filter-class>org.srs.web.base.filters.blankline.BlankLineFilter</filter-class>
+        <filter-name>BlankLineFilter</filter-name>
+        <filter-class>org.srs.web.base.filters.blankline.BlankLineFilter</filter-class>
     </filter>
     <filter-mapping>
-<filter-name>BlankLineFilter</filter-name>
-      <url-pattern>/*</url-pattern>
+        <filter-name>BlankLineFilter</filter-name>
+        <url-pattern>/*</url-pattern>
     </filter-mapping>
 
 <!-- Icons for tree tag -->
