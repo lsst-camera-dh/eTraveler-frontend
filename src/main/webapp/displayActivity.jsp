@@ -56,6 +56,20 @@
 <c:url var="hwLink" value="displayHardware.jsp"><c:param name="hardwareId" value="${activity.hardwareId}"/></c:url>
 <h2>Process: <c:out value="${activity.name}"/> Component: <a href="${hwLink}"><c:out value="${activity.lsstId}"/></a></h2>
 
+<traveler:findRun varRun="runNumber" varTraveler="runTravelerId" activityId="${param.activityId}"/>
+<c:choose>
+    <c:when test="${runTravelerId == param.activityId}">
+        <c:set var="runText" value="${runNumber}"/>
+    </c:when>
+    <c:otherwise>
+        <c:url var="runLink" value="displayActivity.jsp">
+            <c:param name="activityId" value="${runTravelerId}"/>
+        </c:url>
+        <c:set var="runText" value="<a href='${runLink}'>${runNumber}</a>"/>
+    </c:otherwise>
+</c:choose>
+<h2>Run Number: ${runText}</h2>
+
 <traveler:ncrContainingTraveler activityId="${param.activityId}"/>
 
     <div id="theFold"/>        
