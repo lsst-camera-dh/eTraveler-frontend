@@ -10,7 +10,6 @@
 <%@taglib prefix="traveler" tagdir="/WEB-INF/tags"%>
 <%@taglib prefix="ta" tagdir="/WEB-INF/tags/actions"%>
 
-<%-- The list of normal or fragment attributes can be specified here: --%>
 <%@attribute name="hardwareId" required="true"%>
 <%@attribute name="processId" required="true"%>
 <%@attribute name="jobHarnessId"%>
@@ -22,8 +21,9 @@
     <sql:query var="travelerQ">
         select name from Process where id = ?<sql:param value="${processId}"/>;
     </sql:query>
+    <c:set var="isNcrTraveler" value="${travelerQ.rows[0].name == appVariables.ncrTraveler}"/>
     <c:choose>
-        <c:when test="${travelerQ.rows[0].name == appVariables.ncrTraveler}">
+        <c:when test="${isNcrTraveler}">
             <c:set var="inNCR" value="true"/>
         </c:when>
         <c:otherwise>
@@ -45,6 +45,10 @@
             hardwareId="${hardwareId}" processId="${processId}" inNCR="${inNCR}"/>
     </c:otherwise>
 </c:choose>
+
+<c:if test="${(! inNCR) || (isNcrTraveler)}">
+    <ta:createRun activityId="${activityId}"/>
+</c:if>
 
 <sql:query var="hardwareQ">
     select H.*, HS.name

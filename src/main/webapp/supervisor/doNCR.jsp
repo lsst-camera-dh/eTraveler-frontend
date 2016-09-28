@@ -49,8 +49,10 @@ createdBy=?<sql:param value="${userName}"/>,
 creationTS=UTC_TIMESTAMP();
         </sql:update>
 
+<ta:createRun activityId="${NCRActivityId}"/>
+
 <ta:ncrExitActivity activityId="${param.activityId}"/>
 </sql:transaction>
-        <traveler:redirDA activityId="${NCRActivityId}"/>        
+        <traveler:redirDA activityId="${NCRActivityId}"/>
     </body>
 </html>
