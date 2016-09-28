@@ -10,8 +10,10 @@
 <%@taglib prefix="traveler" tagdir="/WEB-INF/tags"%>
 
 <%@attribute name="activityId" required="true"%>
-<%@attribute name="var" required="true" rtexprvalue="false"%>
-<%@variable name-from-attribute="var" alias="travelerId" scope="AT_BEGIN"%>
+<%@attribute name="varTraveler" required="true" rtexprvalue="false"%>
+<%@variable name-from-attribute="varTraveler" alias="travelerId" scope="AT_BEGIN"%>
+<%@attribute name="varRun" required="true" rtexprvalue="false"%>
+<%@variable name-from-attribute="varRun" alias="runNumber" scope="AT_BEGIN"%>
 
     <sql:query var="activityQ">
 select A.inNCR
@@ -35,11 +37,16 @@ where E.ncrActivityId = ?<sql:param value="${ncrId}"/>
                 <traveler:findRun var="travelerId" activityId="${travelerId}"/>
             </c:when>
             <c:otherwise>
-                <c:set var="travlerId" value=""/>
+                <c:set var="travlerId" value="${activityId}"/>
             </c:otherwise>
         </c:choose>
     </c:when>
     <c:otherwise>
-        <c:set var="travlerId" value=""/>
+        <c:set var="travlerId" value="${activityId}"/>
     </c:otherwise>
 </c:choose>
+
+    <sql:query var="runQ">
+select runNumber from RunNumber where rootActivityId = ?<sql:param value="${travelerId}"/>;
+    </sql:query>
+<c:set var="runNumber" value="${runQ.rows[0].runNumber}"/>

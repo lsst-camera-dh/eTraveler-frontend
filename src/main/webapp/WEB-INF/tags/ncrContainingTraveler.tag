@@ -19,16 +19,9 @@ where A.id = ?<sql:param value="${activityId}"/>
 <c:set var="activity" value="${activityQ.rows[0]}"/>
 
 <c:if test="${activity.inNCR}">
-    <traveler:findTraveler var="ncrId" activityId="${activityId}"/>
-    <sql:query var="exceptionQ">
-select E.exitActivityId
-from Exception E
-where E.ncrActivityId = ?<sql:param value="${ncrId}"/>
-    </sql:query>
+    <traveler:findNcrContainingTraveler var="travelerId" activityId="${activityId}"/>
     <c:choose>
-        <c:when test="${! empty exceptionQ.rows}">
-            <c:set var="exception" value="${exceptionQ.rows[0]}"/>
-            <traveler:findTraveler var="travelerId" activityId="${exception.exitActivityId}"/>
+        <c:when test="${! empty travelerId}">
             <sql:query var="processQ">
         select P.name
         from Activity A
