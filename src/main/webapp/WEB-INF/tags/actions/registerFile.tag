@@ -161,8 +161,10 @@ where A.id=?<sql:param value="${activityId}"/>
 
 <c:set var="dcHead" value="${appVariables.etravelerDatacatRoot}/${modePath}/${siteName}-${dataSourceFolder}/${dataSourceFolder}"/>
 
+<traveler:findRun varRun="runNumber" varTraveler="runTraveler" activityId="${activityId}"/>
+
 <c:set var="commonPath" value=
-"${activity.hardwareTypeName}/${activity.lsstId}/${activity.processName}${processVersion}/${activityId}"
+"${activity.hardwareTypeName}/${activity.lsstId}/${runNumber}/${activity.processName}${processVersion}/${activityId}"
 />
 <c:if test="${mode == 'harnessed' && ! empty jhSubPath}">
     <c:set var="commonPath" value="${commonPath}/${jhSubPath}"/>
