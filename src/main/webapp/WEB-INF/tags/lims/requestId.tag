@@ -34,6 +34,8 @@
 </c:if>
 <c:set var="activity" value="${activityQ.rows[0]}"/>
 
+<traveler:findRun varRun="runNumber" varTraveler="rootActivityId" activityId="${activity.id}"/>
+
 <sql:query var="prereqQ" >
     select A.id as activityId, A.hardwareId, A.createdBy,
     H.lsstId,
@@ -58,9 +60,14 @@
 
 {
     "jobid": "${activity.id}",
+    "runNumber": "${runNumber}",
+    "rootActivityId": "${rootActivityId}",
     "prereq": [<c:forEach var="prereqRow" items="${prereqQ.rows}" varStatus="status">
+               <traveler:findRun varRun="runNumber" varTraveler="rootActivityId" activityId="${prereqRow.activityId}"/>
         {
             "jobid": "${prereqRow.activityId}",
+            "runNumber": "${runNumber}",
+            "rootActivityId": "${rootActivityId}",
             "unit_type": "${prereqRow.hardwareTypeName}",
             "unit_id": "${prereqRow.lsstId}",
             "job": "${prereqRow.processName}",
