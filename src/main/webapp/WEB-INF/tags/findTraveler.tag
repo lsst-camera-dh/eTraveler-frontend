@@ -17,11 +17,4 @@
     select * from Activity where id=?<sql:param value="${activityId}"/>;
 </sql:query>
 
-<c:choose>
-    <c:when test="${empty activityQ.rows[0].parentActivityId}">
-        <c:set var="travelerId" value="${activityId}"/>
-    </c:when>
-    <c:otherwise>
-        <traveler:findTraveler var="travelerId" activityId="${activityQ.rows[0].parentActivityId}"/>
-    </c:otherwise>
-</c:choose>
+<c:set var="travelerId" value="${activityQ.rows[0].rootActivityId}"/>

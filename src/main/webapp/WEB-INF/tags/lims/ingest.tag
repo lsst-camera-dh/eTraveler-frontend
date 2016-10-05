@@ -48,15 +48,17 @@
             
             <ta:registerFile activityId="${inputs.jobid}" name="${summary.path}" mode="harnessed" 
                              dataType="${summary.datatype}" limsMetadata="${metadata}"
-                             varFsPath="fsPath" varDcPath="dcPath" varDcPk="dcPk"/>            
+                             varFsPath="fsPath" varBase="baseName" varDcPath="dcPath" varDcPk="dcPk"/>            
             <sql:update>
 insert into FilepathResultHarnessed set
 name='path',
 value=?<sql:param value="${fsPath}"/>,
+basename=?<sql:param value="${baseName}"/>,
 size=?<sql:param value="${summary.size}"/>,
 sha1=?<sql:param value="${summary.sha1}"/>,
 virtualPath=?<sql:param value="${dcPath}"/>,
 catalogKey=?<sql:param value="${dcPk}"/>,
+datatype=?<sql:param value="${summary.datatype}"/>,
 schemaName='fileref',
 schemaVersion=?<sql:param value="${summary.schema_version}"/>,
 schemaInstance=?<sql:param value="${instances[schemaTag]}"/>,

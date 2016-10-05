@@ -17,6 +17,8 @@
 <%@attribute name="name"%>
 <%@attribute name="limsMetadata" type="java.util.Map"%>
 <%@attribute name="mode" required="true"%>
+<%@attribute name="varBase" required="true" rtexprvalue="false"%>
+<%@variable name-from-attribute="varBase" alias="baseName" scope="AT_BEGIN"%>
 <%@attribute name="varFsPath" required="true" rtexprvalue="false"%>
 <%@variable name-from-attribute="varFsPath" alias="fullFsPath" scope="AT_BEGIN"%>
 <%@attribute name="varDcPath" required="true" rtexprvalue="false"%>
@@ -93,6 +95,7 @@
                 <c:set var="jhSubPath" value=""/>
             </c:otherwise>
         </c:choose>
+<c:set var="baseName" value="${name}"/>
 <c:set var="fnComponents" value="${fn:split(name, '.')}"/>
 <c:set var="fileExt" value="${fn:toLowerCase(fnComponents[fn:length(fnComponents)-1])}"/>
 <c:set var="fileFormat" value="${fileExt == name ? 'unspecified' : fileExt}"/>
@@ -158,8 +161,10 @@ where A.id=?<sql:param value="${activityId}"/>
 
 <c:set var="dcHead" value="${appVariables.etravelerDatacatRoot}/${modePath}/${siteName}-${dataSourceFolder}/${dataSourceFolder}"/>
 
+<traveler:findRun varRun="runNumber" varTraveler="runTraveler" activityId="${activityId}"/>
+
 <c:set var="commonPath" value=
-"${activity.hardwareTypeName}/${activity.lsstId}/${activity.processName}${processVersion}/${activityId}"
+"${activity.hardwareTypeName}/${activity.lsstId}/${runNumber}/${activity.processName}${processVersion}/${activityId}"
 />
 <c:if test="${mode == 'harnessed' && ! empty jhSubPath}">
     <c:set var="commonPath" value="${commonPath}/${jhSubPath}"/>
