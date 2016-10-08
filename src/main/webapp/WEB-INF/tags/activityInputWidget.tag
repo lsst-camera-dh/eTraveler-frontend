@@ -78,6 +78,16 @@ inner join InputSemantics ISm on ISm.id=IP.inputSemanticsId
 left join FilepathResultManual RM on RM.activityId=A.id and RM.inputPatternId=IP.id
 where A.id=?<sql:param value="${activityId}"/>
 and ISm.name='filepath')
+union
+(select A.begin, A.end, IP.*, IP.id as ipId,
+    RM.value, null as catalogKey, RM.createdBy, RM.creationTS,
+    ISm.name as ISName
+from Activity A
+inner join InputPattern IP on IP.processId=A.processId
+inner join InputSemantics ISm on ISm.id=IP.inputSemanticsId
+left join TextResultManual RM on RM.activityId=A.id and RM.inputPatternId=IP.id
+where A.id=?<sql:param value="${activityId}"/>
+and ISm.name='text')
 order by ipId;
     </sql:query>
 
@@ -137,11 +147,13 @@ order by ipId;
                         <input type="hidden" name="referringPage" value="${thisPage}">
                         <input type="hidden" name="activityId" value="${activityId}">
                         <input type="hidden" name="inputPatternId" value="${row.id}">
-                        <input type="hidden" name="isName" value="${row.ISName}">
                 <c:choose>
                     <c:when test="${row.ISName == 'boolean'}">
                         <label>True<input type="radio" name="value" value="1"></label>
                         <label>False<input type="radio" name="value" value="0" checked></label>
+                    </c:when>
+                    <c:when test="${row.ISName == 'text'}">
+                        <textarea name="value"></textarea>
                     </c:when>
                     <c:otherwise>
                         <c:if test="${row.isOptional == 0}">*</c:if><input type="${inputType}" name="value" required

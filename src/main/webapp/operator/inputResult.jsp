@@ -21,7 +21,7 @@
         
 <sql:transaction>
     <ta:inputResult activityId="${param.activityId}" inputPatternId="${param.inputPatternId}" 
-                    isName="${param.isName}" value="${param.value}"/>
+                    value="${param.value}"/>
 </sql:transaction>
         <c:redirect url="${param.referringPage}"/>
     </body>

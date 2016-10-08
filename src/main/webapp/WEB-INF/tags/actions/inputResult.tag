@@ -12,36 +12,31 @@
 
 <%@attribute name="activityId" required="true"%>
 <%@attribute name="inputPatternId" required="true"%>
-<%@attribute name="isName" required="true"%>
 <%@attribute name="value" required="true"%>
 
-<c:choose>
-    <c:when test="${isName == 'float'}">
-        <c:set var="tableName" value="FloatResultManual"/>
-    </c:when>
-    <c:when test="${isName == 'string'}">
-        <c:set var="tableName" value="StringResultManual"/>
-    </c:when>
-    <c:when test="${isName == 'filepath'}">
-        <c:set var="tableName" value="FilepathResultManual"/>
+    <sql:query var="semanticsQ">
+select ISm.name, ISm.tableName
+from InputPattern IP
+inner join InputSemantics ISm on ISm.id = IP.inputSemanticsId
+where IP.id = ?<sql:param value="${inputPatternId}"/>;
+    </sql:query>
+<c:set var="tableName" value="${semanticsQ.rows[0].tableName}"/>
+    
+<c:if test="${tableName == 'FilepathResultManual'}">
+    <ta:registerFile activityId="${activityId}" fileItem="${fileItems.value}" mode="manual" 
+                     varFsPath="fsPath" varDcPath="dcPath" varDcPk="dcPk"/>
+    <%-- fileItems is put in the request by the multipart filter --%>
+    <%-- File is saved in registerFile.
+    Which also sets uploadedFileSize and uploadDigest at request scope
+    --%>
+</c:if>
 
-        <ta:registerFile activityId="${activityId}" fileItem="${fileItems.value}" mode="manual" 
-                         varFsPath="fsPath" varDcPath="dcPath" varDcPk="dcPk"/>
-        <%-- fileItems is put in the request by the multipart filter --%>
-        <%-- File is saved in registerFile.
-        Which also sets uploadedFileSize and uploadDigest at request scope
-        --%>
-    </c:when>                   
-    <c:otherwise>
-        <c:set var="tableName" value="IntResultManual"/>
-    </c:otherwise>
-</c:choose>
     <sql:update>
 insert into ${tableName} set
 inputPatternId=?<sql:param value="${inputPatternId}"/>,
 activityId=?<sql:param value="${activityId}"/>,
 <c:choose>
-    <c:when test="${isName == 'filepath'}">
+    <c:when test="${tableName == 'FilepathResultManual'}">
 value=?<sql:param value="${fsPath}"/>,
 virtualPath=?<sql:param value="${dcPath}"/>,
 catalogKey=?<sql:param value="${dcPk}"/>,
