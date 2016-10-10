@@ -26,7 +26,7 @@
         <c:set var="tableName" value="FilepathResultManual"/>
 
         <ta:registerFile activityId="${activityId}" fileItem="${fileItems.value}" mode="manual" 
-                         varFsPath="fsPath" varDcPath="dcPath" varDcPk="dcPk"/>
+                         varFsPath="fsPath" varBase="baseName" varDcPath="dcPath" varDcPk="dcPk"/>
         <%-- fileItems is put in the request by the multipart filter --%>
         <%-- File is saved in registerFile.
         Which also sets uploadedFileSize and uploadDigest at request scope
