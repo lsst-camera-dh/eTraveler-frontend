@@ -35,6 +35,7 @@ from Activity A
 inner join InputPattern IP on IP.processId=A.processId
 inner join InputSemantics ISm on ISm.id=IP.inputSemanticsId
 where A.id=?<sql:param value="${activityId}"/>
+and ISm.name != 'signature'
 order by IP.id;
     </sql:query>
 
