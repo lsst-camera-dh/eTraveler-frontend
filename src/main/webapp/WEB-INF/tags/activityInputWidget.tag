@@ -29,56 +29,13 @@
 </c:choose>
 
     <sql:query var="inputQ" >
-(select A.begin, A.end, IP.*, IP.id as ipId,
-    RM.value, null as catalogKey, RM.createdBy, RM.creationTS,
-    ISm.name as ISName
+select A.begin, A.end, IP.*,
+    ISm.name as ISName, ISm.tableName
 from Activity A
 inner join InputPattern IP on IP.processId=A.processId
 inner join InputSemantics ISm on ISm.id=IP.inputSemanticsId
-left join FloatResultManual RM on RM.activityId=A.id and RM.inputPatternId=IP.id
 where A.id=?<sql:param value="${activityId}"/>
-and ISm.name='float')
-union
-(select A.begin, A.end, IP.*, IP.id as ipId,
-    RM.value, null as catalogKey, RM.createdBy, RM.creationTS,
-    ISm.name as ISName
-from Activity A
-inner join InputPattern IP on IP.processId=A.processId
-inner join InputSemantics ISm on ISm.id=IP.inputSemanticsId
-left join IntResultManual RM on RM.activityId=A.id and RM.inputPatternId=IP.id
-where A.id=?<sql:param value="${activityId}"/>
-and ISm.name='int')
-union
-(select A.begin, A.end, IP.*, IP.id as ipId,
-    if(RM.value is not null, if(RM.value=0,'False','True'), null) as value, null as catalogKey, RM.createdBy, RM.creationTS,
-    ISm.name as ISName
-from Activity A
-inner join InputPattern IP on IP.processId=A.processId
-inner join InputSemantics ISm on ISm.id=IP.inputSemanticsId
-left join IntResultManual RM on RM.activityId=A.id and RM.inputPatternId=IP.id
-where A.id=?<sql:param value="${activityId}"/>
-and ISm.name='boolean')
-union
-(select A.begin, A.end, IP.*, IP.id as ipId,
-    RM.value, null as catalogKey, RM.createdBy, RM.creationTS,
-    ISm.name as ISName
-from Activity A
-inner join InputPattern IP on IP.processId=A.processId
-inner join InputSemantics ISm on ISm.id=IP.inputSemanticsId
-left join StringResultManual RM on RM.activityId=A.id and RM.inputPatternId=IP.id
-where A.id=?<sql:param value="${activityId}"/>
-and ISm.name='string')
-union
-(select A.begin, A.end, IP.*, IP.id as ipId,
-    RM.value, RM.catalogKey, RM.createdBy, RM.creationTS,
-    ISm.name as ISName
-from Activity A
-inner join InputPattern IP on IP.processId=A.processId
-inner join InputSemantics ISm on ISm.id=IP.inputSemanticsId
-left join FilepathResultManual RM on RM.activityId=A.id and RM.inputPatternId=IP.id
-where A.id=?<sql:param value="${activityId}"/>
-and ISm.name='filepath')
-order by ipId;
+order by IP.id;
     </sql:query>
 
 <c:if test="${! empty inputQ.rows}">
@@ -93,18 +50,37 @@ order by ipId;
         </display:column>
         <display:column property="isOptional" sortable="true" headerClass="sortable"/>
         <display:column title="Value">
+            <sql:query var="valueQ">
+select createdBy, creationTS,
+<c:if test="${row.ISName == 'filepath'}">
+    catalogKey,
+</c:if>
+<c:choose>
+    <c:when test="${row.ISName == 'boolean'}">
+        if(value is not null, if(value=0,'False','True'), null) as value
+    </c:when>
+    <c:otherwise>
+        value
+    </c:otherwise>
+</c:choose>
+from ${row.tableName} 
+where inputPatternId = ?<sql:param value="${row.id}"/>
+and activityId = ?<sql:param value="${activityId}"/>
+order by id desc limit 1;
+            </sql:query>
             <c:choose>
-                <c:when test="${! empty row.value}">
+                <c:when test="${! empty valueQ.rows}">
+                    <c:set var="value" value="${valueQ.rows[0]}"/>
                     <c:choose>
-                        <c:when test="${(row.ISName == 'filepath') && (! empty row.catalogKey)}">
+                        <c:when test="${(row.ISName == 'filepath') && (! empty value.catalogKey)}">
                             <c:url var="dcLink" value="http://srs.slac.stanford.edu/DataCatalog/">
-                                <c:param name="dataset" value="${row.catalogKey}"/>
+                                <c:param name="dataset" value="${value.catalogKey}"/>
                                 <c:param name="experiment" value="${appVariables.experiment}"/>
                             </c:url>
-                            <a href="${dcLink}" target="_blank"><c:out value="${row.value}"/></a>
+                            <a href="${dcLink}" target="_blank"><c:out value="${value.value}"/></a>
                         </c:when>
                         <c:otherwise>
-                            <c:out value="${row.value}"/>
+                            <c:out value="${value.value}"/>
                         </c:otherwise>
                     </c:choose>
                 </c:when>
@@ -137,20 +113,22 @@ order by ipId;
                         <input type="hidden" name="referringPage" value="${thisPage}">
                         <input type="hidden" name="activityId" value="${activityId}">
                         <input type="hidden" name="inputPatternId" value="${row.id}">
-                        <input type="hidden" name="isName" value="${row.ISName}">
-                <c:choose>
-                    <c:when test="${row.ISName == 'boolean'}">
-                        <label>True<input type="radio" name="value" value="1"></label>
-                        <label>False<input type="radio" name="value" value="0" checked></label>
-                    </c:when>
-                    <c:otherwise>
-                        <c:if test="${row.isOptional == 0}">*</c:if><input type="${inputType}" name="value" required
-                                <c:if test="${row.ISName=='float'}">step="any"</c:if>
-                                <c:if test="${!empty row.minV}">min="<c:out value="${row.minV}"/>"</c:if>
-                                <c:if test="${!empty row.maxV}">max="<c:out value="${row.maxV}"/>"</c:if>
-                                >
-                    </c:otherwise>
-                </c:choose>
+                        <c:choose>
+                            <c:when test="${row.ISName == 'boolean'}">
+                                <label>True<input type="radio" name="value" value="1"></label>
+                                <label>False<input type="radio" name="value" value="0" checked></label>
+                            </c:when>
+                            <c:when test="${row.ISName == 'text'}">
+                                <textarea name="value"></textarea>
+                            </c:when>
+                            <c:otherwise>
+                                <c:if test="${row.isOptional == 0}">*</c:if><input type="${inputType}" name="value" required
+                                        <c:if test="${row.ISName=='float'}">step="any"</c:if>
+                                        <c:if test="${!empty row.minV}">min="<c:out value="${row.minV}"/>"</c:if>
+                                        <c:if test="${!empty row.maxV}">max="<c:out value="${row.maxV}"/>"</c:if>
+                                        >
+                            </c:otherwise>
+                        </c:choose>
                         <input type="submit" value="Record Result"
                             <c:if test="${! mayOperate}">disabled</c:if>>
                     </form>
