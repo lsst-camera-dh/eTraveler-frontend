@@ -4,6 +4,7 @@
   <excludes>
        <pattern>*/activityPane.jsp*</pattern>
        <pattern>*/processPane.jsp*</pattern>
+       <pattern>*/eclPane.jsp*</pattern>
   </excludes>
 
   <decorator name="basicDecorator" page="basicDecorator.jsp">
