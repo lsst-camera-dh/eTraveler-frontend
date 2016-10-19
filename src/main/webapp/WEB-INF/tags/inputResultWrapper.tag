@@ -15,11 +15,10 @@
 <%@attribute name="value" required="true"%>
 
     <sql:query var="patternQ">
-select IP.id, ISm.name as semantics
+select IP.id
 from Activity A
 inner join Process P on P.id=A.processId
 inner join InputPattern IP on IP.processId=P.id
-inner join InputSemantics ISm on ISm.id=IP.inputSemanticsId
 where A.id=?<sql:param value="${activityId}"/>
 and IP.label=?<sql:param value="${inputName}"/>
 ;
@@ -29,5 +28,4 @@ and IP.label=?<sql:param value="${inputName}"/>
 </c:if>
 <c:set var="pattern" value="${patternQ.rows[0]}"/>
 
-<ta:inputResult activityId="${activityId}" inputPatternId="${pattern.id}"
-                isName="${pattern.semantics}" value="${value}"/>
+<ta:inputResult activityId="${activityId}" inputPatternId="${pattern.id}" value="${value}"/>

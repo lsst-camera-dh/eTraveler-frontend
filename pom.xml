@@ -11,7 +11,7 @@
     <groupId>org.lsst.camera</groupId>
     <artifactId>org-lsst-camera-etraveler-web</artifactId>
     <packaging>war</packaging>
-    <version>1.2.13</version>
+    <version>1.2.14-SNAPSHOT</version>
     <name>LSST ETraveler Web Application</name>
     <url>http://srs.slac.stanford.edu/eTraveler</url>
     
@@ -98,13 +98,19 @@
         <dependency>
             <groupId>org.lsst</groupId>
             <artifactId>org-lsst-ccs-elog</artifactId>
-            <version>1.0.3</version>        
+            <version>1.0.4</version>        
         </dependency>
 
        <dependency>
             <groupId>org.lsst.camera</groupId>
-<artifactId>org-lsst-camera-etraveler-backend-core</artifactId>
+            <artifactId>org-lsst-camera-etraveler-backend-core</artifactId>
             <version>1.32.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>2.5</version>
         </dependency>
     </dependencies>
 
