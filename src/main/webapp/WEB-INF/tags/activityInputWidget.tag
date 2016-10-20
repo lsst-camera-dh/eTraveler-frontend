@@ -136,7 +136,11 @@ order by id desc limit 1;
                 </c:otherwise>
             </c:choose>
         </display:column>
-        <display:column property="createdBy" title="Who" sortable="true" headerClass="sortable"/>
-        <display:column property="creationTS" title="When" sortable="true" headerClass="sortable"/>
+        <display:column title="Who" sortable="true" headerClass="sortable">
+            ${valueQ.rows[0].createdBy}
+        </display:column>
+        <display:column title="When" sortable="true" headerClass="sortable">
+            ${valueQ.rows[0].creationTS}
+        </display:column>
     </display:table>
 </c:if>
