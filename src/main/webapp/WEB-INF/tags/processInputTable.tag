@@ -10,18 +10,20 @@
 <%@taglib prefix="display" uri="http://displaytag.sf.net"%>
 
 <%@attribute name="processId" required="true"%>
+<%@attribute name="optional" required="true"%>
 
 <sql:query var="inputQ" >
     select IP.*, ISm.name as ISName
     from InputPattern IP
     inner join InputSemantics ISm on ISm.id=IP.inputSemanticsId
     where IP.processId=?<sql:param value="${processId}"/>
-    and ISm.name!='signature'
+    and ISm.name != 'signature'
+    and isOptional = ?<sql:param value="${optional}"/>
     order by IP.id;
 </sql:query>
 
 <c:if test="${! empty inputQ.rows}">
-    <h2>Instructions and Results</h2>
+    <h3><c:choose><c:when test="${optional == 0}">Required</c:when><c:otherwise>Optional</c:otherwise></c:choose>:</h3>
     <display:table name="${inputQ.rows}" id="row" class="datatable">
         <display:column property="label" title="Name" sortable="true" headerClass="sortable"/>
         <display:column property="description" sortable="true" headerClass="sortable"/>
