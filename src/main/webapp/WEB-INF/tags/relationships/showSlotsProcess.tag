@@ -14,7 +14,7 @@
 select MRA.name as actName, 
 MRT.name as relName, MRT.description, MRT.minorTypeId, if(MRT.singleBatch != 0, MRT.nMinorItems, 1) as nMinorItems, 
 HT.name as minorTypeName,
-case PRT.slotForm when 'QUERY' then 'Operator Selected' else MRST.slotName end as slotName
+case PRT.slotForm when 'QUERY' then 'Operator Selection NOT SUPPORTED' else MRST.slotName end as slotName
 from ProcessRelationshipTag PRT
 inner join MultiRelationshipAction MRA on MRA.id = PRT.multiRelationshipActionId
 inner join MultiRelationshipType MRT on MRT.id = PRT.multiRelationshipTypeId
