@@ -28,7 +28,11 @@ inner join ProcessRelationshipTag PRT on PRT.processId = A.processId
 inner join MultiRelationshipAction MRA on MRA.id = PRT.multiRelationshipActionId
 inner join MultiRelationshipType MRT on MRT.id = PRT.multiRelationshipTypeId
 inner join HardwareType HT on HT.id = MRT.minorTypeId
-inner join MultiRelationshipSlotType MRST on MRST.multiRelationshipTypeId = MRT.id
+inner join MultiRelationshipSlotType MRST on case PRT.slotForm
+    when 'ALL' then MRST.multiRelationshipTypeId = MRT.id
+    when 'SPECIFIED' then MRST.id = PRT.multiRelationshipSlotTypeId
+    when 'QUERY' then false
+    end
 inner join MultiRelationshipSlot MRS on MRS.multiRelationshipSlotTypeId = MRST.id
     and MRS.hardwareId = A.hardwareId
 left join MultiRelationshipHistory MRH
