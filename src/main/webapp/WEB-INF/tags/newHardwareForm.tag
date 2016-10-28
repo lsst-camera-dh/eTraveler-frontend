@@ -53,7 +53,7 @@
             <td>*<INPUT TYPE=TEXT NAME=manufacturer SIZE=50 autofocus required></td>
         </tr>
         <tr>
-            <td>Maufacturer Serial Number:</td>
+            <td>Manufacturer Serial Number:</td>
             <td><input type="text" name="manufacturerId" size="50"></td>
         </tr>
         <tr>
