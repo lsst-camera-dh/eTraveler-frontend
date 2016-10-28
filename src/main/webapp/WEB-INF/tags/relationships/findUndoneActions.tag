@@ -20,7 +20,11 @@ select MRS.id as slotId, MRA.name
 from Activity A
 inner join ProcessRelationshipTag PRT on PRT.processId = A.processId
 inner join MultiRelationshipAction MRA on MRA.id = PRT.multiRelationshipActionId
-inner join MultiRelationshipSlotType MRST on MRST.multiRelationshipTypeId = PRT.multiRelationshipTypeId
+inner join MultiRelationshipSlotType MRST on case PRT.slotForm
+    when 'ALL' then MRST.multiRelationshipTypeId = PRT.multiRelationshipTypeId
+    when 'SPECIFIED' then MRST.id = PRT.multiRelationshipSlotTypeId
+    when 'QUERY' then false
+    end
 inner join MultiRelationshipSlot MRS on MRS.multiRelationshipSlotTypeId = MRST.id
     and MRS.hardwareId = A.hardwareId
 left join MultiRelationshipHistory MRH on MRH.multiRelationshipSlotId = MRS.id 
