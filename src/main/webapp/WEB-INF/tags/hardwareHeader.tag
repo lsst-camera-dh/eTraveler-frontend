@@ -35,7 +35,7 @@
 
 <table>
     <tr><td>Type:</td><td><a href="${hwtLink}"><c:out value="${hardware.name}"/></a></td></tr>
-    <tr><td>Description:</td><td><c:out value="${hardware.description}"/></td></tr>
+    <tr><td>Type Description:</td><td><c:out value="${hardware.description}"/></td></tr>
     <tr><td>${appVariables.experiment} Serial Number:</td><td><a href="<c:out value="${hwLink}"/>"><c:out value="${hardware.lsstId}"/></a></td></tr>
     <tr><td>Manufacturer:</td><td><c:out value="${hardware.manufacturer}"/></td></tr>
     <tr><td>Manufacturer Serial Number:</td><td><a href="<c:out value="${hwLink}"/>"><c:out value="${hardware.manufacturerId}"/></a></td></tr>
