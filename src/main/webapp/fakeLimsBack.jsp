@@ -52,6 +52,9 @@
     <c:when test="${command == 'getHardwareHierarchy'}">
         <lims:getHardwareHierarchy/>
     </c:when>
+    <c:when test="${command == 'getContainingHardware'}">
+        <lims:getHardwareParents/>
+    </c:when>
     <c:when test="${command == 'getRunInfo'}">
         <lims:getRunInfo/>
     </c:when>

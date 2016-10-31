@@ -1,5 +1,5 @@
 <%-- 
-    Document   : childComponentRows
+    Document   : parentComponentRows
     Created on : Apr 9, 2013, 2:01:16 PM
     Author     : focke
 --%>
@@ -48,7 +48,7 @@ where
     <%
         ((java.util.List)jspContext.getAttribute("compList")).add(jspContext.getAttribute("cRow"));
     %>
-    <relationships:childComponentRows hardwareId="${cRow.child_id}" 
+    <relationships:parentComponentRows hardwareId="${cRow.child_id}" 
                                  level="${nextLevel}" 
                                  noBatched="${noBatched}"
                                  compList="${compList}"/>
