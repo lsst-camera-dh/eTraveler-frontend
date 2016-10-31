@@ -1,5 +1,5 @@
 <%-- 
-    Document   : childComponentList
+    Document   : parentComponentList
     Created on : Apr 9, 2013, 1:55:08 PM
     Author     : focke
 --%>
@@ -19,7 +19,7 @@
     jspContext.setAttribute("compList", compList);
 %>
 
-<relationships:childComponentRows hardwareId="${hardwareId}" 
+<relationships:parentComponentRows hardwareId="${hardwareId}" 
                              level="0" 
                              noBatched="${noBatched}" 
                              compList="${compList}"/>
