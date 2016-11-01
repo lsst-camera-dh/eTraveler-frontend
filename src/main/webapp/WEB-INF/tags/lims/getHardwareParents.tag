@@ -14,7 +14,7 @@
 
 <traveler:findComponent var="hardwareId" serial="${inputs.experimentSN}" typeName="${inputs.hardwareTypeName}"/>
 
-<relationships:parentComponentList var="compList" hardwareId="${hardwareId}" noBatched="${inputs.noBatched}"/>
+<relationships:childComponentList var="compList" hardwareId="${hardwareId}" noBatched="${inputs.noBatched}" mode="p"/>
 
 <lims:encode var="clStr" input="${compList}"/>
 
