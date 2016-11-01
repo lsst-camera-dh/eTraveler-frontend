@@ -8,11 +8,13 @@
 <%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql"%>
 
 <%@attribute name="signatureId" required="true"%>
+<%@attribute name="comment"%>
 
     <sql:update>
 update SignatureResultManual set
-signerValue=?<sql:param value="${userName}"/>,
-signatureTS=utc_timestamp()
-where id=?<sql:param value="${signatureId}"/>
+signerValue = ?<sql:param value="${userName}"/>,
+signerComment = ?<sql:param value="${comment}"/>,
+signatureTS = utc_timestamp()
+where id = ?<sql:param value="${signatureId}"/>
 ;
     </sql:update>

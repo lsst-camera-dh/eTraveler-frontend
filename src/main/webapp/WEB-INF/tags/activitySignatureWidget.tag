@@ -119,7 +119,7 @@ order by IP.id
     <display:column property="signerValue" title="Signed By" sortable="true" headerClass="sortable"/>
     <display:column property="signatureTS" title="Date" sortable="true" headerClass="sortable"/>
     <c:if test="${status == 'inProgress' and resultsFiled}">
-        <display:column title="Sign Here">
+        <display:column title="Sign/Comment Here">
             <c:choose>
                 <c:when test="${empty sig.signatureTS}">
             <form action="operator/signSignature.jsp">
@@ -136,12 +136,13 @@ order by IP.id
     </c:otherwise>
 </c:choose>
 --%>
+<textarea name="comment" placeholder="Comment"></textarea>
 <traveler:checkPerm var="maySign" groups="${sig.signerRequest}"/>
 <input type='submit' value='Sign It!' <c:if test="${! maySign}">disabled</c:if>>
             </form>
                 </c:when>
                 <c:otherwise>
-                    signed
+                    ${sig.signerComment}
                 </c:otherwise>
             </c:choose>
         </display:column>
