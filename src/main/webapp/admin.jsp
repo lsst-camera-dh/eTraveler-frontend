@@ -47,8 +47,7 @@
 
 <hr>
 <h2>Hardware Relationship Types</h2>
-<relationships:newRelationshipTypeForm/>
-<relationships:relationshipTypeList/>
+<relationships:relationshipTypeWidget/>
 
 <hr>
 <h2>Sites</h2>
