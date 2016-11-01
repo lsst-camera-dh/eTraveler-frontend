@@ -84,6 +84,12 @@
     <c:when test="${command == 'setHardwareLocation'}">
         <lims:setHardwareLocation/>
     </c:when>
+    <c:when test="${command == 'getManufacturerId'}">
+        <lims:getManufacturerId/>
+    </c:when>
+    <c:when test="${command == 'setManufacturerId'}">
+        <lims:setManufacturerId/>
+    </c:when>
     <%-- unimplemented JH --%>
     <c:when test="${command == 'status'}">
         <traveler:error message="status doesn't work yet."/>
