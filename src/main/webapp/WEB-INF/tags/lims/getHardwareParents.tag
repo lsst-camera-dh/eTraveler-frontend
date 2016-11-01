@@ -1,5 +1,5 @@
 <%-- 
-    Document   : getHardwareHierarchy
+    Document   : getHardwareParents
     Created on : Mar 25, 2016, 4:45:14 PM
     Author     : focke
 --%>
@@ -14,7 +14,7 @@
 
 <traveler:findComponent var="hardwareId" serial="${inputs.experimentSN}" typeName="${inputs.hardwareTypeName}"/>
 
-<relationships:childComponentList var="compList" hardwareId="${hardwareId}" noBatched="${inputs.noBatched}" mode="c"/>
+<relationships:childComponentList var="compList" hardwareId="${hardwareId}" noBatched="${inputs.noBatched}" mode="p"/>
 
 <lims:encode var="clStr" input="${compList}"/>
 
