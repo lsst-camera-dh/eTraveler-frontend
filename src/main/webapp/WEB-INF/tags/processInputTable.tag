@@ -12,15 +12,15 @@
 <%@attribute name="processId" required="true"%>
 <%@attribute name="optional" required="true"%>
 
-<sql:query var="inputQ" >
-    select IP.*, ISm.name as ISName
-    from InputPattern IP
-    inner join InputSemantics ISm on ISm.id=IP.inputSemanticsId
-    where IP.processId=?<sql:param value="${processId}"/>
-    and ISm.name != 'signature'
-    and isOptional = ?<sql:param value="${optional}"/>
-    order by IP.id;
-</sql:query>
+    <sql:query var="inputQ" >
+select IP.*, ISm.name as ISName
+from InputPattern IP
+inner join InputSemantics ISm on ISm.id=IP.inputSemanticsId
+where IP.processId=?<sql:param value="${processId}"/>
+and ISm.name != 'signature'
+and isOptional = ?<sql:param value="${optional}"/>
+order by IP.id;
+    </sql:query>
 
 <c:if test="${! empty inputQ.rows}">
     <h3><c:choose><c:when test="${optional == 0}">Required</c:when><c:otherwise>Optional</c:otherwise></c:choose>:</h3>
@@ -32,6 +32,5 @@
             <c:if test="${! empty row.units}">${row.units}</c:if>
             ${row.ISName}
         </display:column>
-        <display:column property="isOptional" sortable="true" headerClass="sortable"/>
     </display:table>
 </c:if>
