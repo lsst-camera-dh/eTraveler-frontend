@@ -14,12 +14,16 @@
 select MRA.name as actName, 
 MRT.name as relName, MRT.description, MRT.minorTypeId, if(MRT.singleBatch != 0, MRT.nMinorItems, 1) as nMinorItems, 
 HT.name as minorTypeName,
-MRST.slotName
+case PRT.slotForm when 'QUERY' then 'Operator Selection NOT SUPPORTED' else MRST.slotName end as slotName
 from ProcessRelationshipTag PRT
 inner join MultiRelationshipAction MRA on MRA.id = PRT.multiRelationshipActionId
 inner join MultiRelationshipType MRT on MRT.id = PRT.multiRelationshipTypeId
 inner join HardwareType HT on HT.id = MRT.minorTypeId
-inner join MultiRelationshipSlotType MRST on MRST.multiRelationshipTypeId = MRT.id
+left join MultiRelationshipSlotType MRST on case PRT.slotForm
+    when 'ALL' then MRST.multiRelationshipTypeId = MRT.id
+    when 'SPECIFIED' then MRST.id = PRT.multiRelationshipSlotTypeId
+    when 'QUERY' then false
+    end
 where PRT.processId = ?<sql:param value="${processId}"/>
 ;
     </sql:query>

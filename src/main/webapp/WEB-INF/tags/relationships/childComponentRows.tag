@@ -13,6 +13,7 @@
 <%@attribute name="level" required="true"%>
 <%@attribute name="noBatched"%>
 <%@attribute name="compList" required="true" type="java.util.List"%>
+<%@attribute name="mode" required="true"%>
 
     <sql:query var="componentsQ">
 select 
@@ -36,7 +37,7 @@ from Hardware Hp
     inner join Hardware Hc on Hc.id = MRH.minorId
     inner join HardwareType HTc on HTc.id = Hc.hardwareTypeId <c:if test="${noBatched}">and HTc.isBatched = 0</c:if>
 where 
-    Hp.id = ?<sql:param value="${hardwareId}"/>
+    H${mode == 'p' ? 'c' : 'p'}.id = ?<sql:param value="${hardwareId}"/>
     and 
     MRA.name = 'install'
     ;
@@ -48,8 +49,9 @@ where
     <%
         ((java.util.List)jspContext.getAttribute("compList")).add(jspContext.getAttribute("cRow"));
     %>
-    <relationships:childComponentRows hardwareId="${cRow.child_id}" 
+    <relationships:childComponentRows hardwareId="${mode == 'p' ? cRow.parent_id : cRow.child_id}" 
                                  level="${nextLevel}" 
                                  noBatched="${noBatched}"
-                                 compList="${compList}"/>
+                                 compList="${compList}"
+                                 mode="${mode}"/>
 </c:forEach>

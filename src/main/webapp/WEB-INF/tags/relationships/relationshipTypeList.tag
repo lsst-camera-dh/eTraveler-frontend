@@ -12,6 +12,9 @@
 
 <%@attribute name="assemblyTypeId"%>
 <%@attribute name="componentTypeId"%>
+<%@attribute name="relTypeName"%>
+<%@attribute name="assTypeName"%>
+<%@attribute name="compTypeName"%>
 
 <sql:query var="hrtQ">
     select MRT.*, MRST.*,
@@ -27,6 +30,15 @@
     </c:if>
     <c:if test="${! empty componentTypeId}">
         and MRT.minorTypeId=?<sql:param value="${componentTypeId}"/>
+    </c:if>
+    <c:if test="${! empty relTypeName}">
+        and MRT.name like concat('%', ?<sql:param value="${relTypeName}"/>, '%')
+    </c:if>
+    <c:if test="${! empty assTypeName}">
+        and HTP.name like concat('%', ?<sql:param value="${assTypeName}"/>, '%')
+    </c:if>
+    <c:if test="${! empty compTypeName}">
+        and HTC.name like concat('%', ?<sql:param value="${compTypeName}"/>, '%')
     </c:if>
     order by MRT.name, MRST.id
     ;

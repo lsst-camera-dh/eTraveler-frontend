@@ -56,6 +56,18 @@
 <c:url var="hwLink" value="displayHardware.jsp"><c:param name="hardwareId" value="${activity.hardwareId}"/></c:url>
 <h2>Process: <c:out value="${activity.name}"/> Component: <a href="${hwLink}"><c:out value="${activity.lsstId}"/></a></h2>
 
+<h2>
+<c:choose>
+    <c:when test="${activity.inNCR}">
+        NCR
+    </c:when>
+    <c:otherwise>
+        Traveler
+    </c:otherwise>
+</c:choose>
+ID ${activity.rootActivityId}
+</h2>
+
 <traveler:findRun varRun="runNumber" varTraveler="runTravelerId" activityId="${param.activityId}"/>
 <c:choose>
     <c:when test="${runTravelerId == param.activityId}">

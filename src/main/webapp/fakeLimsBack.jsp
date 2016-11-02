@@ -52,6 +52,9 @@
     <c:when test="${command == 'getHardwareHierarchy'}">
         <lims:getHardwareHierarchy/>
     </c:when>
+    <c:when test="${command == 'getContainingHardware'}">
+        <lims:getHardwareParents/>
+    </c:when>
     <c:when test="${command == 'getRunInfo'}">
         <lims:getRunInfo/>
     </c:when>
@@ -83,6 +86,12 @@
     </c:when>
     <c:when test="${command == 'setHardwareLocation'}">
         <lims:setHardwareLocation/>
+    </c:when>
+    <c:when test="${command == 'getManufacturerId'}">
+        <lims:getManufacturerId/>
+    </c:when>
+    <c:when test="${command == 'setManufacturerId'}">
+        <lims:setManufacturerId/>
     </c:when>
     <%-- unimplemented JH --%>
     <c:when test="${command == 'status'}">

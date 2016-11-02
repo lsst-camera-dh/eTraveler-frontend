@@ -20,7 +20,7 @@
 <traveler:checkFreshness formToken="${param.freshnessToken}"/>
 
 <sql:transaction>
-    <ta:signSignature signatureId="${param.signatureId}"/>
+    <ta:signSignature signatureId="${param.signatureId}" comment="${param.comment}"/>
 </sql:transaction>
 <c:redirect url="${param.referringPage}"/>
     </body>

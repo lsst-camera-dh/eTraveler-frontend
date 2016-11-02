@@ -9,12 +9,30 @@
 <%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql"%>
 <%@taglib prefix="traveler" tagdir="/WEB-INF/tags"%>
 
+<%@attribute name="assTypeName"%>
+<%@attribute name="compTypeName"%>
+
 <traveler:fullRequestString var="thisPage"/>
 <traveler:checkPerm var="mayAdmin" groups="EtravelerAllAdmin"/>
 
-<sql:query var="hardwareTypesQ" >
-    select id, name from HardwareType order by name;
+<sql:query var="parentTypesQ" >
+    select id, name 
+    from HardwareType 
+    <c:if test="${! empty assTypeName}">
+        where name like concat('%', ?<sql:param value="${assTypeName}"/>, '%')
+    </c:if>
+    order by name;
 </sql:query>
+    
+<sql:query var="childTypesQ" >
+    select id, name 
+    from HardwareType 
+    <c:if test="${! empty compTypeName}">
+        where name like concat('%', ?<sql:param value="${compTypeName}"/>, '%')
+    </c:if>
+    order by name;
+</sql:query>
+    
 <form method="get" action="relationships/addRelationshipType.jsp">
     <input type="hidden" name="freshnessToken" value="${freshnessToken}">
     <input type="hidden" name="referringPage" value="${thisPage}">
@@ -30,7 +48,7 @@
             <td>
                 <div>Assembly Type:</div>
                 <select name="hardwareTypeId">
-                    <c:forEach var="htRow" items="${hardwareTypesQ.rows}">
+                    <c:forEach var="htRow" items="${parentTypesQ.rows}">
                         <option value="${htRow.id}">${htRow.name}</option>
                     </c:forEach>
                 </select>
@@ -38,7 +56,7 @@
             <td>
                 <div>Component Type:</div>
                 <select name="minorTypeId">
-                    <c:forEach var="htRow" items="${hardwareTypesQ.rows}">
+                    <c:forEach var="htRow" items="${childTypesQ.rows}">
                         <option value="${htRow.id}">${htRow.name}</option>
                     </c:forEach>
                 </select>

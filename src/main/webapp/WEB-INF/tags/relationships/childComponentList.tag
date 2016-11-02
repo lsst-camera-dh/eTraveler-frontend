@@ -13,6 +13,7 @@
 <%@attribute name="noBatched"%>
 <%@attribute name="var" required="true" rtexprvalue="false"%>
 <%@variable name-from-attribute="var" alias="compList" scope="AT_BEGIN"%>
+<%@attribute name="mode" required="true"%>
 
 <%
     java.util.List compList = new java.util.LinkedList();
@@ -22,4 +23,5 @@
 <relationships:childComponentRows hardwareId="${hardwareId}" 
                              level="0" 
                              noBatched="${noBatched}" 
-                             compList="${compList}"/>
+                             compList="${compList}"
+                             mode="${mode}"/>
