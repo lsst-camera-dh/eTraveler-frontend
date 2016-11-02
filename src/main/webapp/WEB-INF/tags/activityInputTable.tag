@@ -11,6 +11,7 @@
 <%@taglib prefix="traveler" tagdir="/WEB-INF/tags"%>
 
 <%@attribute name="activityId" required="true"%>
+<%@attribute name="optional" required="true"%>
 <%@attribute name="var" required="true" rtexprvalue="false"%>
 <%@variable name-from-attribute="var" alias="resultsFiled" scope="AT_BEGIN"%>
 
@@ -36,11 +37,12 @@ inner join InputPattern IP on IP.processId=A.processId
 inner join InputSemantics ISm on ISm.id=IP.inputSemanticsId
 where A.id=?<sql:param value="${activityId}"/>
 and ISm.name != 'signature'
+and isOptional = ?<sql:param value="${optional}"/>
 order by IP.id;
     </sql:query>
 
 <c:if test="${! empty inputQ.rows}">
-    <h2>Instructions and Results</h2>
+    <h3><c:choose><c:when test="${optional == 0}">Required</c:when><c:otherwise>Optional</c:otherwise></c:choose>:</h3>
     <display:table name="${inputQ.rows}" id="row" class="datatable">
         <display:column property="label" title="Name" sortable="true" headerClass="sortable"/>
         <display:column property="description" sortable="true" headerClass="sortable"/>
@@ -49,7 +51,6 @@ order by IP.id;
             <c:if test="${! empty row.units}">${row.units}</c:if>
             ${row.ISName}
         </display:column>
-        <display:column property="isOptional" sortable="true" headerClass="sortable"/>
         <display:column title="Value">
             <sql:query var="valueQ">
 select createdBy, creationTS,
@@ -84,6 +85,9 @@ order by id desc limit 1;
                             <c:out value="${value.value}"/>
                         </c:otherwise>
                     </c:choose>
+                </c:when>
+                <c:when test="${status == 'skipped'}">
+                    Too late
                 </c:when>
                 <c:when test="${(empty row.begin) || status == 'paused' || status == 'stopped'}">
                     Not yet
