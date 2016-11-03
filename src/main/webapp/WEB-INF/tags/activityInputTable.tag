@@ -128,8 +128,8 @@ order by id desc limit 1;
                         <input type="hidden" name="${inputName}" value="${row.id}">
                         <c:choose>
                             <c:when test="${row.ISName == 'checkbox'}">
-                                <label>True<input type="radio" name="${valueName}" value="1" 
-                                                  <c:if test="${row.isOptional == 0}">required</c:if>></label>
+                                <input type="checkbox" name="${valueName}" value="1" 
+                                                  <c:if test="${row.isOptional == 0}">required</c:if>>
                             </c:when>
                             <c:when test="${row.ISName == 'boolean'}">
                                 <label>True<input type="radio" name="${valueName}" value="1" 
