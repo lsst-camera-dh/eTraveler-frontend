@@ -127,16 +127,6 @@ order by IP.id
 <input type="hidden" name="freshnessToken" value="${freshnessToken}">
 <input type="hidden" name="referringPage" value="${thisPage}">
 <input type="hidden" name="signatureId" value="${sig.id}">
-<%--
-<c:choose>
-    <c:when test="${empty sig.name}">
-        <c:set var="maySign" value="${sig.signerRequest == userName}"/>
-    </c:when>
-    <c:otherwise>
-        <traveler:checkPerm var="maySign" groups="${sig.name}"/>
-    </c:otherwise>
-</c:choose>
---%>
 <textarea name="comment" placeholder="Comment"></textarea>
 <traveler:checkPerm var="maySign" groups="${sig.signerRequest}"/>
 <input type='submit' value='Sign It!' <c:if test="${! maySign}">disabled</c:if>>
