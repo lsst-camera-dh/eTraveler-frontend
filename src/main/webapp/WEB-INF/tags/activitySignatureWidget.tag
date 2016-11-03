@@ -113,6 +113,7 @@ and ISM.name = "signature"
 order by IP.id
 ;
     </sql:query>
+    <c:if test="${! empty sigQ.rows}">
 <display:table name="${sigQ.rows}" id="sig" class="datatable">
     <display:column property="label" title="Label" sortable="true" headerClass="sortable"/>
     <display:column property="signerRequest" title="Group" sortable="true" headerClass="sortable"/>
@@ -148,7 +149,7 @@ order by IP.id
         </display:column>
     </c:if>
 </display:table>
-
+    </c:if>
 <c:set var="signedOff" value="true"/>
 <c:forEach var="sig" items="${sigQ.rows}">
     <c:if test="${empty sig.signatureTs}">
