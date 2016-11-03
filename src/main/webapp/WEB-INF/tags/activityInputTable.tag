@@ -41,8 +41,17 @@ and isOptional = ?<sql:param value="${optional}"/>
 order by IP.id;
     </sql:query>
 
+<c:set var="nInputs" value="0"/>
+
 <c:if test="${! empty inputQ.rows}">
     <h3><c:choose><c:when test="${optional == 0}">Required</c:when><c:otherwise>Optional</c:otherwise></c:choose>:</h3>
+
+    <form method="post" action="operator/inputResult.jsp" enctype="multipart/form-data">
+<%--    <form method="post" action="test.jsp" enctype="multipart/form-data">--%>
+        <input type="hidden" name="freshnessToken" value="${freshnessToken}">
+        <input type="hidden" name="referringPage" value="${thisPage}">
+        <input type="hidden" name="activityId" value="${activityId}">
+
     <display:table name="${inputQ.rows}" id="row" class="datatable">
         <display:column property="label" title="Name" sortable="true" headerClass="sortable"/>
         <display:column property="description" sortable="true" headerClass="sortable"/>
@@ -99,6 +108,9 @@ order by id desc limit 1;
                     No value supplied
                 </c:when>
                 <c:otherwise>
+                    <c:set var="inputName" value="inputPatternId${nInputs}"/>
+                    <c:set var="valueName" value="value${nInputs}"/>
+                    ${inputName} ${valueName}
                     <c:if test="${row.isOptional == 0}">
                         <c:set var="resultsFiled" value="false"/>
                     </c:if>
@@ -113,30 +125,27 @@ order by id desc limit 1;
                             <c:set var="inputType" value="number"/>
                         </c:otherwise>
                     </c:choose>
-                    <form method="post"  action="operator/inputResult.jsp" enctype="multipart/form-data">
-                        <input type="hidden" name="freshnessToken" value="${freshnessToken}">
-                        <input type="hidden" name="referringPage" value="${thisPage}">
-                        <input type="hidden" name="activityId" value="${activityId}">
-                        <input type="hidden" name="inputPatternId" value="${row.id}">
+                        <input type="hidden" name="${inputName}" value="${row.id}">
                         <c:choose>
                             <c:when test="${row.ISName == 'boolean'}">
-                                <label>True<input type="radio" name="value" value="1"></label>
-                                <label>False<input type="radio" name="value" value="0" checked></label>
+                                <label>True<input type="radio" name="${valueName}" value="1" 
+                                                  <c:if test="${row.isOptional == 0}">required</c:if>></label>
+                                <label>False<input type="radio" name="${valueName}" value="0"
+                                                   <c:if test="${row.isOptional == 0}">required</c:if>></label>
                             </c:when>
                             <c:when test="${row.ISName == 'text'}">
-                                <textarea name="value"></textarea>
+                                <textarea name="${valueName}"></textarea>
                             </c:when>
                             <c:otherwise>
-                                <c:if test="${row.isOptional == 0}">*</c:if><input type="${inputType}" name="value" required
+                                <c:if test="${row.isOptional == 0}">*</c:if><input type="${inputType}" name="${valueName}" 
+                                        <c:if test="${row.isOptional == 0}">required</c:if>
                                         <c:if test="${row.ISName=='float'}">step="any"</c:if>
                                         <c:if test="${!empty row.minV}">min="<c:out value="${row.minV}"/>"</c:if>
                                         <c:if test="${!empty row.maxV}">max="<c:out value="${row.maxV}"/>"</c:if>
                                         >
                             </c:otherwise>
                         </c:choose>
-                        <input type="submit" value="Record Result"
-                            <c:if test="${! mayOperate}">disabled</c:if>>
-                    </form>
+                        <c:set var="nInputs" value="${nInputs + 1}"/>
                 </c:otherwise>
             </c:choose>
         </display:column>
@@ -147,4 +156,10 @@ order by id desc limit 1;
             ${valueQ.rows[0].creationTS}
         </display:column>
     </display:table>
+
+        <input type="hidden" name="nInputs" value="${nInputs}">
+        <input type="submit" value="Record Results"
+            <c:if test="${! mayOperate}">disabled</c:if>>
+    </form>
+
 </c:if>
