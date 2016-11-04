@@ -9,6 +9,7 @@
 <%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql"%>
 <%@taglib prefix="ta" tagdir="/WEB-INF/tags/actions"%>
 <%@taglib prefix="traveler" tagdir="/WEB-INF/tags"%>
+<%@taglib prefix="upload" uri="/tlds/uploads.tld"%>
 
 <%@attribute name="activityId" required="true"%>
 <%@attribute name="inputPatternId" required="true"%>
@@ -21,7 +22,30 @@ inner join InputSemantics ISm on ISm.id = IP.inputSemanticsId
 where IP.id = ?<sql:param value="${inputPatternId}"/>;
     </sql:query>
 <c:set var="tableName" value="${semanticsQ.rows[0].tableName}"/>
-    
+
+    <sql:query var="oldValQ">
+select * 
+from ${tableName} 
+where activityId = ?<sql:param value="${activityId}"/>
+and inputPatternId = ?<sql:param value="${inputPatternId}"/>
+order by id desc limit 1;
+    </sql:query>
+<c:if test="${! empty oldValQ.rows}">
+    <c:set var="oldVal" value="${oldValQ.rows[0]}"/>
+    <c:choose>
+        <c:when test="${tableName == 'FilepathResultManual'}">
+            <upload:uploadParser fileItem="${fileItems.value}" 
+                                 varName="name" varFormat="fileFormat" varSize="fs" varSha1="digest"/>
+            <c:set var="duplicate" value="${(oldVal.value == name) && (oldVal.size == fs) && (oldVal.sha1 = digest)}"/>
+            <%-- this is not right --%>
+        </c:when>
+        <c:otherwise>
+            <c:set var="duplicate" value="${oldVal.value == value}"/>
+        </c:otherwise>
+    </c:choose>
+</c:if>
+
+
 <c:if test="${tableName == 'FilepathResultManual'}">
     <ta:registerFile activityId="${activityId}" fileItem="${fileItems.value}" mode="manual" 
                      varBase="baseName" varFsPath="fsPath" varDcPath="dcPath" varDcPk="dcPk"/>
