@@ -36,8 +36,7 @@ order by id desc limit 1;
         <c:when test="${tableName == 'FilepathResultManual'}">
             <upload:uploadParser fileItem="${fileItems.value}" 
                                  varName="name" varFormat="fileFormat" varSize="fs" varSha1="digest"/>
-            <c:set var="duplicate" value="${(oldVal.value == name) && (oldVal.size == fs) && (oldVal.sha1 = digest)}"/>
-            <%-- this is not right --%>
+            <c:set var="duplicate" value="${(oldVal.size == fs) && (oldVal.sha1 = digest)}"/>
         </c:when>
         <c:otherwise>
             <c:set var="duplicate" value="${oldVal.value == value}"/>
@@ -45,33 +44,33 @@ order by id desc limit 1;
     </c:choose>
 </c:if>
 
+<c:if test="${! duplicate}">
+    <c:if test="${tableName == 'FilepathResultManual'}">
+        <ta:registerFile activityId="${activityId}" fileItem="${fileItems.value}" mode="manual" 
+                         varBase="baseName" varFsPath="fsPath" varDcPath="dcPath" varDcPk="dcPk"/>
+        <%-- fileItems is put in the request by the multipart filter --%>
+        <%-- File is saved in registerFile.
+        Which also sets uploadedFileSize and uploadDigest at request scope
+        --%>
+    </c:if>
 
-<c:if test="${tableName == 'FilepathResultManual'}">
-    <ta:registerFile activityId="${activityId}" fileItem="${fileItems.value}" mode="manual" 
-                     varBase="baseName" varFsPath="fsPath" varDcPath="dcPath" varDcPk="dcPk"/>
-    <%-- fileItems is put in the request by the multipart filter --%>
-    <%-- File is saved in registerFile.
-    Which also sets uploadedFileSize and uploadDigest at request scope
-    --%>
+        <sql:update>
+    insert into ${tableName} set
+    inputPatternId=?<sql:param value="${inputPatternId}"/>,
+    activityId=?<sql:param value="${activityId}"/>,
+    <c:choose>
+        <c:when test="${tableName == 'FilepathResultManual'}">
+    value=?<sql:param value="${fsPath}"/>,
+    virtualPath=?<sql:param value="${dcPath}"/>,
+    catalogKey=?<sql:param value="${dcPk}"/>,
+    size=?<sql:param value="${uploadedFileSize}"/>,
+    sha1=?<sql:param value="${uploadDigest}"/>,
+        </c:when>
+        <c:otherwise>
+    value=?<sql:param value="${value}"/>,
+        </c:otherwise>
+    </c:choose>
+    createdBy=?<sql:param value="${userName}"/>,
+    creationTS=UTC_TIMESTAMP();
+        </sql:update>
 </c:if>
-
-    <sql:update>
-insert into ${tableName} set
-inputPatternId=?<sql:param value="${inputPatternId}"/>,
-activityId=?<sql:param value="${activityId}"/>,
-<c:choose>
-    <c:when test="${tableName == 'FilepathResultManual'}">
-value=?<sql:param value="${fsPath}"/>,
-virtualPath=?<sql:param value="${dcPath}"/>,
-catalogKey=?<sql:param value="${dcPk}"/>,
-size=?<sql:param value="${uploadedFileSize}"/>,
-sha1=?<sql:param value="${uploadDigest}"/>,
-    </c:when>
-    <c:otherwise>
-value=?<sql:param value="${value}"/>,
-    </c:otherwise>
-</c:choose>
-createdBy=?<sql:param value="${userName}"/>,
-creationTS=UTC_TIMESTAMP();
-    </sql:update>
-
