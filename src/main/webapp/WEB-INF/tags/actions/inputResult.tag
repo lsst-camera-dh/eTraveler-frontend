@@ -14,6 +14,7 @@
 <%@attribute name="activityId" required="true"%>
 <%@attribute name="inputPatternId" required="true"%>
 <%@attribute name="value" required="true"%>
+<%@attribute name="fieldName"%>
 
     <sql:query var="semanticsQ">
 select ISm.name, ISm.tableName
@@ -36,7 +37,7 @@ order by id desc limit 1;
         <c:when test="${tableName == 'FilepathResultManual'}">
             <upload:uploadParser fileItem="${fileItems.value}" 
                                  varName="name" varFormat="fileFormat" varSize="fs" varSha1="digest"/>
-            <c:set var="duplicate" value="${(oldVal.size == fs) && (oldVal.sha1 = digest)}"/>
+            <c:set var="duplicate" value="${(oldVal.size == fs) && (oldVal.sha1 == digest)}"/>
         </c:when>
         <c:otherwise>
             <c:set var="duplicate" value="${oldVal.value == value}"/>
@@ -46,7 +47,7 @@ order by id desc limit 1;
 
 <c:if test="${! duplicate}">
     <c:if test="${tableName == 'FilepathResultManual'}">
-        <ta:registerFile activityId="${activityId}" fileItem="${fileItems.value}" mode="manual" 
+        <ta:registerFile activityId="${activityId}" fileItem="${fileItems[fieldName]}" mode="manual" 
                          varBase="baseName" varFsPath="fsPath" varDcPath="dcPath" varDcPk="dcPk"/>
         <%-- fileItems is put in the request by the multipart filter --%>
         <%-- File is saved in registerFile.

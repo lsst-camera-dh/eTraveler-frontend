@@ -26,7 +26,8 @@ ${param.nInputs}<br>
         <c:if test="${! empty param[valueName]}">
             <ta:inputResult inputPatternId="${param[inputName]}" 
                             value="${param[valueName]}" 
-                            activityId="${param.activityId}"/>
+                            activityId="${param.activityId}"
+                            fieldName="${valueName}"/>
 ${inputName} ${param[inputName]} ${valueName} ${param[valueName]}<br>
         </c:if>
     </c:forEach>
