@@ -18,7 +18,7 @@
     </head>
     <body>
 <traveler:checkFreshness formToken="${param.freshnessToken}"/>
-${param.nInputs}<br>
+
 <sql:transaction>
     <c:forEach var="pattern" begin="0" end="${param.nInputs - 1}" step="1">
         <c:set var="inputName" value="inputPatternId${pattern}"/>
@@ -28,7 +28,6 @@ ${param.nInputs}<br>
                             value="${param[valueName]}" 
                             activityId="${param.activityId}"
                             fieldName="${valueName}"/>
-${inputName} ${param[inputName]} ${valueName} ${param[valueName]}<br>
         </c:if>
     </c:forEach>
 </sql:transaction>
