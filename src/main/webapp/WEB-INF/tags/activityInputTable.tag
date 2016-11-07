@@ -110,7 +110,6 @@ order by id desc limit 1;
                 <c:otherwise>
                     <c:set var="inputName" value="inputPatternId${nInputs}"/>
                     <c:set var="valueName" value="value${nInputs}"/>
-                    ${inputName} ${valueName}
                     <c:if test="${row.isOptional == 0}">
                         <c:set var="resultsFiled" value="false"/>
                     </c:if>
