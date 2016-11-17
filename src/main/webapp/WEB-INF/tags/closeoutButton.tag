@@ -21,7 +21,8 @@
 <c:set var="topActivityId" value="${! empty param.topActivityId ? param.topActivityId : travelerId}"/>
 
     <sql:query var="activityQ" >
-select A.*, P.substeps, P.maxIteration, P.newLocation, P.newHardwareStatusId,
+select A.*, 
+P.substeps, P.maxIteration, P.newLocation, P.newHardwareStatusId,
 P.travelerActionMask&(select maskBit from InternalAction where name='harnessedJob') as isHarnessed,
 P.travelerActionMask&(select maskBit from InternalAction where name='async') as isAsync,
 P.travelerActionMask&(select maskBit from InternalAction where name='setHardwareLocation') as setsLocation,
@@ -29,6 +30,7 @@ P.travelerActionMask&(select maskBit from InternalAction where name='setHardware
 P.travelerActionMask&(select maskBit from InternalAction where name='addLabel') as addsLabel,
 P.travelerActionMask&(select maskBit from InternalAction where name='removeLabel') as removesLabel,
 P.travelerActionMask&(select maskBit from InternalAction where name='repeatable') as isRepeatable,
+ASH.creationTS as statusTS,
 AFS.name as status, AFS.isFinal
 from Activity A
 inner join Process P on P.id=A.processId
@@ -40,12 +42,11 @@ where A.id=?<sql:param value="${activityId}"/>;
 
 <c:set var="message" value="bug 696274"/>
 <c:set var="readyToClose" value="false"/>
-<c:set var="closed" value="false"/>
 <c:choose>
-    <c:when test="${empty activity.begin}">
+    <c:when test="${activity.status == 'new'}">
         <c:set var="message" value="Not started"/>
     </c:when>
-    <c:when test="${empty activity.end}">
+    <c:when test="${! activity.isFinal}">
         <c:set var="message" value="Needs work"/>
         <c:choose>
             <c:when test="${activity.isAsync != 0}">
@@ -59,9 +60,13 @@ where A.id=?<sql:param value="${activityId}"/>;
 select Ac.id
 from Activity Ap
 inner join ProcessEdge PE on PE.parent=Ap.processId
-left join Activity Ac on Ac.processEdgeId=PE.id and Ac.parentActivityId=Ap.id
+left join Activity Ac 
+    inner join ActivityStatusHistory ASH on ASH.activityId = Ac.id and 
+        ASH.id = (select max(id) from ActivityStatusHistory where activityId = Ac.id)
+    inner join ActivityFinalStatus AFS on AFS.id = ASH.activityStatusId
+    on Ac.processEdgeId=PE.id and Ac.parentActivityId=Ap.id
 where Ap.id=?<sql:param value="${activityId}"/>
-and Ac.end is null    
+and not AFS.isFinal    
                 </sql:query>
                 <c:if test="${empty stepsRemainingQ.rows}">
                     <c:set var="readyToClose" value="true"/>
@@ -70,9 +75,12 @@ and Ac.end is null
             <c:when test="${activity.substeps == 'SELECTION'}">
                 <sql:query var="childQ">
 select count(*) as completedSteps
-from Activity A where
-A.parentActivityId=?<sql:param value="${activityId}"/>
-and A.end is not null
+from Activity A 
+inner join ActivityStatusHistory ASH on ASH.activityId = A.id and 
+    ASH.id = (select max(id) from ActivityStatusHistory where activityId = A.id)
+inner join ActivityFinalStatus AFS on AFS.id = ASH.activityStatusId
+where A.parentActivityId=?<sql:param value="${activityId}"/>
+and AFS.isFinal
                 </sql:query>
                 <c:if test="${childQ.rows[0].completedSteps != 0}">
                     <c:set var="readyToClose" value="true"/>
@@ -84,8 +92,7 @@ and A.end is not null
         </c:choose>
     </c:when>
     <c:otherwise>
-        <c:set var="message" value="${activity.end}"/>
-        <c:set var="closed" value="true"/>
+        <c:set var="message" value="${activity.statusTS}"/>
     </c:otherwise>
 </c:choose>
 
@@ -107,12 +114,12 @@ and A.end is not null
 <c:if test="${readyToClose}">
     <c:set var="message" value="Ready to close"/>
 </c:if>
-<c:set var="failable" value="${! closed && ! travelerFailed}"/> <%-- Argh. travelerFailed is not set in ActivityPane --%>
+<c:set var="failable" value="${! activity.isFinal && ! travelerFailed}"/> <%-- Argh. travelerFailed is not set in ActivityPane --%>
 
 <traveler:hasOpenSWH var="hasOpenSWH" activityId="${activityId}"/>
 
 <c:set var="repeatable" value="false"/>
-<c:if test="${closed && 
+<c:if test="${activity.isFinal && 
               activity.isRepeatable != 0 && 
               ! empty activity.parentActivityId}">
     <traveler:getActivityStatus var="parentStatus" varFinal="parentFinal" activityId="${activity.parentActivityId}"/>
