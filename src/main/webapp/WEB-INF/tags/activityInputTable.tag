@@ -162,7 +162,7 @@ order by id desc limit 1;
 
         <input type="hidden" name="nInputs" value="${nInputs}">
         <input type="submit" value="Record Results"
-            <c:if test="${! mayOperate}">disabled</c:if>>
+            <c:if test="${(! mayOperate) || (nInputs == 0) || isFinal}">disabled</c:if>>
     </form>
 
 </c:if>
