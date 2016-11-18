@@ -113,6 +113,7 @@ and ISM.name = "signature"
 order by IP.id
 ;
     </sql:query>
+    <c:if test="${! empty sigQ.rows}">
 <display:table name="${sigQ.rows}" id="sig" class="datatable">
     <display:column property="label" title="Label" sortable="true" headerClass="sortable"/>
     <display:column property="signerRequest" title="Group" sortable="true" headerClass="sortable"/>
@@ -126,16 +127,6 @@ order by IP.id
 <input type="hidden" name="freshnessToken" value="${freshnessToken}">
 <input type="hidden" name="referringPage" value="${thisPage}">
 <input type="hidden" name="signatureId" value="${sig.id}">
-<%--
-<c:choose>
-    <c:when test="${empty sig.name}">
-        <c:set var="maySign" value="${sig.signerRequest == userName}"/>
-    </c:when>
-    <c:otherwise>
-        <traveler:checkPerm var="maySign" groups="${sig.name}"/>
-    </c:otherwise>
-</c:choose>
---%>
 <textarea name="comment" placeholder="Comment"></textarea>
 <traveler:checkPerm var="maySign" groups="${sig.signerRequest}"/>
 <input type='submit' value='Sign It!' <c:if test="${! maySign}">disabled</c:if>>
@@ -148,7 +139,7 @@ order by IP.id
         </display:column>
     </c:if>
 </display:table>
-
+    </c:if>
 <c:set var="signedOff" value="true"/>
 <c:forEach var="sig" items="${sigQ.rows}">
     <c:if test="${empty sig.signatureTs}">
