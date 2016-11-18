@@ -127,21 +127,17 @@ order by id desc limit 1;
                         <input type="hidden" name="${inputName}" value="${row.id}">
                         <c:choose>
                             <c:when test="${row.ISName == 'checkbox'}">
-                                <input type="checkbox" name="${valueName}" value="1" 
-                                                  <c:if test="${row.isOptional == 0}">required</c:if>>
+                                <input type="checkbox" name="${valueName}" value="1">
                             </c:when>
                             <c:when test="${row.ISName == 'boolean'}">
-                                <label>True<input type="radio" name="${valueName}" value="1" 
-                                                  <c:if test="${row.isOptional == 0}">required</c:if>></label>
-                                <label>False<input type="radio" name="${valueName}" value="0"
-                                                   <c:if test="${row.isOptional == 0}">required</c:if>></label>
+                                <label>True<input type="radio" name="${valueName}" value="1"></label>
+                                <label>False<input type="radio" name="${valueName}" value="0"></label>
                             </c:when>
                             <c:when test="${row.ISName == 'text'}">
                                 <textarea name="${valueName}"></textarea>
                             </c:when>
                             <c:otherwise>
                                 <c:if test="${row.isOptional == 0}">*</c:if><input type="${inputType}" name="${valueName}" 
-                                        <c:if test="${row.isOptional == 0}">required</c:if>
                                         <c:if test="${row.ISName=='float'}">step="any"</c:if>
                                         <c:if test="${!empty row.minV}">min="<c:out value="${row.minV}"/>"</c:if>
                                         <c:if test="${!empty row.maxV}">max="<c:out value="${row.maxV}"/>"</c:if>
