@@ -55,6 +55,11 @@
     and HG.name=?<sql:param value="${hardwareGroupName}"/>
     </c:if>
 
+    <c:if test="${! empty name}">
+      and L.name like concat('%', ?<sql:param value="${name}"/>, '%')
+    </c:if>
+
+
     <c:if test="${! empty subsystemName && subsystemName != 'any'}">
     and SS.name=?<sql:param value="${subsystemName}"/>
     </c:if>
