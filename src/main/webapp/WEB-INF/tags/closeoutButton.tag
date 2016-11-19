@@ -106,10 +106,12 @@ and AFS.isFinal
 
 <c:set var="active" value="${activity.status == 'new' || activity.status == 'inProgress'}"/>
 
-<c:set var="retryable" value="${activity.iteration < activity.maxIteration && 
+<c:set var="retryable" value="${(activity.iteration < activity.maxIteration && 
                                     (activity.status == 'new' || 
                                     activity.status == 'inProgress' || 
-                                    (isHarnessed && activity.status == 'stopped')) &&
+                                    (isHarnessed && activity.status == 'stopped')
+                                    )
+                                ) ||
                                 activity.isRepeatable == 0}"/>
 <c:if test="${readyToClose}">
     <c:set var="message" value="Ready to close"/>
@@ -118,13 +120,7 @@ and AFS.isFinal
 
 <traveler:hasOpenSWH var="hasOpenSWH" activityId="${activityId}"/>
 
-<c:set var="repeatable" value="false"/>
-<c:if test="${activity.isFinal && 
-              activity.isRepeatable != 0 && 
-              ! empty activity.parentActivityId}">
-    <traveler:getActivityStatus var="parentStatus" varFinal="parentFinal" activityId="${activity.parentActivityId}"/>
-    <c:set var="repeatable" value="${! parentFinal}"/>
-</c:if>
+<c:set var="repeatable" value="${readyToClose && activity.isRepeatable != 0 && ! isTop}"/>
 
 <c:out value="${message}"/><br>
 
@@ -219,13 +215,9 @@ Make a new version of the Traveler."/>
         <td>
         <c:choose>
             <c:when test="${repeatable}">
-                <form method=GET action="operator/createActivity.jsp" target="_top">
+                <form method=GET action="operator/repeatActivity.jsp" target="_top">
                     <input type="hidden" name="freshnessToken" value="${freshnessToken}">
-                    <input type="hidden" name="hardwareId" value="${activity.hardwareId}">
-                    <input type="hidden" name="processId" value="${activity.processId}">
-                    <input type="hidden" name="parentActivityId" value="${activity.parentActivityId}">
-                    <input type="hidden" name="processEdgeId" value="${activity.processEdgeId}">
-                    <input type="hidden" name="inNCR" value="${activity.inNCR}">
+                    <input type="hidden" name="activityId" value="${activityId}">       
                     <input type="hidden" name="topActivityId" value="${topActivityId}">
                     <INPUT TYPE=SUBMIT value="Repeat Step">
                 </form>
