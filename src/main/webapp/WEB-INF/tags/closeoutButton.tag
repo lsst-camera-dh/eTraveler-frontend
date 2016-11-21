@@ -189,7 +189,7 @@ Make a new version of the Traveler."/>
                 <input type="hidden" name="activityId" value="${activityId}">       
                 <input type="hidden" name="topActivityId" value="${topActivityId}">       
                 <INPUT TYPE=SUBMIT value="Complete Step"
-                       <c:if test="${(! readyToClose) || (! mayOperate)}">disabled</c:if>>
+                   <c:if test="${(! readyToClose) || (! mayOperate)}">disabled</c:if>>
             </form>      
         </td>
         <td>
@@ -207,7 +207,7 @@ Make a new version of the Traveler."/>
                     <input type="hidden" name="freshnessToken" value="${freshnessToken}">
                     <input type="hidden" name="activityId" value="${activityId}">       
                     <INPUT TYPE=SUBMIT value="Pause Traveler"
-                           <c:if test="${(! active) || (! mayOperate)}">disabled</c:if>>
+                       <c:if test="${(! active) || (! mayOperate)}">disabled</c:if>>
                 </form>
             </c:otherwise>
         </c:choose>
@@ -228,7 +228,7 @@ Make a new version of the Traveler."/>
                     <input type="hidden" name="activityId" value="${activityId}">       
                     <input type="hidden" name="topActivityId" value="${topActivityId}">
                     <INPUT TYPE=SUBMIT value="Retry Step"
-                           <c:if test="${isTop || (((! retryable) || (! mayOperate)) && ((! active) || (! maySkip)))}">disabled</c:if>>
+                       <c:if test="${isTop || (((! retryable) || (! mayOperate)) && ((! active) || (! maySkip)))}">disabled</c:if>>
                 </form>
             </c:otherwise>
         </c:choose>
@@ -250,7 +250,7 @@ Make a new version of the Traveler."/>
                         <input type="hidden" name="topActivityId" value="${topActivityId}">       
                         <%--<input type="hidden" name="status" value="stopped">--%>
                         <INPUT TYPE=SUBMIT value="Stop Work"
-                               <c:if test="${(! failable || ! active) || (! mayOperate)}">disabled</c:if>>
+                           <c:if test="${(! failable || ! active) || (! mayOperate)}">disabled</c:if>>
                     </form>                                  
                 </c:otherwise>
             </c:choose>
@@ -261,7 +261,7 @@ Make a new version of the Traveler."/>
                 <input type="hidden" name="activityId" value="${activityId}">
                 <input type="hidden" name="topActivityId" value="${topActivityId}">
                 <INPUT TYPE=SUBMIT value="Skip Step"
-                       <c:if test="${isTop || ((! active) || (! maySkip))}">disabled</c:if>>
+                   <c:if test="${isTop || ((! active) || (! maySkip))}">disabled</c:if>>
             </form>
         </td>
         <td>
@@ -269,7 +269,7 @@ Make a new version of the Traveler."/>
                 <input type="hidden" name="freshnessToken" value="${freshnessToken}">
                 <input type="hidden" name="activityId" value="${activityId}">
                 <INPUT TYPE=SUBMIT value="NCR"
-                       <c:if test="${isTop || ! active}">disabled</c:if>>
+                   <c:if test="${isTop || ! active}">disabled</c:if>>
             </form>
         </td>
     </tr>
