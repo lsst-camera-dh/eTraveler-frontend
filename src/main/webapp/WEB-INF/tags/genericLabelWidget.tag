@@ -23,9 +23,10 @@ Needs works. How one checks permissions likely depends on object type
    call generic_subsystem(?, ?)
    <sql:param value="${objectId}"/>
    <sql:param value="${objectTypeId}"/>
+   
 </sql:query>
-<c:set var="subsysId" value="${subsysIdQ.rows[0].id}" />
- <c:out value="Subsystem is ${subsysId} " /> 
+<c:set var="subsysId" value="${subsysIdQ.rows[0].subsystemId}" />
+ <c:out value="Subsystem is ${subsysId}" /> <br />
 
 <traveler:getSetGenericLabels var="genLabelQ" objectId="${objectId}" objectTypeId="${objectTypeId}"/>
 <traveler:genericLabelTable result="${genLabelQ}"/>
