@@ -90,6 +90,9 @@ order by id desc limit 1;
                             </c:url>
                             <a href="${dcLink}" target="_blank"><c:out value="${value.value}"/></a>
                         </c:when>
+                        <c:when test="${row.ISName == 'text'}">
+                            <pre><c:out value="${value.value}"/></pre>
+                        </c:when>
                         <c:otherwise>
                             <c:out value="${value.value}"/>
                         </c:otherwise>

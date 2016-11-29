@@ -133,7 +133,7 @@ order by IP.id
             </form>
                 </c:when>
                 <c:otherwise>
-                    ${sig.signerComment}
+                    <pre><c:out value="${sig.signerComment}"/></pre>
                 </c:otherwise>
             </c:choose>
         </display:column>
