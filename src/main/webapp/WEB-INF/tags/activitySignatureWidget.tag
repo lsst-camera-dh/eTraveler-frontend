@@ -133,7 +133,7 @@ order by IP.id
             </form>
                 </c:when>
                 <c:otherwise>
-                    <pre><c:out value="${sig.signerComment}"/></pre>
+                    <traveler:webbify input="${sig.signerComment}"/>
                 </c:otherwise>
             </c:choose>
         </display:column>
