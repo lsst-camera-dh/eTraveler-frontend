@@ -228,7 +228,8 @@ Make a new version of the Traveler."/>
                     <input type="hidden" name="activityId" value="${activityId}">       
                     <input type="hidden" name="topActivityId" value="${topActivityId}">
                     <INPUT TYPE=SUBMIT value="Retry Step"
-                       <c:if test="${isTop || (((! retryable) || (! mayOperate)) && ((! active) || (! maySkip)))}">disabled</c:if>>
+                       <c:if test="${isTop || activity.isRepeatable != 0 ||
+                                     (((! retryable) || (! mayOperate)) && ((! active) || (! maySkip)))}">disabled</c:if>>
                 </form>
             </c:otherwise>
         </c:choose>
