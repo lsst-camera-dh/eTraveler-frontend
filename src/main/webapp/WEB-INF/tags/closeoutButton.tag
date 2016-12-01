@@ -111,7 +111,7 @@ and AFS.isFinal
                                     activity.status == 'inProgress' || 
                                     (isHarnessed && activity.status == 'stopped')
                                     )
-                                ) ||
+                                ) &&
                                 activity.isRepeatable == 0}"/>
 <c:if test="${readyToClose}">
     <c:set var="message" value="Ready to close"/>
