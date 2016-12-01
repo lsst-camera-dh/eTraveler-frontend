@@ -30,7 +30,7 @@ Needs works. How one checks permissions likely depends on object type
 
 <traveler:getSetGenericLabels var="genLabelQ" objectId="${objectId}" objectTypeId="${objectTypeId}"/>
 <traveler:genericLabelTable result="${genLabelQ}"/>
-<form action="operator/removeLabel.jsp">
+<form action="operator/modifyLabels.jsp">
     <input type="hidden" name="freshnessToken" value="${freshnessToken}">
     <input type="hidden" name="referringPage" value="${thisPage}">
     <input type="hidden" name="objectId" value="${objectId}">
@@ -50,7 +50,7 @@ Needs works. How one checks permissions likely depends on object type
 </form>
 
 <traveler:getUnsetGenericLabels var="genUnsetQ" objectId="${objectId}" objectTypeId="${objectTypeId}"/>
-<form action="operator/addLabel.jsp">
+<form action="operator/modifyLabels.jsp">
     <input type="hidden" name="freshnessToken" value="${freshnessToken}">
     <input type="hidden" name="referringPage" value="${thisPage}">
     <input type="hidden" name="objectId" value="${objectId}">

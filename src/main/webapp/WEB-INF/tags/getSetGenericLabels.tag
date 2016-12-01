@@ -5,12 +5,13 @@
 --%>
 
 <%@tag description="get the labels that are currently applied to an object" pageEncoding="UTF-8"%>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql"%>
 
 <%@attribute name="objectTypeId" required="true"%>
 <%@attribute name="objectId" required="true"%>
 <%@attribute name="var" required="true" rtexprvalue="false"%>
-<%@variable name-from-attribute="var" alias="labelQ" scope="AT_BEGIN"%>
+<%@variable name-from-attribute="var" alias="genLabelQ" scope="AT_BEGIN"%>
 
 
 
@@ -24,16 +25,16 @@ select L.name as labelName, L.id as labelId, LH.*, P.name as processName
     inner join Process P on P.id=A.processId) on A.id=LH.activityId
 where LH.id in (select max(id)
                 from LabelHistory
-                where LH.objectId=?<sql:param value="${objectId}"/>
-                and  LG.labelableId=?<sql:param value="${objectTypeId}" />
+                where objectId=?<sql:param value="${objectId}"/>
+                and  labelableId=?<sql:param value="${objectTypeId}" />
                 group by labelId)
-and LH.adding=1
-<%--
+and LH.adding=1 and
+(LG.hardwareGroupId is null
+
 <c:if test="${! empty subsysIdQ}">
-  and LG.subsystemId=?<sql:param value="${subsysId}" />
-  or LG.subsystemId="" />
+  or LG.subsystemId=?<sql:param value="${subsysId}" />
 </c:if>
---%>
+)
 <%-- and need to do similar filtering on hardware groups --%>
   order by LH.id desc
 ;
