@@ -74,7 +74,7 @@
   <display:column property="labelName" title="Label_group:Name"
                   sortable="true" headerClass="sortable" />
   <display:column property="subsystem" title="Subsystem"
-                  sortable="tru" headerClass="sortable" />
+                  sortable="true" headerClass="sortable" />
   <display:column property="hgName" title="Hardware group"
                   sortable="true" headerClass="sortable" />
   <display:column property="labelCreator" title="Creator"
