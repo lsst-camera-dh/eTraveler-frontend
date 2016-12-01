@@ -29,14 +29,7 @@ where LH.id in (select max(id)
                 and  labelableId=?<sql:param value="${objectTypeId}" />
                 group by labelId)
 and LH.adding=1 and
-LG.labelableId=?<sql:param value="${objectTypeId}" /> and
-(LG.hardwareGroupId is null
+LG.labelableId=?<sql:param value="${objectTypeId}" /> 
 
-<c:if test="${! empty subsysIdQ}">
-  or LG.subsystemId=?<sql:param value="${subsysId}" />
-</c:if>
-)
-<%-- and need to do similar filtering on hardware groups --%>
-  order by LH.id desc
 ;
 </sql:query>
