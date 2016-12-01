@@ -29,6 +29,7 @@ where LH.id in (select max(id)
                 and  labelableId=?<sql:param value="${objectTypeId}" />
                 group by labelId)
 and LH.adding=1 and
+LG.labelableId=?<sql:param value="${objectTypeId}" /> and
 (LG.hardwareGroupId is null
 
 <c:if test="${! empty subsysIdQ}">
