@@ -39,7 +39,7 @@ and LH.adding=1) L3 on L2.id=L3.id and
   or LG.subsystemId=?<sql:param value="${subsysId}" />
 </c:if>
 )
-where L3.id is null
+where L3.id is null and LG.labelableId=?<sql:param value="${objectTypeId}" />
 order by L2.name
 ;
    </sql:query>
