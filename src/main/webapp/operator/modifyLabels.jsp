@@ -25,6 +25,7 @@
         
         <c:if test="${empty param.labelId}">
             <traveler:error message="You must specify label."/>
+        </c:if>	    
         <c:if test="${empty param.objectTypeId}">
             <traveler:error message="You must specify type of object to label."/>	
         </c:if>

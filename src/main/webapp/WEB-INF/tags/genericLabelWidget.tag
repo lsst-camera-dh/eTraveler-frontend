@@ -41,7 +41,7 @@
     <select name="labelId" required>
         <option value="" selected>Pick a label to remove</option>
         <c:forEach var="sRow" items="${genLabelQ.rows}">
-            <%-- <option value="${sRow.statusId}"> --%>
+            <option value="${sRow.theLabelId}">
 	    <c:out value="${sRow.labelName}"/>
 	    <%-- </option>  --%>
         </c:forEach>        
