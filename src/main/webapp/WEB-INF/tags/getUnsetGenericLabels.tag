@@ -10,6 +10,7 @@
 
 <%@attribute name="objectTypeId" required="true"%>
 <%@attribute name="objectId" required="true"%>
+<%@attribute name="subsysId" required="true"%>
 <%@attribute name="var" required="true" rtexprvalue="false"%>
 <%@variable name-from-attribute="var" alias="genUnsetQ" scope="AT_BEGIN"%>
 
@@ -28,14 +29,14 @@ left join
 from LabelHistory LH
 inner join Label L on L.id=LH.labelId
 where LH.id in (select max(id)
-                from LabelHistory
-                where objectId=?<sql:param value="${objectId}"/>
-                and labelableId=?<sql:param value="${objectTypeId}" />
-                group by labelId)
+                from LabelHistory LH2
+                where LH2.objectId=?<sql:param value="${objectId}"/>
+                and LH2.labelableId=?<sql:param value="${objectTypeId}" />
+                group by LH2.labelId)
 and LH.adding=1) L3 on L2.id=L3.id and
 (LG.subsystemId is null
 
-<c:if test="${! empty subsysIdQ}">
+<c:if test="${! empty subsysId}">
   or LG.subsystemId=?<sql:param value="${subsysId}" />
 </c:if>
 )
