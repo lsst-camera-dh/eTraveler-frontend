@@ -89,6 +89,7 @@ Group: <select name="sigGroup">
     <option value="NCR-QA">NCR-QA</option>
     <option value="NCR-Requirements">NCR-Requirements</option>
     <option value="NCR-Safety">NCR-Safety</option>
+    <option value="NCR-SensorAcceptance">NCR-SensorAcceptance</option>
     <option value="NCR-SRScientist">NCR-SRScientist</option>
     <option value="NCR-SystemIntegration">NCR-SystemIntegration</option>
     <option value="EtravelerSubsystemManagers">Default Managers</option>
