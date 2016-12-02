@@ -51,7 +51,7 @@
         <c:if test="${! mayManage}">disabled</c:if>>  
 </form>
 
-<traveler:getUnsetGenericLabels var="genUnsetQ" objectId="${objectId}" objectTypeId="${objectTypeId}"/>
+<traveler:getUnsetGenericLabels var="genUnsetQ" objectId="${objectId}" objectTypeId="${objectTypeId}" subsysId="${subsysId}"/>
 <form action="operator/modifyLabels.jsp">
     <input type="hidden" name="freshnessToken" value="${freshnessToken}">
     <input type="hidden" name="referringPage" value="${thisPage}">
