@@ -35,6 +35,9 @@ select rootActivityId from Activity where id = ?<sql:param value="${parentActivi
 insert into Activity set
 hardwareId=?<sql:param value="${hardwareId}"/>,
 processId=?<sql:param value="${processId}"/>,
+<c:if test="${! empty processEdgeId}">
+    processEdgeId = ?<sql:param value="${processEdgeId}"/>,
+</c:if>
 <c:if test="${! empty parentActivityId}">
     parentActivityId = ?<sql:param value="${parentActivityId}"/>,
     rootActivityId = ?<sql:param value="${rootActivityId}"/>,
@@ -42,8 +45,8 @@ processId=?<sql:param value="${processId}"/>,
 <c:if test="${! empty jobHarnessId}">
     jobHarnessId = ?<sql:param value="${jobHarnessId}"/>,
 </c:if>
-<c:if test="${! empty processEdgeId}">
-    processEdgeId = ?<sql:param value="${processEdgeId}"/>,
+<c:if test="${! empty iteration}">
+    iteration = ?<sql:param value="${iteration}"/>,
 </c:if>
 inNCR = ?<sql:param value="${inNCR}"/>,
 createdBy = ?<sql:param value="${userName}"/>,

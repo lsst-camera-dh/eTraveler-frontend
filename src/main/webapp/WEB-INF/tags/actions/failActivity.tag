@@ -25,22 +25,15 @@
 </sql:query>
 <c:set var="activity" value="${activityQ.rows[0]}"/>
     
-<c:choose>
-    <c:when test="${status == 'failure' && activity.iteration < activity.maxIteration}">
-        <ta:retryActivity activityId="${activityId}"/>
-    </c:when>
-    <c:otherwise>
-        <ta:setActivityStatus activityId="${activityId}" status="${status}"/>
-        <sql:update>
-            update StopWorkHistory set
-            resolution='QUIT', resolutionTS=UTC_TIMESTAMP(), resolvedBy=?<sql:param value="${userName}"/>
-            where
-            activityId=?<sql:param value="${activityId}"/>
-            and resolution='NONE' and resolutionTS is null and resolvedBy is null;
-        </sql:update>
+<ta:setActivityStatus activityId="${activityId}" status="${status}"/>
+<sql:update>
+    update StopWorkHistory set
+    resolution='QUIT', resolutionTS=UTC_TIMESTAMP(), resolvedBy=?<sql:param value="${userName}"/>
+    where
+    activityId=?<sql:param value="${activityId}"/>
+    and resolution='NONE' and resolutionTS is null and resolvedBy is null;
+</sql:update>
 
-        <c:if test="${! empty activity.parentActivityId}">
-            <ta:failActivity activityId="${activity.parentActivityId}" status="${status}"/>
-        </c:if>
-    </c:otherwise>
-</c:choose>
+<c:if test="${! empty activity.parentActivityId}">
+    <ta:failActivity activityId="${activity.parentActivityId}" status="${status}"/>
+</c:if>
