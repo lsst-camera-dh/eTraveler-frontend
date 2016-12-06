@@ -30,6 +30,12 @@
 <c:set var="subsysId" value="${subsysIdQ.rows[0].subsystemId}" />
  <%-- <c:out value="Subsystem is ${subsysId}" /> <br /> --%>
 
+<sql:query var="hardwareGroupsQ">
+   call generic_hardwareGroups(?, ?)
+   <sql:param value="${objectId}"/>
+   <sql:param value="${objectTypeId}"/>
+</sql:query>
+
 <traveler:getSetGenericLabels var="genLabelQ" objectId="${objectId}" objectTypeId="${objectTypeId}"/>
 <traveler:genericLabelTable result="${genLabelQ}"/>
 <form action="operator/modifyLabels.jsp">
@@ -51,7 +57,9 @@
         <c:if test="${! mayManage}">disabled</c:if>>  
 </form>
 
-<traveler:getUnsetGenericLabels var="genUnsetQ" objectId="${objectId}" objectTypeId="${objectTypeId}" subsysId="${subsysId}"/>
+<traveler:getUnsetGenericLabels var="genUnsetQ" objectId="${objectId}"
+objectTypeId="${objectTypeId}" subsysId="${subsysId}"
+hgResult="${hardwareGroupsQ}"/>
 <form action="operator/modifyLabels.jsp">
     <input type="hidden" name="freshnessToken" value="${freshnessToken}">
     <input type="hidden" name="referringPage" value="${thisPage}">
