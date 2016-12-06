@@ -11,6 +11,8 @@
 <%@attribute name="objectTypeId" required="true"%>
 <%@attribute name="objectId" required="true"%>
 <%@attribute name="subsysId" required="true"%>
+<%@attribute name="hgResult" required="true"
+             type="javax.servlet.jsp.jstl.sql.Result"%>
 <%@attribute name="var" required="true" rtexprvalue="false"%>
 <%@variable name-from-attribute="var" alias="genUnsetQ" scope="AT_BEGIN"%>
 
@@ -33,14 +35,19 @@ where LH.id in (select max(id)
                 where LH2.objectId=?<sql:param value="${objectId}"/>
                 and LH2.labelableId=?<sql:param value="${objectTypeId}" />
                 group by LH2.labelId)
-and LH.adding=1) L3 on L2.id=L3.id and
+and LH.adding=1) L3 on L2.id=L3.id where
 (LG.subsystemId is null
 
 <c:if test="${! empty subsysId}">
   or LG.subsystemId=?<sql:param value="${subsysId}" />
 </c:if>
+)  and
+(LG.hardwareGroupId is null
+<c:forEach var="sRow" items="${hgResult.rows}">
+  or LG.hardwareGroupId=?<sql:param value="${sRow.hardwareGroupId}"/>
+</c:forEach>
 )
-where L3.id is null and LG.labelableId=?<sql:param value="${objectTypeId}" />
+and L3.id is null and LG.labelableId=?<sql:param value="${objectTypeId}" />
 order by L2.name
 ;
    </sql:query>
