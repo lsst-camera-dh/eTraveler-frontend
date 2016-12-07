@@ -16,6 +16,15 @@ select name from Site order by name;
 select name from Subsystem order by name;
     </sql:query>
 
+    <sql:query var="labelQ">
+select concat(LG.name, ":", L.name) as fullname, L.id as labelId from Label L
+    join LabelGroup LG on L.labelGroupId=LG.id
+    join Labelable on LG.labelableId=Labelable.id
+    where Labelable.name="hardware"
+    order by fullname;
+    </sql:query>
+
+
 <!DOCTYPE html>
 <html>
     <head>
@@ -48,6 +57,15 @@ select name from Subsystem order by name;
                     <filter:filterOption value="${subsystem.name}"><c:out value="${subsystem.name}"/></filter:filterOption>
                 </c:forEach>                
             </filter:filterSelection>
+	    <filter:filterSelection title="Label" var="label"
+	       defaultValue="any" >
+	       <filter:filterOption value="any">Any</filter:filterOption>
+               <c:forEach var="labelInfo" items="${labelQ.rows}">
+	         <filter:filterOption value="${labelInfo.labelId}">
+		   <c:out value="${labelInfo.fullname}" />
+                 </filter:filterOption >
+	       </c:forEach>
+            </filter:filterSelection>
             <filter:filterSelection title="Status" var="status" defaultValue='${theStatus}'>
                 <filter:filterOption value="any">Any</filter:filterOption>
                 <c:forEach var="statusName" items="${statesQ.rows}">
@@ -58,6 +76,7 @@ select name from Subsystem order by name;
         <traveler:hardwareList hardwareTypeId="${param.hardwareTypeId}"
                                hardwareGroupId="${param.hardwareGroupId}"
                                hardwareStatusName="${status}"
+                               labelId="${label}"
                                siteId="${param.siteId}"
                                siteName="${site}"
                                locationId="${param.locationId}"
