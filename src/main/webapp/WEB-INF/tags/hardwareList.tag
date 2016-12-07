@@ -18,6 +18,7 @@
 <%@attribute name="siteId"%>
 <%@attribute name="siteName"%>
 <%@attribute name="locationId"%>
+<%@attribute name="labelId"%>
 <%@attribute name="name"%>
 <%@attribute name="serial"%>
 <%@attribute name="subsystemId"%>
@@ -45,6 +46,16 @@
     inner join Location L on L.id=HLH.locationId
     inner join Site S on S.id=L.siteId
     inner join Subsystem SS on SS.id=HT.subsystemId
+    <c:if test="${! empty labelId and labelId != 'any'}" >
+    inner join LabelHistory LH on 
+      (LH.labelId=?<sql:param value="${labelId}" />) 
+      and (LH.objectId=H.id) and
+      (LH.labelableId=(select LBL.id from Labelable LBL 
+       where name="hardware") ) 
+      and LH.id in (select max(id) from LabelHistory LH2
+      where LH2.labelableId=2 and LH2.labelId=?<sql:param value="${labelId}" />
+      group by LH2.objectId) and LH.adding=1
+    </c:if >
     left join HardwareIdentifier HI on HI.hardwareId=H.id 
         and HI.authorityId=(select id from HardwareIdentifierAuthority where name=?<sql:param value="${preferences.idAuthName}"/>)
     where 1
