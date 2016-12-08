@@ -15,15 +15,7 @@ select name from Site order by name;
     <sql:query var="subsysQ">
 select name from Subsystem order by name;
     </sql:query>
-
-    <sql:query var="labelQ">
-select concat(LG.name, ":", L.name) as fullname, L.id as labelId from Label L
-    join LabelGroup LG on L.labelGroupId=LG.id
-    join Labelable on LG.labelableId=Labelable.id
-    where Labelable.name="hardware"
-    order by fullname;
-    </sql:query>
-
+    <traveler:listLabels objectTypeName="hardware" var="labelQ" />
 
 <!DOCTYPE html>
 <html>
