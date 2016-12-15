@@ -84,7 +84,7 @@
     inner join HardwareStatusHistory HSH on HSH.hardwareId=H.id and HSH.id=(select max(HSH2.id) from HardwareStatusHistory HSH2 inner join HardwareStatus HS on HS.id=HSH2.hardwareStatusId where HSH2.hardwareId=H.id and HS.isStatusValue=1)
     inner join HardwareStatus HS on HS.id=HSH.hardwareStatusId
     where 
-    HS.name not in ('REJECTED', 'USED')
+    1
     and
     <c:choose>
         <c:when test="${!empty hardwareId}">
@@ -135,7 +135,7 @@ where S.name=?<sql:param value="${preferences.siteName}"/>
             </select>
         </c:when>
         <c:otherwise>
-            <input type="hidden" name="processId" value="${processQ.rows[0].id}">
+            <input type="hidden" name="processId" value="${processId}">
             <c:out value="${processQ.rows[0].shortDescription}"/>
         </c:otherwise>
     </c:choose>
@@ -155,7 +155,7 @@ where S.name=?<sql:param value="${preferences.siteName}"/>
             </select>
         </c:when>
         <c:otherwise>
-            <input type="hidden" name="hardwareId" value="${hardwareQ.rows[0].id}">
+            <input type="hidden" name="hardwareId" value="${hardwareId}">
             <c:out value="${hardwareQ.rows[0].lsstId}"/>
         </c:otherwise>
     </c:choose>
