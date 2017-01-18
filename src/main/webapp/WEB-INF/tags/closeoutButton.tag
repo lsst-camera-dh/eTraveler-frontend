@@ -113,16 +113,23 @@ and AFS.isFinal
                                     )
                                 ) &&
                                 activity.isRepeatable == 0}"/>
-<c:if test="${readyToClose}">
-    <c:set var="message" value="Ready to close"/>
-</c:if>
+
+<c:set var="repeatable" value="${readyToClose && activity.isRepeatable != 0 && ! isTop}"/>
+
+<c:choose>
+    <c:when test="${repeatable}">
+        <c:set var="message" value="Ready to repeat or close"/>
+    </c:when>
+    <c:when test="${readyToClose}">
+        <c:set var="message" value="Ready to close"/>
+    </c:when>
+</c:choose>
+
 <c:set var="failable" value="${! activity.isFinal && ! travelerFailed}"/> <%-- Argh. travelerFailed is not set in ActivityPane --%>
 
 <traveler:hasOpenSWH var="hasOpenSWH" activityId="${activityId}"/>
 
-<c:set var="repeatable" value="${readyToClose && activity.isRepeatable != 0 && ! isTop}"/>
-
-<c:out value="${message}"/><br>
+<h3><c:out value="${message}"/></h3><br>
 
 <form METHOD=GET ACTION="operator/closeoutActivity.jsp" target="_top">
     <input type="hidden" name="freshnessToken" value="${freshnessToken}">
