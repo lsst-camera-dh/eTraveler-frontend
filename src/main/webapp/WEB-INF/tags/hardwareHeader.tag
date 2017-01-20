@@ -44,4 +44,5 @@
     <tr><td>Status:</td><td><c:out value="${hardware.hardwareStatusName}"/></td></tr>
     <tr><td>Registered by:</td><td><c:out value="${hardware.createdBy}"/></td></tr>
     <tr><td>Registered at:</td><td><c:out value="${hardware.creationTS}"/></td></tr>
+    <tr><td>Remarks:</td><td><c:out value="${hardware.remarks}"/></td></tr>
 </table>
