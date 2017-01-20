@@ -77,6 +77,10 @@ format="%Y-%m-%d" shownone="true"/>
                 </select>
             </td>
         </tr>
+        <tr>
+            <td>Remark:</td>
+            <td><INPUT TYPE=TEXT NAME=remarks SIZE=50 autofocus></td>
+        </tr>
     </table>    
     <input type="hidden" name="hardwareTypeId" value="${hardwareTypeId}"/>
     <c:set var="what" value="${hType.isBatched == 0 ? 'Component' : 'Batch'}"/>
