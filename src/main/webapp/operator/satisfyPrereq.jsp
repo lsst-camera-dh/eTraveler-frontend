@@ -20,19 +20,10 @@
         <traveler:checkFreshness formToken="${param.freshnessToken}"/>        
         
         <sql:transaction >
-            <sql:update>
-                insert into Prerequisite set
-                prerequisitePatternId=?<sql:param value="${param.prerequisitePatternId}"/>,
-                activityId=?<sql:param value="${param.activityId}"/>,
-                <c:if test="${! empty param.prerequisiteActivityId}">
-                    prerequisiteActivityId=?<sql:param value="${param.prerequisiteActivityId}"/>,
-                </c:if>
-                <c:if test="${! empty param.componentId}">
-                    hardwareId=?<sql:param value="${param.componentId}"/>,
-                </c:if>
-                createdBy=?<sql:param value="${userName}"/>,
-                creationTs=UTC_TIMESTAMP();
-            </sql:update>
+            <ta:satisfyPrereq prerequisitePatternId="${param.prerequisitePatternId}"
+                              activityId="${param.activityId}"
+                              prerequisiteActivityId="${param.prerequisiteActivityId}"
+                              hardwareId="${param.componentId}"/>
         </sql:transaction>
                 
         <c:redirect url="${param.referringPage}"/>
