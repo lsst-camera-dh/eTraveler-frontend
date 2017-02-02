@@ -21,9 +21,9 @@
 
 <sql:transaction>
     <c:forEach var="pattern" begin="0" end="${param.nInputs - 1}" step="1">
-        <c:set var="inputName" value="inputPatternId${pattern}"/>
         <c:set var="valueName" value="value${pattern}"/>
         <c:if test="${! empty param[valueName]}">
+            <c:set var="inputName" value="inputPatternId${pattern}"/>
             <ta:inputResult inputPatternId="${param[inputName]}" 
                             value="${param[valueName]}" 
                             activityId="${param.activityId}"
