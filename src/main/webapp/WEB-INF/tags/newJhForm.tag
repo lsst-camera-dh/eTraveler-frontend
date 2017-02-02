@@ -31,7 +31,7 @@ select id, name from Site
         <c:when test="${empty siteId}">
             <select name="siteId">
                 <c:forEach var="row" items="${siteQ.rows}">
-                    <option value="${row.id}">${row.name}</option>
+                    <option value="${row.id}" <c:if test="${preferences.siteName==row.name}">selected</c:if>>${row.name}</option>
                 </c:forEach>
             </select>
         </c:when>
