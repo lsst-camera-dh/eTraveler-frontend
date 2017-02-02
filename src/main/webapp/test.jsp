@@ -25,7 +25,8 @@
     </head>
     <body>
         <relationships:showSlotHistory slotId="12"/>
-        <traveler:test/>
+        <traveler:test farg='0.1'/>
+        <%--
         ${fileItems}<br>
 ${fn:length(paramValues['value'])} ${param.nInputs}<br>
     <c:forEach var="pattern" begin="0" end="${param.nInputs - 1}" step="1">
@@ -34,11 +35,11 @@ ${fn:length(paramValues['value'])} ${param.nInputs}<br>
         
 <%--        <ta:inputResult inputPatternId="${paramValues['inputPatternId'][pattern]}" 
                         value="${paramValues['value'][pattern]}" 
-                        activityId="${param.activityId}"/>--%>
+                        activityId="${param.activityId}"/>
 <c:if test="${! empty param[valueName]}">
 ${inputName} ${param[inputName]} ${valueName} ${param[valueName]}<br>
 ${fileItems[valueName].name}<br>
 </c:if>
-    </c:forEach>
+    </c:forEach>--%>
     </body>
 </html>
