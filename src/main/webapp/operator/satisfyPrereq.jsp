@@ -20,10 +20,16 @@
         <traveler:checkFreshness formToken="${param.freshnessToken}"/>        
         
         <sql:transaction >
-            <ta:satisfyPrereq prerequisitePatternId="${param.prerequisitePatternId}"
-                              activityId="${param.activityId}"
-                              prerequisiteActivityId="${param.prerequisiteActivityId}"
-                              hardwareId="${param.componentId}"/>
+            <c:forEach var="pattern" begin="0" end="${param.nPrereqs - 1}" step="1">
+                <c:set var="valueName" value="value${pattern}"/>
+                <c:if test="${! empty param[valueName]}">
+                    <c:set var="patternName" value="prerequisitePatternId${pattern}"/>
+                    <ta:satisfyPrereq prerequisitePatternId="${param[patternName]}"
+                                      activityId="${param.activityId}"
+                                      prerequisiteActivityId="${param.prerequisiteActivityId}"
+                                      hardwareId="${param.componentId}"/>
+                </c:if>
+            </c:forEach>
         </sql:transaction>
                 
         <c:redirect url="${param.referringPage}"/>
