@@ -38,7 +38,14 @@ and PP.prerequisiteTypeId=(select id from PrerequisiteType where name=?<sql:para
 order by PP.id
 ;
     </sql:query>
+
+<c:set var="nPrereqs" value="0"/>
+
 <c:if test="${! empty prereqQ.rows}">
+    <form method="get" action="operator/satisfyPrereq.jsp">
+        <input type="hidden" name="freshnessToken" value="${freshnessToken}">
+        <input type="hidden" name="referringPage" value="${thisPage}">
+        <input type="hidden" name="activityId" value="${activityId}">
     <h2><c:out value="${prereqTypeName}"/> requirements</h2>
     <display:table name="${prereqQ.rows}" id="row" class="datatable">
         <display:column property="name"/>
@@ -53,16 +60,15 @@ order by PP.id
                         <c:out value="${row.satisfaction}"/>
                     </c:when>
                     <c:otherwise>
-                        <form method="get" action="operator/satisfyPrereq.jsp">
-                            <input type="hidden" name="freshnessToken" value="${freshnessToken}">
-                            <input type="hidden" name="referringPage" value="${thisPage}">
-                            <input type="hidden" name="prerequisitePatternId" value="${row.id}">
-                            <input type="hidden" name="activityId" value="${activityId}">
-                            <input type="submit" value="Done" <c:if test="${(row.status != 'new') || (! mayOperate)}">disabled</c:if>>
-                        </form>
+                        <input type="hidden" name="prerequisitePatternId${nPrereqs}" value="${row.id}">
+                        <input type="checkbox" name="value${nPrereqs}" value="1">
+                        <c:set var="nPrereqs" value="${nPrereqs + 1}"/>
                     </c:otherwise>
                 </c:choose>
             </display:column>
         </c:if>
     </display:table>
+        <input type="hidden" name="nPrereqs" value="${nPrereqs}">
+        <input type="submit" value="Done" <c:if test="${(prereqQ.rows[0].status != 'new') || (! mayOperate) || (nPrereqs == 0)}">disabled</c:if>>
+    </form>
 </c:if>
