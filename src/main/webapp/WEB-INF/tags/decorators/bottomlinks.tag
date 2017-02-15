@@ -31,6 +31,8 @@
 
             <srs_utils:conditionalLink name="List&nbsp;Locations" url="listLocations.jsp" /> |
 
+            <srs_utils:conditionalLink name="List&nbsp;Mirror&nbsp;Tasks" url="listMirrors.jsp" /> |
+
             <srs_utils:conditionalLink name="List&nbsp;Subsystems" url="listSubsystems.jsp" /> |
 
             <srs_utils:conditionalLink name="Preferences" url="preferences.jsp"/> |

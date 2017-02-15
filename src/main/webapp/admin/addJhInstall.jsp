@@ -28,8 +28,12 @@ jhOutputRoot=?<sql:param value="${param.jhOutputRoot}"/>,
 jhStageRoot=?<sql:param value="${param.jhStageRoot}"/>,
 jhCfg=?<sql:param value="${param.jhCfg}"/>,
 siteId=?<sql:param value="${param.siteId}"/>,
+<c:if test="${! empty param.mirrorId}">
+    mirrorTaskId=?<sql:param value="${param.mirrorId}"/>,
+</c:if>
 createdBy=?<sql:param value="${userName}"/>,
-creationTS=utc_timestamp();
+creationTS=utc_timestamp()
+;
             </sql:update>
         </sql:transaction>
         <c:redirect url="${param.referringPage}"/>

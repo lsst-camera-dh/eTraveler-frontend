@@ -63,6 +63,10 @@
 <traveler:newLocationForm/>
 
 <hr>
+<h2>Mirroring Tasks</h2>
+<traveler:newMirrorForm/>
+
+<hr>
 <h2>Job Harness Installs</h2>
 <traveler:newJhForm/>
 <traveler:jhList/>

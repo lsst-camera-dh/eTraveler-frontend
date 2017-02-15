@@ -20,6 +20,10 @@ select id, name from Site
 ;
     </sql:query>
 
+    <sql:query var="mirrorQ">
+select id, name from MirrorTask;
+    </sql:query>
+
 <form method="get" action="admin/addJhInstall.jsp">
     <input type="hidden" name="freshnessToken" value="${freshnessToken}">
     <input type="hidden" name="referringPage" value="${thisPage}">
@@ -39,6 +43,13 @@ select id, name from Site
             <input type="hidden" name="siteId" value="${siteQ.rows[0].id}"><c:out value="${siteQ.rows[0].name}"/>
         </c:otherwise>
     </c:choose>
+        Mirror Task:
+        <select name="mirrorId">
+            <option value="">unmirrored</option>
+            <c:forEach var="row" items="${mirrorQ.rows}">
+                <option value="${row.id}">${row.name}</option>
+            </c:forEach>
+        </select>
     <br>
     jhVirtualEnv: <input type="text" name="jhVirtualEnv" required="true">
     jhOutputRoot: <input type="text" name="jhOutputRoot" required="true">
