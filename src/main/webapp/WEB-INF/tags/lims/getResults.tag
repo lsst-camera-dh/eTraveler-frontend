@@ -4,8 +4,7 @@
 	Author     : jrb
 --%>
 
-<%tag description="Call java function to get harnessed data for a run"
-pageEncoding="US-ASCII"%>
+<%@tag description="Call java function to get harnessed data for a run" pageEncoding="US-ASCII"%>
 <%@taglib prefix="results" uri="/tlds/resultsLibrary.tld"%>
 
 <%-- inputs are in a map called 'inputs' --%>
@@ -22,10 +21,9 @@ Invokes doTag for simple tag support class which
 Then use <lims:encode to store encoded results in another variable
 Return little map as is done in getHardwareHierarchy.tag:
 --%>
-  <results:getResults    outputVariable="resultsMap"
-			 inputs="${inputs}">
+<results:getResultsWrapper outputVariable="resultsMap" inputs="${inputs}" /> 
+  
 
-  </results:getResults>
 
   <lims:encode var="resultsStr" input="${resultsMap}"/>
 

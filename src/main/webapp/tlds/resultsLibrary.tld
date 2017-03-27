@@ -4,7 +4,7 @@
   <short-name>resultstaglibrary</short-name>
   <uri>/tlds/resultsLibrary</uri>
   <tag>
-    <name>getResults</name>
+    <name>getResultsWrapper</name>
     <tag-class>eTraveler.getResults.GetResultsWrapper</tag-class>
     <body-content>empty</body-content>
     <attribute>

@@ -81,7 +81,11 @@ public class GetResultsWrapper extends SimpleTagSupport {
         close();
         return;
       }
-      jspContext.setAttribute(m_outputVariable, results);
+      if (results == null) {
+        jspContext.setAttribute("acknowledge", "Error: no results found");
+      } else {
+        jspContext.setAttribute(m_outputVariable, results);
+      }
       close();
       return;
     }  else {
