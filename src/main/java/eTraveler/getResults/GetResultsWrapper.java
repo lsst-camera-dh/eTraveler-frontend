@@ -28,7 +28,6 @@ public class GetResultsWrapper extends SimpleTagSupport {
   private Connection m_conn;
   
   public void setInputs(Map arg) {m_inputs = arg;}
-  //public void setCommand(String arg) {m_command = arg;}
   public void setOutputVariable(String arg) {m_outputVariable = arg;}
 
   public void doTag() throws JspException, IOException {
@@ -58,8 +57,9 @@ public class GetResultsWrapper extends SimpleTagSupport {
 
     if (m_function.equals("getRunResults")) {
       // If run is null, complain.  It's ok for schemaName to be null
-      String run= (String) jspContext.getAttribute("run");
-      String schemaName= (String) jspContext.getAttribute("schemaName");
+
+      String run= (String) m_inputs.get("run");
+      String schemaName= (String) m_inputs.get("schemaName");
       if (run == null) {
         jspContext.setAttribute("acknowledge", "Missing run argument");
         close();
@@ -69,7 +69,11 @@ public class GetResultsWrapper extends SimpleTagSupport {
       try {
         // while we still have filter argument, set to null
         // Filtering will be done on client side
-        results = getHD.getRunResults(run, schemaName, null);
+        if (schemaName != null) {
+          results = getHD.getRunResults(run, schemaName, null);
+        } else {
+          results = getHD.getRunResults(run, null);
+        }
       } catch (SQLException sqlEx) {
         jspContext.setAttribute("acknowledge", "Failed with SQL exception "
                                 + sqlEx.getMessage());
