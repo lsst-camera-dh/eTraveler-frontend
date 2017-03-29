@@ -55,6 +55,8 @@ public class GetResultsWrapper extends SimpleTagSupport {
     // Make a new GetHarnessedData object
     GetHarnessedData getHD = new GetHarnessedData(conn);
 
+    Map<String, Object> results = null;
+
     if (m_function.equals("getRunResults")) {
       // If run is null, complain.  It's ok for schemaName to be null
 
@@ -65,7 +67,6 @@ public class GetResultsWrapper extends SimpleTagSupport {
         close();
         return;
       }
-      Map<String, Object> results = null;
       try {
         // while we still have filter argument, set to null
         // Filtering will be done on client side
@@ -93,10 +94,43 @@ public class GetResultsWrapper extends SimpleTagSupport {
       close();
       return;
     }  else {
-      // unrecognized or NYI function
-      jspContext.setAttribute("acknowledge", "unknown function " + m_function);
-      close();
-      return;
+      if (m_function.equals("getRunFilepaths")) {
+        String run= (String) m_inputs.get("run");
+        String stepName= null;
+        if (m_inputs.containsKey("stepName")) {
+          stepName = (String) m_inputs.get("stepName");
+        }
+        if (run == null) {
+          jspContext.setAttribute("acknowledge", "Missing run argument");
+          close();
+          return;
+        }
+        try {
+          results = getHD.getRunFilepaths(run, stepName);
+        }     catch (SQLException sqlEx) {
+          jspContext.setAttribute("acknowledge", "Failed with SQL exception "
+                                  + sqlEx.getMessage());
+          close();
+          return;
+        } catch (GetResultsException ghEx) {
+          jspContext.setAttribute("acknowledge", "Failed with exception "
+                                  + ghEx.getMessage());
+          close();
+          return;
+        }
+        if (results == null) {
+          jspContext.setAttribute("acknowledge", "Error: no results found");
+        } else {
+          jspContext.setAttribute(m_outputVariable, results);
+        }
+        close();
+        return;
+      } else {
+        // unrecognized or NYI function
+        jspContext.setAttribute("acknowledge", "unknown function " + m_function);
+        close();
+        return;
+      }
     }
   }
 

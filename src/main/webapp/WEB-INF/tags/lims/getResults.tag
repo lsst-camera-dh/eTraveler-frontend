@@ -28,7 +28,7 @@ Return little map as is done in getHardwareHierarchy.tag:
 
   <lims:encode var="resultsStr" input="${resultsMap}"/>
 
-{ "acknowledge": null,
+{ "acknowledge": ${acknowledge},
   "results": ${resultsStr} }
   
 

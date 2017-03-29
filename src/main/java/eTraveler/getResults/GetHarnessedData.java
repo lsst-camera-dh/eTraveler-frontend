@@ -40,7 +40,8 @@ public class GetHarnessedData {
   
   private HashMap<String, Object> m_results=null;
 
-  private HashMap<String, ArrayList<String> > m_fileResults=null;
+  //private HashMap<String, ArrayList<HashMap<String, Object> > >
+  private HashMap<String, Object>     m_fileResults=null;
 
   private static final int DT_ABSENT = -2, DT_UNKNOWN = -1,
     DT_FLOAT = 0, DT_INT = 1, DT_STRING = 2;
@@ -188,22 +189,25 @@ public class GetHarnessedData {
      For the given run return lists of virtual paths for all files registered in 
      Data Catalog, sorted by process step
    */
-  public Map<String, ArrayList<String> > getFilepaths(String run, String stepName)
+  public Map<String, Object>     getRunFilepaths(String run, String stepName)
     throws GetResultsException, SQLException {
     int runInt = GetHarnessedData.formRunInt(run);
-    return getFilepaths(runInt, stepName);
+    return getRunFilepaths(runInt, stepName);
   }
 
-  public Map<String, ArrayList<String> > getFilepaths(int run, String stepName)
+  public Map<String, Object>
+    getRunFilepaths(int run, String stepName)
     throws GetResultsException, SQLException {
     clearCache();
     m_run = run;
     m_stepName = stepName;
-    // Really m_results will be HashMap<String, ArrayList<String> >();
-    m_fileResults = new HashMap<String, ArrayList<String> >();
+    // Really m_results will be
+    //    HashMap<String, ArrayList< HashMap<String, Object> > >();
+    m_fileResults = new HashMap<String, Object>();
+
 
     String sql =
-      "select F.virtualPath as vp,P.name as pname,P.id as pid,A.id as aid from FilepathResultHarnessed F join Activity A on F.activityId=A.id "
+      "select F.virtualPath as vp,basename,catalogKey,P.name as pname,P.id as pid,A.id as aid from FilepathResultHarnessed F join Activity A on F.activityId=A.id "
       + activityStatusJoins +
       " join Process P on P.id=A.processId join RunNumber on A.rootActivityId=RunNumber.rootActivityId where RunNumber.runInt='"
       + m_run + "' and " + activityStatusCondition; 
@@ -505,13 +509,20 @@ public class GetHarnessedData {
     boolean gotRow=true;
     int  pid = 0;
     int  aid = 0;
-    ArrayList<String> fileList=null;
+    ArrayList<HashMap<String, Object> > dictList=null;
 
     while (gotRow) {
       if (pid != rs.getInt("pid")) { // make a new one
         pid = rs.getInt("pid");
-        fileList = new ArrayList<String>();
-        m_fileResults.put(rs.getString("pname"), fileList);
+        //fileList = new ArrayList<String>();
+        dictList = new ArrayList<HashMap<String,Object> >();
+        // Add entry 0 with type information
+        HashMap<String, Object> entry0 = new HashMap<String, Object>();
+        entry0.put("virtualPath", "string");
+        entry0.put("basename", "string");
+        entry0.put("catalogKey", "int");
+        dictList.add(entry0);
+        m_fileResults.put(rs.getString("pname"), dictList);
         aid = rs.getInt("aid");
       }
       while ((aid != rs.getInt("aid")) && (pid == rs.getInt("pid")))  {   // skip past
@@ -519,7 +530,11 @@ public class GetHarnessedData {
         if (!gotRow) return;
       }
       if (pid == rs.getInt("pid")) {
-        fileList.add(rs.getString("vp"));
+        HashMap<String, Object> newDict = new HashMap<String, Object>();
+        newDict.put("virtualPath", rs.getString("vp"));
+        newDict.put("basename", rs.getString("basename"));
+        newDict.put("catalogKey", rs.getInt("catalogKey"));
+        dictList.add(newDict);
         gotRow = rs.relative(1);
       }   // otherwise this file belongs to a new step
     } 
