@@ -6,6 +6,7 @@
 
 <%@tag description="Call java function to get harnessed data for a run" pageEncoding="US-ASCII"%>
 <%@taglib prefix="results" uri="/tlds/resultsLibrary.tld"%>
+<%@taglib prefix="lims" tagdir="/WEB-INF/tags/lims"%>
 
 <%-- inputs are in a map called 'inputs' --%>
 
