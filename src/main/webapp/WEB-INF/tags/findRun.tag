@@ -34,8 +34,15 @@ where E.ncrActivityId = ?<sql:param value="${travelerId}"/>
         <c:choose>
             <c:when test="${! empty exceptionQ.rows}">
                 <c:set var="exception" value="${exceptionQ.rows[0]}"/>
-                <traveler:findTraveler var="runTravelerId" activityId="${exception.exitActivityId}"/>
-                <traveler:findRun varTraveler="runTravelerId" varRun="junk" activityId="${runTravelerId}"/>
+                <c:choose>
+                    <c:when test="${exception.exitActivityId == travelerId}">
+                        <c:set var="runTravelerId" value="${travelerId}"/>
+                    </c:when>
+                    <c:otherwise>
+                        <traveler:findTraveler var="runTravelerId" activityId="${exception.exitActivityId}"/>
+                        <traveler:findRun varTraveler="runTravelerId" varRun="junk" activityId="${runTravelerId}"/>
+                    </c:otherwise>
+                </c:choose>
             </c:when>
             <c:otherwise>
                 <c:set var="runTravelerId" value="${travelerId}"/>
