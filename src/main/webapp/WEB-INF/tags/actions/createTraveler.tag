@@ -13,24 +13,12 @@
 <%@attribute name="hardwareId" required="true"%>
 <%@attribute name="processId" required="true"%>
 <%@attribute name="jobHarnessId"%>
-<%@attribute name="inNCR"%>
+<%@attribute name="exceptionTypeId"%>
+<%@attribute name="exitActivityId"%>
 <%@attribute name="var" required="true" rtexprvalue="false"%>
 <%@variable name-from-attribute="var" alias="activityId" scope="AT_BEGIN"%>
 
-<c:if test="${empty inNCR}">
-    <sql:query var="travelerQ">
-        select name from Process where id = ?<sql:param value="${processId}"/>;
-    </sql:query>
-    <c:set var="isNcrTraveler" value="${travelerQ.rows[0].name == appVariables.ncrTraveler}"/>
-    <c:choose>
-        <c:when test="${isNcrTraveler}">
-            <c:set var="inNCR" value="true"/>
-        </c:when>
-        <c:otherwise>
-            <c:set var="inNCR" value="false"/>
-        </c:otherwise>
-    </c:choose>
-</c:if>
+<c:set var="inNCR" value="${! empty exceptionTypeId}"/>
 
 <%-- check if there are any harnessed steps in traveler --%>
 <traveler:hasHarnessedSteps var="hasHarnessed" processId="${processId}"/>
@@ -46,9 +34,22 @@
     </c:otherwise>
 </c:choose>
 
-<c:if test="${(! inNCR) || (isNcrTraveler)}">
-    <ta:createRun activityId="${activityId}"/>
+<c:if test="${inNCR}">
+    <c:if test="${empty exitActivityId}">
+        <c:set var="isNcrTraveler" value="true"/>
+        <c:set var="exitActivityId" value="${activityId}"/>
+    </c:if>
+    <sql:update>
+insert into Exception set
+exceptionTypeId=?<sql:param value="${exceptionTypeId}"/>,
+exitActivityId=?<sql:param value="${exitActivityId}"/>,
+NCRActivityId=?<sql:param value="${activityId}"/>,
+createdBy=?<sql:param value="${userName}"/>,
+creationTS=UTC_TIMESTAMP();
+    </sql:update>
 </c:if>
+
+<ta:createRun activityId="${activityId}"/>
 
 <sql:query var="hardwareQ">
     select H.*, HS.name

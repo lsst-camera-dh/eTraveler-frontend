@@ -31,27 +31,7 @@
                                   varStepId="currentStepActivityId" stepList="${stepList}"/>
 
         <traveler:setPaths activityVar="activityPath" processVar="processPath" activityId="${param.activityId}"/>
-<%--                  
-        <table>
-            <tr>
-                <td>
-        <h2>Process</h2>
-        <traveler:processCrumbs processPath="${processPath}"/>
-        <traveler:processWidget processId="${activity.processId}"/>
-        <h2>Activity</h2>
---%>
         <traveler:activityCrumbs activityPath="${activityPath}"/>
-<%--
-        <traveler:activityHeader activityId="${param.activityId}"/>
-                </td>
-                <td>
-        <h2>Component</h2>
-        <traveler:hardwareHeader hardwareId="${activity.hardwareId}"/>
-                </td>
-            </tr>
-        </table>
-        <h2>Steps</h2>
---%>
 
 <c:url var="hwLink" value="displayHardware.jsp"><c:param name="hardwareId" value="${activity.hardwareId}"/></c:url>
 <h2>Process: <c:out value="${activity.name}"/> Component: <a href="${hwLink}"><c:out value="${activity.lsstId}"/></a></h2>
@@ -81,7 +61,6 @@ ID ${activity.rootActivityId}
     </c:otherwise>
 </c:choose>
 <h2>Run Number: ${runText}</h2>
-
 <traveler:ncrContainingTraveler activityId="${param.activityId}"/>
 
     <div id="theFold"/>        
@@ -99,5 +78,6 @@ ID ${activity.rootActivityId}
                 </td>
             </tr>
         </table>
+
     </body>
 </html>
