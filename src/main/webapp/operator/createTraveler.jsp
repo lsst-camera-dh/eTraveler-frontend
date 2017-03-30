@@ -24,11 +24,27 @@
             <traveler:error message="You don't have permission to start this traveler."/>
         </c:if>
         <sql:transaction>
-        <ta:createTraveler var="activityId"
-            hardwareId="${param.hardwareId}" 
-            processId="${param.processId}"
-            jobHarnessId="${param.jobHarnessId}"
-            inNCR="${param.inNCR}"/>
+            <sql:query var="exceptionTypeQ">
+                select ET.id as exceptionTypeId 
+                from Process P
+                inner join ExceptionType ET on ET.exitProcessId = P.id
+                    and ET.returnProcessId = P.id
+                    and ET.rootProcessId = P.id
+                    and ET.NCRProcessId = P.id
+                    and ET.exitProcessPath is null
+                    and ET.returnProcessPath is null
+                inner join TravelerType TT on TT.rootProcessId = P.id
+                where P.id = ?<sql:param value="${param.processId}"/>
+                and TT.standaloneNCR != 0
+            </sql:query>
+            <c:if test="${! empty exceptionTypeQ.rows}">
+                <c:set var="exceptionTypeId" value="${exceptionTypeQ.rows[0].exceptionTypeId}"/>
+            </c:if>
+            <ta:createTraveler var="activityId"
+                hardwareId="${param.hardwareId}" 
+                processId="${param.processId}"
+                jobHarnessId="${param.jobHarnessId}"
+                exceptionTypeId="${exceptionTypeId}"/>
         </sql:transaction>
         <traveler:redirDA activityId="${activityId}"/>
     </body>
