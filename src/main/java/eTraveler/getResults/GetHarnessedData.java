@@ -127,18 +127,18 @@ public class GetHarnessedData {
     executeGenQuery(sqlString, "IntResultHarnessed", DT_INT);
     executeGenQuery(sqlString, "StringResultHarnessed", DT_STRING);
 
-    if (filter != null)  {
-      for (Object expObject : m_results.values()) {
-        HashMap<String, Object> expMap = (HashMap<String, Object>) expObject;
-        HashMap<String, PerStep> steps =
-          (HashMap<String, PerStep> ) expMap.get("steps");
-        for (PerStep per : steps.values()) {
-          int dtype = DT_UNKNOWN;
-          per.prune(filter, dtype);
-        }
-      }
-    }
-      //prune(); 
+    
+    // if (filter != null)  {
+    //   for (Object expObject : m_results.values()) {
+    //     HashMap<String, Object> expMap = (HashMap<String, Object>) expObject;
+    //     HashMap<String, PerStep> steps =
+    //       (HashMap<String, PerStep> ) expMap.get("steps");
+    //     for (PerStep per : steps.values()) {
+    //       int dtype = DT_UNKNOWN;
+    //       per.prune(filter, dtype);
+    //     }
+    //   }
+    // }
     return m_results;
   }
 
@@ -243,7 +243,6 @@ public class GetHarnessedData {
     m_results.put("run", m_run);
     m_results.put("experimentSN", m_expSN);
     m_results.put("hid", m_oneHid);
-    //HashMap<String, PerStep> stepMap = new HashMap<String, PerStep>();
     HashMap<String, Object> stepMap = new HashMap<String, Object>();
     m_results.put("steps", stepMap);
 
@@ -261,16 +260,16 @@ public class GetHarnessedData {
     executeGenRunQuery(sql, "IntResultHarnessed", DT_INT);
     executeGenRunQuery(sql, "StringResultHarnessed", DT_STRING);
 
-    /*    
-               No filtering on server side
-    if (filter != null) {
-      for (String pname : stepMap.keySet()) {
-        PerStep per = stepMap.get(pname);
-        int dtype = DT_UNKNOWN;
-        per.prune(filter, dtype);
-      }
-    }
-    */
+
+    //            No filtering on server side
+    // if (filter != null) {
+    //   for (String pname : stepMap.keySet()) {
+    //     PerStep per = stepMap.get(pname);
+    //     int dtype = DT_UNKNOWN;
+    //     per.prune(filter, dtype);
+    //   }
+    // }
+
     return m_results;
   }    
   
@@ -355,14 +354,15 @@ public class GetHarnessedData {
       return;
     }
     HashMap<String, Object> expMap = null;
-    HashMap<String, PerStep> steps;
+    HashMap<String, Object> steps;
     if (m_schemaName != null) {
       while (gotRow) {
         String expSN = m_hMap.get(rs.getInt("hid"));
         /* New stuff starts here */
         if (m_results.containsKey(expSN) ) {
           expMap = (HashMap<String, Object>) m_results.get(expSN);
-          steps = (HashMap<String, PerStep>) expMap.get("steps");
+          //steps = (HashMap<String, PerStep>) expMap.get("steps");
+          steps = (HashMap<String, Object>) expMap.get("steps");
         } else  {
           expMap = new HashMap<String, Object>();
           m_results.put(expSN, expMap);
@@ -370,7 +370,8 @@ public class GetHarnessedData {
           expMap.put("raid", rs.getInt("raid"));
           expMap.put("runNumber", m_raiMap.get(rs.getInt("raid")));
 
-          steps = new HashMap<String, PerStep>();
+          //steps = new HashMap<String, PerStep>();
+          steps = new HashMap<String, Object>();
           expMap.put("steps", steps);
         }
         gotRow = storeRunAll(steps, rs, datatype, rs.getInt("hid"));
@@ -407,19 +408,15 @@ public class GetHarnessedData {
   */
   private boolean storeRunAll(Object stepMapsObject, ResultSet rs, int datatype,
                            int hid) throws SQLException, GetResultsException {
-    //HashMap<String, PerStep> stepMaps =
-    //  (HashMap<String, PerStep>) stepMapsObject;
     HashMap<String, Object> stepMaps =
       (HashMap<String, Object>) stepMapsObject;
 
     boolean gotRow = true;
     String pname = ""; 
     String schname = "";
-    //PerStep ourStepMap = null;
     HashMap<String, Object> ourStepMap = null;
 
     ArrayList<HashMap <String, Object> > ourInstanceList = null;
-    // PerSchema ourInstanceList = null;
 
     int raid = 0;
     if (hid > 0) { // could be more than one run
@@ -437,7 +434,6 @@ public class GetHarnessedData {
       }
       if (!(pname.equals(rs.getString("pname")))) {
         pname = rs.getString("pname");
-        //ourStepMap = getOurStepMap(stepMaps, pname);
         ourStepMap = (HashMap<String, Object>) findOrAddStep(stepMaps, pname);
         schname = "";
       }
@@ -446,7 +442,6 @@ public class GetHarnessedData {
         ourInstanceList = (ArrayList<HashMap<String, Object> >)
           findOrAddSchema(ourStepMap, schname);
       }
-      //gotRow = storeOne(rs, ourInstanceList.getArrayList(), datatype);
       gotRow = storeOne(rs, ourInstanceList, datatype);
       if (hid > 0) {
         if (!gotRow) return gotRow;
@@ -457,13 +452,6 @@ public class GetHarnessedData {
     return gotRow;
   }
 
-  PerStep getOurStepMap(HashMap<String, PerStep> maps, String key)  {
-    if (maps.containsKey(key)) return maps.get(key);
-    PerStep newMap = new PerStep();
-    maps.put(key, newMap);
-    return newMap;
-  }
-  
   /* Store a row and advance cursor.  If schema name and pid match but aid does not, skip over rows
      until we've exhausted rows with that aid */
   private boolean storeOne(ResultSet rs, ArrayList<HashMap <String, Object> > instances, int datatype) 
@@ -525,7 +513,6 @@ public class GetHarnessedData {
     while (gotRow) {
       if (pid != rs.getInt("pid")) { // make a new one
         pid = rs.getInt("pid");
-        //fileList = new ArrayList<String>();
         dictList = new ArrayList<HashMap<String,Object> >();
         // Add entry 0 with type information
         HashMap<String, Object> entry0 = new HashMap<String, Object>();

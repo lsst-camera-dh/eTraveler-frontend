@@ -57,6 +57,8 @@ public class GetResultsWrapper extends SimpleTagSupport {
 
     Map<String, Object> results = null;
 
+    jspContext.removeAttribute("acknowledge"); // good status so far
+    
     if (m_function.equals("getRunResults")) {
       // If run is null, complain.  It's ok for schemaName to be null
 
@@ -66,9 +68,8 @@ public class GetResultsWrapper extends SimpleTagSupport {
         jspContext.setAttribute("acknowledge", "Missing run argument");
         close();
         return;
-      } else {
-        jspContext.removeAttribute("acknowledge");
       }
+
       try {
         // while we still have filter argument, set to null
         // Filtering will be done on client side
@@ -95,45 +96,71 @@ public class GetResultsWrapper extends SimpleTagSupport {
       }
       close();
       return;
-    }  else {
-      if (m_function.equals("getRunFilepaths")) {
-        String run= (String) m_inputs.get("run");
-        String stepName= null;
-        if (m_inputs.containsKey("stepName")) {
-          stepName = (String) m_inputs.get("stepName");
-        }
-        if (run == null) {
-          jspContext.setAttribute("acknowledge", "Missing run argument");
-          close();
-          return;
-        }
-        try {
-          results = getHD.getRunFilepaths(run, stepName);
-        }     catch (SQLException sqlEx) {
-          jspContext.setAttribute("acknowledge", "Failed with SQL exception "
+    }
+    if (m_function.equals("getResultsJH")) {
+      try {
+        results =
+          getHD.getResultsJH((String) m_inputs.get("travelerName"),
+                             (String) m_inputs.get("hardwareType"),
+                             (String) m_inputs.get("schemaName"),
+                             (String) m_inputs.get("model"),
+                             (String) m_inputs.get("experimentSN"),
+                             null); // no filter for now
+      }     catch (SQLException sqlEx) {
+        jspContext.setAttribute("acknowledge", "Failed with SQL exception "
                                   + sqlEx.getMessage());
-          close();
-          return;
-        } catch (GetResultsException ghEx) {
-          jspContext.setAttribute("acknowledge", "Failed with exception "
-                                  + ghEx.getMessage());
-          close();
-          return;
-        }
-        if (results == null) {
-          jspContext.setAttribute("acknowledge", "Error: no results found");
-        } else {
-          jspContext.setAttribute(m_outputVariable, results);
-        }
         close();
         return;
-      } else {
-        // unrecognized or NYI function
-        jspContext.setAttribute("acknowledge", "unknown function " + m_function);
+      } catch (GetResultsException ghEx) {
+        jspContext.setAttribute("acknowledge", "Failed with exception "
+                                + ghEx.getMessage());
         close();
         return;
       }
+      if (results == null) {
+        jspContext.setAttribute("acknowledge", "Error: no results found");
+      } else {
+        jspContext.setAttribute(m_outputVariable, results);
+      }
+      close();
+      return;
     }
+    if (m_function.equals("getRunFilepaths")) {
+      String run= (String) m_inputs.get("run");
+      String stepName= null;
+      if (m_inputs.containsKey("stepName")) {
+        stepName = (String) m_inputs.get("stepName");
+      }
+      if (run == null) {
+        jspContext.setAttribute("acknowledge", "Missing run argument");
+        close();
+        return;
+      }
+      try {
+        results = getHD.getRunFilepaths(run, stepName);
+      }     catch (SQLException sqlEx) {
+        jspContext.setAttribute("acknowledge", "Failed with SQL exception "
+                                  + sqlEx.getMessage());
+        close();
+        return;
+      } catch (GetResultsException ghEx) {
+        jspContext.setAttribute("acknowledge", "Failed with exception "
+                                + ghEx.getMessage());
+        close();
+        return;
+      }
+      if (results == null) {
+        jspContext.setAttribute("acknowledge", "Error: no results found");
+      } else {
+        jspContext.setAttribute(m_outputVariable, results);
+      }
+      close();
+      return;
+    } 
+    // unrecognized or NYI function
+    jspContext.setAttribute("acknowledge", "unknown function " + m_function);
+    close();
+    return;
   }
 
   void close() throws JspException {
