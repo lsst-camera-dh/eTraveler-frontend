@@ -66,6 +66,8 @@ public class GetResultsWrapper extends SimpleTagSupport {
         jspContext.setAttribute("acknowledge", "Missing run argument");
         close();
         return;
+      } else {
+        jspContext.removeAttribute("acknowledge");
       }
       try {
         // while we still have filter argument, set to null

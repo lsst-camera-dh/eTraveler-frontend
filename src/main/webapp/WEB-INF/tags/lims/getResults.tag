@@ -7,6 +7,7 @@
 <%@tag description="Call java function to get harnessed data for a run" pageEncoding="US-ASCII"%>
 <%@taglib prefix="results" uri="/tlds/resultsLibrary.tld"%>
 <%@taglib prefix="lims" tagdir="/WEB-INF/tags/lims"%>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
 <%-- inputs are in a map called 'inputs' --%>
 
@@ -27,8 +28,14 @@ Return little map as is done in getHardwareHierarchy.tag:
 
 
   <lims:encode var="resultsStr" input="${resultsMap}"/>
-
+<c:choose>
+  <c:when test="${empty acknowledge}">
+{ "acknowledge": null,
+  "results": ${resultsStr} }
+  </c:when>
+  <c:otherwise>
 { "acknowledge": ${acknowledge},
   "results": ${resultsStr} }
-  
+  </c:otherwise>
+</c:choose>
 
