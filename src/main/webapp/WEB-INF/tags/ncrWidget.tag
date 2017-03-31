@@ -12,7 +12,7 @@
 <%@attribute name="activityId" required="true"%>
 
     <sql:query var="activityQ">
-select A.inNCR
+select A.*
 from Activity A
 where A.id = ?<sql:param value="${activityId}"/>
     </sql:query>
@@ -38,4 +38,20 @@ where A.id = ?<sql:param value="${activityId}"/>
             <h2>This is a standalone NCR</h2>
         </c:otherwise>
     </c:choose>
+    
+    <c:if test="${activityId == activity.rootActivityId}">
+        <sql:query var="exceptionQ">
+            select id from Exception where NCRActivityId = ?<sql:param value="${activityId}"/>
+        </sql:query>
+        <c:set var="exceptionId" value="${exceptionQ.rows[0].id}"/>
+        
+        <sql:query var="objectTypeQ">
+            select id from Labelable where name="NCR"
+        </sql:query>
+        <c:set var="ncrObjectId" value="${objectTypeQ.rows[0].id}" />
+
+        <h2>Generic Labels</h2>
+        <traveler:genericLabelWidget objectId="${exceptionId}"
+                                     objectTypeId="${ncrObjectId}" />
+    </c:if>
 </c:if>
