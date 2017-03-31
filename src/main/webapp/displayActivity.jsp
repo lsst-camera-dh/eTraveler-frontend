@@ -61,7 +61,7 @@ ID ${activity.rootActivityId}
     </c:otherwise>
 </c:choose>
 <h2>Run Number: ${runText}</h2>
-<traveler:ncrContainingTraveler activityId="${param.activityId}"/>
+<traveler:ncrWidget activityId="${param.activityId}"/>
 
     <div id="theFold"/>        
         <table>
