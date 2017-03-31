@@ -128,17 +128,18 @@ public class GetHarnessedData {
     executeGenQuery(sqlString, "StringResultHarnessed", DT_STRING);
 
     
-    // if (filter != null)  {
-    //   for (Object expObject : m_results.values()) {
-    //     HashMap<String, Object> expMap = (HashMap<String, Object>) expObject;
-    //     HashMap<String, PerStep> steps =
-    //       (HashMap<String, PerStep> ) expMap.get("steps");
-    //     for (PerStep per : steps.values()) {
-    //       int dtype = DT_UNKNOWN;
-    //       per.prune(filter, dtype);
-    //     }
-    //   }
-    // }
+    if (filter != null)  {
+      for (Object expObject : m_results.values()) {
+        HashMap<String, Object> expMap = (HashMap<String, Object>) expObject;
+        HashMap<String, Object> steps =
+          (HashMap<String, Object> ) expMap.get("steps");
+        for (String pname : steps.keySet()) {
+          HashMap<String, Object> step = (HashMap<String, Object>)
+            steps.get(pname);
+          pruneStep(step, filter);
+        }
+      }
+    }
     return m_results;
   }
 
@@ -260,16 +261,13 @@ public class GetHarnessedData {
     executeGenRunQuery(sql, "IntResultHarnessed", DT_INT);
     executeGenRunQuery(sql, "StringResultHarnessed", DT_STRING);
 
-
-    //            No filtering on server side
-    // if (filter != null) {
-    //   for (String pname : stepMap.keySet()) {
-    //     PerStep per = stepMap.get(pname);
-    //     int dtype = DT_UNKNOWN;
-    //     per.prune(filter, dtype);
-    //   }
-    // }
-
+    if (filter != null) {
+      for (String pname : stepMap.keySet()) {
+        HashMap<String, Object> step = (HashMap<String, Object>)
+          stepMap.get(pname);
+        pruneStep(step, filter);
+      }
+    }
     return m_results;
   }    
   
@@ -581,5 +579,47 @@ public class GetHarnessedData {
     newSchema.add(instance0);
     step.put(schemaName, newSchema);
     return newSchema;
+  }
+
+  
+  private void pruneInstances(ArrayList<HashMap <String, Object> > mapList,
+                              Pair<String, Object> filter)
+  throws GetResultsException {
+    String key = filter.getLeft();
+    Object val = filter.getRight();
+
+    int valType = DT_UNKNOWN;
+    HashMap<String, Object> instance0 = mapList.get(0);
+    if (!(instance0.containsKey(key))) return;
+    String t=(String) instance0.get(key);
+    if (t.equals("float") ) {
+      valType=DT_FLOAT;
+    } else {
+      if (t.equals("int")) {
+        valType=DT_INT;
+      } else {
+        if (t.equals("string")) {
+          valType=DT_STRING;
+        }  else {
+          throw new GetResultsException("pruneInstances: Unrecognized data type");
+        }
+      }
+    }
+
+    for (int i=(mapList.size() - 1); i > 0; i--) {
+      if (!(mapList.get(i).get(key).equals(val)) ) {
+        mapList.remove(i);
+      }
+    }
+  }
+
+  private void pruneStep(HashMap<String, Object> step,
+                         Pair<String, Object> filter)
+    throws GetResultsException {
+    for (String schema : step.keySet()) {
+      ArrayList<HashMap<String, Object> > instanceList =
+        (ArrayList<HashMap<String, Object> > ) step.get(schema);
+      pruneInstances(instanceList, filter);
+    }
   }
 }

@@ -10,6 +10,7 @@ import java.sql.Connection;
 import java.io.IOException;
 import java.util.Map;
 import java.util.HashMap;
+import org.apache.commons.lang3.tuple.ImmutablePair;
 
 import org.srs.web.base.db.ConnectionManager;
 import org.srs.web.base.filters.modeswitcher.ModeSwitcherFilter;
@@ -69,14 +70,17 @@ public class GetResultsWrapper extends SimpleTagSupport {
         close();
         return;
       }
-
+      ImmutablePair<String, Object> filter=null;
+      if (m_inputs.get("filterKey") != null) {
+        filter = new
+          ImmutablePair<String, Object>(m_inputs.get("filterKey").toString(),
+                               m_inputs.get("filterValue"));
+      }
       try {
-        // while we still have filter argument, set to null
-        // Filtering will be done on client side
         if (schemaName != null) {
-          results = getHD.getRunResults(run, schemaName, null);
+          results = getHD.getRunResults(run, schemaName, filter);
         } else {
-          results = getHD.getRunResults(run, null);
+          results = getHD.getRunResults(run, filter);
         }
       } catch (SQLException sqlEx) {
         jspContext.setAttribute("acknowledge", "Failed with SQL exception "
@@ -99,13 +103,19 @@ public class GetResultsWrapper extends SimpleTagSupport {
     }
     if (m_function.equals("getResultsJH")) {
       try {
+        ImmutablePair<String, Object> filter=null;
+        if (m_inputs.get("filterKey") != null) {
+          filter = new
+            ImmutablePair<String, Object>(m_inputs.get("filterKey").toString(),
+                                 m_inputs.get("filterValue"));
+        }
         results =
           getHD.getResultsJH((String) m_inputs.get("travelerName"),
                              (String) m_inputs.get("hardwareType"),
                              (String) m_inputs.get("schemaName"),
                              (String) m_inputs.get("model"),
                              (String) m_inputs.get("experimentSN"),
-                             null); // no filter for now
+                             filter); // no filter for now
       }     catch (SQLException sqlEx) {
         jspContext.setAttribute("acknowledge", "Failed with SQL exception "
                                   + sqlEx.getMessage());
