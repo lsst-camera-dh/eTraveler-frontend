@@ -166,7 +166,36 @@ public class GetResultsWrapper extends SimpleTagSupport {
       }
       close();
       return;
-    } 
+    }
+
+    if (m_function.equals("getFilepathsJH")) {
+      try {
+        results =
+          getHD.getFilepathsJH((String) m_inputs.get("travelerName"),
+                               (String) m_inputs.get("hardwareType"),
+                               (String) m_inputs.get("stepName"),
+                               (String) m_inputs.get("model"),
+                               (String) m_inputs.get("experimentSN"));
+      }     catch (SQLException sqlEx) {
+        jspContext.setAttribute("acknowledge", "Failed with SQL exception "
+                                + sqlEx.getMessage());
+        close();
+        return;
+      } catch (GetResultsException ghEx) {
+        jspContext.setAttribute("acknowledge", "Failed with exception "
+                                + ghEx.getMessage());
+        close();
+        return;
+      }
+      if (results == null) {
+        jspContext.setAttribute("acknowledge", "Error: no results found");
+      } else {
+        jspContext.setAttribute(m_outputVariable, results);
+      }
+      close();
+      return;
+    }
+
     // unrecognized or NYI function
     jspContext.setAttribute("acknowledge", "unknown function " + m_function);
     close();
