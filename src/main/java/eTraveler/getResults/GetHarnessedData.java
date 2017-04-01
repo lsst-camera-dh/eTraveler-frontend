@@ -120,7 +120,7 @@ public class GetHarnessedData {
       "select ?.schemaName as schname,?.name as resname,?.value as resvalue,?.schemaInstance as ressI,A.id as aid,A.rootActivityId as raid, A.hardwareId as hid,A.processId as pid,Process.name as pname,ASH.activityStatusId as actStatus from  ? join Activity A on ?.activityId=A.id " +
       s_activityStatusJoins + " join Process on Process.id=A.processId where "
       + s_activityStatusCondition + " and ?.schemaName='" + m_schemaName;
-    sqlString += "' and A.rootActivityId in " + m_raiList + " order by A.hardwareId asc, A.rootActivityI d desc, A.processId asc, schname,A.id desc, ressI asc, resname";
+    sqlString += "' and A.rootActivityId in " + m_raiList + " order by A.hardwareId asc, A.rootActivityId desc, A.processId asc, schname,A.id desc, ressI asc, resname";
 
     m_results = new HashMap<String, Object>();
     executeGenQuery(sqlString, "FloatResultHarnessed", DT_FLOAT);
@@ -235,6 +235,7 @@ public class GetHarnessedData {
       throw new GetResultsException("Set connection before attempting to fetch data");
     checkNull(travelerName, "travelerName argument must be non-null");
     checkNull(hardwareType, "hardwareType argument must be non-null");
+    checkNull(stepName, "stepName argument must be non-null");
 
     clearCache();
     m_travelerName = travelerName;
