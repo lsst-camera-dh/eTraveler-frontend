@@ -1,5 +1,5 @@
 <%-- 
-    Document   : ncrContainingTraveler
+    Document   : ncrWidget
     Created on : May 17, 2016, 10:35:49 AM
     Author     : focke
 --%>
@@ -19,7 +19,7 @@ where A.id = ?<sql:param value="${activityId}"/>
 <c:set var="activity" value="${activityQ.rows[0]}"/>
 
 <c:if test="${activity.inNCR}">
-    <traveler:findNcrContainingTraveler var="travelerId" activityId="${activityId}"/>
+    <traveler:findNcrParent var="travelerId" activityId="${activityId}"/>
     <c:choose>
         <c:when test="${! empty travelerId}">
             <sql:query var="processQ">

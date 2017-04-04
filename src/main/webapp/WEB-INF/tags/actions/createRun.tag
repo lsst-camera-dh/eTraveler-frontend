@@ -20,7 +20,7 @@ where A.id = ?<sql:param value="${activityId}"/>
 
 <c:choose>
     <c:when test="${activity.inNCR}">
-        <traveler:findNcrContainingTraveler var="containerId" activityId="${activityId}"/>
+        <traveler:findNcrParent var="containerId" activityId="${activityId}"/>
     </c:when>
     <c:otherwise>
         <c:set var="containerId" value=""/>

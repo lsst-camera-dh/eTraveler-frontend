@@ -30,7 +30,7 @@ select * from Activity where id=?<sql:param value="${param.activityId}"/>;
         </sql:transaction>
         
         <c:if test="${activity.inNCR && empty activity.parentActivityId}">
-            <traveler:findNcrContainingTraveler var="parentId" activityId="${param.activityId}"/>
+            <traveler:findNcrParent var="parentId" activityId="${param.activityId}"/>
             <c:if test="${! empty parentId}">
                 <c:url var="ncrUrl" value="finishNCR.jsp">
                     <c:param name="activityId" value="${param.activityId}"/>
