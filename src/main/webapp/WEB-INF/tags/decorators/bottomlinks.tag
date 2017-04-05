@@ -35,6 +35,8 @@
 
             <srs_utils:conditionalLink name="List&nbsp;Subsystems" url="listSubsystems.jsp" /> |
 
+            <srs_utils:conditionalLink name="List&nbsp;Labels" url="listLabels.jsp" /> |
+
             <srs_utils:conditionalLink name="Preferences" url="preferences.jsp"/> |
 
             <srs_utils:conditionalLink name="Admin" url="admin.jsp" />
