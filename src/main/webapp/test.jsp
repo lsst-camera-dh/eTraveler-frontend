@@ -26,19 +26,21 @@
     <body>
         <relationships:showSlotHistory slotId="12"/>
         <traveler:test/>
-        ${fileItems}<br>
-${fn:length(paramValues['value'])} ${param.nInputs}<br>
-    <c:forEach var="pattern" begin="0" end="${param.nInputs - 1}" step="1">
-                    <c:set var="inputName" value="inputPatternId${pattern}"/>
-                    <c:set var="valueName" value="value${pattern}"/>
-        
-<%--        <ta:inputResult inputPatternId="${paramValues['inputPatternId'][pattern]}" 
-                        value="${paramValues['value'][pattern]}" 
-                        activityId="${param.activityId}"/>--%>
-<c:if test="${! empty param[valueName]}">
-${inputName} ${param[inputName]} ${valueName} ${param[valueName]}<br>
-${fileItems[valueName].name}<br>
-</c:if>
-    </c:forEach>
+
+
+<traveler:lastInPath var="processId" processPath="${param.processPath}"/>
+<traveler:checkId table="Process" id="${processId}"/>
+[${param.processPath}] [${processId}]
+<sql:query var="processQ" >
+    select P.*, TT.id as travelerTypeId, HG.name as hgName,
+    SS.id as subsystemId, SS.name as subsystemName
+    from Process P
+    inner join HardwareGroup HG on HG.id=P.hardwareGroupId
+    left join TravelerType TT on TT.rootProcessId=P.id
+    left join Subsystem SS on SS.id=TT.subsystemId
+    where P.id=?<sql:param value="${processId}"/>;
+</sql:query>
+<c:set var="process" value="${processQ.rows[0]}"/>
+[${process.id}]
     </body>
 </html>
