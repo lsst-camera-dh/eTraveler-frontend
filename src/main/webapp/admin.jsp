@@ -68,7 +68,12 @@
 <traveler:jhList/>
 
 <hr>
-<h2>Hardware Labels</h2>
+<h2>Generic Labels</h2>
+<a href="listLabels.jsp">List Labels</a>
+<traveler:labelAdminWidget/>
+
+<hr>
+<h2>Hardware Labels (Deprecated)</h2>
 <traveler:newLabelTypeForm/>
 
 <hr>

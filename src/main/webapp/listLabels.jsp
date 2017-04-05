@@ -83,5 +83,8 @@ select name from Subsystem order by name;
                         hardwareGroupName="${hardwareGroup}"
                         subsystemId="${param.subsystemId}"
                         subsystemName="${subsystem}"/>
+    
+    <traveler:labelAdminWidget/>
+
     </body>
 </html>
