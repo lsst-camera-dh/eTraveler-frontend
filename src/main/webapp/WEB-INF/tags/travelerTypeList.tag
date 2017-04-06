@@ -36,7 +36,7 @@
     select P.id as processId, concat(P.name, ' v', P.version) as processName, 
         P.shortDescription,
         HG.name as hardwareGroupName, HG.id as hardwareGroupId, 
-        TT.id as travelerTypeId, TT.creationTS,
+        TT.id as travelerTypeId, TT.standaloneNCR, TT.creationTS,
         TTS.name as state,
         count(A.id)-count(A.end) as inProgress, count(A.id) as total, count(A.end) as completed,
         max(A.creationTS) as lastUsed,
@@ -82,7 +82,7 @@
         and P.version=(select max(version) from Process where name=P.name and hardwareGroupId=P.hardwareGroupId)
     </c:if>
     group by P.id
-    order by P.name
+    order by TT.standaloneNCR, P.name
     ;
 </sql:query>
 <display:table name="${result.rows}" id="ttRow" class="datatable" sort="list"
