@@ -13,13 +13,6 @@
 <%@attribute name="objectTypeId" required="true"%>
 
 <traveler:fullRequestString var="thisPage"/>    <%-- What's this about? --%>
-<%-- Needs works. How one checks permissions likely depends on object type --%>
-
-<traveler:checkSsPerm var="mayManage" hardwareId="${hardwareId}" roles="subsystemManager"/>
-
-<%--
-<c:set var="mayManage" value="1" />
---%>
 
 <sql:query var="subsysIdQ">
    call generic_subsystem(?, ?)
@@ -29,6 +22,8 @@
 </sql:query>
 <c:set var="subsysId" value="${subsysIdQ.rows[0].subsystemId}" />
  <%-- <c:out value="Subsystem is ${subsysId}" /> <br /> --%>
+
+<traveler:checkSsPerm var="mayManage" subsystemId="${subsysId}" roles="subsystemManager"/>
 
 <sql:query var="hardwareGroupsQ">
    call generic_hardwareGroups(?, ?)
