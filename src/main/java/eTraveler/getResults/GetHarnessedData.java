@@ -90,7 +90,8 @@ public class GetHarnessedData {
      Return data is map of maps (one for each component)
    */
   public Map<String, Object>
-    getResultsJH(String travelerName, String hardwareType, String schemaName,
+    getResultsJH(String travelerName, String hardwareType, String stepName,
+                 String schemaName,
                  String model, String experimentSN,
                  Pair<String, Object> filter)
     throws GetResultsException, SQLException {
@@ -98,12 +99,13 @@ public class GetHarnessedData {
       throw new GetResultsException("Set connection before attempting to fetch data");
     checkNull(travelerName, "travelerName argument must be non-null");
     checkNull(hardwareType, "hardwareType argument must be non-null");
-    checkNull(schemaName, "schemaName argument must be non-null");
+    checkNull(stepName, "stepName argument must be non-null");
 
     clearCache();
     m_travelerName = travelerName;
     m_hardwareType = hardwareType;
     m_schemaName=schemaName;
+    m_stepName=stepName;
     m_model = model;
     m_expSN = experimentSN;
     if (filter != null) {
@@ -119,7 +121,10 @@ public class GetHarnessedData {
     String sqlString=
       "select ?.schemaName as schname,?.name as resname,?.value as resvalue,?.schemaInstance as ressI,A.id as aid,A.rootActivityId as raid, A.hardwareId as hid,A.processId as pid,Process.name as pname,ASH.activityStatusId as actStatus from  ? join Activity A on ?.activityId=A.id " +
       s_activityStatusJoins + " join Process on Process.id=A.processId where "
-      + s_activityStatusCondition + " and ?.schemaName='" + m_schemaName;
+      + s_activityStatusCondition + " and Process.name='" + m_stepName;
+    if (m_schemaName != null) {
+      sqlString += "' and ?.schemaName='" + m_schemaName;
+    }
     sqlString += "' and A.rootActivityId in " + m_raiList + " order by A.hardwareId asc, A.rootActivityId desc, A.processId asc, schname,A.id desc, ressI asc, resname";
 
     m_results = new HashMap<String, Object>();
@@ -144,43 +149,26 @@ public class GetHarnessedData {
   }
 
   public Map<String, Object>
-    getRunResults(String run, String schemaName, Pair<String, Object> filter)
+    getRunResults(String run, String stepName,
+                  String schemaName, Pair<String, Object> filter)
     throws GetResultsException, SQLException {
 
     int runInt = GetHarnessedData.formRunInt(run);
-    return getRunResults(runInt, schemaName, filter);
+    return getRunResults(runInt, stepName, schemaName, filter);
   }
 
 
   public Map<String, Object>
-    getRunResults(int runInt, String schemaName, Pair<String, Object> filter)
-    throws GetResultsException, SQLException {
-        if (m_connect == null)
-      throw new GetResultsException("Set connection before attempting to fetch data");
-    checkNull(schemaName, "schemaName argument must be non-null");
-    clearCache();
-
-    m_schemaName = schemaName;
-    m_run = runInt;
-
-    return getRunResults(filter);
-  }
-
-  public Map<String, Object>
-    getRunResults(String run, Pair<String, Object> filter)
-    throws GetResultsException, SQLException {
-    int runInt = GetHarnessedData.formRunInt(run);
-    return getRunResults(runInt, filter);
-  }
-
-  
-  public Map<String, Object>
-    getRunResults(int runInt, Pair<String, Object> filter)
+    getRunResults(int runInt, String stepName, String schemaName,
+                  Pair<String, Object> filter)
     throws GetResultsException, SQLException {
     if (m_connect == null)
       throw new GetResultsException("Set connection before attempting to fetch data");
+        //checkNull(schemaName, "schemaName argument must be non-null");
     clearCache();
 
+    m_schemaName = schemaName;
+    m_stepName = stepName;
     m_run = runInt;
 
     return getRunResults(filter);
@@ -291,7 +279,7 @@ public class GetHarnessedData {
   
   /**
      Does most of the work after public routines handle other arguments
-     and appropriately set m_schemaName and m_run
+     and appropriately set m_schemaName, m_stepName and m_run
    */
   private Map<String, Object>
     getRunResults(Pair<String, Object> filter)
@@ -317,7 +305,9 @@ public class GetHarnessedData {
     if (m_schemaName != null) {
       sql += "?.schemaName='" + m_schemaName +"' and ";
     }
-    
+    if (m_stepName != null) {
+      sql += "Process.name='" + m_stepName +"' and ";
+    }
     sql += " A.rootActivityId='" + m_oneRai + "' and " +
       s_activityStatusCondition +
       " order by A.processId asc,schname, A.id desc, ressI asc, resname";
@@ -418,29 +408,26 @@ public class GetHarnessedData {
     }
     HashMap<String, Object> expMap = null;
     HashMap<String, Object> steps;
-    if (m_schemaName != null) {
-      while (gotRow) {
-        String expSN = m_hMap.get(rs.getInt("hid"));
-
-        if (m_results.containsKey(expSN) ) {
-          expMap = (HashMap<String, Object>) m_results.get(expSN);
-
-          steps = (HashMap<String, Object>) expMap.get("steps");
-        } else  {
-          expMap = new HashMap<String, Object>();
-          m_results.put(expSN, expMap);
-          expMap.put("hid", rs.getInt("hid"));
-          expMap.put("raid", rs.getInt("raid"));
-          expMap.put("runNumber", m_raiMap.get(rs.getInt("raid")));
-
-          steps = new HashMap<String, Object>();
-          expMap.put("steps", steps);
-        }
-        gotRow = storeRunAll(steps, rs, datatype, rs.getInt("hid"));
+    while (gotRow) {
+      String expSN = m_hMap.get(rs.getInt("hid"));
+      
+      if (m_results.containsKey(expSN) ) {
+        expMap = (HashMap<String, Object>) m_results.get(expSN);
+        
+        steps = (HashMap<String, Object>) expMap.get("steps");
+      } else  {
+        expMap = new HashMap<String, Object>();
+        m_results.put(expSN, expMap);
+        expMap.put("hid", rs.getInt("hid"));
+        expMap.put("raid", rs.getInt("raid"));
+        expMap.put("runNumber", m_raiMap.get(rs.getInt("raid")));
+        
+        steps = new HashMap<String, Object>();
+        expMap.put("steps", steps);
       }
-    } else {
-      throw new GetResultsException("Missing schema name");
+      gotRow = storeRunAll(steps, rs, datatype, rs.getInt("hid"));
     }
+
     genQuery.close();
     
   }

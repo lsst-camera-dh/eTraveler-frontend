@@ -76,6 +76,7 @@ public class GetResultsWrapper extends SimpleTagSupport {
       case FUNC_getRunResults:
         run= (String) m_inputs.get("run");
         String schemaName= (String) m_inputs.get("schemaName");
+        String stepName= (String) m_inputs.get("stepName");
         if (run == null) {
           jspContext.setAttribute("acknowledge", "Missing run argument");
           close();
@@ -86,11 +87,12 @@ public class GetResultsWrapper extends SimpleTagSupport {
             ImmutablePair<String, Object>(m_inputs.get("filterKey").toString(),
                                           m_inputs.get("filterValue"));
         }
-        if (schemaName != null) {
-          results = getHD.getRunResults(run, schemaName, filter);
-        } else {
-          results = getHD.getRunResults(run, filter);
-        }
+        // if (schemaName != null) {
+        //   results = getHD.getRunResults(run, schemaName, filter);
+        // } else {
+        //   results = getHD.getRunResults(run, filter);
+        // }
+        results = getHD.getRunResults(run, stepName, schemaName, filter);
         break;
       case FUNC_getResultsJH:
         if (m_inputs.get("filterKey") != null) {
@@ -101,6 +103,7 @@ public class GetResultsWrapper extends SimpleTagSupport {
         results =
           getHD.getResultsJH((String) m_inputs.get("travelerName"),
                              (String) m_inputs.get("hardwareType"),
+                             (String) m_inputs.get("stepName"),
                              (String) m_inputs.get("schemaName"),
                              (String) m_inputs.get("model"),
                              (String) m_inputs.get("experimentSN"),
