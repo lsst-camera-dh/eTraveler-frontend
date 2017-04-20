@@ -10,6 +10,7 @@
 <%@taglib prefix="traveler" tagdir="/WEB-INF/tags"%>
 
 <%@attribute name="siteId"%>
+<%@attribute name="mirrorId"%>
 
 <traveler:fullRequestString var="thisPage"/>
 <traveler:checkPerm var="mayAdmin" groups="EtravelerAllAdmin"/>
@@ -21,7 +22,9 @@ select id, name from Site
     </sql:query>
 
     <sql:query var="mirrorQ">
-select id, name from MirrorTask;
+select id, name from MirrorTask
+<c:if test="${! empty mirrorId}">where id=?<sql:param value="${mirrorId}"/></c:if>
+;
     </sql:query>
 
 <form method="get" action="admin/addJhInstall.jsp">
@@ -43,13 +46,19 @@ select id, name from MirrorTask;
             <input type="hidden" name="siteId" value="${siteQ.rows[0].id}"><c:out value="${siteQ.rows[0].name}"/>
         </c:otherwise>
     </c:choose>
-        Mirror Task:
-        <select name="mirrorId">
-            <option value="">unmirrored</option>
-            <c:forEach var="row" items="${mirrorQ.rows}">
-                <option value="${row.id}">${row.name}</option>
-            </c:forEach>
-        </select>
+        Mirror Task: <c:choose>
+        <c:when test="${empty mirrorId}">
+            <select name="mirrorId">
+                <option value="">unmirrored</option>
+                <c:forEach var="row" items="${mirrorQ.rows}">
+                    <option value="${row.id}" <c:if test="${mirrorId == row.id}">selected</c:if>>${row.name}</option>
+                </c:forEach>
+            </select>
+        </c:when>
+        <c:otherwise>
+            <input type="hidden" name="mirrorId" value="${mirrorQ.rows[0].id}"><c:out value="${mirrorQ.rows[0].name}"/>
+        </c:otherwise>
+    </c:choose>
     <br>
     jhVirtualEnv: <input type="text" name="jhVirtualEnv" required="true">
     jhOutputRoot: <input type="text" name="jhOutputRoot" required="true">

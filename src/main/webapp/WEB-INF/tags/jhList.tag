@@ -11,12 +11,15 @@
 <%@taglib prefix="display" uri="http://displaytag.sf.net"%>
 
 <%@attribute name="siteId"%>
+<%@attribute name="mirrorId"%>
 
     <sql:query var="jhQ">
-select JH.*, S.name as siteName
+select JH.*, S.name as siteName, MT.id as mirrorId, MT.name as mirrorName
 from JobHarness JH
-inner join Site S on JH.siteId=S.id
+inner join Site S on JH.siteId = S.id
+left join MirrorTask MT on MT.id = JH.mirrorTaskId
 <c:if test="${! empty siteId}">where S.id=?<sql:param value="${siteId}"/></c:if>
+<c:if test="${! empty mirrorId}">where MT.id=?<sql:param value="${mirrorId}"/></c:if>
 ;
     </sql:query>
 
@@ -32,6 +35,10 @@ inner join Site S on JH.siteId=S.id
     <display:column property="jhOutputRoot" sortable="true" headerClass="sortable"/>
     <display:column property="jhStageRoot" sortable="true" headerClass="sortable"/>
     <display:column property="jhCfg" sortable="true" headerClass="sortable"/>
+    <c:if test="${empty mirrorId or preferences.showFilteredColumns}">
+        <display:column property="mirrorName" title="Mirror" sortable="true" headerClass="sortable"
+                        href="displayMirror.jsp" paramId="mirrorId" paramProperty="mirrorId"/>
+    </c:if>
     <display:column property="createdBy" title="Creator" sortable="true" headerClass="sortable"/>
     <display:column property="creationTS" title="Date" sortable="true" headerClass="sortable"/>
 </display:table>

@@ -115,11 +115,13 @@
 <c:choose>
     <c:when test="${mode == 'harnessed'}">
         <sql:query var="jhSiteQ">
-select S.name as siteName, JH.jhOutputRoot from 
+select S.name as siteName, JH.jhOutputRoot, MT.sourceDirectory, MT.dcSite
+from 
 Activity A
-inner join JobHarness JH on JH.id=A.jobHarnessId
-inner join Site S on S.id=JH.siteId
-where A.id=?<sql:param value="${activityId}"/>
+inner join JobHarness JH on JH.id = A.jobHarnessId
+inner join Site S on S.id = JH.siteId
+left join MirrorTask MT on MT.id = JH.mirrorTaskId
+where A.id = ?<sql:param value="${activityId}"/>
 ;
         </sql:query>
         <c:choose>
@@ -127,6 +129,16 @@ where A.id=?<sql:param value="${activityId}"/>
                 <c:set var="site" value="${jhSiteQ.rows[0]}"/>
                 <c:set var="siteName" value="${site.siteName}"/>
                 <c:set var="jhOutputRoot" value="${site.jhOutputRoot}"/>
+                <c:choose>
+                    <c:when test="${! empty site.sourceDirectory}">
+                        <c:set var="mirrored" value="true"/>
+                        <c:set var="sourceDirectory" value="site.sourceDirectory"/>
+                        <c:set var="dcSite" value="site.dcSite"/>
+                    </c:when>
+                    <c:otherwise>
+                        <c:set var="mirrored" value="false"/>
+                    </c:otherwise>
+                </c:choose>
             </c:when>
             <c:otherwise>
                 <traveler:error message="Cannot resolve Job Harness info."/>
@@ -159,7 +171,14 @@ where A.id=?<sql:param value="${activityId}"/>
     </c:otherwise>
 </c:choose>
 
-<c:set var="dcHead" value="${appVariables.etravelerDatacatRoot}/${modePath}/${siteName}-${dataSourceFolder}/${dataSourceFolder}"/>
+<c:choose>
+    <c:when test="${mirrored}">
+        <%-- mumble --%>
+    </c:when>
+    <c:otherwise>
+        <c:set var="dcHead" value="${appVariables.etravelerDatacatRoot}/${modePath}/${siteName}-${dataSourceFolder}/${dataSourceFolder}"/>
+    </c:otherwise>
+</c:choose>
 
 <traveler:findRun varRun="runNumber" varTraveler="runTraveler" activityId="${activityId}"/>
 
