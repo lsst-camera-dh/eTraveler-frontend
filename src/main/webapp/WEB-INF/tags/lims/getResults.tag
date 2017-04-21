@@ -34,7 +34,7 @@ Return little map as is done in getHardwareHierarchy.tag:
   "results": ${resultsStr} }
   </c:when>
   <c:otherwise>
-{ "acknowledge": ${acknowledge},
+{ "acknowledge": "${acknowledge}",
   "results": ${resultsStr} }
   </c:otherwise>
 </c:choose>
