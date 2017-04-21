@@ -255,7 +255,7 @@ public class GetHarnessedData {
 
     if (!gotRow) {
       throw new
-        GetResultsNoDataException("getFilePathsJH:No files generated for specified parameters");
+        GetResultsNoDataException("No data found");
     }
     while (gotRow) {
       String expSN = m_hMap.get(rs.getInt("hid"));
@@ -344,7 +344,7 @@ public class GetHarnessedData {
     String sql= "select RunNumber.rootActivityId as rai, Activity.hardwareId as hid, Hardware.lsstId as expSN, HardwareType.name as hname,Process.name as pname from RunNumber join Activity on RunNumber.rootActivityId=Activity.id join Hardware on Activity.hardwareId=Hardware.id join HardwareType on HardwareType.id=Hardware.hardwareTypeId join Process on Process.id=Activity.processId where runInt='" + m_run + "'";
     ResultSet rs = m_connect.prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE).executeQuery();
     if (!rs.first()) {
-      throw new GetResultsException("No data found for run " + m_run);
+      throw new GetResultsNoDataException("No data found for run " + m_run);
     }
     m_oneRai = rs.getInt("rai");
     m_expSN = rs.getString("expSN");

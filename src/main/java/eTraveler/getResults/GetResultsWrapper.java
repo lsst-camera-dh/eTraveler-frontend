@@ -76,7 +76,7 @@ public class GetResultsWrapper extends SimpleTagSupport {
     if (m_function.equals("getActivity")) func = FUNC_getActivity;
     if (m_function.equals("getRunActivities")) func = FUNC_getRunActivities;
     if (func == 0) {
-      m_jspContext.setAttribute("acknowledge", "unknown function " + m_function);
+      m_jspContext.setAttribute("acknowledge", "Unknown function " + m_function);
       close();
       return;
     }
@@ -98,7 +98,7 @@ public class GetResultsWrapper extends SimpleTagSupport {
         getActivities(func);
       }
       else {
-        m_jspContext.setAttribute("acknowledge", "unknown function " + m_function);
+        m_jspContext.setAttribute("acknowledge", "Unknown function " + m_function);
         close();
         return;
       }
@@ -183,7 +183,7 @@ public class GetResultsWrapper extends SimpleTagSupport {
                              (String) m_inputs.get("experimentSN"));
       break;
     default:
-      m_jspContext.setAttribute("acknowledge", "unknown function " + m_function);
+      m_jspContext.setAttribute("acknowledge", "Unknown function " + m_function);
       close();
       return;
     }
@@ -211,7 +211,7 @@ public class GetResultsWrapper extends SimpleTagSupport {
       m_results = getA.getRunActivities(run);
       break;
     default:
-      m_jspContext.setAttribute("acknowledge","unknown function " + m_function);
+      m_jspContext.setAttribute("acknowledge","Unknown function " + m_function);
       close();
       return;
     }
