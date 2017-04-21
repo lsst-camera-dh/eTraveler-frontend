@@ -28,7 +28,8 @@ public class GetResultsWrapper extends SimpleTagSupport {
   private String m_function;
   private Connection m_conn;
   private JspContext m_jspContext=null;
-  private Map<String, Object> m_results = null;
+  // private Map<String, Object> m_results = null;
+  private Object m_results = null;
   
   public void setInputs(Map arg) {m_inputs = arg;}
   public void setOutputVariable(String arg) {m_outputVariable = arg;}
@@ -66,10 +67,12 @@ public class GetResultsWrapper extends SimpleTagSupport {
     if (m_function.equals("getResultsJH")) func = FUNC_getResultsJH;
     if (m_function.equals("getRunFilepaths")) func = FUNC_getRunFilepaths;
     if (m_function.equals("getFilepathsJH")) func = FUNC_getFilepathsJH;
+    /*
     if (m_function.equals("getManualRunResults")) func = FUNC_getManualRunResults;
     if (m_function.equals("getManualResultsJH")) func = FUNC_getManualResultsJH;
     if (m_function.equals("getManualRunFilepaths")) func = FUNC_getManualRunFilepaths;
     if (m_function.equals("getManualFilepathsJH")) func = FUNC_getManualFilepathsJH;
+    */
     if (m_function.equals("getActivity")) func = FUNC_getActivity;
     if (m_function.equals("getRunActivities")) func = FUNC_getRunActivities;
     if (func == 0) {
@@ -91,6 +94,8 @@ public class GetResultsWrapper extends SimpleTagSupport {
     try {
       if (func <= FUNC_lastHarnessed) {
         getHarnessed(func);
+      } else if (func >= FUNC_lastManual) {
+        getActivities(func);
       }
       else {
         m_jspContext.setAttribute("acknowledge", "unknown function " + m_function);
@@ -110,7 +115,9 @@ public class GetResultsWrapper extends SimpleTagSupport {
     }
 
     if (m_results == null) {
-      m_jspContext.setAttribute("acknowledge", "Error: no results found");
+      if (m_jspContext.getAttribute("acknowledge") == null) {
+          m_jspContext.setAttribute("acknowledge", "Error: no results found");
+      }
     } else {
       m_jspContext.setAttribute(m_outputVariable, m_results);
     }
@@ -181,6 +188,36 @@ public class GetResultsWrapper extends SimpleTagSupport {
       return;
     }
   }
+  private void getActivities(int func)
+    throws SQLException,GetResultsException,JspException {
+    GetActivityInfo getA = new GetActivityInfo(m_conn);
+    switch(func) {
+    case FUNC_getActivity:
+      String aid= (String) m_inputs.get("activityId");
+      if (aid == null) {
+        m_jspContext.setAttribute("acknowledge", "Missing activityId argument");
+        close();
+        return;
+      }
+      m_results = getA.getActivity(aid);
+      break;
+    case FUNC_getRunActivities:
+      String run= (String) m_inputs.get("run");
+      if (run == null) {
+        m_jspContext.setAttribute("acknowledge", "Missing run argument");
+        close();
+        return;
+      }
+      m_results = getA.getRunActivities(run);
+      break;
+    default:
+      m_jspContext.setAttribute("acknowledge","unknown function " + m_function);
+      close();
+      return;
+    }
+    
+  }
+
   private void close() throws JspException {
     try {
       m_conn.setAutoCommit(true);

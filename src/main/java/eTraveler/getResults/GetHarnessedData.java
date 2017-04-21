@@ -56,7 +56,7 @@ public class GetHarnessedData {
      Return integer equivalent, ignoring final non-numeric character
      if there is one.
    */
-  private static int formRunInt(String st) throws GetResultsException {
+  public static int formRunInt(String st) throws GetResultsException {
     int theInt;
     try {
       theInt = Integer.parseInt(st);
