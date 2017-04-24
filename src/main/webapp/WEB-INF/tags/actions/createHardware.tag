@@ -20,6 +20,7 @@
 <%@attribute name="model"%>
 <%@attribute name="manufactureDateStr"%>
 <%@attribute name="locationId" required="true"%>
+<%@attribute name="remarks"%>
 <%@attribute name="subBatch"%>
 <%@attribute name="var" required="true" rtexprvalue="false"%>
 <%@variable name-from-attribute="var" alias="hardwareId" scope="AT_BEGIN"%>
@@ -80,6 +81,9 @@ manufacturer=?<sql:param value="${manufacturer}"/>,
 manufacturerId=?<sql:param value="${manufacturerId}"/>,
 model=?<sql:param value="${model}"/>,
 manufactureDate=?<sql:dateParam value="${manufactureDate}"/>,
+<c:if test="${! empty remarks}">
+    remarks=?<sql:param value="${remarks}"/>,
+</c:if>
 createdBy=?<sql:param value="${userName}"/>,
 creationTS=UTC_TIMESTAMP();
     </sql:update>

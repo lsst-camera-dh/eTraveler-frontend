@@ -1,5 +1,5 @@
 <%-- 
-    Document   : findNcrContainingTraveler
+    Document   : findNcrParent
     Created on : May 17, 2016, 10:35:49 AM
     Author     : focke
 --%>
@@ -31,14 +31,21 @@ where E.ncrActivityId = ?<sql:param value="${ncrId}"/>
         <c:choose>
             <c:when test="${! empty exceptionQ.rows}">
                 <c:set var="exception" value="${exceptionQ.rows[0]}"/>
-                <traveler:findTraveler var="travelerId" activityId="${exception.exitActivityId}"/>
+                <c:choose>
+                    <c:when test="${exception.exitActivityId == ncrId}">
+                        <c:set var="travelerId" value=""/> <%-- standalone --%>
+                    </c:when>
+                    <c:otherwise>
+                        <traveler:findTraveler var="travelerId" activityId="${exception.exitActivityId}"/>
+                    </c:otherwise>
+                </c:choose>
             </c:when>
             <c:otherwise>
-                <c:set var="travelerId" value=""/>
+                <traveler:error message="No Exception found!" bug="true"/>
             </c:otherwise>
         </c:choose>
     </c:when>
     <c:otherwise>
-        <c:set var="travelerId" value=""/>
+        <traveler:error message="This is not an NCR!" bug="true"/>
     </c:otherwise>
 </c:choose>

@@ -42,6 +42,7 @@ where
     </sql:query>
     <c:set var="exRow" value="${exceptionQ.rows[0]}"/>
         
+    <c:if test="${exRow.NCRActivityId != activityId}">
     <c:set var="thisException" value="${exRow.NCRActivityId}"/>
     <c:set var="returnEdgePath" value="${exRow.returnProcessPath}"/>
     
@@ -52,12 +53,14 @@ where
 %>
         </c:if>
     </c:forEach>
+    
     <traveler:expandActivity activityId="${thisException}" var="exChildren"/>
 <%
     outList.addAll((java.util.List)jspContext.getAttribute("exChildren"));
 %>
     
     <c:set var="lastException" value="${thisException}"/>
+    </c:if>
 </c:forEach>
 
 <c:set var="trailingActivities" value="false"/>

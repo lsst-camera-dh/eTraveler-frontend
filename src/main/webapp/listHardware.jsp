@@ -15,6 +15,7 @@ select name from Site order by name;
     <sql:query var="subsysQ">
 select name from Subsystem order by name;
     </sql:query>
+    <traveler:listLabels objectTypeName="hardware" var="labelQ" />
 
 <!DOCTYPE html>
 <html>
@@ -48,6 +49,15 @@ select name from Subsystem order by name;
                     <filter:filterOption value="${subsystem.name}"><c:out value="${subsystem.name}"/></filter:filterOption>
                 </c:forEach>                
             </filter:filterSelection>
+	    <filter:filterSelection title="Label" var="label"
+	       defaultValue="any" >
+	       <filter:filterOption value="any">Any</filter:filterOption>
+               <c:forEach var="labelInfo" items="${labelQ.rows}">
+	         <filter:filterOption value="${labelInfo.labelId}">
+		   <c:out value="${labelInfo.fullname}" />
+                 </filter:filterOption >
+	       </c:forEach>
+            </filter:filterSelection>
             <filter:filterSelection title="Status" var="status" defaultValue='${theStatus}'>
                 <filter:filterOption value="any">Any</filter:filterOption>
                 <c:forEach var="statusName" items="${statesQ.rows}">
@@ -58,6 +68,7 @@ select name from Subsystem order by name;
         <traveler:hardwareList hardwareTypeId="${param.hardwareTypeId}"
                                hardwareGroupId="${param.hardwareGroupId}"
                                hardwareStatusName="${status}"
+                               labelId="${label}"
                                siteId="${param.siteId}"
                                siteName="${site}"
                                locationId="${param.locationId}"

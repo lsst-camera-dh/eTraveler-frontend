@@ -30,10 +30,13 @@ select * from Activity where id=?<sql:param value="${param.activityId}"/>;
         </sql:transaction>
         
         <c:if test="${activity.inNCR && empty activity.parentActivityId}">
-            <c:url var="ncrUrl" value="finishNCR.jsp">
-                <c:param name="activityId" value="${param.activityId}"/>
-            </c:url>
-            <c:redirect url="${ncrUrl}"/>
+            <traveler:findNcrParent var="parentId" activityId="${param.activityId}"/>
+            <c:if test="${! empty parentId}">
+                <c:url var="ncrUrl" value="finishNCR.jsp">
+                    <c:param name="activityId" value="${param.activityId}"/>
+                </c:url>
+                <c:redirect url="${ncrUrl}"/>
+            </c:if>
         </c:if>
                     
         <traveler:redirDA/>

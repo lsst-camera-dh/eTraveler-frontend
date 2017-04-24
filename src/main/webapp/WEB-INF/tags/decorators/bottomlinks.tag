@@ -22,6 +22,8 @@
 
             <srs_utils:conditionalLink name="List&nbsp;Travelers" url="listTravelers.jsp" /> |
 
+            <srs_utils:conditionalLink name="List&nbsp;NCRs" url="listNCRs.jsp" /> |
+
             <c:url var="newTravLink" value="selectHardwareType.jsp">
                 <c:param name="target" value="initiateTraveler.jsp"/>
             </c:url>
@@ -32,6 +34,8 @@
             <srs_utils:conditionalLink name="List&nbsp;Locations" url="listLocations.jsp" /> |
 
             <srs_utils:conditionalLink name="List&nbsp;Subsystems" url="listSubsystems.jsp" /> |
+
+            <srs_utils:conditionalLink name="List&nbsp;Labels" url="listLabels.jsp" /> |
 
             <srs_utils:conditionalLink name="Preferences" url="preferences.jsp"/> |
 

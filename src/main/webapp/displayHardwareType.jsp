@@ -20,6 +20,12 @@ inner join Subsystem SS on SS.id=H.subsystemId
 where H.id=?<sql:param value="${param.hardwareTypeId}"/>;
     </sql:query>
 <c:set var="hardwareType" value="${hardwareTypeQ.rows[0]}"/>
+
+<sql:query var="objectTypeQ">
+    select id from Labelable where name="hardwareType"
+</sql:query>
+<c:set var="hardwareTypeObjectId" value="${objectTypeQ.rows[0].id}" />
+
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
@@ -43,10 +49,14 @@ where H.id=?<sql:param value="${param.hardwareTypeId}"/>;
         <h3>Register a new one:</h3>
         <traveler:newHardwareForm hardwareTypeId="${param.hardwareTypeId}"/>
 
+        <h2>Generic Labels</h2>
+	<traveler:genericLabelWidget objectId="${param.hardwareTypeId}"
+                                     objectTypeId="${hardwareTypeObjectId}" />
+   
         <h2>Applicable Traveler Types</h2>
         <traveler:travelerTypeList hardwareTypeId="${param.hardwareTypeId}"/>
         <traveler:newTravelerForm hardwareTypeId="${param.hardwareTypeId}"/>
-   
+
         <h2>Relations</h2>
         <h3>Component of</h3>
         <relationships:relationshipTypeList componentTypeId="${param.hardwareTypeId}"/>

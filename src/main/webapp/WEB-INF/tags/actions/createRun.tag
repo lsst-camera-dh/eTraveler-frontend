@@ -18,7 +18,14 @@ where A.id = ?<sql:param value="${activityId}"/>
     </sql:query>
 <c:set var="activity" value="${activityQ.rows[0]}"/>
 
-<traveler:findNcrContainingTraveler var="containerId" activityId="${activityId}"/>
+<c:choose>
+    <c:when test="${activity.inNCR}">
+        <traveler:findNcrParent var="containerId" activityId="${activityId}"/>
+    </c:when>
+    <c:otherwise>
+        <c:set var="containerId" value=""/>
+    </c:otherwise>
+</c:choose>
 <c:choose>
     <c:when test="${(! activity.inNCR) || (empty containerId)}">
         <c:choose>

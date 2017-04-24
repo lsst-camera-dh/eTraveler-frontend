@@ -37,7 +37,7 @@ where HT.id=<sql:param value="${param.hardwareTypeId}"/>
                                quantity="${param.quantity}" manufacturer="${param.manufacturer}"
                                manufacturerId="${param.manufacturerId}" model="${param.model}"
                                manufactureDateStr="${param.manufactureDateDate}" locationId="${param.locationId}"
-                               var="hardwareId"/>
+                               remarks="${param.remarks}" var="hardwareId"/>
         </sql:transaction>
         <c:redirect url="/displayHardware.jsp" context="/eTraveler">
             <c:param name="hardwareId" value="${hardwareId}"/>

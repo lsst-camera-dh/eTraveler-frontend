@@ -33,7 +33,7 @@
 
 <sql:query var="processQ" >
     select 
-        P.id, concat(P.name, ' v', P.version) as versionedName, P.shortDescription
+        P.id, concat(P.name, ' v', P.version) as versionedName, P.shortDescription, TT.standaloneNCR
     from 
         Process P
         inner join TravelerType TT on TT.rootProcessId=P.id
@@ -68,7 +68,7 @@
     <c:if test="${activeTravelerTypesOnly && empty processId}">
         and TTS.name='active'
     </c:if>
-    order by P.name
+    order by TT.standaloneNCR, P.name
     ;
 </sql:query>
     

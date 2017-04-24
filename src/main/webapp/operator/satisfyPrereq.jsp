@@ -20,19 +20,16 @@
         <traveler:checkFreshness formToken="${param.freshnessToken}"/>        
         
         <sql:transaction >
-            <sql:update>
-                insert into Prerequisite set
-                prerequisitePatternId=?<sql:param value="${param.prerequisitePatternId}"/>,
-                activityId=?<sql:param value="${param.activityId}"/>,
-                <c:if test="${! empty param.prerequisiteActivityId}">
-                    prerequisiteActivityId=?<sql:param value="${param.prerequisiteActivityId}"/>,
+            <c:forEach var="pattern" begin="0" end="${param.nPrereqs - 1}" step="1">
+                <c:set var="valueName" value="value${pattern}"/>
+                <c:if test="${! empty param[valueName]}">
+                    <c:set var="patternName" value="prerequisitePatternId${pattern}"/>
+                    <ta:satisfyPrereq prerequisitePatternId="${param[patternName]}"
+                                      activityId="${param.activityId}"
+                                      prerequisiteActivityId="${param.prerequisiteActivityId}"
+                                      hardwareId="${param.componentId}"/>
                 </c:if>
-                <c:if test="${! empty param.componentId}">
-                    hardwareId=?<sql:param value="${param.componentId}"/>,
-                </c:if>
-                createdBy=?<sql:param value="${userName}"/>,
-                creationTs=UTC_TIMESTAMP();
-            </sql:update>
+            </c:forEach>
         </sql:transaction>
                 
         <c:redirect url="${param.referringPage}"/>

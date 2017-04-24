@@ -26,9 +26,15 @@ and S.name=?<sql:param value="${inputs.site}"/>
     <traveler:error message="No location with name ${inputs.location} and site ${inputs.site} found."/>
 </c:if>
 
-<ta:createHardware var="hardwareId" hardwareTypeId="${hardwareTypeId}" locationId="${locQ.rows[0].id}"
-                   manufacturerId="${inputs.manufacturerId}" model="${inputs.model}"
-                   manufactureDateStr="${inputs.manufactureDate}" manufacturer="${inputs.manufacturer}"
-                   quantity="${inputs.quantity}" lsstId="${inputs.experimentSN}"/>
+<ta:createHardware var="hardwareId" 
+                   hardwareTypeId="${hardwareTypeId}" 
+                   locationId="${locQ.rows[0].id}" 
+                   manufacturerId="${inputs.manufacturerId}" 
+                   model="${inputs.model}" 
+                   manufactureDateStr="${inputs.manufactureDate}" 
+                   manufacturer="${inputs.manufacturer}"
+                   quantity="${inputs.quantity}" 
+                   lsstId="${inputs.experimentSN}" 
+                   remarks="${inputs.remarks}"/>
 
 {"id": ${hardwareId}, "acknowledge": null}

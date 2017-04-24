@@ -46,9 +46,16 @@ order by P.id desc
 limit 1
 ;
 </sql:query>
-<c:set var="ncrProcessId" value="${ncrQ.rows[0].id}"/>
-n:${ncrProcessId}<br>
-
+<c:choose>
+    <c:when test="${! empty ncrQ.rows}">
+        <c:set var="ncrProcessId" value="${ncrQ.rows[0].id}"/>
+        n:${ncrProcessId}<br>
+    </c:when>
+    <c:otherwise>
+        <traveler:error message="No NCR traveler type defined! Should be ${appVariables.ncrTraveler}"/>
+    </c:otherwise>
+</c:choose>
+        
 <sql:query var="etQ">
 select id from ExceptionType
 where exitProcessPath=?<sql:param value="${edgePath}"/>
