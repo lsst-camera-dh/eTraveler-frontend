@@ -16,10 +16,12 @@
 
     <name>LSST ETraveler Web Application</name>
     <url>http://srs.slac.stanford.edu/eTraveler</url>
+
+
     
 
     <build>
-        <finalName>eTraveler</finalName>
+        <finalName>eTraveler${appSuffix}</finalName>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -125,6 +127,7 @@
     <properties>
         <netbeans.hint.deploy.server>Tomcat</netbeans.hint.deploy.server>
         <experiment.name>LSST-CAMERA</experiment.name>
+	<appSuffix />
     </properties>
 
     <scm>
