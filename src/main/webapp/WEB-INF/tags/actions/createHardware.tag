@@ -80,7 +80,9 @@ hardwareTypeId=?<sql:param value="${hardwareTypeId}"/>,
 manufacturer=?<sql:param value="${manufacturer}"/>,
 manufacturerId=?<sql:param value="${manufacturerId}"/>,
 model=?<sql:param value="${model}"/>,
-manufactureDate=?<sql:dateParam value="${manufactureDate}"/>,
+<c:if test="${! empty manufactureDateStr}">
+    manufactureDate=?<sql:dateParam value="${manufactureDate}"/>,
+</c:if>
 <c:if test="${! empty remarks}">
     remarks=?<sql:param value="${remarks}"/>,
 </c:if>
