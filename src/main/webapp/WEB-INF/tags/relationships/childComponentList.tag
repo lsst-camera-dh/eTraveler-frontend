@@ -13,6 +13,7 @@
 <%@attribute name="noBatched"%>
 <%@attribute name="var" required="true" rtexprvalue="false"%>
 <%@variable name-from-attribute="var" alias="compList" scope="AT_BEGIN"%>
+<%@attribute name="timestamp"%>
 <%@attribute name="mode" required="true"%>
 
 <%
@@ -24,4 +25,5 @@
                              level="0" 
                              noBatched="${noBatched}" 
                              compList="${compList}"
+                             timestamp="${timestamp}"
                              mode="${mode}"/>
