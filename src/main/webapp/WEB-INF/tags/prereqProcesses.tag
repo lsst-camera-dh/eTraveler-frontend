@@ -66,7 +66,9 @@ order by A.begin desc;
                             <form method="GET" action="operator/satisfyPrereq.jsp">
                                 <input type="hidden" name="freshnessToken" value="${freshnessToken}">
                                 <input type="hidden" name="referringPage" value="${thisPage}">
-                                <input type="HIDDEN" name="prerequisitePatternId" value="${row.ppId}">
+                                <input type="HIDDEN" name="prerequisitePatternId0" value="${row.ppId}">
+                                <input type="HIDDEN" name="value0" value="1">
+                                <input type="HIDDEN" name="nPrereqs" value="1">
                                 <input type="HIDDEN" name="activityId" value="${activityId}">
                                 <select name="prerequisiteActivityId">
                                     <c:forEach var="activity" items="${activityQ.rows}">
