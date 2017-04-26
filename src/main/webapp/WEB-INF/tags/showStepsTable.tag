@@ -31,22 +31,31 @@
         </c:if>
     </display:column>
     <display:column title="Description">
+        <c:set var="contentLabel" value="${step.shortDescription}"/>
         <c:choose>
-            <c:when test="${! empty currentStepLink && step.edgePath == currentStepEPath && (step.activityId == currentStepActivityId || (currentStepActivityId == -1 && empty step.activityId))}">
+            <c:when test="${! empty currentStepLink 
+                            && (step.edgePath == currentStepEPath 
+                            || (empty step.edgePath && empty currentStepEPath))
+                            && (step.activityId == currentStepActivityId 
+                                || (currentStepActivityId == -1 && empty step.activityId)
+                                )}">
                 <c:set var="contentLink" value="${currentStepLink}"/>
+                <c:set var="contentLabel" value="${contentLabel} CURRENT STEP"/>
             </c:when>
             <c:when test="${mode == 'activity' && ! empty step.activityId}">
                 <c:url var="contentLink" value="activityPane.jsp">
                     <c:param name="activityId" value="${step.activityId}"/>
+                    <c:param name="step" value="${step.stepPath}"/>
                 </c:url>
             </c:when>
             <c:otherwise>
                 <c:url var="contentLink" value="processPane.jsp">
                     <c:param name="processId" value="${step.processId}"/>
+                    <c:param name="step" value="${step.stepPath}"/>
                 </c:url>                
             </c:otherwise>
         </c:choose>
-        <a href="${contentLink}" target="content">${step.shortDescription}</a>
+        <a href="${contentLink}" target="content"><c:out value="${contentLabel}"/></a>
     </display:column><
     <c:if test="${mode == 'activity'}">
         <%--<display:column property="activityId"/>--%>

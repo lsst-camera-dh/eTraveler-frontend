@@ -33,7 +33,21 @@ table.datatable th, table.datatable td {
         </sql:query>
         <c:set var="activity" value="${activityQ.rows[0]}"/>
           
-        <h2><c:out value="${activity.processName}"/></h2>
+        <h2>
+            <c:choose>
+                <c:when test="${empty param.step}">
+                    <c:set var="stepLabel" value="Root Step"/>
+                </c:when>
+                <c:otherwise>
+                    <c:set var="stepLabel" value="Step ${param.step}"/>
+                </c:otherwise>
+            </c:choose>
+            <c:if test="${! empty param.isCurrent}">
+                <c:set var="stepLabel" value="${stepLabel} ${param.isCurrent}"/>
+            </c:if>
+            <c:out value="${stepLabel}:"/>
+            <c:out value="${activity.processName}"/>
+        </h2>
         <h2><c:out value="${activity.shortDescription}"/></h2>
         <traveler:activityWidget activityId="${param.activityId}"/>
         <%--<traveler:processWidget processId="${activity.processId}"/>--%>

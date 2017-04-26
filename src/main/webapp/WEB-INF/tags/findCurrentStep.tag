@@ -41,6 +41,7 @@
             <c:if test="${step.statusName == 'stopped'}">
                 <c:set var="lastStopped" value="${step.activityId}"/>
                 <c:set var="lsPath" value="${step.edgePath}"/>
+                <c:set var="lsStep" value="${step.stepPath}"/>
             </c:if>
             <c:if test="${empty step.begin}">
                 <c:if test="${unstarted != 0}">
@@ -48,11 +49,13 @@
                 </c:if>
                 <c:set var="unstarted" value="${step.activityId}"/>
                 <c:set var="usPath" value="${step.edgePath}"/>
+                <c:set var="usStep" value="${step.stepPath}"/>
             </c:if>
             <c:if test="${empty step.end}">
                 <c:set var="lastUnfinished" value="${step.activityId}"/>
                 <c:set var="lufPath" value="${empty step.edgePath ? '' : step.edgePath}"/>
                 <c:set var="lufSubSteps" value="${step.subSteps}"/>
+                <c:set var="lufStep" value="${step.stepPath}"/>
             </c:if>
         </c:when>
         <c:otherwise>
@@ -62,6 +65,7 @@
                     <c:set var="firstUninstantiated" value="${step.processId}"/>
                     <c:set var="processEdgeId" value="${step.processEdgeId}"/>
                     <c:set var="fuPath" value="${step.edgePath}"/>
+                    <c:set var="fuStep" value="${step.stepPath}"/>
                 </c:if>
             </c:if>
         </c:otherwise>
@@ -73,11 +77,13 @@
         <c:set var="mode" value="activity"/>
         <c:set var="theId" value="${lastStopped}"/>
         <c:set var="currentStepEPath" value="${lsPath}"/>
+        <c:set var="theStep" value="${lsStep}"/>
     </c:when>
     <c:when test="${unstarted != 0}">
         <c:set var="mode" value="activity"/>
         <c:set var="theId" value="${unstarted}"/>
         <c:set var="currentStepEPath" value="${usPath}"/>
+        <c:set var="theStep" value="${usStep}"/>
     </c:when>
     <c:when test="${lastUnfinished != 0}">
         <c:choose>
@@ -85,11 +91,13 @@
                 <c:set var="mode" value="process"/>
                 <c:set var="theId" value="${firstUninstantiated}"/>
                 <c:set var="currentStepEPath" value="${fuPath}"/>
+                <c:set var="theStep" value="${fuStep}"/>
             </c:when>
             <c:otherwise>
                <c:set var="mode" value="activity"/>
                <c:set var="theId" value="${lastUnfinished}"/>
                <c:set var="currentStepEPath" value="${lufPath}"/>
+               <c:set var="theStep" value="${lufStep}"/>
             </c:otherwise>
         </c:choose>
     </c:when>
@@ -97,6 +105,7 @@
         <c:set var="mode" value="activity"/>
         <c:set var="theId" value="${topActivityId}"/>
         <c:set var="currentStepEPath" value=""/>
+        <c:set var="theStep" value=""/>
     </c:otherwise>
 </c:choose>
 
@@ -105,6 +114,8 @@
         <c:url var="currentStepLink" value="activityPane.jsp">
             <c:param name="activityId" value="${theId}"/>
             <c:param name="topActivityId" value="${topActivityId}"/>
+            <c:param name="step" value="${theStep}"/>
+            <c:param name="isCurrent" value="CURRENT"/>
         </c:url>
         <c:set var="currentStepActivityId" value="${theId}"/>
     </c:when>
@@ -116,6 +127,8 @@
             <c:param name="inNCR" value="${inNCR}"/>
             <c:param name="parentActivityId" value="${lastUnfinished}"/>
             <c:param name="processEdgeId" value="${processEdgeId}"/>
+            <c:param name="step" value="${theStep}"/>
+            <c:param name="isCurrent" value="CURRENT"/>
         </c:url>
         <c:choose>
             <c:when test="${scriptMode}">
