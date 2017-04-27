@@ -45,8 +45,6 @@ select name, siteId from Location where id = ?<sql:param value="${param.parentId
             select last_insert_id() as id;
         </sql:query>
 </sql:transaction>
-        <c:redirect url="/displayLocation.jsp" context="/eTraveler">
-            <c:param name="locationId" value="${idQ.rows[0].id}"/>
-        </c:redirect>
+        <c:redirect url="${param.referringPage}"/>
     </body>
 </html>

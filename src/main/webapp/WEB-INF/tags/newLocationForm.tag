@@ -13,6 +13,7 @@
 <%@attribute name="parentId"%>
 
 <traveler:checkPerm var="mayAdmin" groups="EtravelerAllAdmin"/>
+<traveler:fullRequestString var="thisPage"/>
 
 <sql:query var="sitesQ" >
     select id, name from Site
@@ -55,6 +56,7 @@ where L.id = ?<sql:param value="${parentId}"/>
 
 <form method="get" action="admin/addLocation.jsp">
     <input type="hidden" name="freshnessToken" value="${freshnessToken}">
+    <input type="hidden" name="referringPage" value="${thisPage}">
     <input type="submit" value="${submitLabel}"
        <c:if test="${! mayAdmin}">disabled</c:if>>
     Name: <input type="text" name="name" required>
