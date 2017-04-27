@@ -44,9 +44,18 @@ where L.id = ?<sql:param value="${parentId}"/>
     </c:choose>
 </c:if>
 
+<c:choose>
+    <c:when test="${! empty parentId}">
+        <c:set var="submitLabel" value="Add Child Location"/>
+    </c:when>
+    <c:otherwise>
+        <c:set var="submitLabel" value="Add Location"/>
+    </c:otherwise>
+</c:choose>
+
 <form method="get" action="admin/addLocation.jsp">
     <input type="hidden" name="freshnessToken" value="${freshnessToken}">
-    <input type="submit" value="Add Location"
+    <input type="submit" value="${submitLabel}"
        <c:if test="${! mayAdmin}">disabled</c:if>>
     Name: <input type="text" name="name" required>
     Site: 
