@@ -10,6 +10,7 @@
 <%@taglib prefix="traveler" tagdir="/WEB-INF/tags"%>
 
 <%@attribute name="siteId"%>
+<%@attribute name="parentId"%>
 
 <traveler:checkPerm var="mayAdmin" groups="EtravelerAllAdmin"/>
 
@@ -18,7 +19,31 @@
     <c:if test="${! empty siteId}">where id=?<sql:param value="${siteId}"/></c:if>
     order by name;
 </sql:query>
-    
+<c:if test="${! empty siteId}">
+    <c:set var="siteName" value="${sitesQ.rows[0].name}"/>
+</c:if>
+
+<c:if test="${! empty parentId}">
+    <sql:query var="pareSiteQ">
+select S.id, S.name
+from Location L 
+inner join Site S on S.id = L.siteId
+where L.id = ?<sql:param value="${parentId}"/>
+    </sql:query>
+    <c:set var="pareSite" value="${pareSiteQ.rows[0]}"/>
+    <c:choose>
+        <c:when test="${! empty siteId}">
+            <c:if test="${pareSite.id != siteId}">
+                <traveler:error message="Site and parent location don't match"/>
+            </c:if>
+        </c:when>
+        <c:otherwise>
+            <c:set var="siteId" value="${pareSite.id}"/>
+            <c:set var="siteName" value="${pareSite.name}"/>
+        </c:otherwise>
+    </c:choose>
+</c:if>
+
 <form method="get" action="admin/addLocation.jsp">
     <input type="hidden" name="freshnessToken" value="${freshnessToken}">
     <input type="submit" value="Add Location"
@@ -35,7 +60,8 @@
         </c:when>
         <c:otherwise>
             <input type="hidden" name="siteId" value="${siteId}">
-            <c:out value="${sitesQ.rows[0].name}"/>
+            <c:out value="${siteName}"/>
         </c:otherwise>
     </c:choose>
+    <input type="hidden" name="parentId" value="${parentId}">
 </form>

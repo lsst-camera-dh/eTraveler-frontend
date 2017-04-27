@@ -18,10 +18,25 @@
     <body>
 <traveler:checkFreshness formToken="${param.freshnessToken}"/>
 
+<c:choose>
+    <c:when test="${! empty param.parentId}">
+        <sql:query var="parentQ">
+select name, siteId from Location where id = ?<sql:param value="${param.parentId}"/>
+        </sql:query>
+        <c:if test="${parentQ.rows[0].siteId != param.siteId}">
+            <traveler:error message="Site and parent location don't match"/>
+        </c:if>
+        <c:set var="locName" value="${parentQ.rows[0].name}/${param.name}"/>
+    </c:when>
+    <c:otherwise>
+        <c:set var="locName" value="${param.name}"/>
+    </c:otherwise>
+</c:choose>
+
 <sql:transaction>  
         <sql:update >
             insert into Location set
-            name=?<sql:param value="${param.name}"/>,
+            name=?<sql:param value="${locName}"/>,
             siteId=?<sql:param value="${param.siteId}"/>,
             createdBy=?<sql:param value="${userName}"/>,
             creationTS=UTC_TIMESTAMP();

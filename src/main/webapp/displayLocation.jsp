@@ -29,12 +29,16 @@
     </head>
     <body>
         <h3>Location Info</h3>
-<table>
-    <tr> <td>Name:</td> <td><c:out value="${location.name}"/></td> </tr>
-    <tr> <td>Site:</td> <td><a href="${siteLink}">${location.siteName}</a></td> </tr>
-    <tr> <td>Creator:</td> <td><c:out value="${location.createdBy}"/></td> </tr>
-    <tr> <td>Date:</td> <td><c:out value="${location.creationTS}"/></td> </tr>
-</table>
+        <table>
+            <tr> <td>Name:</td> <td><c:out value="${location.name}"/></td> </tr>
+            <tr> <td>Site:</td> <td><a href="${siteLink}">${location.siteName}</a></td> </tr>
+            <tr> <td>Creator:</td> <td><c:out value="${location.createdBy}"/></td> </tr>
+            <tr> <td>Date:</td> <td><c:out value="${location.creationTS}"/></td> </tr>
+        </table>
+        
+        <h3>Child Locations</h3>
+        <traveler:newLocationForm parentId="${location.id}"/>
+        <traveler:locationList parentId="${location.id}"/>
 
         <h3>Components</h3>
         <traveler:hardwareList locationId="${param.locationId}"/>
