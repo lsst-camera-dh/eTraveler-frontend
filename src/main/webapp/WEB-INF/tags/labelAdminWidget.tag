@@ -52,7 +52,10 @@ select id, name from HardwareGroup order by name;
 
 
    <sql:query var="groupsQ">
-select id, name from LabelGroup;
+select LG.id, LG.name, LA.name as labelableName
+from LabelGroup LG
+inner join Labelable LA on LA.id = LG.labelableId
+;
    </sql:query>
 
 <form action="admin/addGenericLabelType.jsp">
@@ -62,7 +65,7 @@ select id, name from LabelGroup;
     <select name="groupId" required>
         <option value="0" selected disabled>Label Group</option>
         <c:forEach var="group" items="${groupsQ.rows}">
-            <option value="${group.Id}">${group.name}</option>
+            <option value="${group.Id}">${group.labelableName}: ${group.name}</option>
         </c:forEach>
     </select>
     <input type="submit" value="Add New Label Type"
