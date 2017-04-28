@@ -66,7 +66,7 @@
     and SS.name=?<sql:param value="${subsystemName}"/>
     </c:if>
 
-     order by objectType, labelName;
+     order by objectType, groupName, labelName;
 </sql:query>
 
 <display:table name="${result.rows}" id="row" class="datatable" >
