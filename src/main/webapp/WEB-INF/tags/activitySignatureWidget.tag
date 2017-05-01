@@ -125,25 +125,23 @@ order by IP.id
     <display:column property="signerRequest" title="Group" sortable="true" headerClass="sortable"/>
     <display:column property="signerValue" title="Signed By" sortable="true" headerClass="sortable"/>
     <display:column property="signatureTS" title="Date" sortable="true" headerClass="sortable"/>
-    <c:if test="${status == 'inProgress' and resultsFiled}">
-        <display:column title="Sign/Comment Here">
-            <c:choose>
-                <c:when test="${empty sig.signatureTS}">
-            <form action="operator/signSignature.jsp">
+    <display:column title="Sign/Comment Here">
+        <c:choose>
+            <c:when test="${empty sig.signatureTS and status == 'inProgress' and resultsFiled}">
+        <form action="operator/signSignature.jsp">
 <input type="hidden" name="freshnessToken" value="${freshnessToken}">
 <input type="hidden" name="referringPage" value="${thisPage}">
 <input type="hidden" name="signatureId" value="${sig.id}">
 <textarea name="comment" placeholder="Comment"></textarea>
 <traveler:checkPerm var="maySign" groups="${sig.signerRequest}"/>
 <input type='submit' value='Sign It!' <c:if test="${! maySign}">disabled</c:if>>
-            </form>
-                </c:when>
-                <c:otherwise>
-                    <traveler:webbify input="${sig.signerComment}"/>
-                </c:otherwise>
-            </c:choose>
-        </display:column>
-    </c:if>
+        </form>
+            </c:when>
+            <c:otherwise>
+                <traveler:webbify input="${sig.signerComment}"/>
+            </c:otherwise>
+        </c:choose>
+    </display:column>
 </display:table>
     </c:if>
 <c:set var="signedOff" value="true"/>

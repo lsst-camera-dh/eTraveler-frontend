@@ -29,7 +29,21 @@ table.datatable th, table.datatable td {
         </sql:query>
         <c:set var="process" value="${processQ.rows[0]}"/>
           
-        <h2><c:out value="${process.processName}"/></h2>
+        <h2>
+            <c:choose>
+                <c:when test="${empty param.step}">
+                    <c:set var="stepLabel" value="Root Step"/>
+                </c:when>
+                <c:otherwise>
+                    <c:set var="stepLabel" value="Step ${param.step}"/>
+                </c:otherwise>
+            </c:choose>
+            <c:if test="${! empty param.isCurrent}">
+                <c:set var="stepLabel" value="${stepLabel} ${param.isCurrent}"/>
+            </c:if>
+            <c:out value="${stepLabel}:"/>
+            <c:out value="${process.processName}"/>
+        </h2>
         <h2><c:out value="${process.shortDescription}"/></h2>
         <traveler:processWidget processId="${param.processId}"/>
         

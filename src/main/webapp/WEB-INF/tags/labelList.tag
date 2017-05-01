@@ -22,11 +22,13 @@
 
 <%--  L.name, LG.name as groupName, --%>
 <sql:query var="result" >
-  select L.id, concat(SS.name) as subsystem, concat(L.creationTS) as labelTS, concat(L.createdBy) as labelCreator,
-  concat(LG.name, ':', L.name) as labelName, concat(HG.name) as hgName,
-  concat(LL.name) as objectType from Label L inner join LabelGroup LG on
-  L.labelGroupId=LG.id inner join Labelable LL on LL.id = LG.labelableId left
-  join Subsystem as SS on LG.subsystemId=SS.id
+  select L.id, SS.name as subsystem, L.creationTS as labelTS, L.createdBy as labelCreator,
+  LG.name as groupName, L.name as labelName, HG.name as hgName,
+  LL.name as objectType 
+  from LabelGroup LG
+  inner join Labelable LL on LL.id = LG.labelableId 
+  left join Label L on L.labelGroupId=LG.id 
+  left join Subsystem as SS on LG.subsystemId=SS.id
   left join HardwareGroup as HG on LG.hardwareGroupId = HG.id
 
   where 1
@@ -64,14 +66,16 @@
     and SS.name=?<sql:param value="${subsystemName}"/>
     </c:if>
 
-     order by objectType, labelName;
+     order by objectType, groupName, labelName;
 </sql:query>
 
 <display:table name="${result.rows}" id="row" class="datatable" >
   <display:column property="objectType" title="Labelable object"
                   sortable="true" headerClass="sortable" />
   
-  <display:column property="labelName" title="Label_group:Name"
+  <display:column property="groupName" title="Label Group"
+                  sortable="true" headerClass="sortable" />
+  <display:column property="labelName" title="Label"
                   sortable="true" headerClass="sortable" />
   <display:column property="subsystem" title="Subsystem"
                   sortable="true" headerClass="sortable" />

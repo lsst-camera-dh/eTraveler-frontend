@@ -11,6 +11,13 @@
 <%@taglib prefix="display" uri="http://displaytag.sf.net"%>
 
 <%@attribute name="siteId"%>
+<%@attribute name="parentId"%>
+
+<c:if test="${! empty parentId}">
+    <sql:query var="parentQ">
+        select name from Location where id = ?<sql:param value="${parentId}"/>
+    </sql:query>
+</c:if>
 
     <sql:query var="locationQ">
 select 
@@ -25,6 +32,9 @@ left join (Hardware H inner join HardwareLocationHistory HLH on HLH.hardwareId=H
 where 1
 <c:if test="${! empty siteId}">
     and S.id=?<sql:param value="${siteId}"/>
+</c:if>
+<c:if test="${! empty parentId}">
+    and L.name like concat(?<sql:param value="${parentQ.rows[0].name}"/>, '/%')
 </c:if>
 group by L.id
 order by S.name, L.name;

@@ -20,7 +20,7 @@
 <sql:query var="activityQ">
     select
     A.end,
-    P.name as processName, P.userVersionString,
+    P.name as processName, P.userVersionString, P.jobName,
     P.travelerActionMask&(select maskBit from InternalAction where name='harnessedJob') as isHarnessed,
     P.travelerActionMask&(select maskBit from InternalAction where name='automatable') as isAutomatable,
     H.lsstId,
@@ -64,10 +64,10 @@
         <c:set var="command" value="${binDir}/lcatr-iterator --container-id=${activityId} --lims-url=${limsUrl} --install-area=${instDir} ${stageBit} ${cfgBit}"/>
     </c:when>
     <c:when test="${activity.isHarnessed != 0}">
-        <c:set var="command">${binDir}/lcatr-harness --unit-type=${activity.hardwareTypeName} --unit-id=${activity.lsstId} --job=${activity.processName} --version=${activity.userVersionString} --lims-url=${limsUrl} --archive-root=${activity.jhOutputRoot} --install-area=${instDir} ${stageBit} ${cfgBit}</c:set>
+        <c:set var="command">${binDir}/lcatr-harness --unit-type=${activity.hardwareTypeName} --unit-id=${activity.lsstId} --job=${activity.jobName} --version=${activity.userVersionString} --lims-url=${limsUrl} --archive-root=${activity.jhOutputRoot} --install-area=${instDir} ${stageBit} ${cfgBit}</c:set>
     </c:when>
     <c:otherwise>
         <c:set var="allOk" value="false"/>
-        <c:set var="command" value="Error: Process ${processName} is neither automatable nor harnessed."/>
+        <c:set var="command" value="Error: Process ${activity.processName} is neither automatable nor harnessed."/>
     </c:otherwise>
 </c:choose>

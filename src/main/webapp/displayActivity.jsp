@@ -11,10 +11,13 @@
 
 <traveler:checkId table="Activity" id="${param.activityId}"/>
 <sql:query var="activityQ" >
-    select A.*, P.name, P.shortDescription, H.lsstId
+    select A.*, P.name, P.shortDescription, H.lsstId, JH.name as jhName, S.name as siteName
     from Activity A
     inner join Process P on P.id=A.processId
     inner join Hardware H on H.id=A.hardwareId
+    left join JobHarness JH
+        inner join Site S on S.id = JH.siteId
+        on JH.id = A.jobHarnessId
     where A.id=?<sql:param value="${param.activityId}"/>;
 </sql:query>
 <c:set var="activity" value="${activityQ.rows[0]}"/>
@@ -63,7 +66,11 @@ ID ${activity.rootActivityId}
 <h2>Run Number: ${runText}</h2>
 <traveler:ncrWidget activityId="${param.activityId}"/>
 
-    <div id="theFold"/>        
+<c:if test="${! empty activity.jhName}">
+    <h3>Job Harness: <c:out value="${activity.siteName}"/> <c:out value="${activity.jhName}"/></h3>
+</c:if>
+
+    <div id="theFold"/>
         <table>
             <tr>
                 <td style="vertical-align:top;">

@@ -70,7 +70,8 @@ format="%Y-%m-%d" shownone="true"/>
         <tr>
             <td>Location:</td>
             <td>
-                <select name="locationId">
+                <select name="locationId" required>
+                    <option value="" selected disabled>Pick a Location</option>
                     <c:forEach var="loc" items="${locationQ.rows}">
                         <option value="${loc.locationId}">${loc.siteName} ${loc.locationName}</option>
                     </c:forEach>

@@ -13,6 +13,7 @@
 <%@attribute name="level" required="true"%>
 <%@attribute name="noBatched"%>
 <%@attribute name="compList" required="true" type="java.util.List"%>
+<%@attribute name="timestamp"%>
 <%@attribute name="mode" required="true"%>
 
     <sql:query var="componentsQ">
@@ -32,7 +33,8 @@ from Hardware Hp
     inner join MultiRelationshipSlotType MRST on MRST.id = MRS.multiRelationshipSlotTypeId
     inner join MultiRelationshipType MRT on MRT.id = MRST.multiRelationshipTypeId
     inner join MultiRelationshipHistory MRH on MRH.multiRelationshipSlotId = MRS.id 
-        and MRH.id = (select max(id) from MultiRelationshipHistory where multiRelationshipSlotId = MRS.id)
+        and MRH.id = (select max(id) from MultiRelationshipHistory where multiRelationshipSlotId = MRS.id
+        <c:if test="${! empty timestamp}">and creationTS <= ?<sql:param value="${timestamp}"/></c:if>)
     inner join MultiRelationshipAction MRA on MRA.id = MRH.multiRelationshipActionId
     inner join Hardware Hc on Hc.id = MRH.minorId
     inner join HardwareType HTc on HTc.id = Hc.hardwareTypeId <c:if test="${noBatched}">and HTc.isBatched = 0</c:if>
@@ -53,5 +55,6 @@ where
                                  level="${nextLevel}" 
                                  noBatched="${noBatched}"
                                  compList="${compList}"
+                                 timestamp="${timestamp}"
                                  mode="${mode}"/>
 </c:forEach>
