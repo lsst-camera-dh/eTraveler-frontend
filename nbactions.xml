@@ -24,4 +24,19 @@
             <activatedProfile>LSST-CAMERA</activatedProfile>
         </activatedProfiles>
     </action>
+    <action>
+        <actionName>CUSTOM-srs-deploy-local-jrb</actionName>
+        <displayName>tomcat LSST deploy (local jrb)</displayName>
+        <goals>
+            <goal>package</goal>
+            <goal>tomcat7:deploy</goal>
+        </goals>
+        <properties>
+            <tomcat.server.httpport>8084</tomcat.server.httpport>        
+        </properties>
+        <activatedProfiles>
+            <activatedProfile>deploy-local</activatedProfile>
+            <activatedProfile>LSST-CAMERA</activatedProfile>
+        </activatedProfiles>
+    </action>
 </actions>
