@@ -20,7 +20,7 @@
     inner join ActivityFinalStatus AFS on AFS.id=ASH.activityStatusId
     where
     H.lsstId=?<sql:param value="${inputs.unit_id}"/>
-    and P.name=?<sql:param value="${inputs.job}"/>
+    and P.jobname=?<sql:param value="${inputs.job}"/>
     and P.userVersionString=?<sql:param value="${inputs.version}"/>
     and P.travelerActionMask&(select maskBit from InternalAction where name='harnessedJob')!=0
     and HT.name=?<sql:param value="${inputs.unit_type}"/>
