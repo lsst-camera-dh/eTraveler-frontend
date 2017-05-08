@@ -17,7 +17,7 @@
 
 
 <sql:query var="genLabelQ">
-select L.name as labelName, L.id as theLabelId, LH.*, P.name as processName
+select L.name as labelName, L.id as theLabelId, LH.*, P.name as processName, LG.name as labelGroupName
   from LabelHistory LH
   inner join Label L on L.id=LH.labelId
   inner join LabelGroup LG on LG.id=L.labelGroupId

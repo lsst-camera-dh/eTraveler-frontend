@@ -24,7 +24,7 @@ select L2.name, L2.id from Label L2
 --%>
 
 <sql:query var="genUnsetQ">
-select L2.name, L2.id
+select L2.name, L2.id, LG.name as labelGroupName
 from Label L2 join LabelGroup LG on L2.labelGroupId=LG.id
 left join
 (select L.id, L.name 
