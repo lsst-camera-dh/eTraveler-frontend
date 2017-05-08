@@ -10,9 +10,14 @@
 <%@taglib prefix="traveler" tagdir="/WEB-INF/tags"%>
 
 <%@attribute name="objectId" required="true"%>
-<%@attribute name="objectTypeId" required="true"%>
+<%@attribute name="objectTypeName" required="true"%>
 
 <traveler:fullRequestString var="thisPage"/>    <%-- What's this about? --%>
+
+<sql:query var="objectTypeQ">
+    select id from Labelable where name=?<sql:param value="${objectTypeName}"/>;
+</sql:query>
+<c:set var="objectTypeId" value="${objectTypeQ.rows[0].id}" />
 
 <sql:query var="subsysIdQ">
    call generic_subsystem(?, ?)

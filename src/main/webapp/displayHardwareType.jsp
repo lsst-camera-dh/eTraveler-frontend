@@ -21,11 +21,6 @@ where H.id=?<sql:param value="${param.hardwareTypeId}"/>;
     </sql:query>
 <c:set var="hardwareType" value="${hardwareTypeQ.rows[0]}"/>
 
-<sql:query var="objectTypeQ">
-    select id from Labelable where name="hardwareType"
-</sql:query>
-<c:set var="hardwareTypeObjectId" value="${objectTypeQ.rows[0].id}" />
-
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
@@ -51,7 +46,7 @@ where H.id=?<sql:param value="${param.hardwareTypeId}"/>;
 
         <h2>Generic Labels</h2>
 	<traveler:genericLabelWidget objectId="${param.hardwareTypeId}"
-                                     objectTypeId="${hardwareTypeObjectId}" />
+                                     objectTypeName="hardwareType" />
    
         <h2>Applicable Traveler Types</h2>
         <traveler:travelerTypeList hardwareTypeId="${param.hardwareTypeId}"/>
