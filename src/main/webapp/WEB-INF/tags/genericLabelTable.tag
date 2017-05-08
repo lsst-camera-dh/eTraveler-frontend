@@ -12,6 +12,7 @@
 
 <display:table name="${result.rows}" class="datatable" sort="list"
                pagesize="${fn:length(result.rows) > preferences.pageLength ? preferences.pageLength : 0}">
+    <display:column property="labelGroupName" title="Group" sortable="true" headerClass="sortable"/>
     <display:column property="labelName" title="Name" sortable="true" headerClass="sortable"/>
     <display:column property="reason" title="Reason" sortable="true" headerClass="sortable"/>
     <display:column property="processName" title="Step" sortable="true" headerClass="sortable"
