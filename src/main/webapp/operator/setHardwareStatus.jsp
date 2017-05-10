@@ -40,7 +40,9 @@ order by HSH.id desc limit 1;
         </c:if>
         
         <sql:transaction>
-            <ta:setHardwareStatus hardwareStatusId="${param.hardwareStatusId}" hardwareId="${param.hardwareId}" reason="${param.reason}" removeLabel="${param.removeLabel}"/>
+            <ta:setHardwareStatus hardwareStatusId="${param.hardwareStatusId}" 
+                                  hardwareId="${param.hardwareId}" 
+                                  reason="${param.reason}"/>
         </sql:transaction>
         <c:redirect url="${param.referringPage}"/>
 </body>

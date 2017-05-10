@@ -21,7 +21,8 @@
 
         <sql:transaction >
             <ta:closeoutActivity activityId="${param.activityId}" newLocationId="${param.newLocationId}"
-                                 newStatusId="${param.hardwareStatusId}"/>
+                                 newStatusId="${param.hardwareStatusId}"
+                                 removeLabelId="${param.removeLabelId}" addLabelId="${param.addLabelId}"/>
 
             <sql:query var="activityQ">
 select * from Activity where id=?<sql:param value="${param.activityId}"/>;

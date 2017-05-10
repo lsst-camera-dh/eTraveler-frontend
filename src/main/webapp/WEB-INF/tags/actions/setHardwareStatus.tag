@@ -14,11 +14,6 @@
 <%@attribute name="hardwareStatusName"%>
 <%@attribute name="activityId"%>
 <%@attribute name="reason" required="true"%>
-<%@attribute name="removeLabel"%>
-
-<c:if test="${empty removeLabel}">
-    <c:set var="removeLabel" value="false"/>
-</c:if>
 
 <c:choose>
     <c:when test="${! empty hardwareStatusName}">
@@ -51,9 +46,6 @@ hardwareId=?<sql:param value="${hardwareId}"/>,
     activityId=?<sql:param value="${activityId}"/>,
 </c:if>
 reason=?<sql:param value="${reason}"/>,
-<c:if test="${removeLabel}">
-    adding=0,
-</c:if>
 createdBy=?<sql:param value="${userName}"/>,
 creationTS=UTC_TIMESTAMP();
     </sql:update>

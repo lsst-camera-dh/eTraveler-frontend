@@ -22,7 +22,7 @@
 
     <sql:query var="activityQ" >
 select A.*, 
-P.substeps, P.maxIteration, P.newLocation, P.newHardwareStatusId,
+P.substeps, P.maxIteration, P.newLocation, P.newHardwareStatusId, P.genericLabelId,
 P.travelerActionMask&(select maskBit from InternalAction where name='harnessedJob') as isHarnessed,
 P.travelerActionMask&(select maskBit from InternalAction where name='async') as isAsync,
 P.travelerActionMask&(select maskBit from InternalAction where name='setHardwareLocation') as setsLocation,
@@ -167,27 +167,63 @@ Make a new version of the Traveler."/>
         </c:choose>
     </c:if>
 
-    <c:if test="${(activity.setsStatus != 0 || activity.removesLabel != 0 || activity.addsLabel != 0) && empty activity.newHardwareStatusId && readyToClose}">
-        <c:choose>
-            <c:when test="${activity.setsStatus != 0}">
-                <traveler:getAvailableStates var="statesQ" hardwareId="${activity.hardwareId}"/>
-                <c:set var="stateInstruction" value="Pick a new status"/>
-            </c:when>
-            <c:when test="${activity.removesLabel != 0}">
-                <traveler:getSetLabels var="statesQ" hardwareId="${activity.hardwareId}"/>
-                <c:set var="stateInstruction" value="Pick a label to remove"/>
-            </c:when>
-            <c:when test="${activity.addsLabel != 0}">
-                <traveler:getUnsetLabels var="statesQ" hardwareId="${activity.hardwareId}"/>
-                <c:set var="stateInstruction" value="Pick a label to add"/>
-            </c:when>
-        </c:choose>
+    <c:if test="${readyToClose}">
+<table><tr>
+    <c:if test="${activity.setsStatus != 0 && empty activity.newHardwareStatusId}">
+        <td>
+        <traveler:getAvailableStates var="statesQ" hardwareId="${activity.hardwareId}"/>
         <select name="hardwareStatusId" required>
-            <option value="" selected disabled>${stateInstruction}</option>
+            <option value="" selected disabled>Pick a new status</option>
             <c:forEach var="sRow" items="${statesQ.rows}">
                 <option value="${sRow.id}"><c:out value="${sRow.name}"/></option>
-            </c:forEach>        
+            </c:forEach>
         </select>
+        </td>
+    </c:if>
+
+    <c:if test="${empty activity.genericLabelId}">
+        <sql:query var="objectTypeQ">
+            select id from Labelable where name='hardware';
+        </sql:query>
+        <c:set var="objectTypeId" value="${objectTypeQ.rows[0].id}" />
+
+        <c:if test="${activity.removesLabel != 0}">
+            <td>
+            <traveler:getSetGenericLabels var="statesQ" objectId="${activity.hardwareId}" objectTypeId="${objectTypeId}"/>
+             <select name="removeLabelId" required>
+                <option value="" selected disabled>Pick a label to remove</option>
+                <c:forEach var="sRow" items="${statesQ.rows}">
+                    <option value="${sRow.theLabelId}"><c:out value="${sRow.labelGroupName}:${sRow.labelName}"/></option>
+                </c:forEach>        
+            </select>
+            </td>
+        </c:if>
+
+        <c:if test="${activity.addsLabel != 0}">
+            <sql:query var="hardwareGroupsQ">
+               call generic_hardwareGroups(?, ?)
+               <sql:param value="${activity.hardwareId}"/>
+               <sql:param value="${objectTypeId}"/>
+            </sql:query>
+
+            <sql:query var="subsysIdQ">
+               call generic_subsystem(?, ?)
+               <sql:param value="${objectId}"/>
+               <sql:param value="${objectTypeId}"/>
+            </sql:query>
+            <c:set var="subsysId" value="${subsysIdQ.rows[0].subsystemId}" />
+
+            <traveler:getUnsetGenericLabels var="statesQ" objectId="${activity.hardwareId}" objectTypeId="${objectTypeId}"
+                                            subsysId="${subsysId}" hgResult="${hardwareGroupsQ}"/>
+            <select name="addLabelId" required>
+                <option value="" selected disabled>Pick a label to add</option>
+                <c:forEach var="sRow" items="${statesQ.rows}">
+                    <option value="${sRow.id}"><c:out value="${sRow.labelGroupName}:${sRow.labelName}"/></option>
+                </c:forEach>        
+            </select>
+        </c:if>
+    </c:if>
+</tr></table>
     </c:if>
 
 <table>
