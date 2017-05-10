@@ -46,6 +46,7 @@ order by MRT.id, MRST.id
     </sql:query>
 
 <c:set var="allAssigned" value="true"/>
+<c:if test="${! empty actionsQ.rows}">
 <display:table id="action" name="${actionsQ.rows}" class="datatable">
     <display:column property="relName" title="Relationship" sortable="true" headerClass="sortable"/>
     <display:column property="description" title="Description" sortable="true" headerClass="sortable"/>
@@ -95,3 +96,4 @@ select lsstId from Hardware where id = ?<sql:param value="${minorId}"/>;
     </display:column>
     <display:column property="creationTS" title="Date" sortable="true" headerClass="sortable"/>
 </display:table>
+</c:if>
