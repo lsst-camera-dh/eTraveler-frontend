@@ -47,9 +47,7 @@
     <select name="labelId" required>
         <option value="" selected>Pick a label to remove</option>
         <c:forEach var="sRow" items="${genLabelQ.rows}">
-            <option value="${sRow.theLabelId}">
-	    <c:out value="${sRow.labelGroupName}:${sRow.labelName}"/>
-	    <%-- </option>  --%>
+            <option value="${sRow.theLabelId}"><c:out value="${sRow.labelGroupName}:${sRow.labelName}"/></option>
         </c:forEach>        
     </select>
     Reason: <textarea name="reason" required="true"></textarea>
@@ -69,7 +67,7 @@ hgResult="${hardwareGroupsQ}"/>
     <select name="labelId" required>
         <option value="" selected>Pick a label to add</option>
         <c:forEach var="sRow" items="${genUnsetQ.rows}">
-            <option value="${sRow.id}"><c:out value="${sRow.labelGroupName}:${sRow.name}"/></option>
+            <option value="${sRow.id}"><c:out value="${sRow.labelGroupName}:${sRow.labelName}"/></option>
         </c:forEach>        
     </select>
     Reason: <textarea name="reason" required="true"></textarea>
