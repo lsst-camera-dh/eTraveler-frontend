@@ -50,6 +50,8 @@ public class GetResultsWrapper extends SimpleTagSupport {
   private static final int FUNC_getActivity = 9;
   private static final int FUNC_getRunActivities = 10;
 
+  private static final int FUNC_getRunSummary = 11;
+
 
   public void doTag() throws JspException, IOException {
     m_jspContext = getJspContext();
@@ -75,6 +77,7 @@ public class GetResultsWrapper extends SimpleTagSupport {
     */
     if (m_function.equals("getActivity")) func = FUNC_getActivity;
     if (m_function.equals("getRunActivities")) func = FUNC_getRunActivities;
+    if (m_function.equals("getRunSummary")) func = FUNC_getRunSummary;
     if (func == 0) {
       m_jspContext.setAttribute("acknowledge", "Unknown function " + m_function);
       close();
@@ -95,7 +98,11 @@ public class GetResultsWrapper extends SimpleTagSupport {
       if (func <= FUNC_lastHarnessed) {
         getHarnessed(func);
       } else if (func >= FUNC_lastManual) {
-        getActivities(func);
+        if (func == FUNC_getRunSummary) {
+          getSummary(func);
+        } else {
+          getActivities(func);
+        }
       }
       else {
         m_jspContext.setAttribute("acknowledge", "Unknown function " + m_function);
@@ -217,7 +224,17 @@ public class GetResultsWrapper extends SimpleTagSupport {
     }
     
   }
-
+  private void getSummary(int func)
+    throws SQLException,GetResultsException,JspException {
+    String run =(String) m_inputs.get("run");
+    if (run == null) {
+      m_jspContext.setAttribute("acknowledge", "Missing run argument");
+      close();
+      return;
+    }
+    GetSummary getS = new GetSummary(m_conn);
+    m_results = getS.getRunSummary(run);
+  }
   private void close() throws JspException {
     try {
       m_conn.setAutoCommit(true);
