@@ -116,6 +116,15 @@ select * from JobHarness where siteId=(select id from Site where name=?<sql:para
                 <td>Current Value: <c:out value="${preferences.showFilteredColumns}"/></td>
             </tr>
 
+            <preferences:preference name="fullLabelHistory" title="<b>Show Full Label History:</b> ">
+                <preferences:value value="true"/>
+                <preferences:value value="false"/>
+            </preferences:preference>
+            <tr>
+                <td>Instead of just the ones that are currently set..</td>
+                <td>Current Value: <c:out value="${preferences.fullLabelHistory}"/></td>
+            </tr>
+
         </preferences:preferences>
             
     </body>

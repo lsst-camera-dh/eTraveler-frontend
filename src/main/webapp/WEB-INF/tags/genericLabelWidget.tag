@@ -36,6 +36,12 @@
    <sql:param value="${objectTypeId}"/>
 </sql:query>
 
+<c:if test="${preferences.fullLabelHistory == 'true'}">
+    <traveler:getSetGenericLabels var="genLabelQ" fullHistory="true"
+                                  objectId="${objectId}" objectTypeId="${objectTypeId}"/>
+    <traveler:genericLabelTable result="${genLabelQ}" fullHistory="true"/>
+</c:if>
+
 <traveler:getSetGenericLabels var="genLabelQ" objectId="${objectId}" objectTypeId="${objectTypeId}"/>
 <traveler:genericLabelTable result="${genLabelQ}"/>
 <form action="operator/modifyLabels.jsp">
