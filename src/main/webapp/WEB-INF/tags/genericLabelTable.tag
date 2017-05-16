@@ -10,12 +10,20 @@
 <%@taglib prefix="display" uri="http://displaytag.sf.net"%>
 
 <%@attribute name="result" required="true" type="javax.servlet.jsp.jstl.sql.Result"%>
+<%@attribute name="fullHistory"%>
+
+<c:if test="${fullHistory != 'true'}"><c:set var="fullHistory" value="false"/></c:if>
 
 <c:if test="${! empty result.rows}">
-    <display:table name="${result.rows}" class="datatable" sort="list"
+    <display:table id="row" name="${result.rows}" class="datatable" sort="list"
                    pagesize="${fn:length(result.rows) > preferences.pageLength ? preferences.pageLength : 0}">
         <display:column property="labelGroupName" title="Group" sortable="true" headerClass="sortable"/>
         <display:column property="labelName" title="Name" sortable="true" headerClass="sortable"/>
+        <c:if test="${fullHistory}">
+            <display:column title="Action" sortable="true" headerClass="sortable">
+                ${row.adding == 1 ? 'Add' : 'Remove'}
+            </display:column>
+        </c:if>
         <display:column property="reason" title="Reason" sortable="true" headerClass="sortable"/>
         <display:column property="processName" title="Step" sortable="true" headerClass="sortable"
                         href="displayActivity.jsp" paramId="activityId" paramProperty="activityId"/>
