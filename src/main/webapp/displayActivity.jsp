@@ -60,8 +60,7 @@ ID ${activity.rootActivityId}
             select id from RunNumber where rootActivityId = ?<sql:param value="${param.activityId}"/>
         </sql:query>
 	<traveler:genericLabelWidget objectId="${runQ.rows[0].id}"
-                                     objectTypeName="run" />
-        
+                                     objectTypeName="run" />        
     </c:when>
     <c:otherwise>
         <c:url var="runLink" value="displayActivity.jsp">
