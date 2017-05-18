@@ -39,6 +39,6 @@ where LH.id in (select
                 <c:if test="${! fullHistory}">group by labelId</c:if>)
 <c:if test="${! fullHistory}">and LH.adding=1 </c:if>
 and LG.labelableId=?<sql:param value="${objectTypeId}" /> 
-order by LH.id desc
+order by LG.name, L.name, LH.id desc
 ;
 </sql:query>
