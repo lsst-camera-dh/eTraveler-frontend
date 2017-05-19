@@ -49,7 +49,7 @@ select name from Subsystem order by name;
          </c:forEach>                
        </filter:filterSelection>
 
-       <filter:filterSelection title="Labelable object" var="objectType" defaultValue='hardware'>
+       <filter:filterSelection title="Labelable object" var="objectType" defaultValue='any'>
          <filter:filterOption value="any">Any</filter:filterOption>
          <c:forEach var="objectType" items="${labelableQ.rows}">
            <filter:filterOption value="${objectType.name}"><c:out value="${objectType.name}"/></filter:filterOption>
