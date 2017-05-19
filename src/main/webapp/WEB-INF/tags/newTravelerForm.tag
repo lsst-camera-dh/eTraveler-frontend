@@ -125,7 +125,8 @@ where S.name=?<sql:param value="${preferences.siteName}"/>
             <td>
     <c:choose>
         <c:when test="${empty processId}">
-            <select name="processId">
+            <select name="processId" required>
+                <option value="" selected disabled>Pick a traveler type</option>
                 <c:forEach var="pRow" items="${processQ.rows}">
                     <traveler:checkMask var="mayStart" processId="${pRow.id}"/>
                     <c:if test="${mayStart}">
@@ -148,7 +149,8 @@ where S.name=?<sql:param value="${preferences.siteName}"/>
             <td>
     <c:choose>
         <c:when test="${empty hardwareId}">
-            <select name="hardwareId">
+            <select name="hardwareId" required>
+                <option value="" selected disabled>Pick a component</option>
                 <c:forEach var="hRow" items="${hardwareQ.rows}">
                     <option value="${hRow.id}">${hRow.lsstId}</option>
                 </c:forEach>
@@ -167,6 +169,7 @@ where S.name=?<sql:param value="${preferences.siteName}"/>
             </td>
             <td>
                 <select name="jobHarnessId">
+                    <option value="">Pick a JH install</option>
                     <c:forEach var="jhRow" items="${jhQ.rows}">
                         <option value="${jhRow.id}" <c:if test="${jhRow.name==preferences.jhName}">selected</c:if>>${jhRow.name}</option>
                     </c:forEach>

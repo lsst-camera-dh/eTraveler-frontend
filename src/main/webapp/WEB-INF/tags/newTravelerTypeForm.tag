@@ -49,7 +49,8 @@ The interface here is terrible, if you have ideas on improving it, please share!
             <c:out value="${processQ.rows[0].name}"/>
         </c:when>
         <c:otherwise>
-            <select name="rootProcessId">
+            <select name="rootProcessId" required>
+                <option value="" selected disabled>Pick a step</option>
                 <c:forEach var="process" items="${processQ.rows}">
                     <option value="${process.id}"><c:out value="${process.name}"/></option>
                 </c:forEach>

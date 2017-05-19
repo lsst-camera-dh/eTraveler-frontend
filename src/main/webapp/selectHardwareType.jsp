@@ -24,7 +24,8 @@
 
         <form METHOD=GET ACTION="${param.target}">
             <input type="hidden" name="freshnessToken" value="${freshnessToken}">
-            Type: <select name="hardwareTypeId">
+            Type: <select name="hardwareTypeId" required>
+                <option value="" selected disabled>Pick a hardware type</option>
                 <c:forEach var="hRow" items="${hwTypesQ.rows}">
                     <option value="${hRow.id}">${hRow.name}</option>
                 </c:forEach>

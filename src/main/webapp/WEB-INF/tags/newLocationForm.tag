@@ -63,7 +63,8 @@ where L.id = ?<sql:param value="${parentId}"/>
     Site: 
     <c:choose>
         <c:when test="${empty siteId}">
-            <select name="siteId">
+            <select name="siteId" required>
+                <option value="" selected disabled>Pick a site</option>
                 <c:forEach var="row" items="${sitesQ.rows}">
                     <option value="${row.id}" <c:if test="${preferences.siteName==row.name}">selected</c:if>>${row.name}</option>
                 </c:forEach>
