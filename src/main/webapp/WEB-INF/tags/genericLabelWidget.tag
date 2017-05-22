@@ -26,7 +26,13 @@
    
 </sql:query>
 <c:set var="subsysId" value="${subsysIdQ.rows[0].subsystemId}" />
- <%-- <c:out value="Subsystem is ${subsysId}" /> <br /> --%>
+<%-- <c:out value="Subsystem is ${subsysId}" /> <br /> --%>
+<c:if test="${empty susbysId}">
+    <sql:query var="subsysIdQ">
+select id from Subsystem where name = 'Default';
+    </sql:query>
+    <c:set var="subsysId" value="${subsysIdQ.rows[0].id}"/>
+</c:if>
 
 <traveler:checkSsPerm var="mayManage" subsystemId="${subsysId}" roles="subsystemManager"/>
 
