@@ -75,7 +75,7 @@
   
   <display:column property="groupName" title="Label Group"
                   sortable="true" headerClass="sortable" 
-                  href="listLabels.jsp" paramId="labelGroupId" paramProperty="labelGroupId"/>
+                  href="displayLabelGroup.jsp" paramId="labelGroupId" paramProperty="labelGroupId"/>
   <display:column property="labelName" title="Label"
                   sortable="true" headerClass="sortable" 
                   href="displayLabel.jsp" paramId="labelId" paramProperty="id"/>
