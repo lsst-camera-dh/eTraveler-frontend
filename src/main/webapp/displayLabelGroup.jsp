@@ -33,5 +33,6 @@
         </table>
 
         <traveler:labelList labelGroupId="${param.labelGroupId}"/>
+        <traveler:newLabelForm labelGroupId="${param.labelGroupId}"/>
     </body>
 </html>
