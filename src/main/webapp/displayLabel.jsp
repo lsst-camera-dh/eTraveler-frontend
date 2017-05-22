@@ -10,7 +10,8 @@
 <%@taglib prefix="traveler" tagdir="/WEB-INF/tags"%>
 
 <sql:query var="labelQ">
-    select L.name as labelName, LG.name as labelGroupName
+    select L.name as labelName, L.description as labelDescription,
+    LG.id as labelGroupId, LG.name as labelGroupName, LG.description as labelGroupDescription
     from Label L
     inner join LabelGroup LG on LG.id = L.labelGroupId
     where L.id = ?<sql:param value="${param.labelId}"/>
@@ -27,6 +28,13 @@
     </head>
     <body>
         <h1>${title}</h1>
+        
+        <table>
+            <tr><td>Label:</td><td>${label.labelName}</td></tr>
+            <tr><td>Description:</td><td>${label.labelDescription}</td></tr>
+            <tr><td>Label Group:</td><td>${label.labelGroupName}</td></tr>
+            <tr><td>Group Description:</td><td>${label.labelGroupDescription}</td></tr>
+        </table>
         
         <h2>Generic Labels</h2>
 	<traveler:genericLabelWidget objectId="${param.labelId}"

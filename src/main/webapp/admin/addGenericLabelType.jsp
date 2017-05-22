@@ -26,6 +26,7 @@
             <sql:update>
 insert into Label set
 name = ?<sql:param value="${param.name}"/>,
+description = ?<sql:param value="${param.description}"/>,
 labelGroupId = ?<sql:param value="${param.groupId}"/>,
 createdBy = ?<sql:param value="${userName}"/>,
 creationTS = UTC_TIMESTAMP();

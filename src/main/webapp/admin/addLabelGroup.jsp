@@ -26,6 +26,7 @@
             <sql:update>
 insert into LabelGroup set
 name = ?<sql:param value="${param.name}"/>,
+description = ?<sql:param value="${param.description}"/>,
 <c:if test="${! empty param.subsysId}">
     subsystemId = ?<sql:param value="${param.subsysId}"/>,
 </c:if>

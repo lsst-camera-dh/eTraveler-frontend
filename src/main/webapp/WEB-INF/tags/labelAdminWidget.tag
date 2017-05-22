@@ -28,6 +28,7 @@ select id, name from HardwareGroup order by name;
     <input type="hidden" name="freshnessToken" value="${freshnessToken}">
     <input type="hidden" name="referringPage" value="${thisPage}">
     Name: <input name="name">
+    Description: <textarea name="description" required></textarea>
     <select name="labelableId" required>
         <option value="" selected disabled>Applicable Entities</option>
         <c:forEach var="labelable" items="${labelableQ.rows}">
@@ -62,6 +63,7 @@ inner join Labelable LA on LA.id = LG.labelableId
     <input type="hidden" name="freshnessToken" value="${freshnessToken}">
     <input type="hidden" name="referringPage" value="${thisPage}">
     Name: <input name="name">
+    Description: <textarea name="description" required></textarea>
     <select name="groupId" required>
         <option value="0" selected disabled>Label Group</option>
         <c:forEach var="group" items="${groupsQ.rows}">
