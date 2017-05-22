@@ -29,10 +29,14 @@
     <body>
         <h1>${title}</h1>
         
+        <c:url var="labelGroupLink" value="displayLabelGroup.jsp">
+            <c:param name="labelGroupId" value="${label.labelGroupId}"/>
+        </c:url>
+        
         <table>
             <tr><td>Label:</td><td>${label.labelName}</td></tr>
             <tr><td>Description:</td><td>${label.labelDescription}</td></tr>
-            <tr><td>Label Group:</td><td>${label.labelGroupName}</td></tr>
+            <tr><td>Label Group:</td><td><a href="${labelGroupLink}">${label.labelGroupName}</a></td></tr>
             <tr><td>Group Description:</td><td>${label.labelGroupDescription}</td></tr>
         </table>
         

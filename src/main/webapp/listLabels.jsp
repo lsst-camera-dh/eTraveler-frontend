@@ -77,7 +77,7 @@ select name from Subsystem order by name;
     </filter:filterTable>
     <traveler:labelList labelGroupId="${param.labelGroupId}"
                         labelGroupName="${labelGroup}"
-                        labelableId="{param.labelableId}"
+                        labelableId="${param.labelableId}"
                         labelableObject="${objectType}"
                         name="${name}"
                         hardwareGroupName="${hardwareGroup}"
