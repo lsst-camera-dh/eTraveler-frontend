@@ -32,6 +32,7 @@
             <tr><td>Description:</td><td>${labelGroup.labelGroupDescription}</td></tr>
         </table>
 
+        <h2>Labels:</h2>
         <traveler:labelList labelGroupId="${param.labelGroupId}"/>
         <traveler:newLabelForm labelGroupId="${param.labelGroupId}"/>
     </body>
