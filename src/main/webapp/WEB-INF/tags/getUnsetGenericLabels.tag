@@ -36,7 +36,7 @@ where LH.id in (select max(id)
                 and LH2.labelableId=?<sql:param value="${objectTypeId}" />
                 group by LH2.labelId)
 and LH.adding=1) L3 on L2.id=L3.id where
-(LG.subsystemId is null
+(LG.subsystemId = (select id from Subsystem where name = 'Default')
 
 <c:if test="${! empty subsysId}">
   or LG.subsystemId=?<sql:param value="${subsysId}" />
