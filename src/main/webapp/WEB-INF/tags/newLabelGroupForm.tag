@@ -35,8 +35,8 @@ select id, name from HardwareGroup order by name;
             <option value="${labelable.Id}">${labelable.name}</option>
         </c:forEach>
     </select>
-    <select name="subsysId">
-        <option value="" selected>Subsystem (Optional)</option>
+    <select name="subsysId" required>
+        <option value="" selected disabled>Subsystem</option>
         <c:forEach var="subsys" items="${subsysQ.rows}">
             <option value="${subsys.Id}">${subsys.name}</option>
         </c:forEach>
