@@ -22,8 +22,8 @@
 
 <%--  L.name, LG.name as groupName, --%>
 <sql:query var="result" >
-  select L.id, SS.name as subsystem, L.creationTS as labelTS, L.createdBy as labelCreator,
-  LG.name as groupName, LG.id as labelGroupId, L.name as labelName, HG.name as hgName,
+  select L.id, SS.name as subsystem, SS.id as subsystemId, L.creationTS as labelTS, L.createdBy as labelCreator,
+  LG.name as groupName, LG.id as labelGroupId, L.name as labelName, HG.name as hgName, HG.id as hgId,
   LL.name as objectType 
   from LabelGroup LG
   inner join Labelable LL on LL.id = LG.labelableId 
@@ -80,9 +80,11 @@
                   sortable="true" headerClass="sortable" 
                   href="displayLabel.jsp" paramId="labelId" paramProperty="id"/>
   <display:column property="subsystem" title="Subsystem"
-                  sortable="true" headerClass="sortable" />
+                  sortable="true" headerClass="sortable" 
+                  href="displaySubsystem.jsp" paramId="subsystemId" paramProperty="subsystemId"/>
   <display:column property="hgName" title="Hardware group"
-                  sortable="true" headerClass="sortable" />
+                  sortable="true" headerClass="sortable"  
+                  href="displayHardwareGroup.jsp" paramId="hardwareGroupId" paramProperty="hgId"/>
   <display:column property="labelCreator" title="Creator"
                   sortable="true" headerClass="sortable" />
 
