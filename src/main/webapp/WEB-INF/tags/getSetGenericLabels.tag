@@ -18,7 +18,8 @@
 <c:if test="${fullHistory != 'true'}"><c:set var="fullHistory" value="false"/></c:if>
 
 <sql:query var="genLabelQ">
-select L.name as labelName, L.id as theLabelId, LH.*, P.name as processName, LG.name as labelGroupName
+select L.name as labelName, L.id as theLabelId, LH.*, P.name as processName, 
+  LG.name as labelGroupName, LG.id as labelGroupId
   from LabelHistory LH
   inner join Label L on L.id=LH.labelId
   inner join LabelGroup LG on LG.id=L.labelGroupId

@@ -17,8 +17,10 @@
 <c:if test="${! empty result.rows}">
     <display:table id="row" name="${result.rows}" class="datatable" sort="list"
                    pagesize="${fn:length(result.rows) > preferences.pageLength ? preferences.pageLength : 0}">
-        <display:column property="labelGroupName" title="Group" sortable="true" headerClass="sortable"/>
-        <display:column property="labelName" title="Name" sortable="true" headerClass="sortable"/>
+        <display:column property="labelGroupName" title="Group" sortable="true" headerClass="sortable"
+                        href="displayLabelGroup.jsp" paramId="labelGroupId" paramProperty="labelGroupId"/>
+        <display:column property="labelName" title="Name" sortable="true" headerClass="sortable"
+                        href="displayLabel.jsp" paramId="labelId" paramProperty="theLabelId"/>
         <c:if test="${fullHistory}">
             <display:column title="Action" sortable="true" headerClass="sortable">
                 ${row.adding == 1 ? 'Add' : 'Remove'}
