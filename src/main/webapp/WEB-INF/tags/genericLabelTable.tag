@@ -8,6 +8,7 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <%@taglib prefix="display" uri="http://displaytag.sf.net"%>
+<%@taglib prefix="traveler" tagdir="/WEB-INF/tags"%>
 
 <%@attribute name="result" required="true" type="javax.servlet.jsp.jstl.sql.Result"%>
 <%@attribute name="fullHistory"%>
@@ -17,6 +18,9 @@
 <c:if test="${! empty result.rows}">
     <display:table id="row" name="${result.rows}" class="datatable" sort="list"
                    pagesize="${fn:length(result.rows) > preferences.pageLength ? preferences.pageLength : 0}">
+        <display:column title="Object">
+            <traveler:genericLabelLink labelHistoryId="${row.id}"/>
+        </display:column>
         <display:column property="labelGroupName" title="Group" sortable="true" headerClass="sortable"
                         href="displayLabelGroup.jsp" paramId="labelGroupId" paramProperty="labelGroupId"/>
         <display:column property="labelName" title="Name" sortable="true" headerClass="sortable"
