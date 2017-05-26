@@ -10,9 +10,14 @@
 <%@taglib prefix="traveler" tagdir="/WEB-INF/tags"%>
 
 <%@attribute name="objectId" required="true"%>
-<%@attribute name="objectTypeId" required="true"%>
+<%@attribute name="objectTypeName" required="true"%>
 
 <traveler:fullRequestString var="thisPage"/>    <%-- What's this about? --%>
+
+<sql:query var="objectTypeQ">
+    select id from Labelable where name=?<sql:param value="${objectTypeName}"/>;
+</sql:query>
+<c:set var="objectTypeId" value="${objectTypeQ.rows[0].id}" />
 
 <sql:query var="subsysIdQ">
    call generic_subsystem(?, ?)
@@ -21,7 +26,6 @@
    
 </sql:query>
 <c:set var="subsysId" value="${subsysIdQ.rows[0].subsystemId}" />
- <%-- <c:out value="Subsystem is ${subsysId}" /> <br /> --%>
 
 <traveler:checkSsPerm var="mayManage" subsystemId="${subsysId}" roles="subsystemManager"/>
 
@@ -30,6 +34,12 @@
    <sql:param value="${objectId}"/>
    <sql:param value="${objectTypeId}"/>
 </sql:query>
+
+<c:if test="${preferences.fullLabelHistory == 'true'}">
+    <traveler:getSetGenericLabels var="genLabelQ" fullHistory="true"
+                                  objectId="${objectId}" objectTypeId="${objectTypeId}"/>
+    <traveler:genericLabelTable result="${genLabelQ}" fullHistory="true"/>
+</c:if>
 
 <traveler:getSetGenericLabels var="genLabelQ" objectId="${objectId}" objectTypeId="${objectTypeId}"/>
 <traveler:genericLabelTable result="${genLabelQ}"/>
@@ -42,9 +52,7 @@
     <select name="labelId" required>
         <option value="" selected>Pick a label to remove</option>
         <c:forEach var="sRow" items="${genLabelQ.rows}">
-            <option value="${sRow.theLabelId}">
-	    <c:out value="${sRow.labelName}"/>
-	    <%-- </option>  --%>
+            <option value="${sRow.theLabelId}"><c:out value="${sRow.labelGroupName}:${sRow.labelName}"/></option>
         </c:forEach>        
     </select>
     Reason: <textarea name="reason" required="true"></textarea>
@@ -64,7 +72,7 @@ hgResult="${hardwareGroupsQ}"/>
     <select name="labelId" required>
         <option value="" selected>Pick a label to add</option>
         <c:forEach var="sRow" items="${genUnsetQ.rows}">
-            <option value="${sRow.id}"><c:out value="${sRow.name}"/></option>
+            <option value="${sRow.id}"><c:out value="${sRow.labelGroupName}:${sRow.labelName}"/></option>
         </c:forEach>        
     </select>
     Reason: <textarea name="reason" required="true"></textarea>

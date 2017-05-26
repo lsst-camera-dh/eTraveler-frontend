@@ -14,6 +14,8 @@
 <%@attribute name="activityId" required="true"%>
 <%@attribute name="newLocationId"%>
 <%@attribute name="newStatusId"%>
+<%@attribute name="removeLabelId"%>
+<%@attribute name="addLabelId"%>
 
 <ta:setActivityStatus activityId="${activityId}" status="success"/>
 
@@ -23,7 +25,7 @@ P.travelerActionMask&(select maskBit from InternalAction where name='setHardware
 P.travelerActionMask&(select maskBit from InternalAction where name='setHardwareStatus') as setsStatus,
 P.travelerActionMask&(select maskBit from InternalAction where name='addLabel') as addsLabel,
 P.travelerActionMask&(select maskBit from InternalAction where name='removeLabel') as removesLabel,
-P.newHardwareStatusId,
+P.newHardwareStatusId, P.genericLabelId,
 MRA.name as relationshipAction
 from Activity A
 inner join Process P on P.id=A.processId
@@ -33,6 +35,11 @@ left join (ProcessRelationshipTag PRT
 where A.id=?<sql:param value="${activityId}"/>;
     </sql:query>
 <c:set var="activity" value="${activityQ.rows[0]}"/>
+
+<sql:query var="objectTypeQ">
+    select id from Labelable where name='hardware';
+</sql:query>
+<c:set var="objectTypeId" value="${objectTypeQ.rows[0].id}" />
 
 <c:if test="${activity.setsLocation != 0}">
     <c:if test="${empty newLocationId}">
@@ -45,15 +52,33 @@ where A.id=?<sql:param value="${activityId}"/>;
         reason="Moved by traveler"/>
 </c:if>
 
-<c:if test="${activity.setsStatus!=0 || activity.addsLabel!=0 || activity.removesLabel!=0}">
+<c:if test="${activity.setsStatus!=0}">
     <c:set var="newStatusId" value="${!empty activity.newHardwareStatusId ? activity.newHardwareStatusId : newStatusId}"/>
     <c:if test="${empty newStatusId}">
         <traveler:error message="No hardware status supplied"/>
     </c:if>
-    <c:set var="removeLabel" value="${activity.removesLabel!=0 ? true : false}"/>
     <ta:setHardwareStatus activityId="${activityId}" hardwareId="${activity.hardwareId}"
-                          hardwareStatusId="${newStatusId}" reason="Set by traveler step"
-                          removeLabel="${removeLabel}"/>
+                          hardwareStatusId="${newStatusId}" reason="Set by traveler step"/>
+</c:if>
+
+<c:if test="${activity.addsLabel!=0}">
+    <c:set var="genericLabelId" value="${!empty activity.genericLabelId ? activity.genericLabelId : addLabelId}"/>
+    <c:if test="${empty genericLabelId}">
+        <traveler:error message="No label supplied"/>
+    </c:if>
+    <ta:modifyLabels activityId="${activityId}" objectId="${activity.hardwareId}" objectTypeId="${objectTypeId}"
+                     labelId="${genericLabelId}" reason="Applied by traveler step"
+                     removeLabel="false"/>
+</c:if>
+
+<c:if test="${activity.removesLabel!=0}">
+    <c:set var="genericLabelId" value="${!empty activity.genericLabelId ? activity.genericLabelId : removeLabelId}"/>
+    <c:if test="${empty genericLabelId}">
+        <traveler:error message="No label supplied"/>
+    </c:if>
+    <ta:modifyLabels activityId="${activityId}" objectId="${activity.hardwareId}" objectTypeId="${objectTypeId}"
+                     labelId="${genericLabelId}" reason="Removed by traveler step"
+                     removeLabel="true"/>
 </c:if>
 
 <relationships:closeoutRelationship activityId="${activityId}"/>

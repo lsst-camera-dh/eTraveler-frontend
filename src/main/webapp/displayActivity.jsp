@@ -55,6 +55,12 @@ ID ${activity.rootActivityId}
 <c:choose>
     <c:when test="${runTravelerId == param.activityId}">
         <c:set var="runText" value="${runNumber}"/>
+        <h2>Generic Labels</h2>
+        <sql:query var="runQ">
+            select id from RunNumber where rootActivityId = ?<sql:param value="${param.activityId}"/>
+        </sql:query>
+	<traveler:genericLabelWidget objectId="${runQ.rows[0].id}"
+                                     objectTypeName="run" />        
     </c:when>
     <c:otherwise>
         <c:url var="runLink" value="displayActivity.jsp">

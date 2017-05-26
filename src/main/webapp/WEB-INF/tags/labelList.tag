@@ -22,8 +22,8 @@
 
 <%--  L.name, LG.name as groupName, --%>
 <sql:query var="result" >
-  select L.id, SS.name as subsystem, L.creationTS as labelTS, L.createdBy as labelCreator,
-  LG.name as groupName, L.name as labelName, HG.name as hgName,
+  select L.id, SS.name as subsystem, SS.id as subsystemId, L.creationTS as labelTS, L.createdBy as labelCreator,
+  LG.name as groupName, LG.id as labelGroupId, L.name as labelName, HG.name as hgName, HG.id as hgId,
   LL.name as objectType 
   from LabelGroup LG
   inner join Labelable LL on LL.id = LG.labelableId 
@@ -32,10 +32,10 @@
   left join HardwareGroup as HG on LG.hardwareGroupId = HG.id
 
   where 1
-  <%--
   <c:if test="${! empty labelGroupId}">
-     and LG.id=?<sql:param value="{labelGroupId}"/>
+     and LG.id=?<sql:param value="${labelGroupId}"/>
   </c:if>
+  <%--
   <c:if test="${! empty labelableId}">
      and LL.id=?<sql:param value="{labelableId}"/>
   </c:if>
@@ -74,13 +74,17 @@
                   sortable="true" headerClass="sortable" />
   
   <display:column property="groupName" title="Label Group"
-                  sortable="true" headerClass="sortable" />
+                  sortable="true" headerClass="sortable" 
+                  href="displayLabelGroup.jsp" paramId="labelGroupId" paramProperty="labelGroupId"/>
   <display:column property="labelName" title="Label"
-                  sortable="true" headerClass="sortable" />
+                  sortable="true" headerClass="sortable" 
+                  href="displayLabel.jsp" paramId="labelId" paramProperty="id"/>
   <display:column property="subsystem" title="Subsystem"
-                  sortable="true" headerClass="sortable" />
+                  sortable="true" headerClass="sortable" 
+                  href="displaySubsystem.jsp" paramId="subsystemId" paramProperty="subsystemId"/>
   <display:column property="hgName" title="Hardware group"
-                  sortable="true" headerClass="sortable" />
+                  sortable="true" headerClass="sortable"  
+                  href="displayHardwareGroup.jsp" paramId="hardwareGroupId" paramProperty="hgId"/>
   <display:column property="labelCreator" title="Creator"
                   sortable="true" headerClass="sortable" />
 
