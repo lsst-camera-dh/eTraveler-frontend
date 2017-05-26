@@ -10,13 +10,15 @@
 <%@taglib prefix="traveler" tagdir="/WEB-INF/tags"%>
 
 <sql:query var="labelGroupQ">
-    select LG.id as labelGroupId, LG.name as labelGroupName, LG.description as labelGroupDescription
+    select LG.id as labelGroupId, LG.name as labelGroupName, LG.description as labelGroupDescription,
+    LA.name as typeName
     from LabelGroup LG
+    inner join Labelable LA on LA.id = LG.labelableId
     where LG.id = ?<sql:param value="${param.labelGroupId}"/>
 </sql:query>
 <c:set var="labelGroup" value="${labelGroupQ.rows[0]}"/>
 
-<c:set var="title" value="Label Group ${labelGroup.labelGroupName}"/>
+<c:set var="title" value="Label Group ${labelGroup.typeName}:${labelGroup.labelGroupName}"/>
 
 <!DOCTYPE html>
 <html>
@@ -35,5 +37,11 @@
         <h2>Labels:</h2>
         <traveler:labelList labelGroupId="${param.labelGroupId}"/>
         <traveler:newLabelForm labelGroupId="${param.labelGroupId}"/>
+        
+        <traveler:getSetGenericLabels var="genLabelQ" labelGroupId="${param.labelGroupId}"/>
+        <c:if test="${! empty genLabelQ.rows}">
+            <h2>Applied Labels</h2>
+            <traveler:genericLabelTable result="${genLabelQ}"/>
+        </c:if>
     </body>
 </html>
