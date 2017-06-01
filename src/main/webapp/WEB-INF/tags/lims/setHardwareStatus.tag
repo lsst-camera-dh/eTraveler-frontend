@@ -17,10 +17,7 @@
 
 <c:set var="reason" value="${empty inputs.reason ? 'Set via API' : inputs.reason}"/>
 
-<c:set var="removeLabel" value="${! inputs.adding}"/>
-
 <ta:setHardwareStatus activityId="${inputs.activityId}" hardwareId="${hardwareId}" 
-                      hardwareStatusName="${inputs.hardwareStatusName}" reason="${reason}" 
-                      removeLabel="${removeLabel}"/>
+                      hardwareStatusName="${inputs.hardwareStatusName}" reason="${reason}"/>
 
 { "acknowledge": null }

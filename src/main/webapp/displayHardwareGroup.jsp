@@ -46,7 +46,8 @@
                 <input type="submit" value="Add Member Type"
                     <c:if test="${! mayAdmin}">disabled</c:if>>
                 <input type="hidden" name="hardwareGroupId" value="${param.hardwareGroupId}">
-                <select name="hardwareTypeId">
+                <select name="hardwareTypeId" required>
+                    <option value="" selected disabled>Pick a hardware type</option>
                     <c:forEach var="hwType" items="${hwTypesQ.rows}">
                         <traveler:checkSsPerm var="ssPerm" hardwareTypeId="${hwType.id}" roles="admin"/>
                         <c:if test="${ssPerm}">

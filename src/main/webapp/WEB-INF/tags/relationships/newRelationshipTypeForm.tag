@@ -47,7 +47,8 @@
             </td>
             <td>
                 <div>Assembly Type:</div>
-                <select name="hardwareTypeId">
+                <select name="hardwareTypeId" required>
+                    <option value="" selected disabled>Pick an assembly type</option>
                     <c:forEach var="htRow" items="${parentTypesQ.rows}">
                         <option value="${htRow.id}">${htRow.name}</option>
                     </c:forEach>
@@ -55,7 +56,8 @@
             </td>
             <td>
                 <div>Component Type:</div>
-                <select name="minorTypeId">
+                <select name="minorTypeId" required>
+                    <option value="" selected disabled>Pick a component type</option>
                     <c:forEach var="htRow" items="${childTypesQ.rows}">
                         <option value="${htRow.id}">${htRow.name}</option>
                     </c:forEach>

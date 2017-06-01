@@ -12,7 +12,6 @@
 <%@attribute name="objectId" required="true"%>
 <%@attribute name="objectTypeId" required="true"%>
 <%@attribute name="labelId"%>
-<%-- <%@attribute name="hardwareStatusName"%>  --%>
 <%@attribute name="activityId"%>
 <%@attribute name="reason" required="true"%>
 <%@attribute name="removeLabel"%>
@@ -20,31 +19,6 @@
 <c:if test="${empty removeLabel}">
     <c:set var="removeLabel" value="false"/>
 </c:if>
-
-<%--
-<c:choose>
-    <c:when test="${! empty hardwareStatusName}">
-        <sql:query var="sidQ">
-select id from HardwareStatus where name=?<sql:param value="${hardwareStatusName}"/>;
-        </sql:query>
-        <c:choose>
-            <c:when test="${! empty hardwareStatusId}">
-                <c:if test="${sidQ.rows[0].id != hardwareStatusId}">
-                    <traveler:error message="Inconsistent Hardware status! 361968" bug="true"/>
-                </c:if>
-            </c:when>
-            <c:otherwise>
-                <c:set var="hardwareStatusId" value="${sidQ.rows[0].id}"/>
-            </c:otherwise>
-        </c:choose>
-    </c:when>
-    <c:otherwise>
-        <c:if test="${empty hardwareStatusId}">
-            <traveler:error message="No Hardware status! 442752" bug="true"/>
-        </c:if>
-    </c:otherwise>
-</c:choose>
---%>
 
     <sql:update>
 insert into LabelHistory set

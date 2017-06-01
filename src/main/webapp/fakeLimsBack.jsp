@@ -84,6 +84,9 @@
     <c:when test="${command == 'setHardwareStatus'}">
         <lims:setHardwareStatus/>
     </c:when>
+    <c:when test="${command == 'modifyLabels'}">
+        <lims:modifyLabels/>
+    </c:when>
     <c:when test="${command == 'setHardwareLocation'}">
         <lims:setHardwareLocation/>
     </c:when>

@@ -24,7 +24,7 @@ select L2.name, L2.id from Label L2
 --%>
 
 <sql:query var="genUnsetQ">
-select L2.name, L2.id
+select L2.name as labelName, L2.id, LG.name as labelGroupName
 from Label L2 join LabelGroup LG on L2.labelGroupId=LG.id
 left join
 (select L.id, L.name 
@@ -36,7 +36,7 @@ where LH.id in (select max(id)
                 and LH2.labelableId=?<sql:param value="${objectTypeId}" />
                 group by LH2.labelId)
 and LH.adding=1) L3 on L2.id=L3.id where
-(LG.subsystemId is null
+(LG.subsystemId = (select id from Subsystem where name = 'Default')
 
 <c:if test="${! empty subsysId}">
   or LG.subsystemId=?<sql:param value="${subsysId}" />

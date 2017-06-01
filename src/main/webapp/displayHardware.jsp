@@ -24,11 +24,6 @@
 </sql:query>
 <c:set var="hardware" value="${hardwareQ.rows[0]}"/>
 
-<sql:query var="objectTypeQ">
-    select id from Labelable where name="hardware"
-</sql:query>
-<c:set var="hardwareObjectId" value="${objectTypeQ.rows[0].id}" />
-
 <!DOCTYPE html>
 <html>
     <head>
@@ -43,16 +38,13 @@
         <h2>Status</h2>
         <traveler:hardwareStatusWidget hardwareId="${param.hardwareId}"/>
         
-        <h2>Labels</h2>
-        <traveler:hardwareLabelWidget hardwareId="${param.hardwareId}"/>
-
         <c:if test="${hardware.isBatched != 0}">
             <batch:batchWidget varTotal="quantity" hardwareId="${param.hardwareId}"/>
         </c:if>
 
         <h2>Generic Labels</h2>
 	<traveler:genericLabelWidget objectId="${param.hardwareId}"
-                                     objectTypeId="${hardwareObjectId}" />
+                                     objectTypeName="hardware" />
         
         <h2>Location</h2>
         <traveler:hardwareLocationWidget hardwareId="${param.hardwareId}"/>

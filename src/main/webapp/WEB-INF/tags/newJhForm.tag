@@ -29,7 +29,8 @@ select id, name from Site
     Description: <textarea name="description" required="true"></textarea>
     Site: <c:choose>
         <c:when test="${empty siteId}">
-            <select name="siteId">
+            <select name="siteId" required>
+                <option value="" selected disabled>Pick a site</option>
                 <c:forEach var="row" items="${siteQ.rows}">
                     <option value="${row.id}">${row.name}</option>
                 </c:forEach>

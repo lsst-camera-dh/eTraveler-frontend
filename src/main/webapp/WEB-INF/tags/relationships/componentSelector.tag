@@ -39,6 +39,7 @@ and HSH.hardwareStatusId=(select id from HardwareStatus where name='READY')
     group by H.id
     having nAvailable>=?<sql:param value="${quantity}"/>
 </c:if>
+    order by H.lsstId
 ;
     </sql:query>
 

@@ -93,35 +93,37 @@ where true
 order by A.id desc
 ;
     </sql:query>
-<display:table name="${result.rows}" class="datatable" sort="list"
-               pagesize="${fn:length(result.rows) > preferences.pageLength ? preferences.pageLength : 0}">
-<%--    <display:column property="processName" title="Name" sortable="true" headerClass="sortable"
-                      href="displayActivity.jsp" paramId="activityId" paramProperty="activityId"/>--%>
-    <display:column property="shortDescription" title="Description" sortable="true" headerClass="sortable"
-        href="displayActivity.jsp" paramId="activityId" paramProperty="activityId"/>
-    <c:if test="${empty hardwareId or preferences.showFilteredColumns}">
-        <display:column property="lsstId" title="${appVariables.experiment} Serial Number" sortable="true" headerClass="sortable"
-                        href="displayHardware.jsp" paramId="hardwareId" paramProperty="hardwareId"/>
-        <display:column property="manufacturerId" title="Manufacturer Serial Number" sortable="true" headerClass="sortable"
-                        href="displayHardware.jsp" paramId="hardwareId" paramProperty="hardwareId"/>
-        <c:if test="${'null' != preferences.idAuthName}">
-            <display:column property="nickName" title="${preferences.idAuthName} Identifier" sortable="true" headerClass="sortable"/>
+<c:if test="${! empty result.rows}">
+    <display:table name="${result.rows}" class="datatable" sort="list"
+                   pagesize="${fn:length(result.rows) > preferences.pageLength ? preferences.pageLength : 0}">
+    <%--    <display:column property="processName" title="Name" sortable="true" headerClass="sortable"
+                          href="displayActivity.jsp" paramId="activityId" paramProperty="activityId"/>--%>
+        <display:column property="shortDescription" title="Description" sortable="true" headerClass="sortable"
+            href="displayActivity.jsp" paramId="activityId" paramProperty="activityId"/>
+        <c:if test="${empty hardwareId or preferences.showFilteredColumns}">
+            <display:column property="lsstId" title="${appVariables.experiment} Serial Number" sortable="true" headerClass="sortable"
+                            href="displayHardware.jsp" paramId="hardwareId" paramProperty="hardwareId"/>
+            <display:column property="manufacturerId" title="Manufacturer Serial Number" sortable="true" headerClass="sortable"
+                            href="displayHardware.jsp" paramId="hardwareId" paramProperty="hardwareId"/>
+            <c:if test="${'null' != preferences.idAuthName}">
+                <display:column property="nickName" title="${preferences.idAuthName} Identifier" sortable="true" headerClass="sortable"/>
+            </c:if>
         </c:if>
-    </c:if>
-    <c:if test="${(empty processId && empty hardwareId) || preferences.showFilteredColumns}">
-        <display:column property="hardwareName" title="Component Type" sortable="true" headerClass="sortable"
-                        href="displayHardwareType.jsp" paramId="hardwareTypeId" paramProperty="hardwareTypeId"/>
-    </c:if>
-    <c:if test="${(empty subsystemId and (empty subsystemName or subsystemName == 'Any') and empty hardwareId and empty processId) or preferences.showFilteredColumns}">
-        <display:column property="subsystemName" title="Subsystem" sortable="true" headerClass="sortable"
-                        href="displaySubsystem.jsp" paramId="subsystemId" paramProperty="subsystemId"/>
-    </c:if>
-    <display:column property="creationTS" title="creation" sortable="true" headerClass="sortable"/>
-    <display:column property="createdBy" sortable="true" headerClass="sortable"/>
-    <display:column property="begin" sortable="true" headerClass="sortable"/>
-    <c:if test="${(empty status || status == 'any') || preferences.showFilteredColumns}">
-        <display:column property="status" sortable="true" headerClass="sortable"/>
-    </c:if>
-    <display:column property="end" sortable="true" headerClass="sortable"/>
-    <display:column property="closedBy" sortable="true" headerClass="sortable"/>
-</display:table>        
+        <c:if test="${(empty processId && empty hardwareId) || preferences.showFilteredColumns}">
+            <display:column property="hardwareName" title="Component Type" sortable="true" headerClass="sortable"
+                            href="displayHardwareType.jsp" paramId="hardwareTypeId" paramProperty="hardwareTypeId"/>
+        </c:if>
+        <c:if test="${(empty subsystemId and (empty subsystemName or subsystemName == 'Any') and empty hardwareId and empty processId) or preferences.showFilteredColumns}">
+            <display:column property="subsystemName" title="Subsystem" sortable="true" headerClass="sortable"
+                            href="displaySubsystem.jsp" paramId="subsystemId" paramProperty="subsystemId"/>
+        </c:if>
+        <display:column property="creationTS" title="creation" sortable="true" headerClass="sortable"/>
+        <display:column property="createdBy" sortable="true" headerClass="sortable"/>
+        <display:column property="begin" sortable="true" headerClass="sortable"/>
+        <c:if test="${(empty status || status == 'any') || preferences.showFilteredColumns}">
+            <display:column property="status" sortable="true" headerClass="sortable"/>
+        </c:if>
+        <display:column property="end" sortable="true" headerClass="sortable"/>
+        <display:column property="closedBy" sortable="true" headerClass="sortable"/>
+    </display:table>        
+</c:if>

@@ -18,6 +18,7 @@ public class UserPreferences implements ApplicationPreferences {
     public int componentHeight = 99;
     public int componentDepth = 1;
     public String showFilteredColumns = "false";
+    public String fullLabelHistory = "false";
 
     public String getWriteable() {
         return writeable;
@@ -80,6 +81,13 @@ public class UserPreferences implements ApplicationPreferences {
     }
     public void setShowFilteredColumns(String showFilteredColumns) {
         this.showFilteredColumns = showFilteredColumns;
+    }
+
+    public String getFullLabelHistory() {
+        return fullLabelHistory;
+    }
+    public void setFullLabelHistory(String fullLabelHistory) {
+        this.fullLabelHistory = fullLabelHistory;
     }
 
     public void synchronizeWithApplication(Application app, ApplicationPreferences oldPreferences) {
