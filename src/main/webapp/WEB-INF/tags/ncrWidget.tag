@@ -45,7 +45,6 @@ where A.id = ?<sql:param value="${activityId}"/>
         </sql:query>
         <c:set var="exceptionId" value="${exceptionQ.rows[0].id}"/>
         
-        <h2>Generic Labels</h2>
         <traveler:genericLabelWidget objectId="${exceptionId}"
                                      objectTypeName="NCR" />
     </c:if>

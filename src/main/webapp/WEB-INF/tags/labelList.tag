@@ -70,7 +70,7 @@
 </sql:query>
 
 <display:table name="${result.rows}" id="row" class="datatable" >
-  <display:column property="objectType" title="Labelable object"
+  <display:column property="objectType" title="Labelable Objects"
                   sortable="true" headerClass="sortable" />
   
   <display:column property="groupName" title="Label Group"
@@ -82,13 +82,13 @@
   <display:column property="subsystem" title="Subsystem"
                   sortable="true" headerClass="sortable" 
                   href="displaySubsystem.jsp" paramId="subsystemId" paramProperty="subsystemId"/>
-  <display:column property="hgName" title="Hardware group"
+  <display:column property="hgName" title="Hardware Group"
                   sortable="true" headerClass="sortable"  
                   href="displayHardwareGroup.jsp" paramId="hardwareGroupId" paramProperty="hgId"/>
   <display:column property="labelCreator" title="Creator"
                   sortable="true" headerClass="sortable" />
 
-  <display:column property="labelTS" title="Creation time"
+  <display:column property="labelTS" title="Creation Time"
                   sortable="true" headerClass="sortable" />
 
 

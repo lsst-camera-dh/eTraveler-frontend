@@ -42,7 +42,6 @@
             <batch:batchWidget varTotal="quantity" hardwareId="${param.hardwareId}"/>
         </c:if>
 
-        <h2>Generic Labels</h2>
 	<traveler:genericLabelWidget objectId="${param.hardwareId}"
                                      objectTypeName="hardware" />
         

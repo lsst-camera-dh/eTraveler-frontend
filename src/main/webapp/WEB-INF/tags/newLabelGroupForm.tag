@@ -30,7 +30,7 @@ select id, name from HardwareGroup order by name;
     Name: <input name="name">
     Description: <textarea name="description" required></textarea>
     <select name="labelableId" required>
-        <option value="" selected disabled>Applicable Entities</option>
+        <option value="" selected disabled>Labelable Objects</option>
         <c:forEach var="labelable" items="${labelableQ.rows}">
             <option value="${labelable.Id}">${labelable.name}</option>
         </c:forEach>

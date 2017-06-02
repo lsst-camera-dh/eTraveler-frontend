@@ -44,7 +44,7 @@ where H.id=?<sql:param value="${param.hardwareTypeId}"/>;
         <h3>Register a new one:</h3>
         <traveler:newHardwareForm hardwareTypeId="${param.hardwareTypeId}"/>
 
-        <h2>Generic Labels</h2>
+        <%--Generic Labels--%>>
 	<traveler:genericLabelWidget objectId="${param.hardwareTypeId}"
                                      objectTypeName="hardwareType" />
    

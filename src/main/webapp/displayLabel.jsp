@@ -44,11 +44,10 @@
         
         <traveler:getSetGenericLabels var="genLabelQ" labelId="${param.labelId}"/>
         <c:if test="${! empty genLabelQ.rows}">
-            <h2>Applied Labels</h2>
+            <h2>${label.typeName}s with this label</h2>
             <traveler:genericLabelTable result="${genLabelQ}"/>
         </c:if>
 
-            <h2>Generic Labels</h2>
 	<traveler:genericLabelWidget objectId="${param.labelId}"
                                      objectTypeName="label" />        
     </body>

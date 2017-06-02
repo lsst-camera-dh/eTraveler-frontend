@@ -12,6 +12,8 @@
 <%@attribute name="objectId" required="true"%>
 <%@attribute name="objectTypeName" required="true"%>
 
+<h2>${objectTypeName} Generic Labels</h2>
+
 <traveler:fullRequestString var="thisPage"/>    <%-- What's this about? --%>
 
 <sql:query var="objectTypeQ">
@@ -35,30 +37,27 @@
    <sql:param value="${objectTypeId}"/>
 </sql:query>
 
-<c:if test="${preferences.fullLabelHistory == 'true'}">
-    <traveler:getSetGenericLabels var="genLabelQ" fullHistory="true"
-                                  objectId="${objectId}" objectTypeId="${objectTypeId}"/>
-    <traveler:genericLabelTable result="${genLabelQ}" fullHistory="true"/>
-</c:if>
-
 <traveler:getSetGenericLabels var="genLabelQ" objectId="${objectId}" objectTypeId="${objectTypeId}"/>
-<traveler:genericLabelTable result="${genLabelQ}"/>
-<form action="operator/modifyLabels.jsp">
-    <input type="hidden" name="freshnessToken" value="${freshnessToken}">
-    <input type="hidden" name="referringPage" value="${thisPage}">
-    <input type="hidden" name="objectId" value="${objectId}">
-    <input type="hidden" name="objectTypeId" value="${objectTypeId}">
-    <input type="hidden" name="removeLabel" value="true">
-    <select name="labelId" required>
-        <option value="" selected>Pick a label to remove</option>
-        <c:forEach var="sRow" items="${genLabelQ.rows}">
-            <option value="${sRow.theLabelId}"><c:out value="${sRow.labelGroupName}:${sRow.labelName}"/></option>
-        </c:forEach>        
-    </select>
-    Reason: <textarea name="reason" required="true"></textarea>
-    <input type="submit" value="Remove Label"
-        <c:if test="${! mayManage}">disabled</c:if>>  
-</form>
+<c:if test="${! empty genLabelQ.rows}">
+    <h3>Labels on this ${objectTypeName}</h3>
+    <traveler:genericLabelTable result="${genLabelQ}"/>
+    <form action="operator/modifyLabels.jsp">
+        <input type="hidden" name="freshnessToken" value="${freshnessToken}">
+        <input type="hidden" name="referringPage" value="${thisPage}">
+        <input type="hidden" name="objectId" value="${objectId}">
+        <input type="hidden" name="objectTypeId" value="${objectTypeId}">
+        <input type="hidden" name="removeLabel" value="true">
+        <select name="labelId" required>
+            <option value="" selected>Pick a label to remove</option>
+            <c:forEach var="sRow" items="${genLabelQ.rows}">
+                <option value="${sRow.theLabelId}"><c:out value="${sRow.labelGroupName}:${sRow.labelName}"/></option>
+            </c:forEach>        
+        </select>
+        Reason: <textarea name="reason" required="true"></textarea>
+        <input type="submit" value="Remove Label"
+            <c:if test="${! mayManage}">disabled</c:if>>  
+    </form>
+</c:if>
 
 <traveler:getUnsetGenericLabels var="genUnsetQ" objectId="${objectId}"
 objectTypeId="${objectTypeId}" subsysId="${subsysId}"
@@ -79,3 +78,12 @@ hgResult="${hardwareGroupsQ}"/>
     <input type="submit" value="Add Label"
         <c:if test="${! mayManage}">disabled</c:if>>
 </form>
+
+<c:if test="${preferences.fullLabelHistory == 'true'}">
+    <traveler:getSetGenericLabels var="genLabelQ" fullHistory="true"
+                                  objectId="${objectId}" objectTypeId="${objectTypeId}"/>
+    <c:if test="${! empty genLabelQ.rows}">
+        <h3>Label History</h3>
+        <traveler:genericLabelTable result="${genLabelQ}" fullHistory="true"/>
+    </c:if>
+</c:if>
