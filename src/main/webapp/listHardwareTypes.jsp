@@ -23,7 +23,7 @@ select name from Subsystem order by name;
     <body>
         <h1>Hardware Types</h1>
         <filter:filterTable>
-            <filter:filterInput var="name" title="Name (substring search)"/>
+            <filter:filterInput var="name" title="Name/Description"/>
             <filter:filterSelection title="Subsystem" var="subsystem" defaultValue="${preferences.subsystem}">
                 <filter:filterOption value="${preferences.subsystem}">User Pref</filter:filterOption>
                 <filter:filterOption value="Any">Any</filter:filterOption>

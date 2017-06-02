@@ -40,7 +40,7 @@ select name from Subsystem order by name;
         </c:choose>
         
         <filter:filterTable>
-            <filter:filterInput var="name" title="Name (substring search)"/>
+            <filter:filterInput var="name" title="Name/Description"/>
             <filter:filterSelection title="Component Group" var="hardwareGroupId" defaultValue="">
                 <filter:filterOption value=""></filter:filterOption>
                 <c:forEach var="group" items="${groupsQ.rows}">

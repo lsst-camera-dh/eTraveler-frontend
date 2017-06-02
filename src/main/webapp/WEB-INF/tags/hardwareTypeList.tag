@@ -30,7 +30,8 @@
         and HTGM.hardwareGroupId=?<sql:param value="${hardwareGroupId}"/>
     </c:if>
     <c:if test="${! empty name}">
-        and HT.name like concat('%', ?<sql:param value="${name}"/>, '%')
+        and (HT.name like concat('%', ?<sql:param value="${name}"/>, '%')
+        or HT.description like concat('%', ?<sql:param value="${name}"/>, '%'))
     </c:if>
     <c:if test="${! empty subsystemId && subsystemName != 'Any'}">
         and SS.id=?<sql:param value="${subsystemId}"/>

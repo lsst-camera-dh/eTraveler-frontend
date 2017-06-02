@@ -17,7 +17,7 @@
     <body>
         <h1>Hardware Groups</h1>
         <filter:filterTable>
-            <filter:filterInput var="name" title="Name (substring search)"/>
+            <filter:filterInput var="name" title="Name/Description"/>
         </filter:filterTable>
         <traveler:hardwareGroupList name="${name}"/>
     </body>

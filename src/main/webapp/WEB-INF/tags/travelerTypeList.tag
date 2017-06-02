@@ -67,7 +67,8 @@
         </c:otherwise>
     </c:choose>
     <c:if test="${! empty name}">
-        and P.name like concat('%', ?<sql:param value="${name}"/>, '%')
+        and (P.name like concat('%', ?<sql:param value="${name}"/>, '%')
+        or P.shortDescription like concat('%', ?<sql:param value="${name}"/>, '%'))
     </c:if>
     <c:if test="${! empty subsystemId && subsystemName != 'Any'}">
         and SS.id=?<sql:param value="${subsystemId}"/>

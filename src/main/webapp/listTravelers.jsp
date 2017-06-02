@@ -33,7 +33,7 @@ select name from Subsystem order by name;
     </head>
     <body>
         <filter:filterTable>
-            <filter:filterInput var="name" title="Name (substring search)"/>
+            <filter:filterInput var="name" title="Name/Description"/>
             <filter:filterInput var="cSerial" title="Camera Serial"/>
             <filter:filterInput var="mSerial" title="Manufacturer Serial"/>
             <filter:filterInput var="type" title="Component Type"/>

@@ -54,7 +54,8 @@ where true
         and P.id=?<sql:param value="${processId}"/>
     </c:if>
     <c:if test="${! empty name}">
-        and P.name like concat('%', ?<sql:param value="${name}"/>, '%')
+        and (P.name like concat('%', ?<sql:param value="${name}"/>, '%')
+        or P.shortDescription like concat('%', ?<sql:param value="${name}"/>, '%'))
     </c:if>
     <c:if test="${! empty camSerial}">
         and H.lsstId like concat('%', ?<sql:param value="${camSerial}"/>, '%')
