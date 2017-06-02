@@ -77,7 +77,15 @@
         and SS.name=?<sql:param value="${subsystemName}"/>
     </c:if>
     <c:if test="${! empty state && state != 'any'}">
-        and TTS.name=?<sql:param value="${state}"/>
+        <c:choose>
+            <c:when test="${state == 'newOrActive'}">
+                and (TTS.name=?<sql:param value="active"/>
+                or TTS.name=?<sql:param value="new"/>)
+            </c:when>
+            <c:otherwise>
+                and TTS.name=?<sql:param value="${state}"/>
+            </c:otherwise>
+        </c:choose>
     </c:if>
     <c:if test="${version=='latest'}">
         and P.version=(select max(version) from Process where name=P.name and hardwareGroupId=P.hardwareGroupId)
@@ -100,7 +108,7 @@
         <display:column property="subsystemName" title="Subsystem" sortable="true" headerClass="sortable"
                         href="displaySubsystem.jsp" paramId="subsystemId" paramProperty="subsystemId"/>
     </c:if>
-    <c:if test="${(empty state || state == 'any') || preferences.showFilteredColumns}">
+    <c:if test="${(empty state || state == 'any' || state == 'newOrActive') || preferences.showFilteredColumns}">
         <display:column property="state" sortable="true" headerClass="sortable"
                         href="displayTravelerType.jsp" paramId="travelerTypeId" paramProperty="travelerTypeId"/>
     </c:if>

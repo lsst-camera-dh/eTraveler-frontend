@@ -73,7 +73,14 @@ where true
         and <c:if test="${! done}">not</c:if> AFS.isFinal
     </c:if>
     <c:if test="${! empty status && status != 'any'}">
-        and AFS.name=?<sql:param value="${status}"/>
+        <c:choose>
+            <c:when test="${status == 'notFinal'}">
+                and not AFS.isFinal
+            </c:when>
+            <c:otherwise>
+                and AFS.name=?<sql:param value="${status}"/>
+            </c:otherwise>
+        </c:choose>
     </c:if>
     <c:if test="${! empty userId}">
         and (A.createdBy=?<sql:param value="${userId}"/> or A.closedBy=?<sql:param value="${userId}"/>)
@@ -121,7 +128,7 @@ order by A.id desc
         <display:column property="creationTS" title="creation" sortable="true" headerClass="sortable"/>
         <display:column property="createdBy" sortable="true" headerClass="sortable"/>
         <display:column property="begin" sortable="true" headerClass="sortable"/>
-        <c:if test="${(empty status || status == 'any') || preferences.showFilteredColumns}">
+        <c:if test="${(empty status || status == 'any' || status == 'notFinal') || preferences.showFilteredColumns}">
             <display:column property="status" sortable="true" headerClass="sortable"/>
         </c:if>
         <display:column property="end" sortable="true" headerClass="sortable"/>

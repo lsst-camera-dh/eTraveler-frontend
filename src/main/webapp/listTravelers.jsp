@@ -50,6 +50,7 @@ select name from Subsystem order by name;
                 <c:forEach var="statusName" items="${statesQ.rows}">
                     <filter:filterOption value="${statusName.name}"><c:out value="${statusName.name}"/></filter:filterOption>
                 </c:forEach>
+                <filter:filterOption value="notFinal">Not Final</filter:filterOption>
             </filter:filterSelection>
             <filter:filterSelection title="Version" var="version" defaultValue='all'>
                 <filter:filterOption value="latest">Latest</filter:filterOption>
