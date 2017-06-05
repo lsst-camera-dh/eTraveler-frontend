@@ -79,11 +79,14 @@
     <c:if test="${! empty state && state != 'any'}">
         <c:choose>
             <c:when test="${state == 'newOrActive'}">
-                and (TTS.name=?<sql:param value="active"/>
-                or TTS.name=?<sql:param value="new"/>)
+                and (TTS.name = ?<sql:param value="active"/>
+                or TTS.name = ?<sql:param value="new"/>)
+            </c:when>
+            <c:when test="${state == 'notActive'}">
+                and TTS.name != ?<sql:param value="active"/>
             </c:when>
             <c:otherwise>
-                and TTS.name=?<sql:param value="${state}"/>
+                and TTS.name = ?<sql:param value="${state}"/>
             </c:otherwise>
         </c:choose>
     </c:if>
@@ -108,7 +111,7 @@
         <display:column property="subsystemName" title="Subsystem" sortable="true" headerClass="sortable"
                         href="displaySubsystem.jsp" paramId="subsystemId" paramProperty="subsystemId"/>
     </c:if>
-    <c:if test="${(empty state || state == 'any' || state == 'newOrActive') || preferences.showFilteredColumns}">
+    <c:if test="${(empty state || state == 'any' || state == 'newOrActive' || state == 'notActive') || preferences.showFilteredColumns}">
         <display:column property="state" sortable="true" headerClass="sortable"
                         href="displayTravelerType.jsp" paramId="travelerTypeId" paramProperty="travelerTypeId"/>
     </c:if>

@@ -60,6 +60,7 @@ select name from Subsystem order by name;
                     <filter:filterOption value="${stateName.name}"><c:out value="${stateName.name}"/></filter:filterOption>
                 </c:forEach>
                 <filter:filterOption value="newOrActive">New or Active</filter:filterOption>
+                <filter:filterOption value="notActive">Not Active</filter:filterOption>
             </filter:filterSelection>
             <filter:filterSelection title="Version" var="version" defaultValue='all'>
                 <filter:filterOption value="latest">Latest</filter:filterOption>
