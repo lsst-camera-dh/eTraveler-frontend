@@ -41,16 +41,18 @@ public class GetResultsWrapper extends SimpleTagSupport {
 
   // Reserve for getManual
   private static final int FUNC_getManualRunResults = 5;
-  private static final int FUNC_getManualResultsJH = 6;
+  private static final int FUNC_getManualRunSignatures = 6;
   private static final int FUNC_getManualRunFilepaths = 7;
-  private static final int FUNC_getManualFilepathsJH = 8;
-  private static final int FUNC_lastManual = FUNC_getManualFilepathsJH;
+  private static final int FUNC_getManualResultsStep = 8;
+  private static final int FUNC_getManualResultsSignaturesStep = 9;
+  private static final int FUNC_getManualFilepathsStep = 10;
+  private static final int FUNC_lastManual = FUNC_getManualFilepathsStep;
   
   // Activity info
-  private static final int FUNC_getActivity = 9;
-  private static final int FUNC_getRunActivities = 10;
+  private static final int FUNC_getActivity = 11;
+  private static final int FUNC_getRunActivities = 12;
 
-  private static final int FUNC_getRunSummary = 11;
+  private static final int FUNC_getRunSummary = 13;
 
 
   public void doTag() throws JspException, IOException {
@@ -69,11 +71,12 @@ public class GetResultsWrapper extends SimpleTagSupport {
     if (m_function.equals("getResultsJH")) func = FUNC_getResultsJH;
     if (m_function.equals("getRunFilepaths")) func = FUNC_getRunFilepaths;
     if (m_function.equals("getFilepathsJH")) func = FUNC_getFilepathsJH;
-    /*
     if (m_function.equals("getManualRunResults")) func = FUNC_getManualRunResults;
-    if (m_function.equals("getManualResultsJH")) func = FUNC_getManualResultsJH;
+    /*
     if (m_function.equals("getManualRunFilepaths")) func = FUNC_getManualRunFilepaths;
-    if (m_function.equals("getManualFilepathsJH")) func = FUNC_getManualFilepathsJH;
+    if (m_function.equals("getManualRunSignatures")) func = FUNC_getManualRunSignatures;
+    if (m_function.equals("getManualResultsStep")) func = FUNC_getManualResultsStep;
+    if (m_function.equals("getManualFilepathsStep")) func = FUNC_getManualFilepathsStep;
     */
     if (m_function.equals("getActivity")) func = FUNC_getActivity;
     if (m_function.equals("getRunActivities")) func = FUNC_getRunActivities;
@@ -95,6 +98,30 @@ public class GetResultsWrapper extends SimpleTagSupport {
     m_jspContext.removeAttribute("acknowledge"); // good status so far
 
     try {
+      switch(func) {
+      case FUNC_getRunResults:
+      case FUNC_getResultsJH:
+      case FUNC_getRunFilepaths:
+      case FUNC_getFilepathsJH:
+        getHarnessed(func);
+        break;
+      case FUNC_getActivity:
+      case FUNC_getRunActivities:
+        getActivities(func);
+        break;
+      case FUNC_getRunSummary:
+        getSummary(func);
+        break;
+      case FUNC_getManualRunResults:
+        // call a new thing here
+        getManual(func);
+        break;
+      default:
+        m_jspContext.setAttribute("acknowledge", "Unknown function " + m_function);
+        close();
+        return;
+      }
+      /*
       if (func <= FUNC_lastHarnessed) {
         getHarnessed(func);
       } else if (func >= FUNC_lastManual) {
@@ -109,6 +136,7 @@ public class GetResultsWrapper extends SimpleTagSupport {
         close();
         return;
       }
+      */
     } catch (SQLException sqlEx) {
       m_jspContext.setAttribute("acknowledge", "Failed with SQL exception "
                                 + sqlEx.getMessage());
@@ -188,6 +216,28 @@ public class GetResultsWrapper extends SimpleTagSupport {
                              (String) m_inputs.get("stepName"),
                              (String) m_inputs.get("model"),
                              (String) m_inputs.get("experimentSN"));
+      break;
+    default:
+      m_jspContext.setAttribute("acknowledge", "Unknown function " + m_function);
+      close();
+      return;
+    }
+  }
+  private void getManual(int func) 
+    throws SQLException,GetResultsException,JspException {
+    GetManualData getMD = new GetManualData(m_conn);
+    String run=null;
+    switch(func) {
+    case FUNC_getManualRunResults:
+      run = (String) m_inputs.get("run");
+      if (run == null) {
+        m_jspContext.setAttribute("acknowledge", "Missing run argument");
+        close();
+        return;
+      }
+      String stepName= (String) m_inputs.get("stepName");
+      String nameFilter = (String) m_inputs.get("nameFilter");
+      m_results = getMD.getManualRunResults(run, stepName, nameFilter);
       break;
     default:
       m_jspContext.setAttribute("acknowledge", "Unknown function " + m_function);

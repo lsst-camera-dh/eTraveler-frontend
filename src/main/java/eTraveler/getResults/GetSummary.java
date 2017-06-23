@@ -26,10 +26,15 @@ public class GetSummary {
 
     // Only continue if argument is of acceptable form
     int runInt = GetResultsUtil.formRunInt(run);
-    
+
+    return getRunSummary(runInt);
+  }
+
+  HashMap<String, Object> getRunSummary(int runInt) 
+    throws GetResultsException, SQLException {    
     m_summary = new HashMap<String, Object>();
 
-    String sql="select runNumber,runInt,Process.name as travelerName,Process.version as travelerVersion,Activity.begin, Activity.end,Subsystem.name as subsystem, HardwareType.name as hardwareType,Hardware.lsstId as experimentSN,AFS.name as runStatus from RunNumber join Activity on RunNumber.rootActivityId=Activity.id join Process on Process.id=Activity.processId join TravelerType on Process.id=TravelerType.rootProcessId join Subsystem on Subsystem.id=TravelerType.subsystemId join Hardware on Hardware.id =Activity.hardwareId  join HardwareType on HardwareType.id=Hardware.hardwareTypeId join ActivityStatusHistory  ASH on ASH.activityId=Activity.id  join ActivityFinalStatus AFS on AFS.id=ASH.activityStatusId where RunNumber.runInt=" + runInt + " order by ASH.id desc limit 1";
+    String sql="select runNumber,runInt,Process.name as travelerName,RunNumber.rootActivityId as raid,Process.version as travelerVersion,Activity.begin, Activity.end,Subsystem.name as subsystem, HardwareType.name as hardwareType,Hardware.lsstId as experimentSN,AFS.name as runStatus from RunNumber join Activity on RunNumber.rootActivityId=Activity.id join Process on Process.id=Activity.processId join TravelerType on Process.id=TravelerType.rootProcessId join Subsystem on Subsystem.id=TravelerType.subsystemId join Hardware on Hardware.id =Activity.hardwareId  join HardwareType on HardwareType.id=Hardware.hardwareTypeId join ActivityStatusHistory  ASH on ASH.activityId=Activity.id  join ActivityFinalStatus AFS on AFS.id=ASH.activityStatusId where RunNumber.runInt=" + runInt + " order by ASH.id desc limit 1";
 
     PreparedStatement stmt =
       m_connect.prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE);
@@ -41,6 +46,7 @@ public class GetSummary {
     }
     m_summary.put("runNumber", rs.getString("runNumber"));
     m_summary.put("runInt", rs.getInt("runInt"));
+    m_summary.put("raid", rs.getInt("raid"));
     m_summary.put("travelerName", rs.getString("travelerName"));
     m_summary.put("travelerVersion", rs.getString("travelerVersion"));
     m_summary.put("hardwareType", rs.getString("hardwareType"));

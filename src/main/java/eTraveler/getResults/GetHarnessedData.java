@@ -7,7 +7,6 @@ import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.commons.lang3.StringUtils;
 
-//import org.lsst.camera.etraveler.backend.db.DbConnection;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.Statement;
@@ -56,6 +55,7 @@ public class GetHarnessedData {
      Return integer equivalent, ignoring final non-numeric character
      if there is one.
    */
+  /*  
   public static int formRunInt(String st) throws GetResultsException {
     int theInt;
     try {
@@ -74,7 +74,7 @@ public class GetHarnessedData {
     }
     return theInt;
   }
-    
+  */
   public GetHarnessedData(Connection conn) {
     m_connect=conn;
   }
@@ -153,7 +153,7 @@ public class GetHarnessedData {
                   String schemaName, Pair<String, Object> filter)
     throws GetResultsException, SQLException {
 
-    int runInt = GetHarnessedData.formRunInt(run);
+    int runInt = GetResultsUtil.formRunInt(run);
     return getRunResults(runInt, stepName, schemaName, filter);
   }
 
@@ -180,7 +180,7 @@ public class GetHarnessedData {
    */
   public Map<String, Object>     getRunFilepaths(String run, String stepName)
     throws GetResultsException, SQLException {
-    int runInt = GetHarnessedData.formRunInt(run);
+    int runInt = GetResultsUtil.formRunInt(run);
     return getRunFilepaths(runInt, stepName);
   }
 
