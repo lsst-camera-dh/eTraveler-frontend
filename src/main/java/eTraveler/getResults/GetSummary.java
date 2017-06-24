@@ -21,6 +21,22 @@ public class GetSummary {
     m_connect = conn;
   }
 
+  /**
+     Primarily or exclusively for use internal to package
+   */
+  HashMap<String, Object> getRunSummaryByRaid(int raid)
+        throws GetResultsException, SQLException {
+    String sql="select runInt from RunNumber where rootActivityId='" + raid + "'";
+    PreparedStatement stmt =
+      m_connect.prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE);
+    ResultSet rs=stmt.executeQuery();
+    boolean gotRow = rs.first();
+    if (!gotRow) {
+      throw new GetResultsNoDataException("No information for root activity id " + raid);      
+    }
+    return getRunSummary(rs.getInt("runInt"));
+  }
+
   HashMap<String, Object> getRunSummary(String run)
     throws GetResultsException, SQLException {
 
@@ -46,7 +62,7 @@ public class GetSummary {
     }
     m_summary.put("runNumber", rs.getString("runNumber"));
     m_summary.put("runInt", rs.getInt("runInt"));
-    m_summary.put("raid", rs.getInt("raid"));
+    m_summary.put("rootActivityId", rs.getInt("raid"));
     m_summary.put("travelerName", rs.getString("travelerName"));
     m_summary.put("travelerVersion", rs.getString("travelerVersion"));
     m_summary.put("hardwareType", rs.getString("hardwareType"));

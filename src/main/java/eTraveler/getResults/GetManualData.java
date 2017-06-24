@@ -59,7 +59,7 @@ public class GetManualData {
     if (m_stepName != null) {
       sql += "Process.name='" + m_stepName +"' and ";
     }
-    sql += " A.rootActivityId='" + m_results.get("raid") + "' and " +
+    sql += " A.rootActivityId='" + m_results.get("rootActivityId") + "' and " +
       GetResultsUtil.getActivityStatusCondition() +
       " order by A.processId asc,A.id desc, patname";
 
@@ -121,8 +121,8 @@ public class GetManualData {
           return gotRow;
         }
       }
-      if (!(pname.equals(rs.getString("pname")))) {
-        pname = rs.getString("pname");
+      if (!(pname.equals(rs.getString("procname")))) {
+        pname = rs.getString("procname");
         ourStepMap = (HashMap<String, Object>) findOrAddStep(stepMaps, pname);
       }
       gotRow = storeOne(rs, ourStepMap, datatype);

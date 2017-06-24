@@ -45,36 +45,6 @@ public class GetHarnessedData {
   private static final int DT_ABSENT = -2, DT_UNKNOWN = -1,
     DT_FLOAT = 0, DT_INT = 1, DT_STRING = 2;
 
-  // Assumes Activity has alias A
-  private static final String s_activityStatusJoins="join ActivityStatusHistory ASH on A.id=ASH.activityId join ActivityFinalStatus on ActivityFinalStatus.id=ASH.activityStatusId";
-  private static final String s_activityStatusCondition="ActivityFinalStatus.name='success'";
-  /**
-     Argument should be string representation of either a valid
-     positive integer or valid positive integer followed by one
-     non-numeric character, such as "1234D"
-     Return integer equivalent, ignoring final non-numeric character
-     if there is one.
-   */
-  /*  
-  public static int formRunInt(String st) throws GetResultsException {
-    int theInt;
-    try {
-      theInt = Integer.parseInt(st);
-      } catch (NumberFormatException e) {
-      try {
-        theInt = Integer.parseInt(st.substring(0, st.length() -1));
-      }  catch (NumberFormatException e2) {
-        throw new GetResultsException("Supplied run value " + st +
-                                        " is not valid");
-      }
-      if (theInt < 1) {
-        throw new GetResultsException("Supplied run value " + st +
-                                        " is not valid");
-      }
-    }
-    return theInt;
-  }
-  */
   public GetHarnessedData(Connection conn) {
     m_connect=conn;
   }
@@ -120,8 +90,8 @@ public class GetHarnessedData {
     // name (e.g. "FloatResultHarnessed")
     String sqlString=
       "select ?.schemaName as schname,?.name as resname,?.value as resvalue,?.schemaInstance as ressI,A.id as aid,A.rootActivityId as raid, A.hardwareId as hid,A.processId as pid,Process.name as pname,ASH.activityStatusId as actStatus from  ? join Activity A on ?.activityId=A.id " +
-      s_activityStatusJoins + " join Process on Process.id=A.processId where "
-      + s_activityStatusCondition + " and Process.name='" + m_stepName;
+      GetResultsUtil.getActivityStatusJoins() + " join Process on Process.id=A.processId where "
+      + GetResultsUtil.getActivityStatusCondition() + " and Process.name='" + m_stepName;
     if (m_schemaName != null) {
       sqlString += "' and ?.schemaName='" + m_schemaName;
     }
@@ -197,9 +167,9 @@ public class GetHarnessedData {
 
     String sql =
       "select F.virtualPath as vp,basename,catalogKey,schemaInstance,A.id as aid,P.name as pname,P.id as pid,A.id as aid from FilepathResultHarnessed F join Activity A on F.activityId=A.id "
-      + s_activityStatusJoins +
+      + GetResultsUtil.getActivityStatusJoins() +
       " join Process P on P.id=A.processId join RunNumber on A.rootActivityId=RunNumber.rootActivityId where RunNumber.runInt='"
-      + m_run + "' and " + s_activityStatusCondition; 
+      + m_run + "' and " + GetResultsUtil.getActivityStatusCondition(); 
     if (m_stepName != null) {
       sql += " and P.name='" + m_stepName  + "' ";
     }
@@ -239,8 +209,8 @@ public class GetHarnessedData {
 
     String sql =
       "select F.virtualPath as vp,basename,catalogKey,schemaInstance,A.id as aid,A.rootActivityId as raid, A.hardwareId as hid,P.name as pname,P.id as pid from FilepathResultHarnessed F join Activity A on F.activityId=A.id "
-      + s_activityStatusJoins +
-      " join Process P on P.id=A.processId where " + s_activityStatusCondition; 
+      + GetResultsUtil.getActivityStatusJoins() +
+      " join Process P on P.id=A.processId where " + GetResultsUtil.getActivityStatusCondition(); 
     if (m_stepName != null) {
       sql += " and P.name='" + m_stepName  + "' ";
     }
@@ -300,7 +270,7 @@ public class GetHarnessedData {
 
     String sql =
      "select ?.schemaName as schname,?.name as resname,?.value as resvalue,?.schemaInstance as ressI,A.id as aid,A.processId as pid,Process.name as pname,ASH.activityStatusId as actStatus from ? join Activity A on ?.activityId=A.id "
-      + s_activityStatusJoins +
+      + GetResultsUtil.getActivityStatusJoins() +
       " join Process on Process.id=A.processId where ";
     if (m_schemaName != null) {
       sql += "?.schemaName='" + m_schemaName +"' and ";
@@ -309,7 +279,7 @@ public class GetHarnessedData {
       sql += "Process.name='" + m_stepName +"' and ";
     }
     sql += " A.rootActivityId='" + m_oneRai + "' and " +
-      s_activityStatusCondition +
+      GetResultsUtil.getActivityStatusCondition() +
       " order by A.processId asc,schname, A.id desc, ressI asc, resname";
 
     executeGenRunQuery(sql, "FloatResultHarnessed", DT_FLOAT);
