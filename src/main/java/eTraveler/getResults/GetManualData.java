@@ -3,6 +3,7 @@ package eTraveler.getResults;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.ArrayList;
+import java.util.Set;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -15,7 +16,12 @@ public class GetManualData {
   private Connection m_connect=null;
   private int m_run=0;
   private String m_stepName;
-  private String m_nameFilter;
+  // private String m_nameFilter;
+  private String m_travelerName;
+  private String m_hardwareType;
+  private String m_model=null;
+  private String m_expSN=null;
+  private HashMap<Integer, Object> m_runMaps=null;
   private HashMap<String, Object> m_results = null;
 
   private static final int DT_ABSENT = -2, DT_UNKNOWN = -1,
@@ -29,22 +35,81 @@ public class GetManualData {
     m_connect=conn;
   }
 
+  /**
+     Return map, indexed by experimentSN, of manual data for step stepName
+     belonging to components as specified by arguments hardwareType, model 
+     and experimentSN for which traveler with name travelerName was run and
+     step stepName had good status.
+   */
   public Map<String, Object>
-    getManualRunResults(String run, String stepName, String nameFilter)
+    getManualResultsStep(String travelerName, String hardwareType,
+                         String stepName, String model, String experimentSN)
     throws GetResultsException, SQLException {
-    int runInt = GetResultsUtil.formRunInt(run);
-    return getManualRunResults(runInt, stepName, nameFilter);
+
+    if (m_connect == null)
+      throw new GetResultsException("Set connection before attempting to fetch data");
+    checkNull(travelerName, "travelerName argument must be non-null");
+    checkNull(hardwareType, "hardwareType argument must be non-null");
+    checkNull(stepName, "stepName argument must be non-null");
+
+    m_travelerName = travelerName;
+    m_hardwareType = hardwareType;
+    m_stepName=stepName;
+    m_model = model;
+    m_expSN = experimentSN;
+
+    /*  Get information about all runs on components of interest with
+        the right travelerName.  In general they won't all make the
+        final cut.  We use data only from the most recent good one (if
+        any) for each component.
+     */
+
+    m_runMaps = getRunMaps();
+    if (m_runMaps == null) {
+      throw new GetResultsNoDataException("No data found");
+    }
+    String raiList = setToSqlList(m_runMaps.keySet());
+
+    /* Form data-fetching query. It will be run once for each of the 4 tables
+       which might have data we're looking for: FloatResultManual, etc.
+       Substitute table name for the ?
+     */
+    String sql =
+      "select ?.value as resvalue,IP.units as resunits,IP.name as patname, Process.name as procname, A.id as aid,A.hardwareId as hid,A.rootActivityId as raid,A.processId as pid,ASH.activityStatusId as actStatus from ? join Activity A on ?.activityId=A.id join InputPattern IP on ?.inputPatternId=IP.id "
+      + GetResultsUtil.getActivityStatusJoins()
+      + " join Process on Process.id=A.processId where ";
+    sql += "Process.name='" + m_stepName +"' and ";
+
+    sql += " A.rootActivityId in " + raiList + " and " +
+      GetResultsUtil.getActivityStatusCondition() +
+      " order by A.hardwareId asc, A.rootActivityId desc, A.processId asc,A.id desc, patname";
+
+    m_results = new HashMap<String, Object>();
+    executeGenQuery(sql, "FloatResultHarnessed", DT_FLOAT);
+    executeGenQuery(sql, "IntResultHarnessed", DT_INT);
+    executeGenQuery(sql, "StringResultHarnessed", DT_STRING);
+    executeGenQuery(sql, "TextResultHarnessed", DT_TEXT);
+
+    /* No additional filtering for now */
+    return m_results;
+    
   }
 
   public Map<String, Object>
-    getManualRunResults(int runInt, String stepName, String nameFilter)
+    getManualRunResults(String run, String stepName)
+    throws GetResultsException, SQLException {
+    int runInt = GetResultsUtil.formRunInt(run);
+    return getManualRunResults(runInt, stepName);
+  }
+
+  public Map<String, Object>
+    getManualRunResults(int runInt, String stepName)
     throws GetResultsException, SQLException {
     if (m_connect == null)
       throw new GetResultsException("Set connection before attempting to fetch data");
     
     m_run = runInt;
     m_stepName = stepName;
-    m_nameFilter = nameFilter;
 
     GetSummary getSummary = new GetSummary(m_connect);
     m_results = getSummary.getRunSummary(runInt);
@@ -71,6 +136,38 @@ public class GetManualData {
 
     // No filtering for now
     return m_results;
+  }
+
+  private void executeGenQuery(String sql, String tableName, int datatype)
+    throws SQLException, GetResultsException {
+
+    PreparedStatement genQuery =
+      m_connect.prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE);
+
+    ResultSet rs = genQuery.executeQuery();
+
+    boolean gotRow = rs.first();
+    if (!gotRow) {
+      genQuery.close();
+      return;
+    }
+    HashMap<String, Object> expMap = null;
+    HashMap<String, Object> steps;
+    while (gotRow) {
+      HashMap<String, Object> ourRun =
+        (HashMap<String, Object>) m_runMaps.get(rs.getInt("raid"));
+      String expSN = (String) ourRun.get("experimentSN");
+      if (m_results.containsKey(expSN) ) {
+        expMap = (HashMap<String, Object>) m_results.get(expSN);
+        steps =  (HashMap<String, Object>) expMap.get("steps");
+      } else {
+        expMap = new HashMap<String, Object>(ourRun);
+        steps = new HashMap<String, Object>();
+        expMap.put("steps", steps);
+      }
+      gotRow = storeRunAll(steps, rs, datatype, rs.getInt("hid"));
+    }
+    
   }
 
   private void executeGenRunQuery(String sql, String tableName, int datatype)
@@ -204,4 +301,63 @@ public class GetManualData {
     stepMap.put(stepName, newStep);
     return newStep;
   }
+  private static void checkNull(String val, String msg) throws GetResultsException {
+    if (val == null) throw new GetResultsException(msg);
+  }
+
+  /** Returns a map of maps.  Outermost key is raid.  Include all raids
+      run on a component of interest with correct traveler type name  */
+  private  HashMap<Integer, Object> getRunMaps() throws SQLException {
+    String hidSub=GetResultsUtil.hidSubquery(m_hardwareType, m_expSN, m_model);
+
+    String raiQuery = "select A.id as raid, H.id as hid, H.lsstId as expSN, runNumber,runInt,P.version,A.begin,A.end from Hardware H join Activity A on H.id=A.hardwareId join Process P on A.processId=P.id join RunNumber on A.rootActivityId=RunNumber.rootActivityId where H.id in (" + hidSub + ") and A.id=A.rootActivityId and P.name='" + m_travelerName + "' order by H.id asc, A.id desc";
+
+    PreparedStatement stmt =
+      m_connect.prepareStatement(raiQuery, ResultSet.TYPE_SCROLL_INSENSITIVE);
+
+    ResultSet rs = stmt.executeQuery();
+    boolean gotRow  = rs.first();
+
+    boolean first = true;
+    HashMap<Integer, Object> runMaps;
+    if (gotRow) {
+      runMaps = new HashMap<Integer, Object>();
+      //m_raiMap = new HashMap<Integer, String>();
+      //m_hMap = new HashMap<Integer, String>();
+      //m_raiList= "(";
+    } else {
+      stmt.close();
+      //return false;
+      return null;
+    }
+    
+    while (gotRow)  {
+      HashMap<String, Object> runMap = new HashMap<String, Object>();
+      runMaps.put((Integer)rs.getInt("raid"), runMap);
+      runMap.put("runNumber", rs.getString("runNumber"));
+      runMap.put("runInt", rs.getInt("runInt"));
+      runMap.put("rootActivityId", rs.getInt("raid"));
+      runMap.put("travelerName", m_travelerName);
+      runMap.put("travelerVersion", rs.getString("version"));
+      runMap.put("hardwareType", m_hardwareType);
+      runMap.put("experimentSN", rs.getString("expSN"));
+      runMap.put("begin", rs.getString("begin"));
+      String end = rs.getString("end");
+      if (end == null) end = "";
+      runMap.put("end", end);
+    }
+    stmt.close();
+    return runMaps;
+  }
+  private String setToSqlList(Set<Integer> elts) {
+    if (elts.isEmpty()) return "()";
+    String toReturn = "(";
+    for (Integer elt : elts) {
+      toReturn += "'" + elt.toString() +"',";
+    }
+    //  Change the final comma to close-paren
+    toReturn.replaceAll(",\\z", ")");
+    return toReturn;
+  }
+  
 }

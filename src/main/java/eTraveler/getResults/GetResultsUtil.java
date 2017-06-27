@@ -35,5 +35,18 @@ public class GetResultsUtil {
     }
     return theInt;
   }
+
+  /* This subquery is used to find possibly interesting traveler root ids */
+  public static String hidSubquery(String hardwareType, String expSN,
+                                   String model) {
+    String subq = "select H2.id as hid2 from Hardware H2 join HardwareType HT on H2.hardwareTypeId=HT.id where HT.name='" + hardwareType + "'";
+    if (expSN != null) {
+      subq += " and H2.lsstId='" + expSN + "'";
+    } else if (model != null) {
+      subq += " and H2.model='" + model + "'";
+    }
+    return subq;
+  }
+  
   
 }

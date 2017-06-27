@@ -236,8 +236,8 @@ public class GetResultsWrapper extends SimpleTagSupport {
         return;
       }
       String stepName= (String) m_inputs.get("stepName");
-      String nameFilter = (String) m_inputs.get("nameFilter");
-      m_results = getMD.getManualRunResults(run, stepName, nameFilter);
+      // String nameFilter = (String) m_inputs.get("nameFilter");
+      m_results = getMD.getManualRunResults(run, stepName);
       break;
     default:
       m_jspContext.setAttribute("acknowledge", "Unknown function " + m_function);

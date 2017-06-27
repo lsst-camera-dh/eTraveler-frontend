@@ -297,6 +297,7 @@ public class GetHarnessedData {
   }    
   
   /* This subquery is used to find possibly interesting traveler root ids */
+  /*              Use utility in GetResultsUtil instead.
   private String hidSubquery() {
     String subq = "select H2.id as hid2 from Hardware H2 join HardwareType HT on H2.hardwareTypeId=HT.id where HT.name='" + m_hardwareType + "'";
     if (m_expSN != null) {
@@ -306,6 +307,7 @@ public class GetHarnessedData {
     }
     return subq;
   }
+  */
 
   /**
      Find per-run parameters when we already have a run
@@ -328,7 +330,7 @@ public class GetHarnessedData {
      Initialize per-run map and string representation of runs of interest
    */
   private boolean getRaiMap() throws SQLException {
-    String hidSub = hidSubquery();
+    String hidSub=GetResultsUtil.hidSubquery(m_hardwareType, m_expSN, m_model);
 
     String raiQuery = "select A.id as Aid, H.id as Hid, H.lsstId as expSN, runNumber from Hardware H join Activity A on H.id=A.hardwareId join Process P on A.processId=P.id join RunNumber on A.rootActivityId=RunNumber.rootActivityId where H.id in (" + hidSub + ") and A.id=A.rootActivityId and P.name='" + m_travelerName + "' order by H.id asc, A.id desc";
 
