@@ -85,10 +85,10 @@ public class GetManualData {
       " order by A.hardwareId asc, A.rootActivityId desc, A.processId asc,A.id desc, patname";
 
     m_results = new HashMap<String, Object>();
-    executeGenQuery(sql, "FloatResultHarnessed", DT_FLOAT);
-    executeGenQuery(sql, "IntResultHarnessed", DT_INT);
-    executeGenQuery(sql, "StringResultHarnessed", DT_STRING);
-    executeGenQuery(sql, "TextResultHarnessed", DT_TEXT);
+    executeGenQuery(sql, "FloatResultManual", DT_FLOAT);
+    executeGenQuery(sql, "IntResultManual", DT_INT);
+    executeGenQuery(sql, "StringResultManual", DT_STRING);
+    executeGenQuery(sql, "TextResultManual", DT_TEXT);
 
     /* No additional filtering for now */
     return m_results;
@@ -141,8 +141,10 @@ public class GetManualData {
   private void executeGenQuery(String sql, String tableName, int datatype)
     throws SQLException, GetResultsException {
 
+    String sqlString = sql.replace("?", tableName);
+
     PreparedStatement genQuery =
-      m_connect.prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE);
+      m_connect.prepareStatement(sqlString, ResultSet.TYPE_SCROLL_INSENSITIVE);
 
     ResultSet rs = genQuery.executeQuery();
 
@@ -162,6 +164,7 @@ public class GetManualData {
         steps =  (HashMap<String, Object>) expMap.get("steps");
       } else {
         expMap = new HashMap<String, Object>(ourRun);
+        m_results.put(expSN, expMap);
         steps = new HashMap<String, Object>();
         expMap.put("steps", steps);
       }
@@ -345,6 +348,7 @@ public class GetManualData {
       String end = rs.getString("end");
       if (end == null) end = "";
       runMap.put("end", end);
+      gotRow = rs.relative(1);
     }
     stmt.close();
     return runMaps;
@@ -356,7 +360,7 @@ public class GetManualData {
       toReturn += "'" + elt.toString() +"',";
     }
     //  Change the final comma to close-paren
-    toReturn.replaceAll(",\\z", ")");
+    toReturn = toReturn.replaceAll(",$", ")");
     return toReturn;
   }
   

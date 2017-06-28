@@ -72,10 +72,10 @@ public class GetResultsWrapper extends SimpleTagSupport {
     if (m_function.equals("getRunFilepaths")) func = FUNC_getRunFilepaths;
     if (m_function.equals("getFilepathsJH")) func = FUNC_getFilepathsJH;
     if (m_function.equals("getManualRunResults")) func = FUNC_getManualRunResults;
+    if (m_function.equals("getManualResultsStep")) func = FUNC_getManualResultsStep;
     /*
     if (m_function.equals("getManualRunFilepaths")) func = FUNC_getManualRunFilepaths;
     if (m_function.equals("getManualRunSignatures")) func = FUNC_getManualRunSignatures;
-    if (m_function.equals("getManualResultsStep")) func = FUNC_getManualResultsStep;
     if (m_function.equals("getManualFilepathsStep")) func = FUNC_getManualFilepathsStep;
     */
     if (m_function.equals("getActivity")) func = FUNC_getActivity;
@@ -113,6 +113,7 @@ public class GetResultsWrapper extends SimpleTagSupport {
         getSummary(func);
         break;
       case FUNC_getManualRunResults:
+      case FUNC_getManualResultsStep:
         // call a new thing here
         getManual(func);
         break;
@@ -239,6 +240,15 @@ public class GetResultsWrapper extends SimpleTagSupport {
       // String nameFilter = (String) m_inputs.get("nameFilter");
       m_results = getMD.getManualRunResults(run, stepName);
       break;
+    case FUNC_getManualResultsStep:
+      m_results =
+        getMD.getManualResultsStep((String) m_inputs.get("travelerName"),
+                                   (String) m_inputs.get("hardwareType"),
+                                   (String) m_inputs.get("stepName"),
+                                   (String) m_inputs.get("model"),
+                                   (String) m_inputs.get("experimentSN"));
+      break;
+      
     default:
       m_jspContext.setAttribute("acknowledge", "Unknown function " + m_function);
       close();
