@@ -70,6 +70,9 @@ select createdBy, creationTS,
     <c:when test="${row.ISName == 'boolean'}">
         if(value is not null, if(value=0,'False','True'), null) as value
     </c:when>
+    <c:when test="${row.ISName == 'float'}">
+        valueString as value
+    </c:when>
     <c:otherwise>
         value
     </c:otherwise>
