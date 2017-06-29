@@ -34,7 +34,8 @@
 </c:if>
         
 <c:if test="${empty userName}">
-    <c:set var="userName" value="${inputs.operator}" scope="session"/>
+    <lims:checkUser var="isMagic"/>
+    <c:set var="userName" value="${isMagic ? 'API' : inputs.operator}" scope="session"/>
 </c:if>
 
 <sql:transaction>
@@ -49,6 +50,55 @@
     <c:when test="${command == 'ingest'}">
         <lims:ingest/>
     </c:when>
+    <%-- scripting --%>
+    <c:when test="${command == 'nextJob'}">
+        <lims:script/>
+    </c:when>
+    <c:when test="${command == 'runAutomatable'}">
+        <lims:runAutomatable/>
+    </c:when>
+    <c:when test="${command == 'runOneStep'}">
+        <lims:oneStep/>
+    </c:when>
+    <%-- client --%>
+    <c:when test="${command == 'registerHardware'}">
+        <lims:checkPerm/>
+        <lims:registerHardware/>
+    </c:when>
+    <c:when test="${command == 'defineHardwareType'}">
+        <lims:checkPerm/>
+        <lims:defineHardwareType/>
+    </c:when>
+    <c:when test="${command == 'defineRelationshipType'}">
+        <lims:checkPerm/>
+        <lims:defineRelationshipType/>
+    </c:when>
+    <c:when test="${command == 'uploadYaml'}">
+        <lims:checkPerm/>
+        <lims:upload/>
+    </c:when>
+    <c:when test="${command == 'setHardwareStatus'}">
+        <lims:checkPerm/>
+        <lims:setHardwareStatus/>
+    </c:when>
+    <c:when test="${command == 'modifyLabels'}">
+        <lims:checkPerm/>
+        <lims:modifyLabels/>
+    </c:when>
+    <c:when test="${command == 'setHardwareLocation'}">
+        <lims:checkPerm/>
+        <lims:setHardwareLocation/>
+    </c:when>
+    <c:when test="${command == 'setManufacturerId'}">
+        <lims:checkPerm/>
+        <lims:setManufacturerId/>
+    </c:when>
+    <c:when test="${command == 'getManufacturerId'}">
+        <lims:getManufacturerId/>
+    </c:when>
+    <c:when test="${command == 'getResults'}">
+        <lims:getResults />
+    </c:when>	    
     <c:when test="${command == 'getHardwareHierarchy'}">
         <lims:getHardwareHierarchy/>
     </c:when>
@@ -58,47 +108,6 @@
     <c:when test="${command == 'getRunInfo'}">
         <lims:getRunInfo/>
     </c:when>
-    <%-- scripting --%>
-    <c:when test="${command == 'nextJob'}">
-        <lims:script/>
-    </c:when>
-    <%-- client --%>
-    <c:when test="${command == 'registerHardware'}">
-        <lims:registerHardware/>
-    </c:when>
-    <c:when test="${command == 'defineHardwareType'}">
-        <lims:defineHardwareType/>
-    </c:when>
-    <c:when test="${command == 'defineRelationshipType'}">
-        <lims:defineRelationshipType/>
-    </c:when>
-    <c:when test="${command == 'runAutomatable'}">
-        <lims:runAutomatable/>
-    </c:when>
-    <c:when test="${command == 'runOneStep'}">
-        <lims:oneStep/>
-    </c:when>
-    <c:when test="${command == 'uploadYaml'}">
-        <lims:upload/>
-    </c:when>
-    <c:when test="${command == 'setHardwareStatus'}">
-        <lims:setHardwareStatus/>
-    </c:when>
-    <c:when test="${command == 'modifyLabels'}">
-        <lims:modifyLabels/>
-    </c:when>
-    <c:when test="${command == 'setHardwareLocation'}">
-        <lims:setHardwareLocation/>
-    </c:when>
-    <c:when test="${command == 'getManufacturerId'}">
-        <lims:getManufacturerId/>
-    </c:when>
-    <c:when test="${command == 'setManufacturerId'}">
-        <lims:setManufacturerId/>
-    </c:when>
-    <c:when test="${command == 'getResults'}">
-        <lims:getResults />
-    </c:when>	    
     <%-- unimplemented JH --%>
     <c:when test="${command == 'status'}">
         <traveler:error message="status doesn't work yet."/>
