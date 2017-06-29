@@ -7,9 +7,7 @@
 <%@tag description="check permissions for API/LIMS" pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@taglib prefix="traveler" tagdir="/WEB-INF/tags"%>
-
-<%@attribute name="var" required="true" rtexprvalue="false"%>
-<%@variable name-from-attribute="var" alias="hasPerm" scope="AT_BEGIN"%>
+<%@taglib prefix="lims" tagdir="/WEB-INF/tags/lims"%>
 
 <%-- Is the dataSourceMode protected? --%>
 <c:set var="inAMode" value="false"/>
@@ -19,3 +17,9 @@
     </c:if>    
 </c:forTokens>
 
+<c:if test="${inAMode}">
+    <lims:checkUser var="isMagic"/>
+    <c:if test="${! isMagic}">
+        <traveler:error message="You don't have permission for this."/>
+    </c:if>
+</c:if>
