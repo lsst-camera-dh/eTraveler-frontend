@@ -24,6 +24,13 @@
     <traveler:error message="A component type with name ${name} already exists."/>
 </c:if>
 
+<sql:query var="hwGroupQ">
+    select id from HardwareGroup where name=?<sql:param value="${name}"/>;
+</sql:query>
+<c:if test="${! empty hwGroupQ.rows}">
+    <traveler:error message="A component group with name ${name} already exists."/>
+</c:if>
+
     <sql:update>
 insert into HardwareType set
 name=?<sql:param value="${name}"/>,
