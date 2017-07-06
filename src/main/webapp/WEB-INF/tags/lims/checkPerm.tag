@@ -9,17 +9,7 @@
 <%@taglib prefix="traveler" tagdir="/WEB-INF/tags"%>
 <%@taglib prefix="lims" tagdir="/WEB-INF/tags/lims"%>
 
-<%-- Is the dataSourceMode protected? --%>
-<c:set var="inAMode" value="false"/>
-<c:forTokens var="mode" items="${appVariables.etravelerProtectedModes}" delims=",">
-    <c:if test="${appVariables.dataSourceMode == mode}">
-        <c:set var="inAMode" value="true"/>
-    </c:if>    
-</c:forTokens>
-
-<c:if test="${inAMode}">
-    <lims:checkUser var="isMagic"/>
-    <c:if test="${! isMagic}">
-        <traveler:error message="You don't have permission for this."/>
-    </c:if>
+<lims:checkUser var="isMagic"/>
+<c:if test="${! isMagic}">
+    <traveler:error message="You don't have permission for this."/>
 </c:if>
