@@ -9,6 +9,7 @@
 <%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql"%>
 <%@taglib prefix="batch" tagdir="/WEB-INF/tags/batches"%>
 <%@taglib prefix="relationships" tagdir="/WEB-INF/tags/relationships"%>
+<%@taglib prefix="traveler" tagdir="/WEB-INF/tags"%>
 
 <%@attribute name="slotId" required="true"%>
 <%@attribute name="minorId" required="true"%>
@@ -33,7 +34,22 @@ where MRS.id = ?<sql:param value="${slotId}"/>;
 
     <c:set var="nItems" value="${slot.singleBatch == 0 ? 1 : slot.nMinorItems}"/>
     
-    <batch:createSubBatch var="minorId" parentId="${minorId}" numItems="${nItems}" activityId="${activityId}"/>
+    <sql:query var="childrenQ">
+select count(*) as nChildren from BatchedInventoryHistory where sourceBatchId = ?<sql:param value="${minorId}"/>
+    </sql:query>
+    <c:set var="nChildren" value="${childrenQ.rows[0].nChildren}"/>
+    <sql:query var="totalQ">
+select sum(adjustment) as batchItems from BatchedInventoryHistory where hardwareId = ?<sql:param value="${minorId}"/>
+    </sql:query>
+    <c:set var="batchItems" value="${totalQ.rows[0].batchItems}"/>
+
+    <c:if test="${nItems < batchItems}">
+        <traveler:error message="Too few items in batch, have ${batchItems}, need ${nItems}"/>
+    </c:if>
+    
+    <c:if test="${nChildren != 0 || batchItems != nItems}">
+        <batch:createSubBatch var="minorId" parentId="${minorId}" numItems="${nItems}" activityId="${activityId}"/>
+    </c:if>
 </c:if>
 
 <relationships:updateRelationship slotId="${slotId}" 
