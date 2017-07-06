@@ -10,4 +10,5 @@
 <%@attribute name="var" required="true" rtexprvalue="false"%>
 <%@variable name-from-attribute="var" alias="isMagic" scope="AT_BEGIN"%>
 
-<c:set var="isMagic" value="${inputs.operator == appVariables.eTravelerAPIUser ? true : false}"/>
+<c:set var="isMagic" value="${(inputs.operator == appVariables.eTravelerAPIUser ? true : false)
+                                || (empty appVariables.eTravelerAPIUser)}"/>
