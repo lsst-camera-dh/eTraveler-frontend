@@ -43,7 +43,7 @@ select sum(adjustment) as batchItems from BatchedInventoryHistory where hardware
     </sql:query>
     <c:set var="batchItems" value="${totalQ.rows[0].batchItems}"/>
 
-    <c:if test="${nItems < batchItems}">
+    <c:if test="${batchItems < nItems}">
         <traveler:error message="Too few items in batch, have ${batchItems}, need ${nItems}"/>
     </c:if>
     
