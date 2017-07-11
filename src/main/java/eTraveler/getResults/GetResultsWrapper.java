@@ -5,6 +5,7 @@ import javax.servlet.jsp.PageContext;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.tagext.SimpleTagSupport;
 import javax.servlet.http.HttpServletRequest;
+
 import java.sql.SQLException;
 import java.sql.Connection;
 import java.io.IOException;
@@ -28,7 +29,6 @@ public class GetResultsWrapper extends SimpleTagSupport {
   private String m_function;
   private Connection m_conn;
   private JspContext m_jspContext=null;
-  // private Map<String, Object> m_results = null;
   private Object m_results = null;
   
   public void setInputs(Map arg) {m_inputs = arg;}
@@ -54,9 +54,13 @@ public class GetResultsWrapper extends SimpleTagSupport {
 
   private static final int FUNC_getRunSummary = 13;
 
+  // Hardware
+  private static final int FUNC_getHardwareInstances = 14;
+
 
   public void doTag() throws JspException, IOException {
     m_jspContext = getJspContext();
+
     HttpServletRequest
       request = (HttpServletRequest)((PageContext)m_jspContext).getRequest();
 
@@ -81,6 +85,7 @@ public class GetResultsWrapper extends SimpleTagSupport {
     if (m_function.equals("getActivity")) func = FUNC_getActivity;
     if (m_function.equals("getRunActivities")) func = FUNC_getRunActivities;
     if (m_function.equals("getRunSummary")) func = FUNC_getRunSummary;
+    if (m_function.equals("getHardwareInstances")) func = FUNC_getHardwareInstances;
     if (func == 0) {
       m_jspContext.setAttribute("acknowledge", "Unknown function " + m_function);
       close();
@@ -111,6 +116,9 @@ public class GetResultsWrapper extends SimpleTagSupport {
         break;
       case FUNC_getRunSummary:
         getSummary(func);
+        break;
+      case FUNC_getHardwareInstances:
+        getHardware(func);
         break;
       case FUNC_getManualRunResults:
       case FUNC_getManualResultsStep:
@@ -281,9 +289,24 @@ public class GetResultsWrapper extends SimpleTagSupport {
       m_jspContext.setAttribute("acknowledge","Unknown function " + m_function);
       close();
       return;
-    }
-    
+    }    
   }
+  private void getHardware(int func)
+    throws SQLException,GetResultsException,JspException {
+    GetHardware getH = new GetHardware(m_conn);
+    switch(func) {
+    case FUNC_getHardwareInstances:
+      String htype = (String) m_inputs.get("hardwareTypeName");
+      if (htype == null) {
+        m_jspContext.setAttribute("acknowledge", "Missing hardware type arg");
+        close();
+        return;
+      }
+      m_results =
+        getH.getHardwareInstances(htype,(String) m_inputs.get("experimentSN")); 
+    }
+  }
+  
   private void getSummary(int func)
     throws SQLException,GetResultsException,JspException {
     String run =(String) m_inputs.get("run");
