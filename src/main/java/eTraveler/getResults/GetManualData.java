@@ -63,27 +63,26 @@ public class GetManualData {
         final cut.  We use data only from the most recent good one (if
         any) for each component.
      */
-
-    m_runMaps = getRunMaps();
+    m_runMaps = GetResultsUtil.getRunMaps(m_connect, m_hardwareType,
+                                          m_expSN, m_model, m_travelerName);
     if (m_runMaps == null) {
       throw new GetResultsNoDataException("No data found");
     }
-    String raiList = setToSqlList(m_runMaps.keySet());
+
+    // Find good activities in the runs of interest
+    String goodActivities =
+      GetResultsUtil.latestGoodActivities(m_connect, m_stepName,
+                                          m_runMaps.keySet());
 
     /* Form data-fetching query. It will be run once for each of the 4 tables
        which might have data we're looking for: FloatResultManual, etc.
        Substitute table name for the ?
      */
     String sql =
-      "select ?.value as resvalue,IP.units as resunits,IP.name as patname, Process.name as procname, A.id as aid,A.hardwareId as hid,A.rootActivityId as raid,A.processId as pid,ASH.activityStatusId as actStatus from ? join Activity A on ?.activityId=A.id join InputPattern IP on ?.inputPatternId=IP.id "
-      + GetResultsUtil.getActivityStatusJoins()
-      + " join Process on Process.id=A.processId where ";
-    sql += "Process.name='" + m_stepName +"' and ";
-
-    sql += " A.rootActivityId in " + raiList + " and " +
-      GetResultsUtil.getActivityStatusCondition() +
-      " order by A.hardwareId asc, A.rootActivityId desc, A.processId asc,A.id desc, patname";
-
+      "select ?.value as resvalue,IP.units as resunits,IP.name as patname, Process.name as procname, A.id as aid,A.hardwareId as hid,A.rootActivityId as raid,A.processId as pid from ? join Activity A on ?.activityId=A.id join InputPattern IP on ?.inputPatternId=IP.id join Process on Process.id=A.processId";
+    sql +=   " where A.id in " + goodActivities +
+      " order by A.hardwareId asc, A.rootActivityId desc,A.id desc, patname";
+    
     m_results = new HashMap<String, Object>();
     executeGenQuery(sql, "FloatResultManual", DT_FLOAT);
     executeGenQuery(sql, "IntResultManual", DT_INT);
@@ -306,62 +305,6 @@ public class GetManualData {
   }
   private static void checkNull(String val, String msg) throws GetResultsException {
     if (val == null) throw new GetResultsException(msg);
-  }
-
-  /** Returns a map of maps.  Outermost key is raid.  Include all raids
-      run on a component of interest with correct traveler type name  */
-  private  HashMap<Integer, Object> getRunMaps() throws SQLException {
-    String hidSub=GetResultsUtil.hidSubquery(m_hardwareType, m_expSN, m_model);
-
-    String raiQuery = "select A.id as raid, H.id as hid, H.lsstId as expSN, runNumber,runInt,P.version,A.begin,A.end from Hardware H join Activity A on H.id=A.hardwareId join Process P on A.processId=P.id join RunNumber on A.rootActivityId=RunNumber.rootActivityId where H.id in (" + hidSub + ") and A.id=A.rootActivityId and P.name='" + m_travelerName + "' order by H.id asc, A.id desc";
-
-    PreparedStatement stmt =
-      m_connect.prepareStatement(raiQuery, ResultSet.TYPE_SCROLL_INSENSITIVE);
-
-    ResultSet rs = stmt.executeQuery();
-    boolean gotRow  = rs.first();
-
-    boolean first = true;
-    HashMap<Integer, Object> runMaps;
-    if (gotRow) {
-      runMaps = new HashMap<Integer, Object>();
-      //m_raiMap = new HashMap<Integer, String>();
-      //m_hMap = new HashMap<Integer, String>();
-      //m_raiList= "(";
-    } else {
-      stmt.close();
-      //return false;
-      return null;
-    }
-    
-    while (gotRow)  {
-      HashMap<String, Object> runMap = new HashMap<String, Object>();
-      runMaps.put((Integer)rs.getInt("raid"), runMap);
-      runMap.put("runNumber", rs.getString("runNumber"));
-      runMap.put("runInt", rs.getInt("runInt"));
-      runMap.put("rootActivityId", rs.getInt("raid"));
-      runMap.put("travelerName", m_travelerName);
-      runMap.put("travelerVersion", rs.getString("version"));
-      runMap.put("hardwareType", m_hardwareType);
-      runMap.put("experimentSN", rs.getString("expSN"));
-      runMap.put("begin", rs.getString("begin"));
-      String end = rs.getString("end");
-      if (end == null) end = "";
-      runMap.put("end", end);
-      gotRow = rs.relative(1);
-    }
-    stmt.close();
-    return runMaps;
-  }
-  private String setToSqlList(Set<Integer> elts) {
-    if (elts.isEmpty()) return "()";
-    String toReturn = "(";
-    for (Integer elt : elts) {
-      toReturn += "'" + elt.toString() +"',";
-    }
-    //  Change the final comma to close-paren
-    toReturn = toReturn.replaceAll(",$", ")");
-    return toReturn;
   }
   
 }
