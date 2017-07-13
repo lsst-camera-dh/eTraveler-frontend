@@ -79,7 +79,7 @@ public class GetManualData {
        Substitute table name for the ?
      */
     String sql =
-      "select ?.value as resvalue,IP.units as resunits,IP.name as patname, Process.name as procname, A.id as aid,A.hardwareId as hid,A.rootActivityId as raid,A.processId as pid from ? join Activity A on ?.activityId=A.id join InputPattern IP on ?.inputPatternId=IP.id join Process on Process.id=A.processId";
+      "select ?.value as resvalue,IP.units as resunits,IP.name as patname, IP.isOptional, Process.name as procname, A.id as aid,A.hardwareId as hid,A.rootActivityId as raid,A.processId as pid from ? join Activity A on ?.activityId=A.id join InputPattern IP on ?.inputPatternId=IP.id join Process on Process.id=A.processId";
     sql +=   " where A.id in " + goodActivities +
       " order by A.hardwareId asc, A.rootActivityId desc,A.id desc, patname";
     
@@ -117,7 +117,7 @@ public class GetManualData {
     m_results.put("steps", stepMap);
 
     String sql =
-      "select ?.value as resvalue,IP.units as resunits,IP.name as patname, Process.name as procname, A.id as aid,A.processId as pid,ASH.activityStatusId as actStatus from ? join Activity A on ?.activityId=A.id join InputPattern IP on ?.inputPatternId=IP.id "
+      "select ?.value as resvalue,IP.units as resunits,IP.name as patname, IP.isOptional, Process.name as procname, A.id as aid,A.processId as pid,ASH.activityStatusId as actStatus from ? join Activity A on ?.activityId=A.id join InputPattern IP on ?.inputPatternId=IP.id "
       + GetResultsUtil.getActivityStatusJoins()
       + " join Process on Process.id=A.processId where ";
     if (m_stepName != null) {
@@ -275,6 +275,7 @@ public class GetManualData {
     // Store parts which are independent of datatype
     ourEntry.put("activityId", rs.getInt("aid"));
     ourEntry.put("units", rs.getString("resunits"));
+    ourEntry.put("isOptional", rs.getInt("isOptional"));
 
     switch (datatype) {
     case DT_FLOAT:
