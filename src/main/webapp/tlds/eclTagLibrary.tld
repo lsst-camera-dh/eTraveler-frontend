@@ -102,4 +102,32 @@
         <type>java.lang.String</type>
     </attribute>
   </tag>
+  <tag>
+    <name>eclTags</name>
+    <tag-class>org.lsst.camera.eclLib.eclTags</tag-class>
+    <body-content>empty</body-content>
+    <attribute>
+        <name>var</name>
+        <required>true</required>
+        <rtexprvalue>false</rtexprvalue>
+        <type>java.lang.String</type>
+    </attribute>
+    <variable>
+        <name-from-attribute>var</name-from-attribute>
+        <variable-class>java.util.List</variable-class>
+        <scope>AT_BEGIN</scope>
+    </variable>
+    <attribute>
+        <name>version</name>
+        <required>true</required>
+        <rtexprvalue>true</rtexprvalue>
+        <type>java.lang.String</type>
+    </attribute>
+    <attribute>
+        <name>url</name>
+        <required>true</required>
+        <rtexprvalue>true</rtexprvalue>
+        <type>java.lang.String</type>
+    </attribute>
+  </tag>
 </taglib>
