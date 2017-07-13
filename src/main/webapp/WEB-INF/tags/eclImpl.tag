@@ -21,6 +21,7 @@
 <h2>Electronic Logbook</h2>
 
 <ecl:eclCategories var="categories" version="${appVariables.etravelerELogVersion}" url="${appVariables.etravelerELogUrl}"/>
+<ecl:eclTags var="tags" version="${appVariables.etravelerELogVersion}" url="${appVariables.etravelerELogUrl}"/>
 
 <c:set var="version" value="${appVariables.etravelerELogVersion}"/>
 <c:set var="eLogHome" value="${appVariables.etravelerELogUrl}"/>
@@ -114,6 +115,18 @@
     </select>
                         </td>
                     </tr>
+                    <%--
+                    <tr>
+                        <td>
+    <select name="tag">
+        <option value="" selected>Optional tag</option>
+        <c:forEach var="tag" items="${tags}">
+            <option value="${tag}">${tag}</option>
+        </c:forEach>
+    </select>
+                        </td>
+                    </tr>
+                    --%>
                     <tr>
                         <td>
     <input type="SUBMIT" value="Post a comment">
