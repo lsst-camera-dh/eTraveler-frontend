@@ -12,7 +12,6 @@
     <artifactId>org-lsst-camera-etraveler-web</artifactId>
     <packaging>war</packaging>
 
-
     <version>1.2.24-SNAPSHOT-getResults</version>
 
     <name>LSST ETraveler Web Application</name>
