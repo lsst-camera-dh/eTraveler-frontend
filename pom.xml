@@ -17,9 +17,6 @@
     <name>LSST ETraveler Web Application</name>
     <url>http://srs.slac.stanford.edu/eTraveler</url>
 
-
-    
-
     <build>
         <finalName>eTraveler${appSuffix}</finalName>
         <plugins>
