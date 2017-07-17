@@ -59,7 +59,6 @@
         <traveler:travelerTypeHistory travelerTypeId="${param.travelerTypeId}"/>
         <traveler:travelerTypeStatusForm travelerTypeId="${param.travelerTypeId}"/>
 
-        <h2>Generic Labels</h2>
 	<traveler:genericLabelWidget objectId="${param.travelerTypeId}"
                                      objectTypeName="travelerType" />
     </body>

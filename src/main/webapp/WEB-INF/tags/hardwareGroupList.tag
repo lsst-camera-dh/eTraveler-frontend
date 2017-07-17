@@ -25,7 +25,8 @@
         and HTGMS.hardwareTypeId=?<sql:param value="${hardwareTypeId}"/>
     </c:if>
     <c:if test="${! empty name}">
-        and HG.name like concat('%', ?<sql:param value="${name}"/>, '%')
+        and (HG.name like concat('%', ?<sql:param value="${name}"/>, '%')
+        or HG.description like concat('%', ?<sql:param value="${name}"/>, '%'))
     </c:if>
     group by HG.id
     order by name

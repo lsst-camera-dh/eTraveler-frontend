@@ -40,7 +40,7 @@ select name from Subsystem order by name;
         </c:choose>
         
         <filter:filterTable>
-            <filter:filterInput var="name" title="Name (substring search)"/>
+            <filter:filterInput var="name" title="Name/Description"/>
             <filter:filterSelection title="Component Group" var="hardwareGroupId" defaultValue="">
                 <filter:filterOption value=""></filter:filterOption>
                 <c:forEach var="group" items="${groupsQ.rows}">
@@ -59,6 +59,8 @@ select name from Subsystem order by name;
                 <c:forEach var="stateName" items="${statesQ.rows}">
                     <filter:filterOption value="${stateName.name}"><c:out value="${stateName.name}"/></filter:filterOption>
                 </c:forEach>
+                <filter:filterOption value="newOrActive">New or Active</filter:filterOption>
+                <filter:filterOption value="notActive">Not Active</filter:filterOption>
             </filter:filterSelection>
             <filter:filterSelection title="Version" var="version" defaultValue='all'>
                 <filter:filterOption value="latest">Latest</filter:filterOption>

@@ -71,6 +71,9 @@ order by id desc limit 1;
     value=?<sql:param value="${value}"/>,
         </c:otherwise>
     </c:choose>
+    <c:if test="${tableName == 'FloatResultManual'}">
+        valueString = ?<sql:param value="${value}"/>,
+    </c:if>
     createdBy=?<sql:param value="${userName}"/>,
     creationTS=UTC_TIMESTAMP();
         </sql:update>

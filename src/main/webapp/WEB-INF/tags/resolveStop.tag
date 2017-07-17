@@ -52,6 +52,16 @@
                 <input type="hidden" name="freshnessToken" value="${freshnessToken}">
                 <input type="hidden" name="activityId" value="${activityId}">       
                 <input type="hidden" name="topActivityId" value="${travelerId}">
+                <input type="hidden" name="status" value="closed">
+                <INPUT TYPE=SUBMIT value="Close Traveler"
+                    <c:if test="${! maySupervise}">disabled</c:if>>
+            </form>
+        </td>
+        <td>
+            <form METHOD=GET ACTION="failActivity.jsp" target="_top">
+                <input type="hidden" name="freshnessToken" value="${freshnessToken}">
+                <input type="hidden" name="activityId" value="${activityId}">       
+                <input type="hidden" name="topActivityId" value="${travelerId}">
                 <input type="hidden" name="status" value="failure">
                 <INPUT TYPE=SUBMIT value="Fail Traveler"
                     <c:if test="${! maySupervise}">disabled</c:if>>

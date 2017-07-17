@@ -34,13 +34,13 @@
             <tr><td>Description:</td><td>${labelGroup.labelGroupDescription}</td></tr>
         </table>
 
-        <h2>Labels:</h2>
+        <h2>Labels in this group</h2>
         <traveler:labelList labelGroupId="${param.labelGroupId}"/>
         <traveler:newLabelForm labelGroupId="${param.labelGroupId}"/>
         
         <traveler:getSetGenericLabels var="genLabelQ" labelGroupId="${param.labelGroupId}"/>
         <c:if test="${! empty genLabelQ.rows}">
-            <h2>Applied Labels</h2>
+            <h2>${labelGroup.typeName}s with these labels</h2>
             <traveler:genericLabelTable result="${genLabelQ}"/>
         </c:if>
     </body>
