@@ -6,6 +6,7 @@
 
 <%@tag description="eLog stuff" pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <%@taglib prefix="traveler" tagdir="/WEB-INF/tags"%>
 <%@taglib uri="/tlds/eclTagLibrary.tld" prefix="ecl"%>
 
@@ -26,6 +27,7 @@
 <c:set var="version" value="${appVariables.etravelerELogVersion}"/>
 <c:set var="eLogHome" value="${appVariables.etravelerELogUrl}"/>
 <c:set var="eLogSearchPath" value="E/search"/>
+<c:set var="eLogShowPath" value="E/show"/>
 
 <c:set var="activityField" value="activityId${! empty activityId ? activityId : 0}"/>
 <c:set var="processField" value="processId${! empty processId ? processId : 0}"/>
@@ -85,6 +87,20 @@
 <a href="${searchLink}" target="_blank">Search eLog</a>
         </td>
     </tr>
+<ecl:eclSearch var="entries" version="${appVariables.etravelerELogVersion}" url="${appVariables.etravelerELogUrl}"
+               query="si=${searchField}"/>
+<c:forEach var="entry" items="${entries}">
+    <c:set var="text" value="${fn:replace(entry.text, displayLink, '')}"/>
+    <c:url var="entryLink" value="${eLogHome}/${eLogShowPath}">
+        <c:param name="e" value="${entry.id}"/>
+    </c:url>
+    <tr>
+        <td>
+    <a href="${entryLink}" target='_blank'>${entry.timestamp} ${entry.author}</a>:
+    ${text}
+        </td>
+    </tr>
+</c:forEach>        
     <tr>
         <td>
 <form method="GET" action="fh/eclPost.jsp">

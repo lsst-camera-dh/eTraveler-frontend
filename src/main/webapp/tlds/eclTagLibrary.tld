@@ -3,6 +3,7 @@
   <tlib-version>1.0</tlib-version>
   <short-name>ecltaglibrary</short-name>
   <uri>/tlds/eclTagLibrary</uri>
+  
   <tag>
     <name>eclPost</name>
     <tag-class>org.lsst.camera.eclLib.eclPost</tag-class>
@@ -74,6 +75,7 @@
         <type>java.lang.String</type>
     </attribute>
   </tag>
+  
   <tag>
     <name>eclCategories</name>
     <tag-class>org.lsst.camera.eclLib.eclCategories</tag-class>
@@ -102,6 +104,7 @@
         <type>java.lang.String</type>
     </attribute>
   </tag>
+  
   <tag>
     <name>eclTags</name>
     <tag-class>org.lsst.camera.eclLib.eclTags</tag-class>
@@ -125,6 +128,41 @@
     </attribute>
     <attribute>
         <name>url</name>
+        <required>true</required>
+        <rtexprvalue>true</rtexprvalue>
+        <type>java.lang.String</type>
+    </attribute>
+  </tag>
+  
+  <tag>
+    <name>eclSearch</name>
+    <tag-class>org.lsst.camera.eclLib.eclSearch</tag-class>
+    <body-content>empty</body-content>
+    <attribute>
+        <name>var</name>
+        <required>true</required>
+        <rtexprvalue>false</rtexprvalue>
+        <type>java.lang.String</type>
+    </attribute>
+    <variable>
+        <name-from-attribute>var</name-from-attribute>
+        <variable-class>java.util.List</variable-class>
+        <scope>AT_BEGIN</scope>
+    </variable>
+    <attribute>
+        <name>version</name>
+        <required>true</required>
+        <rtexprvalue>true</rtexprvalue>
+        <type>java.lang.String</type>
+    </attribute>
+    <attribute>
+        <name>url</name>
+        <required>true</required>
+        <rtexprvalue>true</rtexprvalue>
+        <type>java.lang.String</type>
+    </attribute>
+    <attribute>
+        <name>query</name>
         <required>true</required>
         <rtexprvalue>true</rtexprvalue>
         <type>java.lang.String</type>
