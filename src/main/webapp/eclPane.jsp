@@ -15,13 +15,13 @@
         <title>ECL pane</title>
     </head>
     <body>
-        <c:catch var="ex">
+<%--        <c:catch var="ex">--%>
             <traveler:eclImpl author="${param.author}" hardwareTypeId="${param.hardwareTypeId}" 
                           hardwareGroupId="${param.hardwareGroupId}" hardwareId="${param.hardwareId}" 
                           processId="${param.processId}" activityId="${param.activityId}"/>
-        </c:catch>
+<%--        </c:catch>
         <c:if test="${! empty ex}">
             <h2>eLog not available</h2>
-        </c:if>
+        </c:if>--%>
     </body>
 </html>
