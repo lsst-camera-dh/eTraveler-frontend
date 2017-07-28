@@ -1,5 +1,4 @@
 package eTraveler.getResults;
-
 import java.util.Map;
 import java.util.HashMap;
 import java.util.ArrayList;
@@ -29,13 +28,9 @@ public class GetHarnessedData {
   private int m_oneHid;
   private String m_stepName=null;
   private ImmutablePair<String, Object> m_filter=null;
-  
-  private String m_raiList=null;
-  // Per run information (run number) keyed by root activity id
-  private HashMap<Integer, String > m_raiMap=null;
 
-  // Per component information (experimentSN) keyed by hardware id
-  private HashMap<Integer, String> m_hMap = null;
+  private HashMap<Integer, Object> m_runMaps;
+  // each Object value is itself a HashMap<String, Object>
   
   private HashMap<String, Object> m_results=null;
 
@@ -63,7 +58,7 @@ public class GetHarnessedData {
     getResultsJH(String travelerName, String hardwareType, String stepName,
                  String schemaName,
                  String model, String experimentSN,
-                 Pair<String, Object> filter)
+                 Pair<String, Object> filter, ArrayList<String> hardwareLabels)
     throws GetResultsException, SQLException {
     if (m_connect == null)
       throw new GetResultsException("Set connection before attempting to fetch data");
@@ -82,20 +77,31 @@ public class GetHarnessedData {
       m_filter = new
         ImmutablePair<String, Object> (filter.getLeft(), filter.getRight());
     }
-    if (!getRaiMap()) {
+
+    m_runMaps =
+      GetResultsUtil.getRunMaps(m_connect, hardwareType,
+                                experimentSN, model, travelerName);
+                                         
+    if (m_runMaps == null) {
       throw new GetResultsNoDataException("No data found");
     }
+    // Find good activities in the runs of interest
+    String goodActivities =
+      GetResultsUtil.latestGoodActivities(m_connect, m_stepName,
+                                          m_runMaps.keySet());
 
     // There are 6 replacements to be made.  All of them are results table
     // name (e.g. "FloatResultHarnessed")
     String sqlString=
-      "select ?.schemaName as schname,?.name as resname,?.value as resvalue,?.schemaInstance as ressI,A.id as aid,A.rootActivityId as raid, A.hardwareId as hid,A.processId as pid,Process.name as pname,ASH.activityStatusId as actStatus from  ? join Activity A on ?.activityId=A.id " +
-      GetResultsUtil.getActivityStatusJoins() + " join Process on Process.id=A.processId where "
-      + GetResultsUtil.getActivityStatusCondition() + " and Process.name='" + m_stepName;
+      "select ?.schemaName as schname,?.name as resname,?.value as resvalue,?.schemaInstance as ressI,A.id as aid,A.rootActivityId as raid, A.hardwareId as hid,A.processId as pid,Process.name as pname"
+      + " from  ? join Activity A on ?.activityId=A.id " 
+      + " join Process on Process.id=A.processId "
+      + " where A.id in " + goodActivities 
+      + " and Process.name='" + m_stepName;
     if (m_schemaName != null) {
       sqlString += "' and ?.schemaName='" + m_schemaName;
     }
-    sqlString += "' and A.rootActivityId in " + m_raiList + " order by A.hardwareId asc, A.rootActivityId desc, A.processId asc, schname,A.id desc, ressI asc, resname";
+    sqlString +=  "' order by A.hardwareId asc, A.rootActivityId desc, A.processId asc, schname,A.id desc, ressI asc, resname";
 
     m_results = new HashMap<String, Object>();
     executeGenQuery(sqlString, "FloatResultHarnessed", DT_FLOAT);
@@ -203,18 +209,23 @@ public class GetHarnessedData {
     m_stepName = stepName;
     HashMap<String, Object> steps = null;
 
-    if (!getRaiMap()) {
+    m_runMaps =
+      GetResultsUtil.getRunMaps(m_connect, hardwareType,
+                                experimentSN, model, travelerName);
+                                         
+    if (m_runMaps == null) {
       throw new GetResultsNoDataException("No data found");
     }
+    // Find good activities in the runs of interest
+    String goodActivities =
+      GetResultsUtil.latestGoodActivities(m_connect, m_stepName,
+                                          m_runMaps.keySet());
 
     String sql =
       "select F.virtualPath as vp,basename,catalogKey,schemaInstance,A.id as aid,A.rootActivityId as raid, A.hardwareId as hid,P.name as pname,P.id as pid from FilepathResultHarnessed F join Activity A on F.activityId=A.id "
-      + GetResultsUtil.getActivityStatusJoins() +
-      " join Process P on P.id=A.processId where " + GetResultsUtil.getActivityStatusCondition(); 
-    if (m_stepName != null) {
+      + " join Process P on P.id=A.processId where A.id in " + goodActivities;
       sql += " and P.name='" + m_stepName  + "' ";
-    }
-    sql += " and A.rootActivityId in " + m_raiList;
+
     sql += " order by A.hardwareId asc,P.id asc ,A.id desc, F.basename, F.virtualPath";
     m_fileResults = new HashMap<String, Object>();
 
@@ -224,26 +235,27 @@ public class GetHarnessedData {
     HashMap<String, Object> expMap = null;
 
     if (!gotRow) {
+      stmt.close();
       throw new
         GetResultsNoDataException("No data found");
     }
     while (gotRow) {
-      String expSN = m_hMap.get(rs.getInt("hid"));
+      HashMap<String, Object> ourRunMap =
+        (HashMap<String, Object>) m_runMaps.get(rs.getInt("raid"));
+      String expSN = (String) ourRunMap.get("experimentSN");
       if (m_fileResults.containsKey(expSN) ) {
         expMap = (HashMap<String, Object>) m_fileResults.get(expSN);
         steps = (HashMap<String, Object>) expMap.get("steps");
       } else  {
-        expMap = new HashMap<String, Object>();
+        expMap = new HashMap<String, Object>(ourRunMap);
         m_fileResults.put(expSN, expMap);
-        expMap.put("hid", rs.getInt("hid"));
-        expMap.put("raid", rs.getInt("raid"));
-        expMap.put("runNumber", m_raiMap.get(rs.getInt("raid")));
 
         steps = new HashMap<String, Object>();
         expMap.put("steps", steps);
       }
       gotRow = storeRunPaths(steps, rs, rs.getInt("hid"));
     }
+    stmt.close();
     return m_fileResults;
   }    
   
@@ -326,44 +338,7 @@ public class GetHarnessedData {
 
     return;
   }
-  /**
-     Initialize per-run map and string representation of runs of interest
-   */
-  private boolean getRaiMap() throws SQLException {
-    String hidSub=GetResultsUtil.hidSubquery(m_hardwareType, m_expSN, m_model);
-
-    String raiQuery = "select A.id as Aid, H.id as Hid, H.lsstId as expSN, runNumber from Hardware H join Activity A on H.id=A.hardwareId join Process P on A.processId=P.id join RunNumber on A.rootActivityId=RunNumber.rootActivityId where H.id in (" + hidSub + ") and A.id=A.rootActivityId and P.name='" + m_travelerName + "' order by H.id asc, A.id desc";
-
-    PreparedStatement stmt =
-      m_connect.prepareStatement(raiQuery, ResultSet.TYPE_SCROLL_INSENSITIVE);
-
-    ResultSet rs = stmt.executeQuery();
-    boolean gotRow  = rs.first();
-
-    boolean first = true;
-    if (gotRow) {
-      m_raiMap = new HashMap<Integer, String>();
-      m_hMap = new HashMap<Integer, String>();
-      m_raiList= "(";
-    } else {
-      stmt.close();
-      return false;
-    }
-    
-    while (gotRow)  {
-      m_raiMap.put((Integer)rs.getInt("Aid"), rs.getString("runNumber"));
-      m_hMap.put((Integer)rs.getInt("Hid"), rs.getString("expSN"));
-      if (!first) m_raiList += ",";
-      else first = false;
-      m_raiList += "'" + rs.getString("Aid") + "'";
-      gotRow = rs.relative(1);
-    }
-    m_raiList += ")";
-
-    stmt.close();
-    return true;
-  }
-
+  
   private void executeGenQuery(String sql, String tableName, int datatype)
     throws SQLException, GetResultsException {
     String sqlString = sql.replace("?", tableName);
@@ -381,18 +356,17 @@ public class GetHarnessedData {
     HashMap<String, Object> expMap = null;
     HashMap<String, Object> steps;
     while (gotRow) {
-      String expSN = m_hMap.get(rs.getInt("hid"));
+      HashMap<String, Object> ourRun =
+        (HashMap<String, Object>) m_runMaps.get(rs.getInt("raid"));
+      String expSN = (String) ourRun.get("experimentSN");
       
       if (m_results.containsKey(expSN) ) {
         expMap = (HashMap<String, Object>) m_results.get(expSN);
         
         steps = (HashMap<String, Object>) expMap.get("steps");
       } else  {
-        expMap = new HashMap<String, Object>();
+        expMap = new HashMap<String, Object>(ourRun);
         m_results.put(expSN, expMap);
-        expMap.put("hid", rs.getInt("hid"));
-        expMap.put("raid", rs.getInt("raid"));
-        expMap.put("runNumber", m_raiMap.get(rs.getInt("raid")));
         
         steps = new HashMap<String, Object>();
         expMap.put("steps", steps);
@@ -615,9 +589,6 @@ public class GetHarnessedData {
     m_model=null;
     m_expSN=null;
     m_filter=null;
-    m_raiList=null;
-    m_raiMap=null;
-    m_hMap=null;
     m_results=null;
     m_fileResults=null;
     m_run=0;

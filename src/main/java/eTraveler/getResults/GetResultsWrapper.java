@@ -11,6 +11,7 @@ import java.sql.Connection;
 import java.io.IOException;
 import java.util.Map;
 import java.util.HashMap;
+import java.util.ArrayList;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 
 import org.srs.web.base.db.ConnectionManager;
@@ -130,22 +131,6 @@ public class GetResultsWrapper extends SimpleTagSupport {
         close();
         return;
       }
-      /*
-      if (func <= FUNC_lastHarnessed) {
-        getHarnessed(func);
-      } else if (func >= FUNC_lastManual) {
-        if (func == FUNC_getRunSummary) {
-          getSummary(func);
-        } else {
-          getActivities(func);
-        }
-      }
-      else {
-        m_jspContext.setAttribute("acknowledge", "Unknown function " + m_function);
-        close();
-        return;
-      }
-      */
     } catch (SQLException sqlEx) {
       m_jspContext.setAttribute("acknowledge", "Failed with SQL exception "
                                 + sqlEx.getMessage());
@@ -174,6 +159,7 @@ public class GetResultsWrapper extends SimpleTagSupport {
     throws SQLException,GetResultsException,JspException {
     GetHarnessedData getHD = new GetHarnessedData(m_conn);
     ImmutablePair<String, Object> filter=null;
+    ArrayList<String> hardwareLabels=null;
     String run=null;
       
     switch(func) {
@@ -199,6 +185,9 @@ public class GetResultsWrapper extends SimpleTagSupport {
           ImmutablePair<String, Object>(m_inputs.get("filterKey").toString(),
                                         m_inputs.get("filterValue"));
       }
+      if (m_inputs.get("hardwareLabels") != null)  {
+        hardwareLabels = (ArrayList<String>) m_inputs.get("hardwareLabels");
+      }
       m_results =
         getHD.getResultsJH((String) m_inputs.get("travelerName"),
                            (String) m_inputs.get("hardwareType"),
@@ -206,7 +195,7 @@ public class GetResultsWrapper extends SimpleTagSupport {
                            (String) m_inputs.get("schemaName"),
                            (String) m_inputs.get("model"),
                            (String) m_inputs.get("experimentSN"),
-                           filter); 
+                           filter, hardwareLabels); 
       break;
     case FUNC_getRunFilepaths:
       run= (String) m_inputs.get("run");

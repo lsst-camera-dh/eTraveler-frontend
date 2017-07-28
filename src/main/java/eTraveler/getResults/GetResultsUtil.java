@@ -7,6 +7,7 @@ import java.sql.SQLException;
 
 import java.util.HashMap;
 import java.util.Set;
+import java.util.ArrayList;
 
 public class GetResultsUtil {
 
@@ -107,6 +108,16 @@ public class GetResultsUtil {
     toReturn = toReturn.replaceAll(",$", ")");
     return toReturn;
   }
+  public static String arrayToSqlList(ArrayList<String> elts) {
+    if (elts.isEmpty()) return "()";
+    String toReturn = "(";
+    for (String elt : elts) {
+      toReturn += "'" + elt + "',";
+    }
+    //  Change the final comma to close-paren
+    toReturn = toReturn.replaceAll(",$", ")");
+    return toReturn;
+  }
   /**
      Given stepName, collection of root activity ids for runs which may 
      include step so named, for each component find most recent
@@ -147,4 +158,37 @@ public class GetResultsUtil {
     ret += ")";
     return ret;
   }
+
+    // Find labels associated with hardware components of interest
+
+    /*
+select id, labelId,objectId,adding from LabelHistory where labelId in(select Label.id from Label join LabelGroup LG on LG.id=Label.labelGroupId where concat(LG.name,":",Label.name) in ("SnarkRandom:green","SnarkRandom:fuzzy") ) and objectId in (5,24,66) and id in (select max(id) from LabelHistory  LH2 group by LH2.objectId,LH2.labelId) and adding=1;
+
+Maybe better to find label id's associated with names in a separate query:
+
+mysql> select Label.id,concat(LabelGroup.name,":",Label.name) as fullname from Label join LabelGroup on LabelGroup.id=Label.labelGroupId where concat(LabelGroup.name,":",Label.name)  in ("SnarkRandom:green", "SnarkRandom:fuzzy");
++----+-------------------+
+| id | fullname          |
++----+-------------------+
+| 16 | SnarkRandom:fuzzy |
+| 15 | SnarkRandom:green |
++----+-------------------+
+
+Then
+
+mysql> select labelId,objectId from LabelHistory where labelId in (15,16) and objectId in (5,24,66) and id in (select max(id) from LabelHistory LH2 group by LH2.objectId,LH2.labelId) and adding=1;
++---------+----------+
+| labelId | objectId |
++---------+----------+
+|      15 |        5 |
+|      16 |        5 |
+|      15 |       24 |
++---------+----------+
+
+Then only use runs in runmap on one of the hardware components with id=objectId
+in table above.  And, for those runs, add list of label names to summary info
+for the run.
+
+     */
+  
 }
