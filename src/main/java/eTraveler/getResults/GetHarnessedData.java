@@ -87,7 +87,6 @@ public class GetHarnessedData {
       throw new GetResultsNoDataException("No data found");
     }
 
-    // ConcurrentSkipListSet<Integer> hidSet = null;
     Set<Integer> hidSet = null;
     if (hardwareLabels != null) {
       hidSet = GetResultsUtil.addHardwareLabels(m_connect, m_runMaps,
@@ -208,7 +207,7 @@ public class GetHarnessedData {
 
   public Map<String, Object>
     getFilepathsJH(String travelerName, String hardwareType, String stepName,
-                   String model, String experimentSN)
+                   String model, String experimentSN,Set<String> hardwareLabels)
     throws GetResultsException, SQLException {
     if (m_connect == null)
       throw new GetResultsException("Set connection before attempting to fetch data");
@@ -231,6 +230,16 @@ public class GetHarnessedData {
     if (m_runMaps == null) {
       throw new GetResultsNoDataException("No data found");
     }
+    Set<Integer> hidSet = null;
+
+    if (hardwareLabels != null) {
+      hidSet = GetResultsUtil.addHardwareLabels(m_connect, m_runMaps,
+                                                hardwareLabels);
+      if (hidSet == null) {
+        throw new GetResultsNoDataException("No data found");
+      }
+    }
+    
     // Find good activities in the runs of interest
     String goodActivities =
       GetResultsUtil.latestGoodActivities(m_connect, m_stepName,
@@ -240,6 +249,9 @@ public class GetHarnessedData {
       "select F.virtualPath as vp,basename,catalogKey,schemaInstance,A.id as aid,A.rootActivityId as raid, A.hardwareId as hid,P.name as pname,P.id as pid from FilepathResultHarnessed F join Activity A on F.activityId=A.id "
       + " join Process P on P.id=A.processId where A.id in " + goodActivities;
       sql += " and P.name='" + m_stepName  + "' ";
+    if (hidSet != null) {
+      sql += " and A.hardwareId in " +GetResultsUtil.setToSqlList(hidSet);
+    }
 
     sql += " order by A.hardwareId asc,P.id asc ,A.id desc, F.basename, F.virtualPath";
     m_fileResults = new HashMap<String, Object>();

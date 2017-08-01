@@ -213,12 +213,19 @@ public class GetResultsWrapper extends SimpleTagSupport {
       break;
       
     case FUNC_getFilepathsJH:
+      if (m_inputs.get("hardwareLabels") != null)  {
+        ArrayList<String> labelList =
+          (ArrayList<String>) m_inputs.get("hardwareLabels");
+        hardwareLabels = new ConcurrentSkipListSet<String>();
+        hardwareLabels.addAll(labelList);
+      }
       m_results =
         getHD.getFilepathsJH((String) m_inputs.get("travelerName"),
                              (String) m_inputs.get("hardwareType"),
                              (String) m_inputs.get("stepName"),
                              (String) m_inputs.get("model"),
-                             (String) m_inputs.get("experimentSN"));
+                             (String) m_inputs.get("experimentSN"),
+                             hardwareLabels);
       break;
     default:
       m_jspContext.setAttribute("acknowledge", "Unknown function " + m_function);
