@@ -12,6 +12,8 @@ import java.io.IOException;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.ArrayList;
+import java.util.Set;
+import java.util.concurrent.ConcurrentSkipListSet;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 
 import org.srs.web.base.db.ConnectionManager;
@@ -159,7 +161,7 @@ public class GetResultsWrapper extends SimpleTagSupport {
     throws SQLException,GetResultsException,JspException {
     GetHarnessedData getHD = new GetHarnessedData(m_conn);
     ImmutablePair<String, Object> filter=null;
-    ArrayList<String> hardwareLabels=null;
+    Set<String> hardwareLabels=null;
     String run=null;
       
     switch(func) {
@@ -186,7 +188,10 @@ public class GetResultsWrapper extends SimpleTagSupport {
                                         m_inputs.get("filterValue"));
       }
       if (m_inputs.get("hardwareLabels") != null)  {
-        hardwareLabels = (ArrayList<String>) m_inputs.get("hardwareLabels");
+        ArrayList<String> labelList =
+          (ArrayList<String>) m_inputs.get("hardwareLabels");
+        hardwareLabels = new ConcurrentSkipListSet<String>();
+        hardwareLabels.addAll(labelList);
       }
       m_results =
         getHD.getResultsJH((String) m_inputs.get("travelerName"),

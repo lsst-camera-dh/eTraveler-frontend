@@ -2,6 +2,8 @@ package eTraveler.getResults;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.ArrayList;
+import java.util.concurrent.ConcurrentSkipListSet;
+import java.util.Set;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.commons.lang3.StringUtils;
@@ -58,7 +60,7 @@ public class GetHarnessedData {
     getResultsJH(String travelerName, String hardwareType, String stepName,
                  String schemaName,
                  String model, String experimentSN,
-                 Pair<String, Object> filter, ArrayList<String> hardwareLabels)
+                 Pair<String, Object> filter, Set<String> hardwareLabels)
     throws GetResultsException, SQLException {
     if (m_connect == null)
       throw new GetResultsException("Set connection before attempting to fetch data");
@@ -81,10 +83,20 @@ public class GetHarnessedData {
     m_runMaps =
       GetResultsUtil.getRunMaps(m_connect, hardwareType,
                                 experimentSN, model, travelerName);
-                                         
     if (m_runMaps == null) {
       throw new GetResultsNoDataException("No data found");
     }
+
+    // ConcurrentSkipListSet<Integer> hidSet = null;
+    Set<Integer> hidSet = null;
+    if (hardwareLabels != null) {
+      hidSet = GetResultsUtil.addHardwareLabels(m_connect, m_runMaps,
+                                                hardwareLabels);
+      if (hidSet == null) {
+        throw new GetResultsNoDataException("No data found");
+      }
+    }
+                                         
     // Find good activities in the runs of interest
     String goodActivities =
       GetResultsUtil.latestGoodActivities(m_connect, m_stepName,
@@ -97,11 +109,14 @@ public class GetHarnessedData {
       + " from  ? join Activity A on ?.activityId=A.id " 
       + " join Process on Process.id=A.processId "
       + " where A.id in " + goodActivities 
-      + " and Process.name='" + m_stepName;
-    if (m_schemaName != null) {
-      sqlString += "' and ?.schemaName='" + m_schemaName;
+      + " and Process.name='" + m_stepName + "'";
+    if (hidSet != null) {
+      sqlString += " and A.hardwareId in " +GetResultsUtil.setToSqlList(hidSet);
     }
-    sqlString +=  "' order by A.hardwareId asc, A.rootActivityId desc, A.processId asc, schname,A.id desc, ressI asc, resname";
+    if (m_schemaName != null) {
+      sqlString += " and ?.schemaName='" + m_schemaName + "'";
+    }
+    sqlString +=  " order by A.hardwareId asc, A.rootActivityId desc, A.processId asc, schname,A.id desc, ressI asc, resname";
 
     m_results = new HashMap<String, Object>();
     executeGenQuery(sqlString, "FloatResultHarnessed", DT_FLOAT);

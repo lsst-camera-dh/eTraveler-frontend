@@ -7,6 +7,7 @@ import java.sql.SQLException;
 
 import java.util.HashMap;
 import java.util.Set;
+import java.util.concurrent.ConcurrentSkipListSet;
 import java.util.ArrayList;
 
 public class GetResultsUtil {
@@ -89,6 +90,7 @@ public class GetResultsUtil {
       runMap.put("travelerVersion", rs.getString("version"));
       runMap.put("hardwareType", hardwareType);
       runMap.put("experimentSN", rs.getString("expSN"));
+      runMap.put("hardwareId", rs.getInt("hid"));
       runMap.put("begin", rs.getString("begin"));
       String end = rs.getString("end");
       if (end == null) end = "";
@@ -118,6 +120,17 @@ public class GetResultsUtil {
     toReturn = toReturn.replaceAll(",$", ")");
     return toReturn;
   }
+  public static String stringSetToSqlList(Set<String> elts) {
+    if (elts.isEmpty()) return "()";
+    String toReturn = "(";
+    for (String elt : elts) {
+      toReturn += "'" + elt + "',";
+    }
+    //  Change the final comma to close-paren
+    toReturn = toReturn.replaceAll(",$", ")");
+    return toReturn;
+  }
+
   /**
      Given stepName, collection of root activity ids for runs which may 
      include step so named, for each component find most recent
@@ -159,9 +172,97 @@ public class GetResultsUtil {
     return ret;
   }
 
-    // Find labels associated with hardware components of interest
+  /**
+     Given run maps as created by GetResultsUtil.getRunMaps
+     and set of labels of interest, for each hardware instance
+     appearing in a run map, if it has any of the labels of
+     interest add key "hardwareLabels" whose value is list
+     of labels it has
+     Returns set of hardware ids having at least one label
+   */
+  public static Set<Integer>
+    addHardwareLabels(Connection conn, HashMap<Integer, Object> runMaps,
+                      Set<String> labels) throws SQLException {
+    Set<Integer> hids = new ConcurrentSkipListSet<Integer>();
+    for (Integer raid : runMaps.keySet()) {
+      HashMap<String, Object> runMap =
+        (HashMap<String, Object>) runMaps.get(raid);
+      hids.add((Integer) runMap.get("hardwareId"));
+    }
+    HashMap<Integer, Object> hidLabels =
+      associateLabels(conn, labels, hids, "hardware");
+    if (hidLabels == null) return null;
 
-    /*
+    for (Integer raid : runMaps.keySet()) {
+      HashMap<String, Object> runMap =
+        (HashMap<String, Object>) runMaps.get(raid);
+      Integer hid = (Integer) runMap.get("hardwareId");
+      if (hidLabels.keySet().contains(hid)) {
+        runMap.put("hardwareLabels", hidLabels.get(hid));
+      }
+    }
+    return hidLabels.keySet();
+  }
+
+  // Maybe be more explicit with return type.  It's really going to
+  // be a list or set of strings
+  public static HashMap<Integer, Object>
+    associateLabels(Connection conn, Set<String> labels,
+                    Set<Integer> objectIds, String labelableType)
+  throws SQLException {
+    String labelCondition = " in " + stringSetToSqlList(labels);
+
+    String labelIdQ =
+      "select Label.id as lid,concat(LG.name,':',Label.name) as "
+      + "fullname from Label join LabelGroup LG on LG.id=Label.labelGroupId "
+      + "where concat(LG.name,':',Label.name) " + labelCondition;
+    PreparedStatement stmt =
+      conn.prepareStatement(labelIdQ, ResultSet.TYPE_SCROLL_INSENSITIVE);
+    ResultSet rs = stmt.executeQuery();
+    boolean gotRow=rs.first();
+    if (!gotRow) {
+      stmt.close();
+      return null;
+    }
+    HashMap<Integer, String> labelIds = new HashMap<Integer,String>();
+    while (gotRow) {
+      labelIds.put(rs.getInt("lid"), rs.getString("fullname"));
+      gotRow = rs.relative(1);
+    }
+    stmt.close();
+    String assocQ = "select labelId,objectId from "
+      +"LabelHistory LH join Labelable on LH.labelableId=Labelable.id where "
+      + "labelId in " + setToSqlList(labelIds.keySet())
+      + " and objectId in " + setToSqlList(objectIds)
+      + " and Labelable.name='" + labelableType
+      + "' and LH.id in "
+      + "(select max(id) from LabelHistory LH2 group by LH2.objectId, "
+      + "LH2.labelId) and adding=1";
+    stmt = conn.prepareStatement(assocQ, ResultSet.TYPE_SCROLL_INSENSITIVE);
+    rs = stmt.executeQuery();
+    gotRow=rs.first();
+    if (!gotRow) {
+      stmt.close();
+      return null;
+    }
+    HashMap<Integer, Object> idToLabels = new HashMap<Integer, Object>();    
+    while (gotRow) {
+        ArrayList<String> labelList = null;
+      Integer oid = rs.getInt("objectId");
+      Integer lid = rs.getInt("labelId");
+      if (!idToLabels.containsKey(oid)) {
+        labelList = new ArrayList<String>();
+        idToLabels.put(oid, labelList);
+      } else {
+        labelList = (ArrayList<String>) idToLabels.get(oid);
+      }
+      labelList.add(labelIds.get(lid));
+      gotRow = rs.relative(1);
+    }
+    stmt.close();
+    return idToLabels;
+  }
+  /*
 select id, labelId,objectId,adding from LabelHistory where labelId in(select Label.id from Label join LabelGroup LG on LG.id=Label.labelGroupId where concat(LG.name,":",Label.name) in ("SnarkRandom:green","SnarkRandom:fuzzy") ) and objectId in (5,24,66) and id in (select max(id) from LabelHistory  LH2 group by LH2.objectId,LH2.labelId) and adding=1;
 
 Maybe better to find label id's associated with names in a separate query:
