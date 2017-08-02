@@ -3,6 +3,8 @@ package eTraveler.getResults;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.ArrayList;
+import java.util.concurrent.ConcurrentSkipListSet;
+import java.util.Set;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -27,8 +29,12 @@ public class GetHardware {
      Primarily or exclusively for use internal to package
    */
   ArrayList< HashMap<String, Object>>
-    getHardwareInstances(String htype, String expSN)
+    getHardwareInstances(String htype, String expSN, Set<String> hardwareLabels)
     throws SQLException, GetResultsException {
+
+    // If hardwareLabels not null
+    //   Get set of all hardware id's under consideration
+    //   Invoke GetResultsUtil.associateLabels 
     String findHistoryRows =
       "(select max(HSH2.id) from HardwareStatusHistory HSH2 " +
       "join Hardware H2 on HSH2.hardwareId=H2.id " +

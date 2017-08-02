@@ -212,6 +212,10 @@ public class GetResultsUtil {
   throws SQLException {
     String labelCondition = " in " + stringSetToSqlList(labels);
 
+    // If any of the label strings is of the form 'groupName:', could
+    // either
+    //    expand into set of fullnames with that groupname or
+    //    change the way we do the query to remove condition on label name
     String labelIdQ =
       "select Label.id as lid,concat(LG.name,':',Label.name) as "
       + "fullname from Label join LabelGroup LG on LG.id=Label.labelGroupId "

@@ -236,6 +236,7 @@ public class GetResultsWrapper extends SimpleTagSupport {
   private void getManual(int func) 
     throws SQLException,GetResultsException,JspException {
     GetManualData getMD = new GetManualData(m_conn);
+    Set<String> hardwareLabels=null;
     String run=null;
     switch(func) {
     case FUNC_getManualRunResults:
@@ -250,12 +251,19 @@ public class GetResultsWrapper extends SimpleTagSupport {
       m_results = getMD.getManualRunResults(run, stepName);
       break;
     case FUNC_getManualResultsStep:
+      if (m_inputs.get("hardwareLabels") != null)  {
+        ArrayList<String> labelList =
+          (ArrayList<String>) m_inputs.get("hardwareLabels");
+        hardwareLabels = new ConcurrentSkipListSet<String>();
+        hardwareLabels.addAll(labelList);
+      }
       m_results =
         getMD.getManualResultsStep((String) m_inputs.get("travelerName"),
                                    (String) m_inputs.get("hardwareType"),
                                    (String) m_inputs.get("stepName"),
                                    (String) m_inputs.get("model"),
-                                   (String) m_inputs.get("experimentSN"));
+                                   (String) m_inputs.get("experimentSN"),
+                                   hardwareLabels);
       break;
       
     default:
@@ -295,6 +303,7 @@ public class GetResultsWrapper extends SimpleTagSupport {
   private void getHardware(int func)
     throws SQLException,GetResultsException,JspException {
     GetHardware getH = new GetHardware(m_conn);
+    Set<String> hardwareLabels=null;
     switch(func) {
     case FUNC_getHardwareInstances:
       String htype = (String) m_inputs.get("hardwareTypeName");
@@ -303,8 +312,16 @@ public class GetResultsWrapper extends SimpleTagSupport {
         close();
         return;
       }
+      if (m_inputs.get("hardwareLabels") != null)  {
+        ArrayList<String> labelList =
+          (ArrayList<String>) m_inputs.get("hardwareLabels");
+        hardwareLabels = new ConcurrentSkipListSet<String>();
+        hardwareLabels.addAll(labelList);
+      }
+      
       m_results =
-        getH.getHardwareInstances(htype,(String) m_inputs.get("experimentSN")); 
+        getH.getHardwareInstances(htype,(String) m_inputs.get("experimentSN"),
+                                  hardwareLabels); 
     }
   }
   
