@@ -29,21 +29,65 @@ public class GetHardware {
      Primarily or exclusively for use internal to package
    */
   ArrayList< HashMap<String, Object>>
-    getHardwareInstances(String htype, String expSN, Set<String> hardwareLabels)
+    getHardwareInstances(String htype, String expSN, String model,
+                         Set<String> hardwareLabels)
     throws SQLException, GetResultsException {
 
     // If hardwareLabels not null
     //   Get set of all hardware id's under consideration
-    //   Invoke GetResultsUtil.associateLabels 
+    //   Invoke GetResultsUtil.associateLabels
+    String getHidsQ = "select H.id as hid from Hardware H "
+      + "join HardwareType HT on H.hardwareTypeId = HT.id "
+      + "where HT.name='" + htype + "' ";
+    if (expSN != null) {
+      getHidsQ += "and H.lsstId='" + expSN + "' ";
+    } else {
+      if (model != null) {
+        getHidsQ += "and H.model='" + model + "' ";
+      }
+    }
+    PreparedStatement stmt =
+      m_connect.prepareStatement(getHidsQ, ResultSet.TYPE_SCROLL_INSENSITIVE);
+    ResultSet rs=stmt.executeQuery();
+    boolean gotRow = rs.first();
+    if (!gotRow) {
+      String msg="No information for hardware type " + htype;
+      if (expSN != null) {
+        msg += " and experimentSN=" + expSN;
+      } else if (model != null) {
+        msg += " and model=" + model;
+      }
+      throw new GetResultsNoDataException(msg);
+    }
+    Set<Integer> hidSet = new ConcurrentSkipListSet<Integer>();    
+    while (gotRow) {
+      hidSet.add(rs.getInt("hid"));
+      gotRow = rs.relative(1);
+    }
+    stmt.close();
+    HashMap<Integer, Object> hidToLabels=null;
+    if (hardwareLabels !=null) {
+      hidToLabels =
+        GetResultsUtil.associateLabels(m_connect, hardwareLabels,
+                                       hidSet, "hardware");
+      hidSet = hidToLabels.keySet();
+    }
     String findHistoryRows =
       "(select max(HSH2.id) from HardwareStatusHistory HSH2 " +
       "join Hardware H2 on HSH2.hardwareId=H2.id " +
       "join HardwareType HT on HT.id=H2.hardwareTypeId " +
       "join HardwareStatus HS2 on HS2.id=HSH2.hardwareStatusId " +
-      "where HS2.isStatusValue=1 and HT.name='" + htype + "' ";
+      "where HS2.isStatusValue=1 and " + /*HT.name='" + htype + "' "; */
+      "H2.id in " + GetResultsUtil.setToSqlList(hidSet);
+    /*
     if (expSN != null) {
-      findHistoryRows += "and H2.lsstId+'" + expSN + "' ";
+      findHistoryRows += "and H2.lsstId='" + expSN + "' ";
+    }  else {
+      if (model != null) {
+        findHistoryRows += "and H2.model='" + model + "' ";
+      }
     }
+    */
     findHistoryRows += " group by HSH2.hardwareId) ";
     
     String sql="select H.id as hid,lsstId,  "
@@ -54,10 +98,10 @@ public class GetHardware {
       + "HS.id=HSH.hardwareStatusId where HSH.id in "
       + findHistoryRows + " order by hid";
 
-    PreparedStatement stmt =
+    stmt =
       m_connect.prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE);
-    ResultSet rs=stmt.executeQuery();
-    boolean gotRow = rs.first();
+    rs=stmt.executeQuery();
+    gotRow = rs.first();
     if (!gotRow) {
       String msg="No information for hardware type " + htype;
       if (expSN != null) {
@@ -74,6 +118,9 @@ public class GetHardware {
       instance.put("manufacturerId",rs.getString("manufacturerId"));
       instance.put("remarks",rs.getString("remarks"));
       instance.put("status", rs.getString("status"));
+      if (hardwareLabels != null) {
+        instance.put("hardwareLabels", hidToLabels.get(rs.getInt("hid")));
+      }
       m_hlist.add(instance);
       gotRow = rs.relative(1);
     }

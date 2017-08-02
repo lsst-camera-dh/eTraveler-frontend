@@ -306,7 +306,7 @@ public class GetResultsWrapper extends SimpleTagSupport {
     Set<String> hardwareLabels=null;
     switch(func) {
     case FUNC_getHardwareInstances:
-      String htype = (String) m_inputs.get("hardwareTypeName");
+      String htype = (String) m_inputs.get("hardwareType");
       if (htype == null) {
         m_jspContext.setAttribute("acknowledge", "Missing hardware type arg");
         close();
@@ -321,6 +321,7 @@ public class GetResultsWrapper extends SimpleTagSupport {
       
       m_results =
         getH.getHardwareInstances(htype,(String) m_inputs.get("experimentSN"),
+                                  (String) m_inputs.get("model"),
                                   hardwareLabels); 
     }
   }
