@@ -61,7 +61,8 @@ public class GetResultsUtil {
 
   public static HashMap<Integer, Object>
     getRunMaps(Connection conn, String hardwareType, String expSN,
-               String model, String travelerName) throws SQLException {
+               String model, String travelerName)
+    throws SQLException, GetResultsException {
     String hidSub=GetResultsUtil.hidSubquery(hardwareType, expSN, model);
 
     String raiQuery = "select A.id as raid, H.id as hid, H.lsstId as expSN, runNumber,runInt,P.version,A.begin,A.end from Hardware H join Activity A on H.id=A.hardwareId join Process P on A.processId=P.id join RunNumber on A.rootActivityId=RunNumber.rootActivityId where H.id in (" + hidSub + ") and A.id=A.rootActivityId and P.name='" + travelerName + "' order by H.id asc, A.id desc";
@@ -91,10 +92,10 @@ public class GetResultsUtil {
       runMap.put("hardwareType", hardwareType);
       runMap.put("experimentSN", rs.getString("expSN"));
       runMap.put("hardwareId", rs.getInt("hid"));
-      runMap.put("begin", rs.getString("begin"));
+      runMap.put("begin", GetResultsUtil.timeISO(rs.getString("begin")));
       String end = rs.getString("end");
       if (end == null) end = "";
-      runMap.put("end", end);
+      runMap.put("end", GetResultsUtil.timeISO(end));
       gotRow = rs.relative(1);
     }
     stmt.close();
@@ -296,34 +297,16 @@ public class GetResultsUtil {
     stmt.close();
     return idToLabels;
   }
-  /*
-select id, labelId,objectId,adding from LabelHistory where labelId in(select Label.id from Label join LabelGroup LG on LG.id=Label.labelGroupId where concat(LG.name,":",Label.name) in ("SnarkRandom:green","SnarkRandom:fuzzy") ) and objectId in (5,24,66) and id in (select max(id) from LabelHistory  LH2 group by LH2.objectId,LH2.labelId) and adding=1;
 
-Maybe better to find label id's associated with names in a separate query:
-
-mysql> select Label.id,concat(LabelGroup.name,":",Label.name) as fullname from Label join LabelGroup on LabelGroup.id=Label.labelGroupId where concat(LabelGroup.name,":",Label.name)  in ("SnarkRandom:green", "SnarkRandom:fuzzy");
-+----+-------------------+
-| id | fullname          |
-+----+-------------------+
-| 16 | SnarkRandom:fuzzy |
-| 15 | SnarkRandom:green |
-+----+-------------------+
-
-Then
-
-mysql> select labelId,objectId from LabelHistory where labelId in (15,16) and objectId in (5,24,66) and id in (select max(id) from LabelHistory LH2 group by LH2.objectId,LH2.labelId) and adding=1;
-+---------+----------+
-| labelId | objectId |
-+---------+----------+
-|      15 |        5 |
-|      16 |        5 |
-|      15 |       24 |
-+---------+----------+
-
-Then only use runs in runmap on one of the hardware components with id=objectId
-in table above.  And, for those runs, add list of label names to summary info
-for the run.
-
-     */
-  
+  /* Substitute T for the blank between date and time */
+  static public String timeISO(String sqlDatetime)
+  throws GetResultsException {
+    if (sqlDatetime == null) {
+      return "";
+    }
+    if (sqlDatetime.length() > 10) {
+      if (sqlDatetime.charAt(10) == ' ') return sqlDatetime.replace(' ', 'T');
+    }
+    return sqlDatetime;
+  }
 }
