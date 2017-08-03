@@ -210,20 +210,50 @@ public class GetResultsUtil {
     associateLabels(Connection conn, Set<String> labels,
                     Set<Integer> objectIds, String labelableType)
   throws SQLException {
-    String labelCondition = " in " + stringSetToSqlList(labels);
 
     // If any of the label strings is of the form 'groupName:', could
-    // either
     //    expand into set of fullnames with that groupname or
-    //    change the way we do the query to remove condition on label name
+
+    Set<String> expandedLabels = new ConcurrentSkipListSet<String>();
+    Set<String> groups  = new ConcurrentSkipListSet<String>();
+    PreparedStatement stmt;
+    ResultSet rs;
+    boolean gotRow;
+    for (String lbl : labels) {
+      String cmps[] = lbl.split(":");
+      if (cmps.length == 1 ) {
+        groups.add(cmps[0]);
+      } else {
+        expandedLabels.add(lbl);
+      }
+    }
+    if (groups.size() > 0) {
+      String expandQ =
+        "select concat(LabelGroup.name,':',Label.name) as fullname from "
+        + "LabelGroup join Label on LabelGroup.id=Label.labelGroupId "
+        + "join Labelable on LabelGroup.labelableId=Labelable.id "
+        + "where Labelable.name='hardware' and LabelGroup.name in "
+        + GetResultsUtil.stringSetToSqlList(groups);
+      stmt=conn.prepareStatement(expandQ, ResultSet.TYPE_SCROLL_INSENSITIVE);
+      rs = stmt.executeQuery();
+      gotRow = rs.first();
+      while (gotRow) {
+        expandedLabels.add(rs.getString("fullname"));
+        gotRow = rs.relative(1);
+      }
+      stmt.close();
+    }
+
+    String labelCondition = " in " + stringSetToSqlList(expandedLabels);
+    
     String labelIdQ =
       "select Label.id as lid,concat(LG.name,':',Label.name) as "
       + "fullname from Label join LabelGroup LG on LG.id=Label.labelGroupId "
       + "where concat(LG.name,':',Label.name) " + labelCondition;
-    PreparedStatement stmt =
+    stmt =
       conn.prepareStatement(labelIdQ, ResultSet.TYPE_SCROLL_INSENSITIVE);
-    ResultSet rs = stmt.executeQuery();
-    boolean gotRow=rs.first();
+    rs = stmt.executeQuery();
+    gotRow=rs.first();
     if (!gotRow) {
       stmt.close();
       return null;
