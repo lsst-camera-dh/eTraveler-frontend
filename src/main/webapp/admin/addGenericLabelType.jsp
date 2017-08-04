@@ -16,6 +16,7 @@
         <title>Add a new generic label type</title>
     </head>
     <body>
+        <traveler:checkSpaces var="theName" input="${param.name}" fieldName="Name"/>
         <traveler:checkFreshness formToken="${param.freshnessToken}"/>
         <c:set var="theGroup" value="EtravelerAllAdmin"/>
         <traveler:checkPerm var="mayAdmin" groups="${theGroup}"/>
@@ -25,7 +26,7 @@
         <sql:transaction>
             <sql:update>
 insert into Label set
-name = ?<sql:param value="${param.name}"/>,
+name = ?<sql:param value="${theName}"/>,
 description = ?<sql:param value="${param.description}"/>,
 labelGroupId = ?<sql:param value="${param.groupId}"/>,
 createdBy = ?<sql:param value="${userName}"/>,

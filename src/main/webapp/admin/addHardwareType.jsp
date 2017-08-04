@@ -17,6 +17,7 @@
         <title>Add HardwareType</title>
     </head>
     <body>
+        <traveler:checkSpaces var="theName" input="${param.name}" fieldName="Name"/>
         <traveler:checkFreshness formToken="${param.freshnessToken}"/>
         
         <traveler:checkSsPerm var="mayAdmin" subsystemId="${param.subsystemId}" roles="admin"/>
@@ -28,7 +29,7 @@ select name from Subsystem where id=?<sql:param value="${param.subsystemId}"/>;
         </c:if>
         
         <sql:transaction>
-            <ta:createHardwareType var="hardwareTypeId" name="${param.name}"
+            <ta:createHardwareType var="hardwareTypeId" name="${theName}"
                                    width="${param.width}" isBatched="${param.isBatched}"
                                    description="${param.description}" subsystemId="${param.subsystemId}"/>
         </sql:transaction>

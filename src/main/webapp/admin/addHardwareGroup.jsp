@@ -16,12 +16,13 @@
         <title>Add Hardware Group</title>
     </head>
     <body>
+        <traveler:checkSpaces var="theName" input="${param.name}" fieldName="Name"/>
         <traveler:checkFreshness formToken="${param.freshnessToken}"/>
         
         <sql:transaction>
             <sql:update>
                 insert into HardwareGroup set
-                name=?<sql:param value="${param.name}"/>,
+                name=?<sql:param value="${theName}"/>,
                 description=?<sql:param value="${param.description}"/>,
                 createdBy=?<sql:param value="${userName}"/>,
                 creationTS=UTC_TIMESTAMP();

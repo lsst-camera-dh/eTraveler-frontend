@@ -24,23 +24,11 @@
         <title>Test Page</title>
     </head>
     <body>
-        <relationships:showSlotHistory slotId="12"/>
         <traveler:test/>
 
 
-<traveler:lastInPath var="processId" processPath="${param.processPath}"/>
-<traveler:checkId table="Process" id="${processId}"/>
-[${param.processPath}] [${processId}]
-<sql:query var="processQ" >
-    select P.*, TT.id as travelerTypeId, HG.name as hgName,
-    SS.id as subsystemId, SS.name as subsystemName
-    from Process P
-    inner join HardwareGroup HG on HG.id=P.hardwareGroupId
-    left join TravelerType TT on TT.rootProcessId=P.id
-    left join Subsystem SS on SS.id=TT.subsystemId
-    where P.id=?<sql:param value="${processId}"/>;
-</sql:query>
-<c:set var="process" value="${processQ.rows[0]}"/>
-[${process.id}]
-    </body>
+        <c:forTokens var="foo" items="abc" delims="">
+            [${foo}]
+        </c:forTokens>
+        
 </html>
