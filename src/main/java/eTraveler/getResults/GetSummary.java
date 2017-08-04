@@ -76,5 +76,12 @@ public class GetSummary {
 
     return m_summary;
   }
-  
+
+  public Map<Integer, Object>
+    getComponentRuns(String hardwareType, String experimentSN)
+    throws SQLException, GetResultsException {
+
+    return GetResultsUtil.getRunMaps(m_connect, hardwareType,
+                                     experimentSN, null, null);
+  }
 }

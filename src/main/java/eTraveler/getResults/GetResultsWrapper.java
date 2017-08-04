@@ -55,11 +55,11 @@ public class GetResultsWrapper extends SimpleTagSupport {
   private static final int FUNC_getActivity = 11;
   private static final int FUNC_getRunActivities = 12;
 
+  // Hardware, run summaries  
   private static final int FUNC_getRunSummary = 13;
 
-  // Hardware
-  private static final int FUNC_getHardwareInstances = 14;
-
+  private static final int FUNC_getComponentRuns = 14;
+  private static final int FUNC_getHardwareInstances = 15;
 
   public void doTag() throws JspException, IOException {
     m_jspContext = getJspContext();
@@ -88,6 +88,7 @@ public class GetResultsWrapper extends SimpleTagSupport {
     if (m_function.equals("getActivity")) func = FUNC_getActivity;
     if (m_function.equals("getRunActivities")) func = FUNC_getRunActivities;
     if (m_function.equals("getRunSummary")) func = FUNC_getRunSummary;
+    if (m_function.equals("getComponentRuns")) func = FUNC_getComponentRuns;
     if (m_function.equals("getHardwareInstances")) func = FUNC_getHardwareInstances;
     if (func == 0) {
       m_jspContext.setAttribute("acknowledge", "Unknown function " + m_function);
@@ -101,8 +102,7 @@ public class GetResultsWrapper extends SimpleTagSupport {
       m_jspContext.setAttribute("acknowledge", "SQL error" + se.getMessage());
       close();
       return;
-    }
-    
+    }    
     m_jspContext.removeAttribute("acknowledge"); // good status so far
 
     try {
@@ -118,6 +118,7 @@ public class GetResultsWrapper extends SimpleTagSupport {
         getActivities(func);
         break;
       case FUNC_getRunSummary:
+      case FUNC_getComponentRuns:
         getSummary(func);
         break;
       case FUNC_getHardwareInstances:
@@ -154,7 +155,6 @@ public class GetResultsWrapper extends SimpleTagSupport {
     }
     close();
     return;
-
   }
 
   private void getHarnessed(int func)
@@ -328,14 +328,33 @@ public class GetResultsWrapper extends SimpleTagSupport {
   
   private void getSummary(int func)
     throws SQLException,GetResultsException,JspException {
-    String run =(String) m_inputs.get("run");
-    if (run == null) {
-      m_jspContext.setAttribute("acknowledge", "Missing run argument");
+    GetSummary getS = new GetSummary(m_conn);
+    switch(func) {
+    case FUNC_getRunSummary:
+      String run =(String) m_inputs.get("run");
+      if (run == null) {
+        m_jspContext.setAttribute("acknowledge", "Missing run argument");
+        close();
+        return;
+      }
+      m_results = getS.getRunSummary(run);
+      break;
+    case FUNC_getComponentRuns:
+      String htype = (String) m_inputs.get("hardwareType");
+      String expSN = (String) m_inputs.get("experimentSN");
+      if ((htype == null) || (expSN == null)) {
+        m_jspContext.setAttribute("acknowledge", "Missing argument");
+        close();
+        return;
+      }
+      m_results = getS.getComponentRuns(htype, expSN);
+      break;
+    default:
+      m_jspContext.setAttribute("acknowledge",
+                                "Unknown function " + m_function);
       close();
       return;
-    }
-    GetSummary getS = new GetSummary(m_conn);
-    m_results = getS.getRunSummary(run);
+    }      
   }
   private void close() throws JspException {
     try {
@@ -347,5 +366,3 @@ public class GetResultsWrapper extends SimpleTagSupport {
     }
   }
 }
-
-  
