@@ -78,10 +78,11 @@ public class GetSummary {
   }
 
   public Map<Integer, Object>
-    getComponentRuns(String hardwareType, String experimentSN)
+    getComponentRuns(String hardwareType, String experimentSN,
+                     String travelerName)
     throws SQLException, GetResultsException {
 
     return GetResultsUtil.getRunMaps(m_connect, hardwareType,
-                                     experimentSN, null, null);
+                                     experimentSN, null, travelerName, true);
   }
 }

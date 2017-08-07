@@ -81,8 +81,8 @@ public class GetHarnessedData {
     }
 
     m_runMaps =
-      GetResultsUtil.getRunMaps(m_connect, hardwareType,
-                                experimentSN, model, travelerName);
+      GetResultsUtil.getRunMaps(m_connect, hardwareType, experimentSN,
+                                model, travelerName, false);
     if (m_runMaps == null) {
       throw new GetResultsNoDataException("No data found");
     }
@@ -224,8 +224,8 @@ public class GetHarnessedData {
     HashMap<String, Object> steps = null;
 
     m_runMaps =
-      GetResultsUtil.getRunMaps(m_connect, hardwareType,
-                                experimentSN, model, travelerName);
+      GetResultsUtil.getRunMaps(m_connect, hardwareType, experimentSN,
+                                model, travelerName, false);
                                          
     if (m_runMaps == null) {
       throw new GetResultsNoDataException("No data found");

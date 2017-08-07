@@ -347,7 +347,8 @@ public class GetResultsWrapper extends SimpleTagSupport {
         close();
         return;
       }
-      m_results = getS.getComponentRuns(htype, expSN);
+      String travelerName = (String) m_inputs.get("travelerName");
+      m_results = getS.getComponentRuns(htype, expSN, travelerName);
       break;
     default:
       m_jspContext.setAttribute("acknowledge",

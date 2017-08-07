@@ -65,8 +65,9 @@ public class GetManualData {
         final cut.  We use data only from the most recent good one (if
         any) for each component.
      */
-    m_runMaps = GetResultsUtil.getRunMaps(m_connect, m_hardwareType,
-                                          m_expSN, m_model, m_travelerName);
+    m_runMaps =
+      GetResultsUtil.getRunMaps(m_connect, m_hardwareType, m_expSN, m_model,
+                                m_travelerName, false);
     if (m_runMaps == null) {
       throw new GetResultsNoDataException("No data found");
     }
