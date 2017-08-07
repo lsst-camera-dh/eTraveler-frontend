@@ -59,6 +59,14 @@ public class GetResultsUtil {
     return subq;
   }
 
+  /**
+     getRunMaps is called from two types of routines:
+      1. those wanting per run data, such as getResultsJH
+      2. those (currently just one) wanting information about runs executed
+        on a particular component (getComponentRuns)
+      The argument byComponent is false in the first case, true in the second
+        
+   */
   public static HashMap<Integer, Object>
     getRunMaps(Connection conn, String hardwareType, String expSN,
                String model, String travelerName, boolean byComponent)
@@ -102,7 +110,7 @@ public class GetResultsUtil {
       runMap.put("runNumber", rs.getString("runNumber"));
       runMap.put("runInt", rs.getInt("runInt"));
       runMap.put("rootActivityId", rs.getInt("raid"));
-      if (travelerName != null) {
+      if (!byComponent) {
         runMap.put("travelerName", travelerName);
       } else {
         runMap.put("travelerName", rs.getString("pname"));
