@@ -17,6 +17,7 @@
         <title>Add MultiRelationshipType</title>
     </head>
     <body>
+        <traveler:checkSpaces var="theName" input="${param.name}" fieldName="Name"/>
         <traveler:checkFreshness formToken="${param.freshnessToken}"/>
 
         <traveler:checkSsPerm var="mayAdmin" hardwareTypeId="${param.hardwareTypeId}" roles="admin"/>
@@ -33,7 +34,7 @@ where HT.id=?<sql:param value="${param.hardwareTypeId}"/>
         
         <sql:transaction>
             <relationships:createRelationshipType slotNames="${param.slotNames}" minorTypeId="${param.minorTypeId}"
-                numItems="${param.numItems}" name="${param.name}" hardwareTypeId="${param.hardwareTypeId}"
+                numItems="${param.numItems}" name="${theName}" hardwareTypeId="${param.hardwareTypeId}"
                 description="${param.description}" var="mrtId"/>
         </sql:transaction>
         <c:redirect url="${param.referringPage}"/>

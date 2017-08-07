@@ -12,7 +12,7 @@
     <artifactId>org-lsst-camera-etraveler-web</artifactId>
     <packaging>war</packaging>
 
-    <version>1.2.23</version>
+    <version>1.2.25-SNAPSHOT</version>
 
     <name>LSST ETraveler Web Application</name>
     <url>http://srs.slac.stanford.edu/eTraveler</url>
@@ -102,7 +102,7 @@
         <dependency>
             <groupId>org.lsst</groupId>
             <artifactId>org-lsst-ccs-elog</artifactId>
-            <version>1.0.5</version>        
+            <version>1.0.6</version>        
         </dependency>
 
        <dependency>
