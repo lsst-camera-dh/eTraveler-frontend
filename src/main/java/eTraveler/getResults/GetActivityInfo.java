@@ -45,7 +45,7 @@ public class GetActivityInfo {
       throws GetResultsException, SQLException {
     ArrayList<HashMap<String, Object>> infoList =
       new ArrayList<HashMap<String, Object>>();
-    int runInt = GetHarnessedData.formRunInt(runNumber);
+    int runInt = GetResultsUtil.formRunInt(runNumber);
 
     String subquery="(select A2.id from Activity A2 join RunNumber RN on A2.rootActivityId=RN.rootActivityId where '";
     subquery += runInt + "'=RN.runInt)";
