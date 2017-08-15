@@ -13,7 +13,7 @@ import java.util.Map;
 import java.util.HashMap;
 import java.util.ArrayList;
 import java.util.Set;
-import java.util.concurrent.ConcurrentSkipListSet;
+import java.util.HashSet;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 
 import org.srs.web.base.db.ConnectionManager;
@@ -190,7 +190,7 @@ public class GetResultsWrapper extends SimpleTagSupport {
       if (m_inputs.get("hardwareLabels") != null)  {
         ArrayList<String> labelList =
           (ArrayList<String>) m_inputs.get("hardwareLabels");
-        hardwareLabels = new ConcurrentSkipListSet<String>();
+        hardwareLabels = new HashSet<String>();
         hardwareLabels.addAll(labelList);
       }
       m_results =
@@ -216,7 +216,7 @@ public class GetResultsWrapper extends SimpleTagSupport {
       if (m_inputs.get("hardwareLabels") != null)  {
         ArrayList<String> labelList =
           (ArrayList<String>) m_inputs.get("hardwareLabels");
-        hardwareLabels = new ConcurrentSkipListSet<String>();
+        hardwareLabels = new HashSet<String>();
         hardwareLabels.addAll(labelList);
       }
       m_results =
@@ -254,7 +254,7 @@ public class GetResultsWrapper extends SimpleTagSupport {
       if (m_inputs.get("hardwareLabels") != null)  {
         ArrayList<String> labelList =
           (ArrayList<String>) m_inputs.get("hardwareLabels");
-        hardwareLabels = new ConcurrentSkipListSet<String>();
+        hardwareLabels = new HashSet<String>();
         hardwareLabels.addAll(labelList);
       }
       m_results =
@@ -315,7 +315,7 @@ public class GetResultsWrapper extends SimpleTagSupport {
       if (m_inputs.get("hardwareLabels") != null)  {
         ArrayList<String> labelList =
           (ArrayList<String>) m_inputs.get("hardwareLabels");
-        hardwareLabels = new ConcurrentSkipListSet<String>();
+        hardwareLabels = new HashSet<String>();
         hardwareLabels.addAll(labelList);
       }
       

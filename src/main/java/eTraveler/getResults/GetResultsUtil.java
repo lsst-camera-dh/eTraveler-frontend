@@ -7,7 +7,7 @@ import java.sql.SQLException;
 
 import java.util.HashMap;
 import java.util.Set;
-import java.util.concurrent.ConcurrentSkipListSet;
+import java.util.HashSet;
 import java.util.ArrayList;
 
 public class GetResultsUtil {
@@ -213,7 +213,7 @@ public class GetResultsUtil {
   public static Set<Integer>
     addHardwareLabels(Connection conn, HashMap<Integer, Object> runMaps,
                       Set<String> labels) throws SQLException {
-    Set<Integer> hids = new ConcurrentSkipListSet<Integer>();
+    Set<Integer> hids = new HashSet<Integer>();
     for (Integer raid : runMaps.keySet()) {
       HashMap<String, Object> runMap =
         (HashMap<String, Object>) runMaps.get(raid);
@@ -244,8 +244,8 @@ public class GetResultsUtil {
     // If any of the label strings is of the form 'groupName:', could
     //    expand into set of fullnames with that groupname or
 
-    Set<String> expandedLabels = new ConcurrentSkipListSet<String>();
-    Set<String> groups  = new ConcurrentSkipListSet<String>();
+    Set<String> expandedLabels = new HashSet<String>();
+    Set<String> groups  = new HashSet<String>();
     PreparedStatement stmt;
     ResultSet rs;
     boolean gotRow;

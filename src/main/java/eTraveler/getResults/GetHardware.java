@@ -3,7 +3,7 @@ package eTraveler.getResults;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.ArrayList;
-import java.util.concurrent.ConcurrentSkipListSet;
+import java.util.HashSet;
 import java.util.Set;
 
 import java.sql.Connection;
@@ -59,7 +59,7 @@ public class GetHardware {
       }
       throw new GetResultsNoDataException(msg);
     }
-    Set<Integer> hidSet = new ConcurrentSkipListSet<Integer>();    
+    Set<Integer> hidSet = new HashSet<Integer>();    
     while (gotRow) {
       hidSet.add(rs.getInt("hid"));
       gotRow = rs.relative(1);
@@ -79,15 +79,7 @@ public class GetHardware {
       "join HardwareStatus HS2 on HS2.id=HSH2.hardwareStatusId " +
       "where HS2.isStatusValue=1 and " + /*HT.name='" + htype + "' "; */
       "H2.id in " + GetResultsUtil.setToSqlList(hidSet);
-    /*
-    if (expSN != null) {
-      findHistoryRows += "and H2.lsstId='" + expSN + "' ";
-    }  else {
-      if (model != null) {
-        findHistoryRows += "and H2.model='" + model + "' ";
-      }
-    }
-    */
+
     findHistoryRows += " group by HSH2.hardwareId) ";
     
     String sql="select H.id as hid,lsstId,  "

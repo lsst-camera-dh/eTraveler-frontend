@@ -82,7 +82,12 @@ public class GetSummary {
                      String travelerName)
     throws SQLException, GetResultsException {
 
-    return GetResultsUtil.getRunMaps(m_connect, hardwareType,
-                                     experimentSN, null, travelerName, true);
+    Map<Integer, Object> results =
+      GetResultsUtil.getRunMaps(m_connect, hardwareType,
+                                experimentSN, null, travelerName, true);
+    if (results == null) {
+      throw new GetResultsNoDataException("No data found");
+    }
+    return results;
   }
 }

@@ -2,7 +2,6 @@ package eTraveler.getResults;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.ArrayList;
-import java.util.concurrent.ConcurrentSkipListSet;
 import java.util.Set;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
