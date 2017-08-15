@@ -87,7 +87,8 @@ public class GetHardware {
     
     String sql="select H.id as hid,lsstId,  "
       + "remarks, model, manufacturer,manufacturerId, "
-      + "HS.name as status, concat(Site.name,':', Location.name) as loc "
+      + "HS.name as status, concat(Site.name,':', Location.name) as loc, "
+      + "HSH.creationTS as statusSetTS, HLH.creationTS as locationSetTS "
       + "from Hardware H "
       + "join HardwareStatusHistory HSH on H.id=HSH.hardwareId "
       + "join HardwareStatus HS on HS.id=HSH.hardwareStatusId "
@@ -118,7 +119,11 @@ public class GetHardware {
       instance.put("manufacturerId",rs.getString("manufacturerId"));
       instance.put("remarks",rs.getString("remarks"));
       instance.put("status", rs.getString("status"));
+      instance.put("statusSetTS",
+                   GetResultsUtil.timeISO(rs.getString("statusSetTS")));
       instance.put("location", rs.getString("loc"));
+      instance.put("locationSetTS",
+                   GetResultsUtil.timeISO(rs.getString("locationSetTS")));
       if (hardwareLabels != null) {
         instance.put("hardwareLabels", hidToLabels.get(rs.getInt("hid")));
       }
