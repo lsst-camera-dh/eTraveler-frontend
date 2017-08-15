@@ -117,7 +117,7 @@ public class GetResultsUtil {
         runMap.put("subsystem", rs.getString("subsystem"));
         runMap.put("runStatus", rs.getString("runStatus"));
       }
-      runMap.put("travelerVersion", rs.getString("version"));
+      runMap.put("travelerVersion", rs.getInt("version"));
       runMap.put("hardwareType", hardwareType);
       runMap.put("experimentSN", rs.getString("expSN"));
       runMap.put("hardwareId", rs.getInt("hid"));

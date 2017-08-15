@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.Set;
 import java.util.HashSet;
 import org.apache.commons.lang3.tuple.ImmutablePair;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.srs.web.base.db.ConnectionManager;
 import org.srs.web.base.filters.modeswitcher.ModeSwitcherFilter;
@@ -151,7 +152,9 @@ public class GetResultsWrapper extends SimpleTagSupport {
           m_jspContext.setAttribute("acknowledge", "Error: no results found");
       }
     } else {
-      m_jspContext.setAttribute(m_outputVariable, m_results);
+      ObjectMapper mapper = new ObjectMapper();
+      String outputString = mapper.writeValueAsString(m_results);
+      m_jspContext.setAttribute(m_outputVariable, outputString);
     }
     close();
     return;

@@ -17,17 +17,15 @@ Invokes doTag for simple tag support class which
      (or, perhaps someday, GetManual) function to call
   Unpacks arguments
   Uses JspContext to get an appropriate db connection
-  Creates a new GetHarnessedData object and makes the call
-  ..sticks results in an appropriate variable
+  Creates a new GetHarnessedData or other object and makes the call
+  ..encodes results using an ObjectMapper and stickes in
+  variable as requested.
 
-Then use <lims:encode to store encoded results in another variable
 Return little map as is done in getHardwareHierarchy.tag:
 --%>
-<results:getResultsWrapper outputVariable="resultsMap" inputs="${inputs}" /> 
-  
 
+<results:getResultsWrapper outputVariable="resultsStr" inputs="${inputs}" />
 
-  <lims:encode var="resultsStr" input="${resultsMap}"/>
 <c:choose>
   <c:when test="${empty acknowledge}">
 { "acknowledge": null,
