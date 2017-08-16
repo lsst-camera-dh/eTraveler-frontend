@@ -29,10 +29,16 @@ Return little map as is done in getHardwareHierarchy.tag:
 <c:choose>
   <c:when test="${empty acknowledge}">
 { "acknowledge": null,
-  "results": ${resultsStr} }
   </c:when>
   <c:otherwise>
-{ "acknowledge": "${acknowledge}",
+{ "acknowledge": "${acknowledge}",      
+  </c:otherwise>
+</c:choose>
+<c:choose>
+  <c:when test="${empty resultsStr}">
+  "results" : null }
+  </c:when>
+  <c:otherwise>
   "results": ${resultsStr} }
   </c:otherwise>
 </c:choose>
