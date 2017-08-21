@@ -81,21 +81,8 @@ public class GetActivityInfo {
     info.put("activityId", rs.getInt("A.id"));
     info.put("stepName", rs.getString("P.name"));
     info.put("status", rs.getString("AFS.name"));
-    info.put("begin", timeISO(rs.getString("A.begin")));
-    info.put("end", timeISO(rs.getString("A.end")));
+    info.put("begin", GetResultsUtil.timeISO(rs.getString("A.begin")));
+    info.put("end", GetResultsUtil.timeISO(rs.getString("A.end")));
   }
   /* Process good results row */
-  
-  /* Substitute T for the blank between date and time */
-  static private String timeISO(String sqlDatetime)
-  throws GetResultsException {
-    if (sqlDatetime == null) {
-      return "";
-    }
-    if (sqlDatetime.length() > 10) {
-      if (sqlDatetime.charAt(10) == ' ') return sqlDatetime.replace(' ', 'T');
-    }
-    return sqlDatetime;
-  }
-
 }

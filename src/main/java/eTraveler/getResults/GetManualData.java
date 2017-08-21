@@ -43,7 +43,8 @@ public class GetManualData {
    */
   public Map<String, Object>
     getManualResultsStep(String travelerName, String hardwareType,
-                         String stepName, String model, String experimentSN)
+                         String stepName, String model, String experimentSN,
+                         Set<String> hardwareLabels)
     throws GetResultsException, SQLException {
 
     if (m_connect == null)
@@ -63,12 +64,22 @@ public class GetManualData {
         final cut.  We use data only from the most recent good one (if
         any) for each component.
      */
-    m_runMaps = GetResultsUtil.getRunMaps(m_connect, m_hardwareType,
-                                          m_expSN, m_model, m_travelerName);
+    m_runMaps =
+      GetResultsUtil.getRunMaps(m_connect, m_hardwareType, m_expSN, m_model,
+                                m_travelerName, false);
     if (m_runMaps == null) {
       throw new GetResultsNoDataException("No data found");
     }
 
+        Set<Integer> hidSet = null;
+    if (hardwareLabels != null) {
+      hidSet = GetResultsUtil.addHardwareLabels(m_connect, m_runMaps,
+                                                hardwareLabels);
+      if (hidSet == null) {
+        throw new GetResultsNoDataException("No data found");
+      }
+    }
+                                         
     // Find good activities in the runs of interest
     String goodActivities =
       GetResultsUtil.latestGoodActivities(m_connect, m_stepName,
@@ -80,8 +91,11 @@ public class GetManualData {
      */
     String sql =
       "select ?.value as resvalue,IP.units as resunits,IP.name as patname, IP.isOptional, Process.name as procname, A.id as aid,A.hardwareId as hid,A.rootActivityId as raid,A.processId as pid from ? join Activity A on ?.activityId=A.id join InputPattern IP on ?.inputPatternId=IP.id join Process on Process.id=A.processId";
-    sql +=   " where A.id in " + goodActivities +
-      " order by A.hardwareId asc, A.rootActivityId desc,A.id desc, patname";
+    sql +=   " where A.id in " + goodActivities;
+    if (hidSet != null) {
+      sql += " and A.hardwareId in " +GetResultsUtil.setToSqlList(hidSet);
+    }
+    sql += " order by A.hardwareId asc, A.rootActivityId desc,A.id desc, patname";
     
     m_results = new HashMap<String, Object>();
     executeGenQuery(sql, "FloatResultManual", DT_FLOAT);

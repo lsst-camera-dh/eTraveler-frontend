@@ -67,14 +67,27 @@ public class GetSummary {
     m_summary.put("travelerVersion", rs.getString("travelerVersion"));
     m_summary.put("hardwareType", rs.getString("hardwareType"));
     m_summary.put("experimentSN", rs.getString("experimentSN"));
-    m_summary.put("begin", rs.getString("begin"));
+    m_summary.put("begin", GetResultsUtil.timeISO(rs.getString("begin")));
     String end = rs.getString("end");
     if (end == null) end="";
-    m_summary.put("end", end);
+    m_summary.put("end", GetResultsUtil.timeISO(end));
     m_summary.put("subsystem", rs.getString("subsystem"));
     m_summary.put("runStatus", rs.getString("runStatus"));
 
     return m_summary;
   }
-  
+
+  public Map<Integer, Object>
+    getComponentRuns(String hardwareType, String experimentSN,
+                     String travelerName)
+    throws SQLException, GetResultsException {
+
+    Map<Integer, Object> results =
+      GetResultsUtil.getRunMaps(m_connect, hardwareType,
+                                experimentSN, null, travelerName, true);
+    if (results == null) {
+      throw new GetResultsNoDataException("No data found");
+    }
+    return results;
+  }
 }
