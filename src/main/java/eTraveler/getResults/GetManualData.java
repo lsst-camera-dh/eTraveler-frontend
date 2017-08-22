@@ -39,12 +39,14 @@ public class GetManualData {
      Return map, indexed by experimentSN, of manual data for step stepName
      belonging to components as specified by arguments hardwareType, model 
      and experimentSN for which traveler with name travelerName was run and
-     step stepName had good status.
+     step stepName had good status. Exact form of innermost map depends
+     on value of rqstData input, which denotes one of primitives (i.e.,
+     int, string or float values), filepaths or signatures.
    */
   public Map<String, Object>
-    getManualResultsStep(String travelerName, String hardwareType,
-                         String stepName, String model, String experimentSN,
-                         Set<String> hardwareLabels)
+    getManualStep(int rqstData, String travelerName, String hardwareType,
+                  String stepName, String model, String experimentSN,
+                  Set<String> hardwareLabels)
     throws GetResultsException, SQLException {
 
     if (m_connect == null)
@@ -84,29 +86,76 @@ public class GetManualData {
     String goodActivities =
       GetResultsUtil.latestGoodActivities(m_connect, m_stepName,
                                           m_runMaps.keySet());
+    m_results = new HashMap<String, Object>();
 
+    String sql = null;
+    
+    switch(rqstData) {
+    case GetResultsWrapper.RQSTDATA_primitives:
     /* Form data-fetching query. It will be run once for each of the 4 tables
        which might have data we're looking for: FloatResultManual, etc.
        Substitute table name for the ?
      */
-    String sql =
-      "select ?.value as resvalue,IP.units as resunits,IP.name as patname, IP.isOptional, Process.name as procname, A.id as aid,A.hardwareId as hid,A.rootActivityId as raid,A.processId as pid from ? join Activity A on ?.activityId=A.id join InputPattern IP on ?.inputPatternId=IP.id join Process on Process.id=A.processId";
-    sql +=   " where A.id in " + goodActivities;
-    if (hidSet != null) {
-      sql += " and A.hardwareId in " +GetResultsUtil.setToSqlList(hidSet);
-    }
-    sql += " order by A.hardwareId asc, A.rootActivityId desc,A.id desc, patname";
+      sql =
+        "select ?.value as resvalue,IP.units as resunits,IP.name as patname, IP.isOptional, Process.name as pname, A.id as aid,A.hardwareId as hid,A.rootActivityId as raid,A.processId as pid from ? join Activity A on ?.activityId=A.id join InputPattern IP on ?.inputPatternId=IP.id join Process on Process.id=A.processId";
+      sql +=   " where A.id in " + goodActivities;
+      if (hidSet != null) {
+        sql += " and A.hardwareId in " +GetResultsUtil.setToSqlList(hidSet);
+      }
+      sql += " order by A.hardwareId asc, A.rootActivityId desc,A.id desc, patname";
     
-    m_results = new HashMap<String, Object>();
-    executeGenQuery(sql, "FloatResultManual", DT_FLOAT);
-    executeGenQuery(sql, "IntResultManual", DT_INT);
-    executeGenQuery(sql, "StringResultManual", DT_STRING);
-    executeGenQuery(sql, "TextResultManual", DT_TEXT);
+      executeGenQuery(sql, "FloatResultManual", DT_FLOAT);
+      executeGenQuery(sql, "IntResultManual", DT_INT);
+      executeGenQuery(sql, "StringResultManual", DT_STRING);
+      executeGenQuery(sql, "TextResultManual", DT_TEXT);
 
-    /* No additional filtering for now */
+      break;
+    case GetResultsWrapper.RQSTDATA_filepaths:
+      sql = "select F.virtualPath as vp,catalogKey,A.id as aid,A.hardwareId as hid,A.rootActivityId as raid,P.name as pname,P.id as pid,IP.name as patname, IP.isOptional from FilepathResultManual F join Activity A on F.activityId=A.id join InputPattern IP on F.inputPatternId=IP.id join Process P on P.id=A.processId where A.id in " + goodActivities;
+      if (hidSet != null) {
+        sql += " and A.hardwareId in " + GetResultsUtil.setToSqlList(hidSet);
+      }
+      sql += " order by A.hardwareId asc, A.rootActivityId desc,A.id desc, patname";
+
+      PreparedStatement stmt = m_connect.prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE);
+      ResultSet rs = stmt.executeQuery();
+      boolean gotRow=rs.first();
+      HashMap<String, Object>expMap=null;
+
+      if (!gotRow) {
+        stmt.close();
+        throw new
+          GetResultsNoDataException("No data found");
+      }
+      while (gotRow) {
+        HashMap<String, Object> steps = null;
+        HashMap<String, Object> ourRunMap =
+          (HashMap<String, Object>) m_runMaps.get(rs.getInt("raid"));
+        String expSN = (String) ourRunMap.get("experimentSN");
+        if (m_results.containsKey(expSN) ) {
+          expMap = (HashMap<String, Object>) m_results.get(expSN);
+          steps = (HashMap<String, Object>) expMap.get("steps");
+        } else  {
+          expMap = new HashMap<String, Object>(ourRunMap);
+          m_results.put(expSN, expMap);
+          
+          steps = new HashMap<String, Object>();
+          expMap.put("steps", steps);
+        }
+        gotRow = storeRunPaths(steps, rs, rs.getInt("hid"));
+      }
+      stmt.close();
+
+      break;
+    case GetResultsWrapper.RQSTDATA_signatures:
+      throw new GetResultsException("GetManualSignaturesStep NYI");      
+      // break;
+    default:
+      throw new GetResultsException("Unknown requested data type");
+    }
     return m_results;
-    
   }
+    
 
   public Map<String, Object>
     getManualRunResults(String run, String stepName)
@@ -131,7 +180,7 @@ public class GetManualData {
     m_results.put("steps", stepMap);
 
     String sql =
-      "select ?.value as resvalue,IP.units as resunits,IP.name as patname, IP.isOptional, Process.name as procname, A.id as aid,A.processId as pid,ASH.activityStatusId as actStatus from ? join Activity A on ?.activityId=A.id join InputPattern IP on ?.inputPatternId=IP.id "
+      "select ?.value as resvalue,IP.units as resunits,IP.name as patname, IP.isOptional, Process.name as pname, A.id as aid,A.processId as pid,ASH.activityStatusId as actStatus from ? join Activity A on ?.activityId=A.id join InputPattern IP on ?.inputPatternId=IP.id "
       + GetResultsUtil.getActivityStatusJoins()
       + " join Process on Process.id=A.processId where ";
     if (m_stepName != null) {
@@ -234,8 +283,8 @@ public class GetManualData {
           return gotRow;
         }
       }
-      if (!(pname.equals(rs.getString("procname")))) {
-        pname = rs.getString("procname");
+      if (!(pname.equals(rs.getString("pname")))) {
+        pname = rs.getString("pname");
         ourStepMap = (HashMap<String, Object>) findOrAddStep(stepMaps, pname);
       }
       gotRow = storeOne(rs, ourStepMap, datatype);
@@ -311,6 +360,75 @@ public class GetManualData {
     return rs.relative(1);
   }
 
+  /**
+     Do the work of storing returned data for one run.  We start with cursor 
+     pointing to a good row. 
+     For each process step, save data for most recent successful activity assoc. 
+     with that step.
+     If hid is 0, all data are known to come from a single run.
+   */
+  private boolean storeRunPaths(HashMap<String, Object> steps, ResultSet rs, int hid)
+    throws SQLException {
+    boolean gotRow=true;
+    int  pid = 0;
+    int  aid = 0;
+    int raid = 0;
+    HashMap<String, Object> fileEntryMap = null;
+    // ArrayList<HashMap<String, Object> > dictList=null;
+
+    if (hid > 0) {
+      raid = rs.getInt("raid");
+    }
+    while (gotRow) {
+      if (raid > 0) {
+        if (rs.getInt("raid") != raid) { // skip over entries for other runs
+          while (rs.getInt("hid") == hid) {
+            gotRow = rs.relative(1);
+            if (!gotRow) return gotRow;
+          }
+          return gotRow;
+        }
+      }
+      
+      if (pid != rs.getInt("pid")) { // make a new one
+        pid = rs.getInt("pid");
+        //dictList = addPathList(rs.getString("pname"), steps);
+        fileEntryMap = new HashMap<String, Object>();
+        steps.put(rs.getString("pname"), fileEntryMap);
+        aid = rs.getInt("aid");
+      }
+      while ((aid != rs.getInt("aid")) && (pid == rs.getInt("pid")))  {   // skip past
+        gotRow = rs.relative(1);
+        if (!gotRow) return gotRow;
+      }
+      if (pid == rs.getInt("pid")) {
+        gotRow = storePathEntry(fileEntryMap, rs);
+        if (hid > 0) {
+          if (!gotRow) return gotRow;
+          // if hid has changed, we're done with this component
+          if (rs.getInt("hid") != hid) return gotRow;
+        }
+      }   // otherwise this file belongs to a new step
+    } 
+    return gotRow;
+  }
+
+
+  
+  /* Add filepath entry to dict for current step*/
+  private static boolean
+    storePathEntry(HashMap <String, Object>  fileEntryMap,
+                   ResultSet rs) throws SQLException {
+
+    HashMap<String, Object> newDict = new HashMap<String, Object>();
+    newDict.put("virtualPath", rs.getString("vp"));
+    newDict.put("catalogKey", rs.getInt("catalogKey"));
+    newDict.put("isOptional", rs.getInt("isOptional"));
+    newDict.put("activityId", rs.getInt("aid"));
+    fileEntryMap.put(rs.getString("patname"), newDict);
+    return rs.relative(1);
+  }
+  
   private static Object findOrAddStep(HashMap<String, Object> stepMap,
                                       String stepName) {
     if (stepMap.containsKey(stepName)) return stepMap.get(stepName);
