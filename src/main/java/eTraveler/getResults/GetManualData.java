@@ -25,8 +25,9 @@ public class GetManualData {
   private HashMap<String, Object> m_results = null;
 
   private static final int DT_ABSENT = -2, DT_UNKNOWN = -1,
-    DT_FLOAT = 0, DT_INT = 1, DT_STRING = 2, DT_TEXT = 3;
-
+    DT_FLOAT = 0, DT_INT = 1, DT_STRING = 2, DT_TEXT = 3,
+    DT_FILEPATH = 4;
+  
   public GetManualData(Connection conn) {
     m_connect=conn;
   }
@@ -142,7 +143,7 @@ public class GetManualData {
           steps = new HashMap<String, Object>();
           expMap.put("steps", steps);
         }
-        gotRow = storeRunPaths(steps, rs, rs.getInt("hid"));
+        gotRow = storeRunAll(steps, rs, DT_FILEPATH, rs.getInt("hid"));
       }
       stmt.close();
 
@@ -265,6 +266,8 @@ public class GetManualData {
     HashMap<String, Object> stepMaps =
       (HashMap<String, Object>) stepMapsObject;
 
+    ManualStorer storer = new ManualStorer(datatype);
+
     boolean gotRow = true;
     String pname = ""; 
     HashMap<String, Object> ourStepMap = null;
@@ -287,7 +290,8 @@ public class GetManualData {
         pname = rs.getString("pname");
         ourStepMap = (HashMap<String, Object>) findOrAddStep(stepMaps, pname);
       }
-      gotRow = storeOne(rs, ourStepMap, datatype);
+      // gotRow = storeOne(rs, ourStepMap, datatype);
+      gotRow = storer.storeRow(rs, ourStepMap);
       if (hid > 0) {
         if (!gotRow) return gotRow;
         // If hid has changed, we're done with this component
@@ -295,138 +299,6 @@ public class GetManualData {
       }
     }
     return gotRow;
-  }
-
-  /**
-     rs          result set from query made in executeGenRunQuery
-     stepMap     keyed by Process.name.  Matches our step name. 
-                 Contains of each entry is a map, keyed by
-                 InputPattern.name.   We repeat activityId in each
-                 such entry, even though they will all be the same
-                 for all entries in a stepMap
-     datatype    Depends on which results table query was made on
-
-     Store a row and advance cursor.  If stepname matches but aid of
-     pre-existing entries does not,
-     skip over rows until we've exhausted rows with that aid */
-  private boolean storeOne(ResultSet rs, HashMap <String, Object> stepMap,
-                           int datatype) 
-    throws SQLException, GetResultsException {
-
-    boolean gotRow = true;
-    HashMap <String, Object> ourEntry = null;
-    String    patname = rs.getString("patname");
-    if (stepMap.containsKey(patname)) {
-      ourEntry = (HashMap <String, Object>) stepMap.get(patname);
-      if ((Integer) ourEntry.get("activityId") != rs.getInt("aid")) {
-        // Skip past all other rows with this bad aid
-        int thisAid = rs.getInt("aid");
-        while (thisAid == rs.getInt("aid")) {
-          gotRow = rs.relative(1);
-          if (!gotRow) return gotRow;
-        }
-        return gotRow;
-      }  else { // shouldn't happen
-        throw new GetResultsException("Duplicate input pattern name in step");
-      }
-    }
-    
-    // Make a new hash map for our entry and store in step map
-    ourEntry = new HashMap<String, Object>();
-    stepMap.put(patname, ourEntry);
-
-    // Store parts which are independent of datatype
-    ourEntry.put("activityId", rs.getInt("aid"));
-    ourEntry.put("units", rs.getString("resunits"));
-    ourEntry.put("isOptional", rs.getInt("isOptional"));
-
-    switch (datatype) {
-    case DT_FLOAT:
-      ourEntry.put("value", rs.getDouble("resvalue"));
-      ourEntry.put("datatype", "float");
-      break;
-    case DT_INT:
-      ourEntry.put("value", rs.getInt("resvalue"));
-      ourEntry.put("datatype", "int");
-      break;
-    case DT_STRING:
-    case DT_TEXT:
-      ourEntry.put("value", rs.getString("resvalue"));
-      ourEntry.put("datatype", "string");
-      break;
-    default:
-      throw new GetResultsException("Unkown datatype");
-    }
-    return rs.relative(1);
-  }
-
-  /**
-     Do the work of storing returned data for one run.  We start with cursor 
-     pointing to a good row. 
-     For each process step, save data for most recent successful activity assoc. 
-     with that step.
-     If hid is 0, all data are known to come from a single run.
-   */
-  private boolean storeRunPaths(HashMap<String, Object> steps, ResultSet rs, int hid)
-    throws SQLException {
-    boolean gotRow=true;
-    int  pid = 0;
-    int  aid = 0;
-    int raid = 0;
-    HashMap<String, Object> fileEntryMap = null;
-    // ArrayList<HashMap<String, Object> > dictList=null;
-
-    if (hid > 0) {
-      raid = rs.getInt("raid");
-    }
-    while (gotRow) {
-      if (raid > 0) {
-        if (rs.getInt("raid") != raid) { // skip over entries for other runs
-          while (rs.getInt("hid") == hid) {
-            gotRow = rs.relative(1);
-            if (!gotRow) return gotRow;
-          }
-          return gotRow;
-        }
-      }
-      
-      if (pid != rs.getInt("pid")) { // make a new one
-        pid = rs.getInt("pid");
-        //dictList = addPathList(rs.getString("pname"), steps);
-        fileEntryMap = new HashMap<String, Object>();
-        steps.put(rs.getString("pname"), fileEntryMap);
-        aid = rs.getInt("aid");
-      }
-      while ((aid != rs.getInt("aid")) && (pid == rs.getInt("pid")))  {   // skip past
-        gotRow = rs.relative(1);
-        if (!gotRow) return gotRow;
-      }
-      if (pid == rs.getInt("pid")) {
-        gotRow = storePathEntry(fileEntryMap, rs);
-        if (hid > 0) {
-          if (!gotRow) return gotRow;
-          // if hid has changed, we're done with this component
-          if (rs.getInt("hid") != hid) return gotRow;
-        }
-      }   // otherwise this file belongs to a new step
-    } 
-    return gotRow;
-  }
-
-
-  
-  /* Add filepath entry to dict for current step*/
-  private static boolean
-    storePathEntry(HashMap <String, Object>  fileEntryMap,
-                   ResultSet rs) throws SQLException {
-
-    HashMap<String, Object> newDict = new HashMap<String, Object>();
-    newDict.put("virtualPath", rs.getString("vp"));
-    newDict.put("catalogKey", rs.getInt("catalogKey"));
-    newDict.put("isOptional", rs.getInt("isOptional"));
-    newDict.put("activityId", rs.getInt("aid"));
-    fileEntryMap.put(rs.getString("patname"), newDict);
-    return rs.relative(1);
   }
   
   private static Object findOrAddStep(HashMap<String, Object> stepMap,
@@ -439,5 +311,67 @@ public class GetManualData {
   private static void checkNull(String val, String msg) throws GetResultsException {
     if (val == null) throw new GetResultsException(msg);
   }
-  
+
+  private class ManualStorer implements RowStorer {
+    private int     m_valueType=DT_FILEPATH;
+    ManualStorer() {}
+    ManualStorer(int valueType) {
+      m_valueType = valueType;
+    }
+    
+    public boolean storeRow(ResultSet rs, HashMap<String, Object> dest)
+      throws SQLException, GetResultsException {
+
+      boolean gotRow = true;
+      HashMap <String, Object> ourEntry = null;
+      String    patname = rs.getString("patname");
+      if (dest.containsKey(patname)) {
+        ourEntry = (HashMap <String, Object>) dest.get(patname);
+        if ((Integer) ourEntry.get("activityId") != rs.getInt("aid")) {
+          // Skip past all other rows with this bad aid
+          int thisAid = rs.getInt("aid");
+          while (thisAid == rs.getInt("aid")) {
+            gotRow = rs.relative(1);
+            if (!gotRow) return gotRow;
+          }
+          return gotRow;
+        }  else { // shouldn't happen
+          throw new GetResultsException("Duplicate input pattern name in step");
+        }
+      }
+      
+      // Make a new hash map for our entry and store in destination map
+      ourEntry = new HashMap<String, Object>();
+      dest.put(patname, ourEntry);
+      
+      // Store parts which are independent of value type
+      ourEntry.put("activityId", rs.getInt("aid"));
+      ourEntry.put("isOptional", rs.getInt("isOptional"));
+      if (m_valueType != DT_FILEPATH) {
+        ourEntry.put("units", rs.getString("resunits"));
+      }
+      switch (m_valueType) {
+      case DT_FLOAT:
+        ourEntry.put("value", rs.getDouble("resvalue"));
+        ourEntry.put("datatype", "float");
+        break;
+      case DT_INT:
+        ourEntry.put("value", rs.getInt("resvalue"));
+        ourEntry.put("datatype", "int");
+        break;
+      case DT_TEXT:
+      case DT_STRING:
+        ourEntry.put("value", rs.getString("resvalue"));
+        ourEntry.put("datatype", "string");
+        break;
+      case DT_FILEPATH:
+        ourEntry.put("virtualPath", rs.getString("vp"));
+        ourEntry.put("catalogKey", rs.getInt("catalogKey"));
+        break;
+      default:
+        throw new GetResultsException("Unsupported value type");
+      }
+      return rs.relative(1);
+    }
+  }
 }
