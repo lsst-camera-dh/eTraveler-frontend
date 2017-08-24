@@ -117,36 +117,7 @@ public class GetManualData {
         sql += " and A.hardwareId in " + GetResultsUtil.setToSqlList(hidSet);
       }
       sql += " order by A.hardwareId asc, A.rootActivityId desc,A.id desc, patname";
-
-      PreparedStatement stmt = m_connect.prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE);
-      ResultSet rs = stmt.executeQuery();
-      boolean gotRow=rs.first();
-      HashMap<String, Object>expMap=null;
-
-      if (!gotRow) {
-        stmt.close();
-        throw new
-          GetResultsNoDataException("No data found");
-      }
-      while (gotRow) {
-        HashMap<String, Object> steps = null;
-        HashMap<String, Object> ourRunMap =
-          (HashMap<String, Object>) m_runMaps.get(rs.getInt("raid"));
-        String expSN = (String) ourRunMap.get("experimentSN");
-        if (m_results.containsKey(expSN) ) {
-          expMap = (HashMap<String, Object>) m_results.get(expSN);
-          steps = (HashMap<String, Object>) expMap.get("steps");
-        } else  {
-          expMap = new HashMap<String, Object>(ourRunMap);
-          m_results.put(expSN, expMap);
-          
-          steps = new HashMap<String, Object>();
-          expMap.put("steps", steps);
-        }
-        gotRow = storeRunAll(steps, rs, DT_FILEPATH, rs.getInt("hid"));
-      }
-      stmt.close();
-
+      executeGenQuery(sql, null, DT_FILEPATH);
       break;
     case GetResultsWrapper.RQSTDATA_signatures:
       throw new GetResultsException("GetManualSignaturesStep NYI");      
@@ -204,7 +175,9 @@ public class GetManualData {
   private void executeGenQuery(String sql, String tableName, int datatype)
     throws SQLException, GetResultsException {
 
-    String sqlString = sql.replace("?", tableName);
+    String sqlString;
+    if (datatype == DT_FILEPATH) sqlString = sql;
+    else sqlString = sql.replace("?", tableName);
 
     PreparedStatement genQuery =
       m_connect.prepareStatement(sqlString, ResultSet.TYPE_SCROLL_INSENSITIVE);
@@ -233,7 +206,7 @@ public class GetManualData {
       }
       gotRow = storeRunAll(steps, rs, datatype, rs.getInt("hid"));
     }
-    
+    genQuery.close();
   }
 
   private void executeGenRunQuery(String sql, String tableName, int datatype)
