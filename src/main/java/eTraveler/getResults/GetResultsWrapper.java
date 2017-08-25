@@ -87,10 +87,10 @@ public class GetResultsWrapper extends SimpleTagSupport {
     if (m_function.equals("getManualResultsStep")) func = FUNC_getManualResultsStep;
     if (m_function.equals("getManualRunFilepaths")) func = FUNC_getManualRunFilepaths;
     if (m_function.equals("getManualFilepathsStep")) func = FUNC_getManualFilepathsStep;
-    /*
+
     if (m_function.equals("getManualRunSignatures")) func = FUNC_getManualRunSignatures;
     if (m_function.equals("getManualSignaturesStep")) func = FUNC_getManualSignaturesStep;
-    */
+
     if (m_function.equals("getActivity")) func = FUNC_getActivity;
     if (m_function.equals("getRunActivities")) func = FUNC_getRunActivities;
     if (m_function.equals("getRunSummary")) func = FUNC_getRunSummary;
@@ -134,6 +134,8 @@ public class GetResultsWrapper extends SimpleTagSupport {
       case FUNC_getManualResultsStep:
       case FUNC_getManualRunFilepaths:
       case FUNC_getManualFilepathsStep:
+      case FUNC_getManualRunSignatures:
+      case FUNC_getManualSignaturesStep:
         // call a new thing here
         getManual(func);
         break;
@@ -256,6 +258,9 @@ public class GetResultsWrapper extends SimpleTagSupport {
       // intentional fall-through
     case FUNC_getManualRunFilepaths:
       if (rqstdata == RQSTDATA_none) rqstdata = RQSTDATA_filepaths;
+      // intentional fall-through
+    case FUNC_getManualRunSignatures:
+      if (rqstdata == RQSTDATA_none) rqstdata = RQSTDATA_signatures;
       run = (String) m_inputs.get("run");
       if (run == null) {
         m_jspContext.setAttribute("acknowledge", "Missing run argument");
@@ -265,14 +270,7 @@ public class GetResultsWrapper extends SimpleTagSupport {
       String stepName= (String) m_inputs.get("stepName");
       // String nameFilter = (String) m_inputs.get("nameFilter");
 
-      // Code below to be replaced by
       m_results=getMD.getManualRun(rqstdata, run, stepName);
-      /*
-      if (func == FUNC_getManualRunResults) {
-        m_results = getMD.getManualRunResults(run, stepName);
-      } else {
-        m_results = getMD.getManualRunFilepaths(run, stepName);
-        } */
       break;
     case FUNC_getManualResultsStep:
       if (rqstdata == RQSTDATA_none) rqstdata = RQSTDATA_primitives;

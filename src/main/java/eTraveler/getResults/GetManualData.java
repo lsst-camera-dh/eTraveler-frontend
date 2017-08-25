@@ -26,7 +26,7 @@ public class GetManualData {
 
   private static final int DT_ABSENT = -2, DT_UNKNOWN = -1,
     DT_FLOAT = 0, DT_INT = 1, DT_STRING = 2, DT_TEXT = 3,
-    DT_FILEPATH = 4;
+    DT_FILEPATH = 4, DT_SIGNATURE = 5;
   
   public GetManualData(Connection conn) {
     m_connect=conn;
@@ -87,6 +87,9 @@ public class GetManualData {
     String goodActivities =
       GetResultsUtil.latestGoodActivities(m_connect, m_stepName,
                                           m_runMaps.keySet());
+    if (goodActivities == null) {
+      throw new GetResultsNoDataException("No data found");
+    }
     m_results = new HashMap<String, Object>();
 
     String sql = null;
@@ -120,8 +123,13 @@ public class GetManualData {
       executeGenQuery(sql, null, DT_FILEPATH);
       break;
     case GetResultsWrapper.RQSTDATA_signatures:
-      throw new GetResultsException("GetManualSignaturesStep NYI");      
-      // break;
+      sql = "select signerRequest,signerValue,signerComment,signatureTS,A.id as aid,A.hardwareId as hid,A.rootActivityId as raid,P.name as pname,P.id as pid,IP.name as patname, IP.isOptional from SignatureResultManual S join Activity A on S.activityId=A.id join InputPattern IP on S.inputPatternId=IP.id join Process P on P.id=A.processId where A.id in " + goodActivities;
+      if (hidSet != null) {
+        sql += " and A.hardwareId in " + GetResultsUtil.setToSqlList(hidSet);
+      }
+      sql += " order by A.hardwareId asc, A.rootActivityId desc,A.id desc, patname";
+      executeGenQuery(sql, null, DT_SIGNATURE);
+      break;
     default:
       throw new GetResultsException("Unknown requested data type");
     }
@@ -185,7 +193,18 @@ public class GetManualData {
       executeGenRunQuery(sql, null, DT_FILEPATH);
       break;
     case GetResultsWrapper.RQSTDATA_signatures:
-      throw new GetResultsException("GetManualRunSignatures NYI");
+      sql =
+        "select signerRequest,signerValue,signerComment,signatureTS,IP.name as patname, IP.isOptional, Process.name as pname, A.id as aid,A.processId as pid,ASH.activityStatusId as actStatus from SignatureResultManual S join Activity A on S.activityId=A.id join InputPattern IP on S.inputPatternId=IP.id "
+        + GetResultsUtil.getActivityStatusJoins()
+        + " join Process on Process.id=A.processId where ";
+      if (m_stepName != null) {
+        sql += "Process.name='" + m_stepName +"' and ";
+      }
+      sql += " A.rootActivityId='" + m_results.get("rootActivityId") +
+        "' and " + GetResultsUtil.getActivityStatusCondition() +
+        " order by A.processId asc,A.id desc, patname";
+      executeGenRunQuery(sql, null, DT_SIGNATURE);
+      break;
     default:
       throw new GetResultsException("Unknown requested data type");
     }
@@ -196,7 +215,8 @@ public class GetManualData {
     throws SQLException, GetResultsException {
 
     String sqlString;
-    if (datatype == DT_FILEPATH) sqlString = sql;
+    if ((datatype == DT_FILEPATH) || (datatype == DT_SIGNATURE))
+      sqlString = sql;
     else sqlString = sql.replace("?", tableName);
 
     PreparedStatement genQuery =
@@ -233,7 +253,8 @@ public class GetManualData {
     throws SQLException, GetResultsException {
 
     String sqlString;
-    if (datatype == DT_FILEPATH) sqlString = sql;
+    if ((datatype == DT_FILEPATH) || (datatype == DT_SIGNATURE))
+      sqlString = sql;
     else sqlString = sql.replace("?", tableName);
 
     PreparedStatement genQuery =
@@ -320,9 +341,16 @@ public class GetManualData {
 
       boolean gotRow = true;
       HashMap <String, Object> ourEntry = null;
-      String    patname = rs.getString("patname");
-      if (dest.containsKey(patname)) {
-        ourEntry = (HashMap <String, Object>) dest.get(patname);
+
+      String ourKey;
+      if (m_valueType == DT_SIGNATURE) {
+        ourKey = rs.getString("signerRequest");
+      } else {
+        ourKey = rs.getString("patname");
+      }
+      //String    patname = rs.getString("patname");
+      if (dest.containsKey(ourKey)) {
+        ourEntry = (HashMap <String, Object>) dest.get(ourKey);
         if ((Integer) ourEntry.get("activityId") != rs.getInt("aid")) {
           // Skip past all other rows with this bad aid
           int thisAid = rs.getInt("aid");
@@ -332,18 +360,20 @@ public class GetManualData {
           }
           return gotRow;
         }  else { // shouldn't happen
-          throw new GetResultsException("Duplicate input pattern name in step");
+          throw new GetResultsException("Duplicate key in step");
         }
       }
       
       // Make a new hash map for our entry and store in destination map
       ourEntry = new HashMap<String, Object>();
-      dest.put(patname, ourEntry);
+      dest.put(ourKey, ourEntry);
       
-      // Store parts which are independent of value type
+      // Store parts which are more or less independent of value type
       ourEntry.put("activityId", rs.getInt("aid"));
-      ourEntry.put("isOptional", rs.getInt("isOptional"));
-      if (m_valueType != DT_FILEPATH) {
+      if  (m_valueType != DT_SIGNATURE) {
+        ourEntry.put("isOptional", rs.getInt("isOptional"));
+      }
+      if ((m_valueType != DT_FILEPATH) && (m_valueType != DT_SIGNATURE)) {
         ourEntry.put("units", rs.getString("resunits"));
       }
       switch (m_valueType) {
@@ -363,6 +393,14 @@ public class GetManualData {
       case DT_FILEPATH:
         ourEntry.put("virtualPath", rs.getString("vp"));
         ourEntry.put("catalogKey", rs.getInt("catalogKey"));
+        break;
+      case DT_SIGNATURE:
+        //ourEntry.put("signerRequest", rs.getString("signerRequest"));
+        ourEntry.put("inputPattern", rs.getString("patname"));
+        ourEntry.put("signerValue", rs.getString("signerValue"));
+        ourEntry.put("signerComment", rs.getString("signerComment"));
+        ourEntry.put("signatureTS",
+                     GetResultsUtil.timeISO(rs.getString("signatureTS")));
         break;
       default:
         throw new GetResultsException("Unsupported value type");
