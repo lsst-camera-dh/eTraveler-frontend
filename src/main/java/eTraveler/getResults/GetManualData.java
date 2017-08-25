@@ -128,17 +128,17 @@ public class GetManualData {
     return m_results;
   }
     
-
   public Map<String, Object>
-    getManualRunResults(String run, String stepName)
+    getManualRun(int rqstdata, String run, String stepName)
     throws GetResultsException, SQLException {
     int runInt = GetResultsUtil.formRunInt(run);
-    return getManualRunResults(runInt, stepName);
+    return getManualRun(rqstdata, runInt, stepName);
   }
 
   public Map<String, Object>
-    getManualRunResults(int runInt, String stepName)
+    getManualRun(int rqstdata, int runInt, String stepName)
     throws GetResultsException, SQLException {
+
     if (m_connect == null)
       throw new GetResultsException("Set connection before attempting to fetch data");
     
@@ -150,25 +150,45 @@ public class GetManualData {
 
     HashMap<String, Object> stepMap = new HashMap<String, Object>();
     m_results.put("steps", stepMap);
+    
+    String sql;
+    switch(rqstdata) {
+    case GetResultsWrapper.RQSTDATA_primitives:
+      sql =
+        "select ?.value as resvalue,IP.units as resunits,IP.name as patname, IP.isOptional, Process.name as pname, A.id as aid,A.processId as pid,ASH.activityStatusId as actStatus from ? join Activity A on ?.activityId=A.id join InputPattern IP on ?.inputPatternId=IP.id "
+        + GetResultsUtil.getActivityStatusJoins()
+        + " join Process on Process.id=A.processId where ";
+      if (m_stepName != null) {
+        sql += "Process.name='" + m_stepName +"' and ";
+      }
+      sql += " A.rootActivityId='" + m_results.get("rootActivityId") +
+        "' and " + GetResultsUtil.getActivityStatusCondition() +
+        " order by A.processId asc,A.id desc, patname";
 
-    String sql =
-      "select ?.value as resvalue,IP.units as resunits,IP.name as patname, IP.isOptional, Process.name as pname, A.id as aid,A.processId as pid,ASH.activityStatusId as actStatus from ? join Activity A on ?.activityId=A.id join InputPattern IP on ?.inputPatternId=IP.id "
-      + GetResultsUtil.getActivityStatusJoins()
-      + " join Process on Process.id=A.processId where ";
-    if (m_stepName != null) {
-      sql += "Process.name='" + m_stepName +"' and ";
+      // Perform the same query on 4 tables; merge results by step as we go
+      executeGenRunQuery(sql, "StringResultManual", DT_STRING);
+      executeGenRunQuery(sql, "IntResultManual", DT_INT);
+      executeGenRunQuery(sql, "FloatResultManual", DT_FLOAT);
+      executeGenRunQuery(sql, "TextResultManual", DT_TEXT);
+      break;
+    case GetResultsWrapper.RQSTDATA_filepaths:
+      sql =
+        "select F.virtualPath as vp,catalogKey,IP.name as patname, IP.isOptional, Process.name as pname, A.id as aid,A.processId as pid,ASH.activityStatusId as actStatus from FilepathResultManual F join Activity A on F.activityId=A.id join InputPattern IP on F.inputPatternId=IP.id "
+        + GetResultsUtil.getActivityStatusJoins()
+        + " join Process on Process.id=A.processId where ";
+      if (m_stepName != null) {
+        sql += "Process.name='" + m_stepName +"' and ";
+      }
+      sql += " A.rootActivityId='" + m_results.get("rootActivityId") +
+        "' and " + GetResultsUtil.getActivityStatusCondition() +
+        " order by A.processId asc,A.id desc, patname";
+      executeGenRunQuery(sql, null, DT_FILEPATH);
+      break;
+    case GetResultsWrapper.RQSTDATA_signatures:
+      throw new GetResultsException("GetManualRunSignatures NYI");
+    default:
+      throw new GetResultsException("Unknown requested data type");
     }
-    sql += " A.rootActivityId='" + m_results.get("rootActivityId") + "' and " +
-      GetResultsUtil.getActivityStatusCondition() +
-      " order by A.processId asc,A.id desc, patname";
-
-    // Perform the same query on 4 tables; merge results by step as we go
-    executeGenRunQuery(sql, "StringResultManual", DT_STRING);
-    executeGenRunQuery(sql, "IntResultManual", DT_INT);
-    executeGenRunQuery(sql, "FloatResultManual", DT_FLOAT);
-    executeGenRunQuery(sql, "TextResultManual", DT_TEXT);
-
-    // No filtering for now
     return m_results;
   }
 
@@ -211,7 +231,10 @@ public class GetManualData {
 
   private void executeGenRunQuery(String sql, String tableName, int datatype)
     throws SQLException, GetResultsException {
-    String sqlString = sql.replace("?", tableName);
+
+    String sqlString;
+    if (datatype == DT_FILEPATH) sqlString = sql;
+    else sqlString = sql.replace("?", tableName);
 
     PreparedStatement genQuery =
       m_connect.prepareStatement(sqlString, ResultSet.TYPE_SCROLL_INSENSITIVE);

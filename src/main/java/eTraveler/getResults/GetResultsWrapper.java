@@ -252,7 +252,10 @@ public class GetResultsWrapper extends SimpleTagSupport {
     String run=null;
     switch(func) {
     case FUNC_getManualRunResults:
+      if (rqstdata == RQSTDATA_none) rqstdata = RQSTDATA_primitives;
+      // intentional fall-through
     case FUNC_getManualRunFilepaths:
+      if (rqstdata == RQSTDATA_none) rqstdata = RQSTDATA_filepaths;
       run = (String) m_inputs.get("run");
       if (run == null) {
         m_jspContext.setAttribute("acknowledge", "Missing run argument");
@@ -261,9 +264,13 @@ public class GetResultsWrapper extends SimpleTagSupport {
       }
       String stepName= (String) m_inputs.get("stepName");
       // String nameFilter = (String) m_inputs.get("nameFilter");
+
+      // Code below to be replaced by
+      m_results=getMD.getManualRun(rqstdata, run, stepName);
+      /*
       if (func == FUNC_getManualRunResults) {
         m_results = getMD.getManualRunResults(run, stepName);
-      } /*else {
+      } else {
         m_results = getMD.getManualRunFilepaths(run, stepName);
         } */
       break;
