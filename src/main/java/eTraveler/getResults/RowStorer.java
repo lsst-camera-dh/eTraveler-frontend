@@ -8,6 +8,6 @@ import java.sql.SQLException;
  *  dest
  */
 public interface RowStorer {
-  public boolean storeRow(ResultSet rs, HashMap<String, Object> dest)
+  public boolean storeRow(ResultSet rs, Object dest)
     throws SQLException, GetResultsException;
 }

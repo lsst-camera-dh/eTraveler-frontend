@@ -305,7 +305,8 @@ public class GetManualData {
       }
       if (!(pname.equals(rs.getString("pname")))) {
         pname = rs.getString("pname");
-        ourStepMap = (HashMap<String, Object>) findOrAddStep(stepMaps, pname);
+        ourStepMap = (HashMap<String, Object>)
+          GetResultsUtil.findOrAddStep(stepMaps, pname);
       }
       // gotRow = storeOne(rs, ourStepMap, datatype);
       gotRow = storer.storeRow(rs, ourStepMap);
@@ -317,14 +318,7 @@ public class GetManualData {
     }
     return gotRow;
   }
-  
-  private static Object findOrAddStep(HashMap<String, Object> stepMap,
-                                      String stepName) {
-    if (stepMap.containsKey(stepName)) return stepMap.get(stepName);
-    HashMap<String, Object> newStep = new HashMap<String, Object>();
-    stepMap.put(stepName, newStep);
-    return newStep;
-  }
+
   private static void checkNull(String val, String msg) throws GetResultsException {
     if (val == null) throw new GetResultsException(msg);
   }
@@ -336,9 +330,10 @@ public class GetManualData {
       m_valueType = valueType;
     }
     
-    public boolean storeRow(ResultSet rs, HashMap<String, Object> dest)
+    public boolean storeRow(ResultSet rs, Object destObj)
       throws SQLException, GetResultsException {
 
+      HashMap<String, Object> dest = (HashMap<String, Object>) destObj;
       boolean gotRow = true;
       HashMap <String, Object> ourEntry = null;
 
@@ -348,7 +343,7 @@ public class GetManualData {
       } else {
         ourKey = rs.getString("patname");
       }
-      //String    patname = rs.getString("patname");
+
       if (dest.containsKey(ourKey)) {
         ourEntry = (HashMap <String, Object>) dest.get(ourKey);
         if ((Integer) ourEntry.get("activityId") != rs.getInt("aid")) {

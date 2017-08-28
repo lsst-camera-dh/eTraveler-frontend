@@ -327,6 +327,15 @@ public class GetResultsUtil {
     return idToLabels;
   }
 
+  public static Object findOrAddStep(HashMap<String, Object> stepMap,
+                                     String stepName) {
+    if (stepMap.containsKey(stepName)) return stepMap.get(stepName);
+    HashMap<String, Object> newStep = new HashMap<String, Object>();
+    stepMap.put(stepName, newStep);
+    return newStep;
+  }
+
+  
   /* Substitute T for the blank between date and time */
   static public String timeISO(String sqlDatetime)
   throws GetResultsException {
