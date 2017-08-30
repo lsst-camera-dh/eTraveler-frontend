@@ -37,6 +37,10 @@ public class GetResultsWrapper extends SimpleTagSupport {
   
   public void setInputs(Map arg) {m_inputs = arg;}
   public void setOutputVariable(String arg) {m_outputVariable = arg;}
+  public static final int RQSTDATA_primitives = 1;  // string, int, float
+  public static final int RQSTDATA_filepaths = 2;
+  public static final int RQSTDATA_signatures = 3;
+  public static final int RQSTDATA_none = -1;
   private static final int FUNC_getRunResults = 1;
   private static final int FUNC_getResultsJH = 2;
   private static final int FUNC_getRunFilepaths = 3;
@@ -48,7 +52,7 @@ public class GetResultsWrapper extends SimpleTagSupport {
   private static final int FUNC_getManualRunSignatures = 6;
   private static final int FUNC_getManualRunFilepaths = 7;
   private static final int FUNC_getManualResultsStep = 8;
-  private static final int FUNC_getManualResultsSignaturesStep = 9;
+  private static final int FUNC_getManualSignaturesStep = 9;
   private static final int FUNC_getManualFilepathsStep = 10;
   private static final int FUNC_lastManual = FUNC_getManualFilepathsStep;
   
@@ -81,11 +85,12 @@ public class GetResultsWrapper extends SimpleTagSupport {
     if (m_function.equals("getFilepathsJH")) func = FUNC_getFilepathsJH;
     if (m_function.equals("getManualRunResults")) func = FUNC_getManualRunResults;
     if (m_function.equals("getManualResultsStep")) func = FUNC_getManualResultsStep;
-    /*
     if (m_function.equals("getManualRunFilepaths")) func = FUNC_getManualRunFilepaths;
-    if (m_function.equals("getManualRunSignatures")) func = FUNC_getManualRunSignatures;
     if (m_function.equals("getManualFilepathsStep")) func = FUNC_getManualFilepathsStep;
-    */
+
+    if (m_function.equals("getManualRunSignatures")) func = FUNC_getManualRunSignatures;
+    if (m_function.equals("getManualSignaturesStep")) func = FUNC_getManualSignaturesStep;
+
     if (m_function.equals("getActivity")) func = FUNC_getActivity;
     if (m_function.equals("getRunActivities")) func = FUNC_getRunActivities;
     if (m_function.equals("getRunSummary")) func = FUNC_getRunSummary;
@@ -127,6 +132,10 @@ public class GetResultsWrapper extends SimpleTagSupport {
         break;
       case FUNC_getManualRunResults:
       case FUNC_getManualResultsStep:
+      case FUNC_getManualRunFilepaths:
+      case FUNC_getManualFilepathsStep:
+      case FUNC_getManualRunSignatures:
+      case FUNC_getManualSignaturesStep:
         // call a new thing here
         getManual(func);
         break;
@@ -240,9 +249,18 @@ public class GetResultsWrapper extends SimpleTagSupport {
     throws SQLException,GetResultsException,JspException {
     GetManualData getMD = new GetManualData(m_conn);
     Set<String> hardwareLabels=null;
+    int rqstdata = RQSTDATA_none;
+    
     String run=null;
     switch(func) {
     case FUNC_getManualRunResults:
+      if (rqstdata == RQSTDATA_none) rqstdata = RQSTDATA_primitives;
+      // intentional fall-through
+    case FUNC_getManualRunFilepaths:
+      if (rqstdata == RQSTDATA_none) rqstdata = RQSTDATA_filepaths;
+      // intentional fall-through
+    case FUNC_getManualRunSignatures:
+      if (rqstdata == RQSTDATA_none) rqstdata = RQSTDATA_signatures;
       run = (String) m_inputs.get("run");
       if (run == null) {
         m_jspContext.setAttribute("acknowledge", "Missing run argument");
@@ -251,9 +269,18 @@ public class GetResultsWrapper extends SimpleTagSupport {
       }
       String stepName= (String) m_inputs.get("stepName");
       // String nameFilter = (String) m_inputs.get("nameFilter");
-      m_results = getMD.getManualRunResults(run, stepName);
+
+      m_results=getMD.getManualRun(rqstdata, run, stepName);
       break;
     case FUNC_getManualResultsStep:
+      if (rqstdata == RQSTDATA_none) rqstdata = RQSTDATA_primitives;
+      // intentional fall-through
+    case FUNC_getManualFilepathsStep:
+      if (rqstdata == RQSTDATA_none) rqstdata = RQSTDATA_filepaths;
+      //intentional fall-through
+    case FUNC_getManualSignaturesStep:
+      if (rqstdata == RQSTDATA_none) rqstdata = RQSTDATA_signatures;
+      
       if (m_inputs.get("hardwareLabels") != null)  {
         ArrayList<String> labelList =
           (ArrayList<String>) m_inputs.get("hardwareLabels");
@@ -261,12 +288,13 @@ public class GetResultsWrapper extends SimpleTagSupport {
         hardwareLabels.addAll(labelList);
       }
       m_results =
-        getMD.getManualResultsStep((String) m_inputs.get("travelerName"),
-                                   (String) m_inputs.get("hardwareType"),
-                                   (String) m_inputs.get("stepName"),
-                                   (String) m_inputs.get("model"),
-                                   (String) m_inputs.get("experimentSN"),
-                                   hardwareLabels);
+        getMD.getManualStep(rqstdata,
+                            (String) m_inputs.get("travelerName"),
+                            (String) m_inputs.get("hardwareType"),
+                            (String) m_inputs.get("stepName"),
+                            (String) m_inputs.get("model"),
+                            (String) m_inputs.get("experimentSN"),
+                            hardwareLabels);
       break;
       
     default:

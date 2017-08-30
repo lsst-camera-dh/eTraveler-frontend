@@ -25,8 +25,9 @@ public class GetManualData {
   private HashMap<String, Object> m_results = null;
 
   private static final int DT_ABSENT = -2, DT_UNKNOWN = -1,
-    DT_FLOAT = 0, DT_INT = 1, DT_STRING = 2, DT_TEXT = 3;
-
+    DT_FLOAT = 0, DT_INT = 1, DT_STRING = 2, DT_TEXT = 3,
+    DT_FILEPATH = 4, DT_SIGNATURE = 5;
+  
   public GetManualData(Connection conn) {
     m_connect=conn;
   }
@@ -39,12 +40,14 @@ public class GetManualData {
      Return map, indexed by experimentSN, of manual data for step stepName
      belonging to components as specified by arguments hardwareType, model 
      and experimentSN for which traveler with name travelerName was run and
-     step stepName had good status.
+     step stepName had good status. Exact form of innermost map depends
+     on value of rqstData input, which denotes one of primitives (i.e.,
+     int, string or float values), filepaths or signatures.
    */
   public Map<String, Object>
-    getManualResultsStep(String travelerName, String hardwareType,
-                         String stepName, String model, String experimentSN,
-                         Set<String> hardwareLabels)
+    getManualStep(int rqstData, String travelerName, String hardwareType,
+                  String stepName, String model, String experimentSN,
+                  Set<String> hardwareLabels)
     throws GetResultsException, SQLException {
 
     if (m_connect == null)
@@ -84,40 +87,66 @@ public class GetManualData {
     String goodActivities =
       GetResultsUtil.latestGoodActivities(m_connect, m_stepName,
                                           m_runMaps.keySet());
+    if (goodActivities == null) {
+      throw new GetResultsNoDataException("No data found");
+    }
+    m_results = new HashMap<String, Object>();
 
+    String sql = null;
+    
+    switch(rqstData) {
+    case GetResultsWrapper.RQSTDATA_primitives:
     /* Form data-fetching query. It will be run once for each of the 4 tables
        which might have data we're looking for: FloatResultManual, etc.
        Substitute table name for the ?
      */
-    String sql =
-      "select ?.value as resvalue,IP.units as resunits,IP.name as patname, IP.isOptional, Process.name as procname, A.id as aid,A.hardwareId as hid,A.rootActivityId as raid,A.processId as pid from ? join Activity A on ?.activityId=A.id join InputPattern IP on ?.inputPatternId=IP.id join Process on Process.id=A.processId";
-    sql +=   " where A.id in " + goodActivities;
-    if (hidSet != null) {
-      sql += " and A.hardwareId in " +GetResultsUtil.setToSqlList(hidSet);
+      sql =
+        "select ?.value as resvalue,IP.units as resunits,IP.name as patname, IP.isOptional, Process.name as pname, A.id as aid,A.hardwareId as hid,A.rootActivityId as raid,A.processId as pid from ? join Activity A on ?.activityId=A.id join InputPattern IP on ?.inputPatternId=IP.id join Process on Process.id=A.processId";
+      sql +=   " where A.id in " + goodActivities;
+      if (hidSet != null) {
+        sql += " and A.hardwareId in " +GetResultsUtil.setToSqlList(hidSet);
+      }
+      sql += " order by A.hardwareId asc, A.rootActivityId desc,A.id desc, patname";
+    
+      executeGenQuery(sql, "FloatResultManual", DT_FLOAT);
+      executeGenQuery(sql, "IntResultManual", DT_INT);
+      executeGenQuery(sql, "StringResultManual", DT_STRING);
+      executeGenQuery(sql, "TextResultManual", DT_TEXT);
+
+      break;
+    case GetResultsWrapper.RQSTDATA_filepaths:
+      sql = "select F.virtualPath as vp,catalogKey,A.id as aid,A.hardwareId as hid,A.rootActivityId as raid,P.name as pname,P.id as pid,IP.name as patname, IP.isOptional from FilepathResultManual F join Activity A on F.activityId=A.id join InputPattern IP on F.inputPatternId=IP.id join Process P on P.id=A.processId where A.id in " + goodActivities;
+      if (hidSet != null) {
+        sql += " and A.hardwareId in " + GetResultsUtil.setToSqlList(hidSet);
+      }
+      sql += " order by A.hardwareId asc, A.rootActivityId desc,A.id desc, patname";
+      executeGenQuery(sql, null, DT_FILEPATH);
+      break;
+    case GetResultsWrapper.RQSTDATA_signatures:
+      sql = "select signerRequest,signerValue,signerComment,signatureTS,A.id as aid,A.hardwareId as hid,A.rootActivityId as raid,P.name as pname,P.id as pid,IP.name as patname, IP.isOptional from SignatureResultManual S join Activity A on S.activityId=A.id join InputPattern IP on S.inputPatternId=IP.id join Process P on P.id=A.processId where A.id in " + goodActivities;
+      if (hidSet != null) {
+        sql += " and A.hardwareId in " + GetResultsUtil.setToSqlList(hidSet);
+      }
+      sql += " order by A.hardwareId asc, A.rootActivityId desc,A.id desc, patname";
+      executeGenQuery(sql, null, DT_SIGNATURE);
+      break;
+    default:
+      throw new GetResultsException("Unknown requested data type");
     }
-    sql += " order by A.hardwareId asc, A.rootActivityId desc,A.id desc, patname";
-    
-    m_results = new HashMap<String, Object>();
-    executeGenQuery(sql, "FloatResultManual", DT_FLOAT);
-    executeGenQuery(sql, "IntResultManual", DT_INT);
-    executeGenQuery(sql, "StringResultManual", DT_STRING);
-    executeGenQuery(sql, "TextResultManual", DT_TEXT);
-
-    /* No additional filtering for now */
     return m_results;
-    
   }
-
+    
   public Map<String, Object>
-    getManualRunResults(String run, String stepName)
+    getManualRun(int rqstdata, String run, String stepName)
     throws GetResultsException, SQLException {
     int runInt = GetResultsUtil.formRunInt(run);
-    return getManualRunResults(runInt, stepName);
+    return getManualRun(rqstdata, runInt, stepName);
   }
 
   public Map<String, Object>
-    getManualRunResults(int runInt, String stepName)
+    getManualRun(int rqstdata, int runInt, String stepName)
     throws GetResultsException, SQLException {
+
     if (m_connect == null)
       throw new GetResultsException("Set connection before attempting to fetch data");
     
@@ -129,32 +158,66 @@ public class GetManualData {
 
     HashMap<String, Object> stepMap = new HashMap<String, Object>();
     m_results.put("steps", stepMap);
+    
+    String sql;
+    switch(rqstdata) {
+    case GetResultsWrapper.RQSTDATA_primitives:
+      sql =
+        "select ?.value as resvalue,IP.units as resunits,IP.name as patname, IP.isOptional, Process.name as pname, A.id as aid,A.processId as pid,ASH.activityStatusId as actStatus from ? join Activity A on ?.activityId=A.id join InputPattern IP on ?.inputPatternId=IP.id "
+        + GetResultsUtil.getActivityStatusJoins()
+        + " join Process on Process.id=A.processId where ";
+      if (m_stepName != null) {
+        sql += "Process.name='" + m_stepName +"' and ";
+      }
+      sql += " A.rootActivityId='" + m_results.get("rootActivityId") +
+        "' and " + GetResultsUtil.getActivityStatusCondition() +
+        " order by A.processId asc,A.id desc, patname";
 
-    String sql =
-      "select ?.value as resvalue,IP.units as resunits,IP.name as patname, IP.isOptional, Process.name as procname, A.id as aid,A.processId as pid,ASH.activityStatusId as actStatus from ? join Activity A on ?.activityId=A.id join InputPattern IP on ?.inputPatternId=IP.id "
-      + GetResultsUtil.getActivityStatusJoins()
-      + " join Process on Process.id=A.processId where ";
-    if (m_stepName != null) {
-      sql += "Process.name='" + m_stepName +"' and ";
+      // Perform the same query on 4 tables; merge results by step as we go
+      executeGenRunQuery(sql, "StringResultManual", DT_STRING);
+      executeGenRunQuery(sql, "IntResultManual", DT_INT);
+      executeGenRunQuery(sql, "FloatResultManual", DT_FLOAT);
+      executeGenRunQuery(sql, "TextResultManual", DT_TEXT);
+      break;
+    case GetResultsWrapper.RQSTDATA_filepaths:
+      sql =
+        "select F.virtualPath as vp,catalogKey,IP.name as patname, IP.isOptional, Process.name as pname, A.id as aid,A.processId as pid,ASH.activityStatusId as actStatus from FilepathResultManual F join Activity A on F.activityId=A.id join InputPattern IP on F.inputPatternId=IP.id "
+        + GetResultsUtil.getActivityStatusJoins()
+        + " join Process on Process.id=A.processId where ";
+      if (m_stepName != null) {
+        sql += "Process.name='" + m_stepName +"' and ";
+      }
+      sql += " A.rootActivityId='" + m_results.get("rootActivityId") +
+        "' and " + GetResultsUtil.getActivityStatusCondition() +
+        " order by A.processId asc,A.id desc, patname";
+      executeGenRunQuery(sql, null, DT_FILEPATH);
+      break;
+    case GetResultsWrapper.RQSTDATA_signatures:
+      sql =
+        "select signerRequest,signerValue,signerComment,signatureTS,IP.name as patname, IP.isOptional, Process.name as pname, A.id as aid,A.processId as pid,ASH.activityStatusId as actStatus from SignatureResultManual S join Activity A on S.activityId=A.id join InputPattern IP on S.inputPatternId=IP.id "
+        + GetResultsUtil.getActivityStatusJoins()
+        + " join Process on Process.id=A.processId where ";
+      if (m_stepName != null) {
+        sql += "Process.name='" + m_stepName +"' and ";
+      }
+      sql += " A.rootActivityId='" + m_results.get("rootActivityId") +
+        "' and " + GetResultsUtil.getActivityStatusCondition() +
+        " order by A.processId asc,A.id desc, patname";
+      executeGenRunQuery(sql, null, DT_SIGNATURE);
+      break;
+    default:
+      throw new GetResultsException("Unknown requested data type");
     }
-    sql += " A.rootActivityId='" + m_results.get("rootActivityId") + "' and " +
-      GetResultsUtil.getActivityStatusCondition() +
-      " order by A.processId asc,A.id desc, patname";
-
-    // Perform the same query on 4 tables; merge results by step as we go
-    executeGenRunQuery(sql, "StringResultManual", DT_STRING);
-    executeGenRunQuery(sql, "IntResultManual", DT_INT);
-    executeGenRunQuery(sql, "FloatResultManual", DT_FLOAT);
-    executeGenRunQuery(sql, "TextResultManual", DT_TEXT);
-
-    // No filtering for now
     return m_results;
   }
 
   private void executeGenQuery(String sql, String tableName, int datatype)
     throws SQLException, GetResultsException {
 
-    String sqlString = sql.replace("?", tableName);
+    String sqlString;
+    if ((datatype == DT_FILEPATH) || (datatype == DT_SIGNATURE))
+      sqlString = sql;
+    else sqlString = sql.replace("?", tableName);
 
     PreparedStatement genQuery =
       m_connect.prepareStatement(sqlString, ResultSet.TYPE_SCROLL_INSENSITIVE);
@@ -183,12 +246,16 @@ public class GetManualData {
       }
       gotRow = storeRunAll(steps, rs, datatype, rs.getInt("hid"));
     }
-    
+    genQuery.close();
   }
 
   private void executeGenRunQuery(String sql, String tableName, int datatype)
     throws SQLException, GetResultsException {
-    String sqlString = sql.replace("?", tableName);
+
+    String sqlString;
+    if ((datatype == DT_FILEPATH) || (datatype == DT_SIGNATURE))
+      sqlString = sql;
+    else sqlString = sql.replace("?", tableName);
 
     PreparedStatement genQuery =
       m_connect.prepareStatement(sqlString, ResultSet.TYPE_SCROLL_INSENSITIVE);
@@ -216,6 +283,8 @@ public class GetManualData {
     HashMap<String, Object> stepMaps =
       (HashMap<String, Object>) stepMapsObject;
 
+    ManualStorer storer = new ManualStorer(datatype);
+
     boolean gotRow = true;
     String pname = ""; 
     HashMap<String, Object> ourStepMap = null;
@@ -234,11 +303,13 @@ public class GetManualData {
           return gotRow;
         }
       }
-      if (!(pname.equals(rs.getString("procname")))) {
-        pname = rs.getString("procname");
-        ourStepMap = (HashMap<String, Object>) findOrAddStep(stepMaps, pname);
+      if (!(pname.equals(rs.getString("pname")))) {
+        pname = rs.getString("pname");
+        ourStepMap = (HashMap<String, Object>)
+          GetResultsUtil.findOrAddStep(stepMaps, pname);
       }
-      gotRow = storeOne(rs, ourStepMap, datatype);
+      // gotRow = storeOne(rs, ourStepMap, datatype);
+      gotRow = storer.storeRow(rs, ourStepMap);
       if (hid > 0) {
         if (!gotRow) return gotRow;
         // If hid has changed, we're done with this component
@@ -248,78 +319,88 @@ public class GetManualData {
     return gotRow;
   }
 
-  /**
-     rs          result set from query made in executeGenRunQuery
-     stepMap     keyed by Process.name.  Matches our step name. 
-                 Contains of each entry is a map, keyed by
-                 InputPattern.name.   We repeat activityId in each
-                 such entry, even though they will all be the same
-                 for all entries in a stepMap
-     datatype    Depends on which results table query was made on
-
-     Store a row and advance cursor.  If stepname matches but aid of
-     pre-existing entries does not,
-     skip over rows until we've exhausted rows with that aid */
-  private boolean storeOne(ResultSet rs, HashMap <String, Object> stepMap,
-                           int datatype) 
-    throws SQLException, GetResultsException {
-
-    boolean gotRow = true;
-    HashMap <String, Object> ourEntry = null;
-    String    patname = rs.getString("patname");
-    if (stepMap.containsKey(patname)) {
-      ourEntry = (HashMap <String, Object>) stepMap.get(patname);
-      if ((Integer) ourEntry.get("activityId") != rs.getInt("aid")) {
-        // Skip past all other rows with this bad aid
-        int thisAid = rs.getInt("aid");
-        while (thisAid == rs.getInt("aid")) {
-          gotRow = rs.relative(1);
-          if (!gotRow) return gotRow;
-        }
-        return gotRow;
-      }  else { // shouldn't happen
-        throw new GetResultsException("Duplicate input pattern name in step");
-      }
-    }
-    
-    // Make a new hash map for our entry and store in step map
-    ourEntry = new HashMap<String, Object>();
-    stepMap.put(patname, ourEntry);
-
-    // Store parts which are independent of datatype
-    ourEntry.put("activityId", rs.getInt("aid"));
-    ourEntry.put("units", rs.getString("resunits"));
-    ourEntry.put("isOptional", rs.getInt("isOptional"));
-
-    switch (datatype) {
-    case DT_FLOAT:
-      ourEntry.put("value", rs.getDouble("resvalue"));
-      ourEntry.put("datatype", "float");
-      break;
-    case DT_INT:
-      ourEntry.put("value", rs.getInt("resvalue"));
-      ourEntry.put("datatype", "int");
-      break;
-    case DT_STRING:
-    case DT_TEXT:
-      ourEntry.put("value", rs.getString("resvalue"));
-      ourEntry.put("datatype", "string");
-      break;
-    default:
-      throw new GetResultsException("Unkown datatype");
-    }
-    return rs.relative(1);
-  }
-
-  private static Object findOrAddStep(HashMap<String, Object> stepMap,
-                                      String stepName) {
-    if (stepMap.containsKey(stepName)) return stepMap.get(stepName);
-    HashMap<String, Object> newStep = new HashMap<String, Object>();
-    stepMap.put(stepName, newStep);
-    return newStep;
-  }
   private static void checkNull(String val, String msg) throws GetResultsException {
     if (val == null) throw new GetResultsException(msg);
   }
-  
+
+  private class ManualStorer implements RowStorer {
+    private int     m_valueType=DT_FILEPATH;
+    ManualStorer() {}
+    ManualStorer(int valueType) {
+      m_valueType = valueType;
+    }
+    
+    public boolean storeRow(ResultSet rs, Object destObj)
+      throws SQLException, GetResultsException {
+
+      HashMap<String, Object> dest = (HashMap<String, Object>) destObj;
+      boolean gotRow = true;
+      HashMap <String, Object> ourEntry = null;
+
+      String ourKey;
+      if (m_valueType == DT_SIGNATURE) {
+        ourKey = rs.getString("signerRequest");
+      } else {
+        ourKey = rs.getString("patname");
+      }
+
+      if (dest.containsKey(ourKey)) {
+        ourEntry = (HashMap <String, Object>) dest.get(ourKey);
+        if ((Integer) ourEntry.get("activityId") != rs.getInt("aid")) {
+          // Skip past all other rows with this bad aid
+          int thisAid = rs.getInt("aid");
+          while (thisAid == rs.getInt("aid")) {
+            gotRow = rs.relative(1);
+            if (!gotRow) return gotRow;
+          }
+          return gotRow;
+        }  else { // shouldn't happen
+          throw new GetResultsException("Duplicate key in step");
+        }
+      }
+      
+      // Make a new hash map for our entry and store in destination map
+      ourEntry = new HashMap<String, Object>();
+      dest.put(ourKey, ourEntry);
+      
+      // Store parts which are more or less independent of value type
+      ourEntry.put("activityId", rs.getInt("aid"));
+      if  (m_valueType != DT_SIGNATURE) {
+        ourEntry.put("isOptional", rs.getInt("isOptional"));
+      }
+      if ((m_valueType != DT_FILEPATH) && (m_valueType != DT_SIGNATURE)) {
+        ourEntry.put("units", rs.getString("resunits"));
+      }
+      switch (m_valueType) {
+      case DT_FLOAT:
+        ourEntry.put("value", rs.getDouble("resvalue"));
+        ourEntry.put("datatype", "float");
+        break;
+      case DT_INT:
+        ourEntry.put("value", rs.getInt("resvalue"));
+        ourEntry.put("datatype", "int");
+        break;
+      case DT_TEXT:
+      case DT_STRING:
+        ourEntry.put("value", rs.getString("resvalue"));
+        ourEntry.put("datatype", "string");
+        break;
+      case DT_FILEPATH:
+        ourEntry.put("virtualPath", rs.getString("vp"));
+        ourEntry.put("catalogKey", rs.getInt("catalogKey"));
+        break;
+      case DT_SIGNATURE:
+        //ourEntry.put("signerRequest", rs.getString("signerRequest"));
+        ourEntry.put("inputPattern", rs.getString("patname"));
+        ourEntry.put("signerValue", rs.getString("signerValue"));
+        ourEntry.put("signerComment", rs.getString("signerComment"));
+        ourEntry.put("signatureTS",
+                     GetResultsUtil.timeISO(rs.getString("signatureTS")));
+        break;
+      default:
+        throw new GetResultsException("Unsupported value type");
+      }
+      return rs.relative(1);
+    }
+  }
 }

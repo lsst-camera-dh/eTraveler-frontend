@@ -455,7 +455,8 @@ public class GetHarnessedData {
       }
       if (!(pname.equals(rs.getString("pname")))) {
         pname = rs.getString("pname");
-        ourStepMap = (HashMap<String, Object>) findOrAddStep(stepMaps, pname);
+        ourStepMap = (HashMap<String, Object>)
+          GetResultsUtil.findOrAddStep(stepMaps, pname);
         schname = "";
       }
       if (!schname.equals(rs.getString("schname"))) {
@@ -620,14 +621,6 @@ public class GetHarnessedData {
     m_run=0;
     m_oneRai=0;
     m_oneHid=0;
-  }
-
-  private static Object findOrAddStep(HashMap<String, Object> stepMap,
-                                      String stepName) {
-    if (stepMap.containsKey(stepName)) return stepMap.get(stepName);
-    HashMap<String, Object> newStep = new HashMap<String, Object>();
-    stepMap.put(stepName, newStep);
-    return newStep;
   }
 
   private static Object findOrAddSchema(HashMap<String, Object> step,
