@@ -249,6 +249,8 @@ public class GetResultsWrapper extends SimpleTagSupport {
     throws SQLException,GetResultsException,JspException {
     GetManualData getMD = new GetManualData(m_conn);
     Set<String> hardwareLabels=null;
+    ArrayList<String> statuses =
+      (ArrayList<String>) m_inputs.get("activityStatus");
     int rqstdata = RQSTDATA_none;
     
     String run=null;
@@ -270,7 +272,7 @@ public class GetResultsWrapper extends SimpleTagSupport {
       String stepName= (String) m_inputs.get("stepName");
       // String nameFilter = (String) m_inputs.get("nameFilter");
 
-      m_results=getMD.getManualRun(rqstdata, run, stepName);
+      m_results=getMD.getManualRun(rqstdata, run, stepName, statuses);
       break;
     case FUNC_getManualResultsStep:
       if (rqstdata == RQSTDATA_none) rqstdata = RQSTDATA_primitives;
@@ -294,7 +296,7 @@ public class GetResultsWrapper extends SimpleTagSupport {
                             (String) m_inputs.get("stepName"),
                             (String) m_inputs.get("model"),
                             (String) m_inputs.get("experimentSN"),
-                            hardwareLabels);
+                            hardwareLabels, statuses);
       break;
       
     default:

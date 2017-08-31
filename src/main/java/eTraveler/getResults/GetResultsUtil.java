@@ -20,6 +20,13 @@ public class GetResultsUtil {
 
   public static String getActivityStatusJoins() {return s_activityStatusJoins;}
   public static String getActivityStatusCondition() {return s_activityStatusCondition;}
+  public static String getActivityStatusCondition(ArrayList<String> statuses) {
+    if (statuses == null) return getActivityStatusCondition();
+    String cond = "ASH.id in (select max(id) from ActivityStatusHistory "
+      + "group by activityID) and AFS.name in ";
+    cond += arrayToSqlList(statuses);
+    return cond;
+  }
   
   /**
      Argument should be string representation of either a valid
@@ -164,18 +171,22 @@ public class GetResultsUtil {
   /**
      Given stepName, collection of root activity ids for runs which may 
      include step so named, for each component find most recent
-     successful activity (if any) with correct step name in one of the
-     runs on that component.  Return as string which is of form
+     acceptable activity (if any) with correct step name in one of the
+     runs on that component.    If statuses arg. is null, "acceptable"
+     means "success".  Otherwise any status in the supplied set is
+     deemed acceptable.
+     Return as string which is of form
         "(act1, act2, .. )"
   */
   public static String latestGoodActivities(Connection conn, String stepName,
-                                            Set<Integer> raids)
+                                            Set<Integer> raids,
+                                            ArrayList<String> statuses)
   throws SQLException {
     String raidList = setToSqlList(raids);
     String sql="select A.id as aid, A.hardwareId as hid from Activity A "
       + "join Process on Process.id=A.processId " + getActivityStatusJoins()
-      + " where A.rootActivityId in " + raidList + " and "
-      + getActivityStatusCondition() 
+      + " where A.rootActivityId in " + raidList + " and " 
+      + getActivityStatusCondition(statuses) 
       + " and Process.name='" + stepName
       + "' order by hid asc, A.id desc";
 
