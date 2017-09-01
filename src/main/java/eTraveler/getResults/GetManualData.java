@@ -47,7 +47,7 @@ public class GetManualData {
   public Map<String, Object>
     getManualStep(int rqstData, String travelerName, String hardwareType,
                   String stepName, String model, String experimentSN,
-                  Set<String> hardwareLabels)
+                  Set<String> hardwareLabels, ArrayList<String> statuses)
     throws GetResultsException, SQLException {
 
     if (m_connect == null)
@@ -86,7 +86,7 @@ public class GetManualData {
     // Find good activities in the runs of interest
     String goodActivities =
       GetResultsUtil.latestGoodActivities(m_connect, m_stepName,
-                                          m_runMaps.keySet());
+                                          m_runMaps.keySet(), statuses);
     if (goodActivities == null) {
       throw new GetResultsNoDataException("No data found");
     }
@@ -137,14 +137,16 @@ public class GetManualData {
   }
     
   public Map<String, Object>
-    getManualRun(int rqstdata, String run, String stepName)
+    getManualRun(int rqstdata, String run, String stepName,
+                 ArrayList<String> statuses)
     throws GetResultsException, SQLException {
     int runInt = GetResultsUtil.formRunInt(run);
-    return getManualRun(rqstdata, runInt, stepName);
+    return getManualRun(rqstdata, runInt, stepName, statuses);
   }
 
   public Map<String, Object>
-    getManualRun(int rqstdata, int runInt, String stepName)
+    getManualRun(int rqstdata, int runInt, String stepName,
+                 ArrayList<String> statuses)
     throws GetResultsException, SQLException {
 
     if (m_connect == null)
@@ -170,7 +172,7 @@ public class GetManualData {
         sql += "Process.name='" + m_stepName +"' and ";
       }
       sql += " A.rootActivityId='" + m_results.get("rootActivityId") +
-        "' and " + GetResultsUtil.getActivityStatusCondition() +
+        "' and " + GetResultsUtil.getActivityStatusCondition(statuses) +
         " order by A.processId asc,A.id desc, patname";
 
       // Perform the same query on 4 tables; merge results by step as we go
@@ -188,7 +190,7 @@ public class GetManualData {
         sql += "Process.name='" + m_stepName +"' and ";
       }
       sql += " A.rootActivityId='" + m_results.get("rootActivityId") +
-        "' and " + GetResultsUtil.getActivityStatusCondition() +
+        "' and " + GetResultsUtil.getActivityStatusCondition(statuses) +
         " order by A.processId asc,A.id desc, patname";
       executeGenRunQuery(sql, null, DT_FILEPATH);
       break;
@@ -201,7 +203,7 @@ public class GetManualData {
         sql += "Process.name='" + m_stepName +"' and ";
       }
       sql += " A.rootActivityId='" + m_results.get("rootActivityId") +
-        "' and " + GetResultsUtil.getActivityStatusCondition() +
+        "' and " + GetResultsUtil.getActivityStatusCondition(statuses) +
         " order by A.processId asc,A.id desc, patname";
       executeGenRunQuery(sql, null, DT_SIGNATURE);
       break;

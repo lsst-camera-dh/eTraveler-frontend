@@ -98,7 +98,7 @@ public class GetHarnessedData {
     // Find good activities in the runs of interest
     String goodActivities =
       GetResultsUtil.latestGoodActivities(m_connect, m_stepName,
-                                          m_runMaps.keySet());
+                                          m_runMaps.keySet(), null);
 
     // There are 6 replacements to be made.  All of them are results table
     // name (e.g. "FloatResultHarnessed")
@@ -242,7 +242,7 @@ public class GetHarnessedData {
     // Find good activities in the runs of interest
     String goodActivities =
       GetResultsUtil.latestGoodActivities(m_connect, m_stepName,
-                                          m_runMaps.keySet());
+                                          m_runMaps.keySet(), null);
 
     String sql =
       "select F.virtualPath as vp,basename,catalogKey,schemaInstance,A.id as aid,A.rootActivityId as raid, A.hardwareId as hid,P.name as pname,P.id as pid from FilepathResultHarnessed F join Activity A on F.activityId=A.id "
