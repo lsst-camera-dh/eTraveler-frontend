@@ -23,7 +23,7 @@ public class GetResultsUtil {
   public static String getActivityStatusCondition(ArrayList<String> statuses) {
     if (statuses == null) return getActivityStatusCondition();
     String cond = "ASH.id in (select max(id) from ActivityStatusHistory "
-      + "group by activityID) and AFS.name in ";
+      + "group by activityId) and AFS.name in ";
     cond += arrayToSqlList(statuses);
     return cond;
   }

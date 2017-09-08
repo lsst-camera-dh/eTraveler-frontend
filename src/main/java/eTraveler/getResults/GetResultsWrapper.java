@@ -54,17 +54,18 @@ public class GetResultsWrapper extends SimpleTagSupport {
   private static final int FUNC_getManualResultsStep = 8;
   private static final int FUNC_getManualSignaturesStep = 9;
   private static final int FUNC_getManualFilepathsStep = 10;
-  private static final int FUNC_lastManual = FUNC_getManualFilepathsStep;
-  
+  private static final int FUNC_getManualMissingSignatures = 11;
+  //private static final int FUNC_lastManual = 
+
   // Activity info
-  private static final int FUNC_getActivity = 11;
-  private static final int FUNC_getRunActivities = 12;
+  private static final int FUNC_getActivity = 12;
+  private static final int FUNC_getRunActivities = 13;
 
   // Hardware, run summaries  
-  private static final int FUNC_getRunSummary = 13;
+  private static final int FUNC_getRunSummary = 14;
 
-  private static final int FUNC_getComponentRuns = 14;
-  private static final int FUNC_getHardwareInstances = 15;
+  private static final int FUNC_getComponentRuns = 15;
+  private static final int FUNC_getHardwareInstances = 16;
 
   public void doTag() throws JspException, IOException {
     m_jspContext = getJspContext();
@@ -90,7 +91,8 @@ public class GetResultsWrapper extends SimpleTagSupport {
 
     if (m_function.equals("getManualRunSignatures")) func = FUNC_getManualRunSignatures;
     if (m_function.equals("getManualSignaturesStep")) func = FUNC_getManualSignaturesStep;
-
+    if (m_function.equals("getManualMissingSignatures"))
+      func = FUNC_getManualMissingSignatures;
     if (m_function.equals("getActivity")) func = FUNC_getActivity;
     if (m_function.equals("getRunActivities")) func = FUNC_getRunActivities;
     if (m_function.equals("getRunSummary")) func = FUNC_getRunSummary;
@@ -136,7 +138,7 @@ public class GetResultsWrapper extends SimpleTagSupport {
       case FUNC_getManualFilepathsStep:
       case FUNC_getManualRunSignatures:
       case FUNC_getManualSignaturesStep:
-        // call a new thing here
+      case FUNC_getManualMissingSignatures:
         getManual(func);
         break;
       default:
@@ -249,6 +251,7 @@ public class GetResultsWrapper extends SimpleTagSupport {
     throws SQLException,GetResultsException,JspException {
     GetManualData getMD = new GetManualData(m_conn);
     Set<String> hardwareLabels=null;
+    
     ArrayList<String> statuses =
       (ArrayList<String>) m_inputs.get("activityStatus");
     int rqstdata = RQSTDATA_none;
@@ -298,7 +301,22 @@ public class GetResultsWrapper extends SimpleTagSupport {
                             (String) m_inputs.get("experimentSN"),
                             hardwareLabels, statuses);
       break;
+    case FUNC_getManualMissingSignatures:
+      if (statuses == null) {
+        statuses = new ArrayList<String>(3);
+        statuses.add("success");
+        statuses.add("inProgress");
+        statuses.add("paused");
+      }
       
+      m_results =
+        getMD.getMissingSignatures(statuses,
+                                         (String) m_inputs.get("travelerName"),
+                                         (String) m_inputs.get("stepName"),
+                                         (String) m_inputs.get("hardwareType"),
+                                         (String) m_inputs.get("model"),
+                                         (String) m_inputs.get("experimentSN"),
+                                         null);
     default:
       m_jspContext.setAttribute("acknowledge", "Unknown function " + m_function);
       close();

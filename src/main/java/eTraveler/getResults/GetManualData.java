@@ -212,6 +212,34 @@ public class GetManualData {
     }
     return m_results;
   }
+  /*
+    Don't allow status value of 'superseded'.   That way, there can be only
+    one interesting activity per step.
+   */
+  public HashMap<Integer, Object>    // or maybe ArrayList<Object> ?
+    getMissingSignatures(ArrayList<String> statuses, 
+                         String travelerName, String stepName,
+                         String hardwareType, String model, String expSN,
+                         ArrayList<String> ncrLabels)
+    throws SQLException, GetResultsException {
+    if (((model != null) || (expSN != null)) && hardwareType == null) {
+      throw new
+        GetResultsException("getMissingSignatures: missing hardwareType arg");
+    }
+
+    String sql="select A.begin as stepbegin, A.id as aid,A.rootActivityId as raid,P.name as pname,P.id as pid,A2.begin as runbegin,P2.name as travname,P2.version,SRM.activityId,signerRequest,RunNumber.runNumber,RunNumber.runInt,H.lsstId,H.id as hid,HT.name as htname,AFS.name as status from Activity A join Process P on A.processId=P.id join Activity A2 on A2.id=A.rootActivityId join Process P2 on P2.id=A2.processId join SignatureResultManual SRM on SRM.activityId=A.id join RunNumber on RunNumber.rootActivityId=A.rootActivityId join Hardware H on A.hardwareId=H.id join HardwareType HT on H.hardwareTypeId=HT.id join ActivityStatusHistory ASH on ASH.activityId=A.id join ActivityFinalStatus AFS on AFS.id=ASH.activityStatusId where A.id in (select distinct A3.id from Activity A3 join SignatureResultManual SRM2 on SRM2.activityId=A3.id where signerValue is null) and ";
+    sql += GetResultsUtil.getActivityStatusCondition(statuses);
+    if (travelerName != null) sql += " and P2.name='"+ travelerName + "' ";
+    if (stepName != null) sql += " and P.name='"+ stepName + "' ";
+    if (hardwareType != null) sql += " and HT.name='"+ hardwareType + "' ";
+    if (expSN != null) {
+      sql += " and lsstId='"+ expSN + "' ";
+    } else {
+      if (model != null) sql += " and H.model='"+ model + "' ";
+    }
+    sql += "order by hid,travname,raid desc,pid,aid desc";
+    return executeMissingSigQuery(sql, ncrLabels);
+  }
 
   private void executeGenQuery(String sql, String tableName, int datatype)
     throws SQLException, GetResultsException {
@@ -402,6 +430,114 @@ public class GetManualData {
       default:
         throw new GetResultsException("Unsupported value type");
       }
+      return rs.relative(1);
+    }
+  }
+  HashMap<Integer, Object>
+    executeMissingSigQuery(String sql, ArrayList<String> ncrLabels)
+    throws SQLException, GetResultsException {
+
+    PreparedStatement q =
+      m_connect.prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE,
+                                 ResultSet.CONCUR_READ_ONLY);
+
+    ResultSet rs = q.executeQuery();
+
+    boolean gotRow = rs.first();
+    if (!gotRow) {
+      q.close();
+      return null;
+    }
+    // Keys for results map are hardware ids
+    HashMap<Integer, Object> results = new HashMap<Integer, Object>();
+    int oldHid=0;
+    // Keys for per-hid info map are root activity ids
+    Map<Integer, Object> ourHidMap = null;
+    Map<String, Object> ourRunMap = null;
+    Map<String, Object> ourStepMap = null;
+    int oldRaid=0;
+
+    while (gotRow) {
+      int hid = rs.getInt("hid");
+      if (hid != oldHid) {
+        ourHidMap = new HashMap<Integer, Object>();
+        results.put((Integer) hid , ourHidMap);
+        oldRaid=0;
+        oldHid = hid;
+      }
+      int raid = rs.getInt("raid");
+      if (raid != oldRaid) {
+        ourRunMap = new HashMap<String, Object>();
+        ourHidMap.put((Integer) raid, ourRunMap);
+        ourRunMap.put("experimentSN", rs.getString("lsstId"));
+        ourRunMap.put("hardwareType", rs.getString("htname"));
+        ourRunMap.put("travelerName", rs.getString("travname"));
+        ourRunMap.put("travelerVersion", rs.getInt("version"));
+        ourRunMap.put("runNumber", rs.getString("runNumber"));
+        ourRunMap.put("runInt", rs.getInt("runInt"));
+        ourRunMap.put("runBegin", rs.getString("runbegin"));
+        ourStepMap = new HashMap<String, Object>();
+        ourRunMap.put("steps", ourStepMap);
+
+        gotRow = storeRunSig(ourStepMap, rs, raid);
+        
+      }
+
+    }
+    return results;
+  }
+  private boolean
+    storeRunSig(Map<String, Object> steps, ResultSet rs,  int ourRaid)
+    throws SQLException, GetResultsException {
+    // list of entries belonging to step 
+    ArrayList<Object > ourStepList = null;
+    MissingSigStorer storer = new MissingSigStorer();
+    int oldPid=0;
+    int oldAid=0;
+
+    boolean gotRow = true;
+    int pid = rs.getInt("pid");
+
+    while (true) {
+      if (pid != oldPid) {
+        ourStepList = new ArrayList<Object>();
+        steps.put(rs.getString("pname"), ourStepList);
+        oldPid = pid; oldAid=0;
+      }
+      int aid = rs.getInt("aid");      
+      if (oldAid == 0) oldAid=aid;
+      if (oldAid > aid)  {  // skip to next pid
+        while ( oldPid==pid) {
+          gotRow = rs.relative(1);
+          if (!gotRow) return gotRow;
+          if (rs.getInt("raid") != ourRaid) return gotRow;
+          pid = rs.getInt("pid");
+        }
+        continue;
+      }
+      // Store entry for this step name (may be more than one)
+      gotRow = storer.storeRow(rs, ourStepList);
+
+      if (!gotRow) return gotRow;        // no more data
+      if (rs.getInt("raid") != ourRaid) return gotRow;   // done with run
+      pid = rs.getInt("pid");
+    }
+  }
+  private class MissingSigStorer implements RowStorer {
+    MissingSigStorer() {    }
+    public boolean storeRow(ResultSet rs, Object destObj)
+      throws SQLException, GetResultsException {
+      ArrayList<Object> dest =
+        (ArrayList<Object >) destObj;
+      int aid = rs.getInt("aid");
+
+      HashMap <String, Object> ourMap = new HashMap<String, Object>();
+      ourMap.put("activityId", rs.getInt("aid"));
+      ourMap.put("activityBegin",
+                 GetResultsUtil.timeISO(rs.getString("stepBegin")));
+      ourMap.put("signerRequest", rs.getString("signerRequest"));
+      ourMap.put("activityStatus", rs.getString("status"));
+      dest.add(ourMap);
       return rs.relative(1);
     }
   }
