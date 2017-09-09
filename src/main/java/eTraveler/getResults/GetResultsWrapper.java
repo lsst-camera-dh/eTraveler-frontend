@@ -54,7 +54,7 @@ public class GetResultsWrapper extends SimpleTagSupport {
   private static final int FUNC_getManualResultsStep = 8;
   private static final int FUNC_getManualSignaturesStep = 9;
   private static final int FUNC_getManualFilepathsStep = 10;
-  private static final int FUNC_getManualMissingSignatures = 11;
+  private static final int FUNC_getMissingSignatures = 11;
   //private static final int FUNC_lastManual = 
 
   // Activity info
@@ -91,8 +91,7 @@ public class GetResultsWrapper extends SimpleTagSupport {
 
     if (m_function.equals("getManualRunSignatures")) func = FUNC_getManualRunSignatures;
     if (m_function.equals("getManualSignaturesStep")) func = FUNC_getManualSignaturesStep;
-    if (m_function.equals("getManualMissingSignatures"))
-      func = FUNC_getManualMissingSignatures;
+    if (m_function.equals("getMissingSignatures")) func = FUNC_getMissingSignatures;
     if (m_function.equals("getActivity")) func = FUNC_getActivity;
     if (m_function.equals("getRunActivities")) func = FUNC_getRunActivities;
     if (m_function.equals("getRunSummary")) func = FUNC_getRunSummary;
@@ -138,7 +137,7 @@ public class GetResultsWrapper extends SimpleTagSupport {
       case FUNC_getManualFilepathsStep:
       case FUNC_getManualRunSignatures:
       case FUNC_getManualSignaturesStep:
-      case FUNC_getManualMissingSignatures:
+      case FUNC_getMissingSignatures:
         getManual(func);
         break;
       default:
@@ -301,7 +300,7 @@ public class GetResultsWrapper extends SimpleTagSupport {
                             (String) m_inputs.get("experimentSN"),
                             hardwareLabels, statuses);
       break;
-    case FUNC_getManualMissingSignatures:
+    case FUNC_getMissingSignatures:
       if (statuses == null) {
         statuses = new ArrayList<String>(3);
         statuses.add("success");
@@ -317,6 +316,7 @@ public class GetResultsWrapper extends SimpleTagSupport {
                                          (String) m_inputs.get("model"),
                                          (String) m_inputs.get("experimentSN"),
                                          null);
+      break;
     default:
       m_jspContext.setAttribute("acknowledge", "Unknown function " + m_function);
       close();
