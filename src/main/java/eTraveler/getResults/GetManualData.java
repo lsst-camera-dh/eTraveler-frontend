@@ -451,8 +451,8 @@ public class GetManualData {
     // Keys for results map are hardware ids
     HashMap<Integer, Object> results = new HashMap<Integer, Object>();
     int oldHid=0;
-    // Keys for per-hid info map are root activity ids
-    Map<Integer, Object> ourHidMap = null;
+    // Keys for per-hid info map are run numbers (as strings)
+    Map<String, Object> ourHidMap = null;
     Map<String, Object> ourRunMap = null;
     Map<String, Object> ourStepMap = null;
     int oldRaid=0;
@@ -460,7 +460,7 @@ public class GetManualData {
     while (gotRow) {
       int hid = rs.getInt("hid");
       if (hid != oldHid) {
-        ourHidMap = new HashMap<Integer, Object>();
+        ourHidMap = new HashMap<String, Object>();
         results.put((Integer) hid , ourHidMap);
         oldRaid=0;
         oldHid = hid;
@@ -468,12 +468,12 @@ public class GetManualData {
       int raid = rs.getInt("raid");
       if (raid != oldRaid) {
         ourRunMap = new HashMap<String, Object>();
-        ourHidMap.put((Integer) raid, ourRunMap);
+        ourHidMap.put(rs.getString("runNumber"), ourRunMap);
         ourRunMap.put("experimentSN", rs.getString("lsstId"));
         ourRunMap.put("hardwareType", rs.getString("htname"));
         ourRunMap.put("travelerName", rs.getString("travname"));
         ourRunMap.put("travelerVersion", rs.getInt("version"));
-        ourRunMap.put("runNumber", rs.getString("runNumber"));
+        ourRunMap.put("rootActivityId", raid);
         ourRunMap.put("runInt", rs.getInt("runInt"));
         ourRunMap.put("runBegin", rs.getString("runbegin"));
         ourStepMap = new HashMap<String, Object>();
