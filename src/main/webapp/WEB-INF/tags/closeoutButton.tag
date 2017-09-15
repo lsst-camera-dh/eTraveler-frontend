@@ -208,7 +208,7 @@ Make a new version of the Traveler."/>
 
             <sql:query var="subsysIdQ">
                call generic_subsystem(?, ?)
-               <sql:param value="${objectId}"/>
+               <sql:param value="${activity.hardwareId}"/>
                <sql:param value="${objectTypeId}"/>
             </sql:query>
             <c:set var="subsysId" value="${subsysIdQ.rows[0].subsystemId}" />
