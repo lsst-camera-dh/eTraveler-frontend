@@ -11,7 +11,7 @@
 
 <%@attribute name="objectId" required="true"%>
 <%@attribute name="objectTypeId" required="true"%>
-<%@attribute name="labelId"%>
+<%@attribute name="labelId" required="true"%>
 <%@attribute name="activityId"%>
 <%@attribute name="reason" required="true"%>
 <%@attribute name="removeLabel"%>
@@ -20,6 +20,7 @@
     <c:set var="removeLabel" value="false"/>
 </c:if>
 
+<c:if test="${labelId != 0}">
     <sql:update>
 insert into LabelHistory set
 labelId=?<sql:param value="${labelId}"/>,
@@ -35,3 +36,4 @@ reason=?<sql:param value="${reason}"/>,
 createdBy=?<sql:param value="${userName}"/>,
 creationTS=UTC_TIMESTAMP();
     </sql:update>
+</c:if>

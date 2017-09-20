@@ -192,6 +192,7 @@ Make a new version of the Traveler."/>
             <traveler:getSetGenericLabels var="statesQ" objectId="${activity.hardwareId}" objectTypeId="${objectTypeId}"/>
              <select name="removeLabelId" required>
                 <option value="" selected disabled>Pick a label to remove</option>
+                <option value="0">No Label</option>
                 <c:forEach var="sRow" items="${statesQ.rows}">
                     <option value="${sRow.theLabelId}"><c:out value="${sRow.labelGroupName}:${sRow.labelName}"/></option>
                 </c:forEach>        
@@ -217,6 +218,7 @@ Make a new version of the Traveler."/>
                                             subsysId="${subsysId}" hgResult="${hardwareGroupsQ}"/>
             <select name="addLabelId" required>
                 <option value="" selected disabled>Pick a label to add</option>
+                <option value="0">No Label</option>
                 <c:forEach var="sRow" items="${statesQ.rows}">
                     <option value="${sRow.id}"><c:out value="${sRow.labelGroupName}:${sRow.labelName}"/></option>
                 </c:forEach>        
