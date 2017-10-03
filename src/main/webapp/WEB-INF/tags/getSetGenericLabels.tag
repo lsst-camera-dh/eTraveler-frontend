@@ -46,12 +46,15 @@ select L.name as labelName, L.id as theLabelId, LH.*, P.name as processName,
 where LH.id in (select 
     ${fullHistory ? 'LH2.id' : 'max(LH2.id)'}
     from LabelHistory LH2
-    <c:if test="${mode == 'group'}">inner join Label L2 on L2.id = LH2.labelId</c:if>
+    <c:if test="${! empty labelGroupId}">inner join Label L2 on L2.id = LH2.labelId</c:if>
     where 
     <c:choose>
         <c:when test="${mode == 'object'}">
             LH2.objectId=?<sql:param value="${objectId}"/>
             and LH2.labelableId=?<sql:param value="${objectTypeId}" />
+            <c:if test="${! empty labelGroupId}">
+                and L2.labelGroupId = ?<sql:param value="${labelGroupId}"/>
+            </c:if>
         </c:when>
         <c:when test="${mode == 'group'}">
             L2.labelGroupId = ?<sql:param value="${labelGroupId}"/>

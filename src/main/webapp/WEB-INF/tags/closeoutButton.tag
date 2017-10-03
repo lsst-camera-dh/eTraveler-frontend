@@ -211,7 +211,8 @@ Make a new version of the Traveler."/>
 
         <c:if test="${activity.removesLabel != 0}">
             <td>
-            <traveler:getSetGenericLabels var="statesQ" objectId="${activity.hardwareId}" objectTypeId="${objectTypeId}"/>
+            <traveler:getSetGenericLabels var="statesQ" objectId="${activity.hardwareId}" objectTypeId="${objectTypeId}"
+                                          labelGroupId="${activity.labelGroupId}"/>
              <select name="removeLabelId" required>
                 <option value="" selected disabled>Pick a label to remove</option>
                 <option value="0">No Label</option>
