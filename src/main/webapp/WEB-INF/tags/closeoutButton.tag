@@ -152,17 +152,20 @@ Go to the right Site,
 Create a new Location,
 Make a new version of the Traveler."/>
         </c:if>
+        <c:set var="newLocationReason" value="Moved by traveler step"/>
         <c:choose>
             <c:when test="${! empty activity.newLocation}">
                 <input type="hidden" name="newLocationId" value="${locsQ.rows[0].id}">
+                <input type="hidden" name="newLocationReason" value="${newLocationReason}">
             </c:when>
             <c:otherwise>
-                Pick a Location:
                 <select name="newLocationId">
+                    <option value="" selected disabled>Pick a new location</option>
                     <c:forEach var="loc" items="${locsQ.rows}">
                         <option value="${loc.id}"><c:out value="${loc.name}"/></option>
                     </c:forEach>
                 </select>
+                Reason: <input type="text" name="newLocationReason" value="${newLocationReason}">
             </c:otherwise>
         </c:choose>
     </c:if>
@@ -178,6 +181,7 @@ Make a new version of the Traveler."/>
                 <option value="${sRow.id}"><c:out value="${sRow.name}"/></option>
             </c:forEach>
         </select>
+        Reason: <input type="text" name="newStatusReason" value="Set by traveler step">
         </td>
     </c:if>
 
