@@ -134,7 +134,9 @@ and AFS.isFinal
 <form METHOD=GET ACTION="operator/closeoutActivity.jsp" target="_top">
     <input type="hidden" name="freshnessToken" value="${freshnessToken}">
 
-    <c:if test="${activity.setsLocation != 0 && readyToClose}">
+    <c:if test="${readyToClose}">
+<table><tr>
+    <c:if test="${activity.setsLocation != 0}">
         <sql:query var="locsQ">
 select L.id, L.name 
 from Location L 
@@ -159,6 +161,7 @@ Make a new version of the Traveler."/>
                 <input type="hidden" name="newLocationReason" value="${newLocationReason}">
             </c:when>
             <c:otherwise>
+                <td>
                 <select name="newLocationId">
                     <option value="" selected disabled>Pick a new location</option>
                     <c:forEach var="loc" items="${locsQ.rows}">
@@ -166,12 +169,11 @@ Make a new version of the Traveler."/>
                     </c:forEach>
                 </select>
                 Reason: <input type="text" name="newLocationReason" value="${newLocationReason}">
+                </td>
             </c:otherwise>
         </c:choose>
     </c:if>
 
-    <c:if test="${readyToClose}">
-<table><tr>
     <c:if test="${activity.setsStatus != 0 && empty activity.newHardwareStatusId}">
         <td>
         <traveler:getAvailableStates var="statesQ" hardwareId="${activity.hardwareId}"/>
@@ -201,6 +203,7 @@ Make a new version of the Traveler."/>
                     <option value="${sRow.theLabelId}"><c:out value="${sRow.labelGroupName}:${sRow.labelName}"/></option>
                 </c:forEach>        
             </select>
+            <input type="text" name="removeLabelReason" value="Removed by traveler step">
             </td>
         </c:if>
 
@@ -217,7 +220,7 @@ Make a new version of the Traveler."/>
                <sql:param value="${objectTypeId}"/>
             </sql:query>
             <c:set var="subsysId" value="${subsysIdQ.rows[0].subsystemId}" />
-
+            <td>
             <traveler:getUnsetGenericLabels var="statesQ" objectId="${activity.hardwareId}" objectTypeId="${objectTypeId}"
                                             subsysId="${subsysId}" hgResult="${hardwareGroupsQ}"/>
             <select name="addLabelId" required>
@@ -227,6 +230,8 @@ Make a new version of the Traveler."/>
                     <option value="${sRow.id}"><c:out value="${sRow.labelGroupName}:${sRow.labelName}"/></option>
                 </c:forEach>        
             </select>
+            <input type="text" name="addLabelReason" value="Applied by traveler step">
+            </td>
         </c:if>
     </c:if>
 </tr></table>
