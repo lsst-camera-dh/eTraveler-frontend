@@ -11,6 +11,7 @@
 <%@attribute name="objectTypeId" required="true"%>
 <%@attribute name="objectId" required="true"%>
 <%@attribute name="subsysId" required="true"%>
+<%@attribute name="labelGroupId"%>
 <%@attribute name="hgResult" required="true"
              type="javax.servlet.jsp.jstl.sql.Result"%>
 <%@attribute name="var" required="true" rtexprvalue="false"%>
@@ -47,6 +48,9 @@ and LH.adding=1) L3 on L2.id=L3.id where
   or LG.hardwareGroupId=?<sql:param value="${sRow.hardwareGroupId}"/>
 </c:forEach>
 )
+<c:if test="${! empty labelGroupId}">
+    and LG.id = ?<sql:param value="${labelGroupId}"/>
+</c:if>
 and L3.id is null and LG.labelableId=?<sql:param value="${objectTypeId}" />
 order by L2.name
 ;

@@ -239,7 +239,8 @@ Make a new version of the Traveler."/>
             <c:set var="subsysId" value="${subsysIdQ.rows[0].subsystemId}" />
             <td>
             <traveler:getUnsetGenericLabels var="statesQ" objectId="${activity.hardwareId}" objectTypeId="${objectTypeId}"
-                                            subsysId="${subsysId}" hgResult="${hardwareGroupsQ}"/>
+                                            subsysId="${subsysId}" hgResult="${hardwareGroupsQ}"
+                                            labelGroupId="${activity.labelGroupId}"/>
             <select name="addLabelId" required>
                 <option value="" selected disabled>Pick a label to add</option>
                 <option value="0">No Label</option>
