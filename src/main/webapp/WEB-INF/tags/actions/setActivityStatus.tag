@@ -48,22 +48,18 @@ select * from Activity where id=?<sql:param value="${activityId}"/>;
     <c:set var="activity" value="${activityQ.rows[0]}"/>
     <c:set var="started" value="${! empty activity.begin}"/>
 
+        <sql:update>
+update Activity set
     <c:if test="${(isFinal && ! started) || (oldStatus == 'new' && status == 'inProgress')}">
-        <sql:update>
-update Activity set
-begin=utc_timestamp()
-where id=?<sql:param value="${activityId}"/>;
-        </sql:update>
+begin=utc_timestamp(),
     </c:if>
-
     <c:if test="${isFinal}">
-        <sql:update>
-update Activity set
 end=utc_timestamp(),
-closedBy=?<sql:param value="${userName}"/>
+closedBy=?<sql:param value="${userName}"/>,
+    </c:if>
+activityFinalStatusId=?<sql:param value="${statusId}"/>
 where id=?<sql:param value="${activityId}"/>;
         </sql:update>
-    </c:if>
 
         <sql:update>
 insert into ActivityStatusHistory set

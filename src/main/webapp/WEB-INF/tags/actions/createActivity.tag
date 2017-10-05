@@ -45,6 +45,7 @@ processId=?<sql:param value="${processId}"/>,
 <c:if test="${! empty jobHarnessId}">
     jobHarnessId = ?<sql:param value="${jobHarnessId}"/>,
 </c:if>
+activityFinalStatusId = (select id from ActivityFinalStatus where name = 'new'),
 <c:if test="${! empty iteration}">
     iteration = ?<sql:param value="${iteration}"/>,
 </c:if>
