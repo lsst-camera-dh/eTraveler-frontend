@@ -49,3 +49,7 @@ reason=?<sql:param value="${reason}"/>,
 createdBy=?<sql:param value="${userName}"/>,
 creationTS=UTC_TIMESTAMP();
     </sql:update>
+
+    <sql:update>
+update Hardware set hardwareStatusId = ?<sql:param value="${hardwareStatusId}"/> where id = ?<sql:param value="${hardwareId}"/>;
+    </sql:update>
