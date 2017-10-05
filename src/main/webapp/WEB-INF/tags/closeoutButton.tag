@@ -22,7 +22,7 @@
 
     <sql:query var="activityQ" >
 select A.*, 
-P.substeps, P.maxIteration, P.newLocation, P.newHardwareStatusId, P.genericLabelId,
+P.substeps, P.maxIteration, P.siteId, P.newLocation, P.newHardwareStatusId, P.genericLabelId, P.labelGroupId,
 P.travelerActionMask&(select maskBit from InternalAction where name='harnessedJob') as isHarnessed,
 P.travelerActionMask&(select maskBit from InternalAction where name='async') as isAsync,
 P.travelerActionMask&(select maskBit from InternalAction where name='setHardwareLocation') as setsLocation,
@@ -134,41 +134,62 @@ and AFS.isFinal
 <form METHOD=GET ACTION="operator/closeoutActivity.jsp" target="_top">
     <input type="hidden" name="freshnessToken" value="${freshnessToken}">
 
-    <c:if test="${activity.setsLocation != 0 && readyToClose}">
+    <c:if test="${readyToClose}">
+<table><tr>
+    <c:if test="${activity.setsLocation != 0}">
+        <c:choose>
+            <c:when test="${! empty activity.siteId}">
+                <c:set var="siteId" value="${activity.siteId}"/>
+            </c:when>
+            <c:otherwise>
+                <sql:query var="siteQ">
+                    select id from Site where name = ?<sql:param value="${preferences.siteName}"/>;
+                </sql:query>
+                <c:set var="siteId" value="${siteQ.rows[0].id}"/>
+            </c:otherwise>
+        </c:choose>
+        <sql:query var="siteQ">
+            select name from Site where id = ?<sql:param value="${siteId}"/>;
+        </sql:query>
+        <c:set var="siteName" value="${siteQ.rows[0].name}"/>
+                    
         <sql:query var="locsQ">
-select L.id, L.name 
+select L.id, L.name, S.name as siteName
 from Location L 
     inner join Site S on S.id=L.siteId
-where S.name=?<sql:param value="${preferences.siteName}"/>
+where S.id=?<sql:param value="${siteId}"/>
 <c:if test="${! empty activity.newLocation}">
     and L.name=?<sql:param value="${activity.newLocation}"/>
 </c:if>
 ;
         </sql:query>
         <c:if test="${empty locsQ.rows}">
-            <traveler:error message="This step moves the component to a Location (${activity.newLocation}) that does not exist at your Site.
+            <traveler:error message="This step moves the component to a Location (${activity.newLocation}) that does not exist at your Site (${siteName}).
 Your options, easiest to hardest:
 Go to the right Site,
 Create a new Location,
 Make a new version of the Traveler."/>
         </c:if>
+        <c:set var="newLocationReason" value="Moved by traveler step"/>
         <c:choose>
             <c:when test="${! empty activity.newLocation}">
                 <input type="hidden" name="newLocationId" value="${locsQ.rows[0].id}">
+                <input type="hidden" name="newLocationReason" value="${newLocationReason}">
             </c:when>
             <c:otherwise>
-                Pick a Location:
+                <td>
                 <select name="newLocationId">
+                    <option value="" selected disabled>Pick a new location</option>
                     <c:forEach var="loc" items="${locsQ.rows}">
-                        <option value="${loc.id}"><c:out value="${loc.name}"/></option>
+                        <option value="${loc.id}"><c:out value="${loc.siteName}:${loc.name}"/></option>
                     </c:forEach>
                 </select>
+                Reason: <input type="text" name="newLocationReason" value="${newLocationReason}">
+                </td>
             </c:otherwise>
         </c:choose>
     </c:if>
 
-    <c:if test="${readyToClose}">
-<table><tr>
     <c:if test="${activity.setsStatus != 0 && empty activity.newHardwareStatusId}">
         <td>
         <traveler:getAvailableStates var="statesQ" hardwareId="${activity.hardwareId}"/>
@@ -178,6 +199,7 @@ Make a new version of the Traveler."/>
                 <option value="${sRow.id}"><c:out value="${sRow.name}"/></option>
             </c:forEach>
         </select>
+        Reason: <input type="text" name="newStatusReason" value="Set by traveler step">
         </td>
     </c:if>
 
@@ -189,7 +211,8 @@ Make a new version of the Traveler."/>
 
         <c:if test="${activity.removesLabel != 0}">
             <td>
-            <traveler:getSetGenericLabels var="statesQ" objectId="${activity.hardwareId}" objectTypeId="${objectTypeId}"/>
+            <traveler:getSetGenericLabels var="statesQ" objectId="${activity.hardwareId}" objectTypeId="${objectTypeId}"
+                                          labelGroupId="${activity.labelGroupId}"/>
              <select name="removeLabelId" required>
                 <option value="" selected disabled>Pick a label to remove</option>
                 <option value="0">No Label</option>
@@ -197,6 +220,7 @@ Make a new version of the Traveler."/>
                     <option value="${sRow.theLabelId}"><c:out value="${sRow.labelGroupName}:${sRow.labelName}"/></option>
                 </c:forEach>        
             </select>
+            <input type="text" name="removeLabelReason" value="Removed by traveler step">
             </td>
         </c:if>
 
@@ -213,9 +237,10 @@ Make a new version of the Traveler."/>
                <sql:param value="${objectTypeId}"/>
             </sql:query>
             <c:set var="subsysId" value="${subsysIdQ.rows[0].subsystemId}" />
-
+            <td>
             <traveler:getUnsetGenericLabels var="statesQ" objectId="${activity.hardwareId}" objectTypeId="${objectTypeId}"
-                                            subsysId="${subsysId}" hgResult="${hardwareGroupsQ}"/>
+                                            subsysId="${subsysId}" hgResult="${hardwareGroupsQ}"
+                                            labelGroupId="${activity.labelGroupId}"/>
             <select name="addLabelId" required>
                 <option value="" selected disabled>Pick a label to add</option>
                 <option value="0">No Label</option>
@@ -223,6 +248,8 @@ Make a new version of the Traveler."/>
                     <option value="${sRow.id}"><c:out value="${sRow.labelGroupName}:${sRow.labelName}"/></option>
                 </c:forEach>        
             </select>
+            <input type="text" name="addLabelReason" value="Applied by traveler step">
+            </td>
         </c:if>
     </c:if>
 </tr></table>
