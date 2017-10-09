@@ -24,7 +24,7 @@
                                  newLocationId="${param.newLocationId}" newLocationReason="${param.newLocationReason}"
                                  newStatusId="${param.hardwareStatusId}" newStatusReason="${param.newStatusReason}"
                                  removeLabelId="${param.removeLabelId}"  removeLabelReason="${param.removeLabelReason}"
-                                 addLabelId="${param.addLabelId}" addLabelRea="${param.addLabelReason}"/>
+                                 addLabelId="${param.addLabelId}" addLabelReason="${param.addLabelReason}"/>
 
             <sql:query var="activityQ">
 select * from Activity where id=?<sql:param value="${param.activityId}"/>;
