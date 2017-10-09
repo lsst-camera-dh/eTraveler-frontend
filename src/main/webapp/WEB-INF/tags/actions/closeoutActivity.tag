@@ -15,7 +15,7 @@
 <%@attribute name="newLocationId"%>
 <%@attribute name="newLocationReason"%>
 <%@attribute name="newStatusId"%>
-<%@attribute name="newSatusReason"%>
+<%@attribute name="newStatusReason"%>
 <%@attribute name="addLabelId"%>
 <%@attribute name="addLabelReason"%>
 <%@attribute name="removeLabelId"%>
