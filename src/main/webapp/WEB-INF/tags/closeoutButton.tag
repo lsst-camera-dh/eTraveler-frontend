@@ -118,7 +118,7 @@ and AFS.isFinal
 
 <c:choose>
     <c:when test="${repeatable}">
-        <c:set var="message" value="<h3>Ready to repeat or close</h3>"/>
+        <c:set var="message" value="Ready to repeat or close"/>
     </c:when>
     <c:when test="${readyToClose}">
         <c:set var="message" value="Ready to close"/>
@@ -129,7 +129,7 @@ and AFS.isFinal
 
 <traveler:hasOpenSWH var="hasOpenSWH" activityId="${activityId}"/>
 
-<c:out value="${message}"/><br>
+<h3><c:out value="${message}"/></h3>
 
 <form METHOD=GET ACTION="operator/closeoutActivity.jsp" target="_top">
     <input type="hidden" name="freshnessToken" value="${freshnessToken}">
