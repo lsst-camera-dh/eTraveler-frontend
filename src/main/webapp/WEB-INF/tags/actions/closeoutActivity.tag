@@ -13,9 +13,13 @@
 
 <%@attribute name="activityId" required="true"%>
 <%@attribute name="newLocationId"%>
+<%@attribute name="newLocationReason"%>
 <%@attribute name="newStatusId"%>
-<%@attribute name="removeLabelId"%>
+<%@attribute name="newStatusReason"%>
 <%@attribute name="addLabelId"%>
+<%@attribute name="addLabelReason"%>
+<%@attribute name="removeLabelId"%>
+<%@attribute name="removeLabelReason"%>
 
 <ta:setActivityStatus activityId="${activityId}" status="success"/>
 
@@ -45,11 +49,12 @@ where A.id=?<sql:param value="${activityId}"/>;
     <c:if test="${empty newLocationId}">
             <traveler:error message="No location supplied." bug="true"/>
     </c:if>
+    <c:if test="${empty newLocationReason}"><c:set var="newLocationReason" value="Moved by traveler step"/></c:if>
     <ta:setHardwareLocation 
         hardwareId="${activity.hardwareId}" 
         newLocationId="${newLocationId}" 
         activityId="${activityId}"
-        reason="Moved by traveler"/>
+        reason="${newLocationReason}"/>
 </c:if>
 
 <c:if test="${activity.setsStatus!=0}">
@@ -57,8 +62,9 @@ where A.id=?<sql:param value="${activityId}"/>;
     <c:if test="${empty newStatusId}">
         <traveler:error message="No hardware status supplied"/>
     </c:if>
+    <c:if test="${empty newStatusReason}"><c:set var="newStatusReason" value="Set by traveler step"/></c:if>
     <ta:setHardwareStatus activityId="${activityId}" hardwareId="${activity.hardwareId}"
-                          hardwareStatusId="${newStatusId}" reason="Set by traveler step"/>
+                          hardwareStatusId="${newStatusId}" reason="${newStatusReason}"/>
 </c:if>
 
 <c:if test="${activity.addsLabel!=0}">
@@ -66,9 +72,11 @@ where A.id=?<sql:param value="${activityId}"/>;
     <c:if test="${empty genericLabelId}">
         <traveler:error message="No label supplied"/>
     </c:if>
+    <c:if test="${empty addLabelReason}"><c:set var="addLabelReason" value="Applied by traveler step"/></c:if>
     <ta:modifyLabels activityId="${activityId}" objectId="${activity.hardwareId}" objectTypeId="${objectTypeId}"
-                     labelId="${genericLabelId}" reason="Applied by traveler step"
+                     labelId="${genericLabelId}" reason="${addLabelReason}"
                      removeLabel="false"/>
+    <
 </c:if>
 
 <c:if test="${activity.removesLabel!=0}">
@@ -76,8 +84,9 @@ where A.id=?<sql:param value="${activityId}"/>;
     <c:if test="${empty genericLabelId}">
         <traveler:error message="No label supplied"/>
     </c:if>
+    <c:if test="${empty removeLabelReason}"><c:set var="removeLabelReason" value="Removed by traveler step"/></c:if>
     <ta:modifyLabels activityId="${activityId}" objectId="${activity.hardwareId}" objectTypeId="${objectTypeId}"
-                     labelId="${genericLabelId}" reason="Removed by traveler step"
+                     labelId="${genericLabelId}" reason="${removeLabelReason}"
                      removeLabel="true"/>
 </c:if>
 

@@ -75,13 +75,13 @@
         and HS.name=?<sql:param value="${hardwareStatusName}"/>
     </c:if>
     <c:if test="${! empty siteId}">
-        and siteId=?<sql:param value="${siteId}"/>
+        and S.id=?<sql:param value="${siteId}"/>
     </c:if>
     <c:if test="${! empty siteName && siteName != 'any'}">
         and S.name=?<sql:param value="${siteName}"/>
     </c:if>
     <c:if test="${! empty locationId}">
-        and locationId=?<sql:param value="${locationId}"/>
+        and L.id=?<sql:param value="${locationId}"/>
     </c:if>
     <c:if test="${! empty subsystemId && subsystemName != 'Any'}">
         and SS.id=?<sql:param value="${subsystemId}"/>

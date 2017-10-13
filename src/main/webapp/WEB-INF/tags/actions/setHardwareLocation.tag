@@ -26,6 +26,10 @@ createdBy=?<sql:param value="${userName}"/>,
 creationTS=UTC_TIMESTAMP();
     </sql:update>
 
+    <sql:update>
+update Hardware set locationId = ?<sql:param value="${newLocationId}"/> where id = ?<sql:param value="${hardwareId}"/>;
+    </sql:update>
+
     <sql:query var="childrenQ" >
 select MRS.hardwareId, MRH.minorId, MRA.name
 from MultiRelationshipSlot MRS

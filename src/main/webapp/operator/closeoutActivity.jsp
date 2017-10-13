@@ -20,9 +20,11 @@
         <traveler:checkFreshness formToken="${param.freshnessToken}"/>        
 
         <sql:transaction >
-            <ta:closeoutActivity activityId="${param.activityId}" newLocationId="${param.newLocationId}"
-                                 newStatusId="${param.hardwareStatusId}"
-                                 removeLabelId="${param.removeLabelId}" addLabelId="${param.addLabelId}"/>
+            <ta:closeoutActivity activityId="${param.activityId}" 
+                                 newLocationId="${param.newLocationId}" newLocationReason="${param.newLocationReason}"
+                                 newStatusId="${param.hardwareStatusId}" newStatusReason="${param.newStatusReason}"
+                                 removeLabelId="${param.removeLabelId}"  removeLabelReason="${param.removeLabelReason}"
+                                 addLabelId="${param.addLabelId}" addLabelReason="${param.addLabelReason}"/>
 
             <sql:query var="activityQ">
 select * from Activity where id=?<sql:param value="${param.activityId}"/>;
