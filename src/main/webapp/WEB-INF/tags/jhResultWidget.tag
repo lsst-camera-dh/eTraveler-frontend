@@ -44,7 +44,7 @@ order by section, schemaName, schemaVersion, schemaInstance, name
                     <c:out value="${row.value}"/>
                 </c:when>
                 <c:otherwise>
-                    <c:url var="dcLink" value="http://srs.slac.stanford.edu/DataCatalog/">
+                    <c:url var="dcLink" value="http://srs.slac.stanford.edu/DataCatalog/dataset.jsp">
                         <c:param name="dataset" value="${row.catalogKey}"/>
                         <c:param name="experiment" value="${appVariables.experiment}"/>
                     </c:url>
