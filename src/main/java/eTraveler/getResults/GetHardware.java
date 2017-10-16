@@ -108,6 +108,7 @@ public class GetHardware {
       if (expSN != null) {
         msg += " and experimentSN=" + expSN;
       }
+      stmt.close();
       throw new GetResultsNoDataException(msg);
     }
     m_hlist=new ArrayList<HashMap<String, Object> >();
@@ -130,6 +131,7 @@ public class GetHardware {
       m_hlist.add(instance);
       gotRow = rs.relative(1);
     }
+    stmt.close();
     return m_hlist;
 
   }

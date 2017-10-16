@@ -31,7 +31,7 @@ public class GetResultsWrapper extends SimpleTagSupport {
   private Map    m_inputs;
   private String m_outputVariable;
   private String m_function;
-  private Connection m_conn;
+  private Connection m_conn=null;
   private JspContext m_jspContext=null;
   private Object m_results = null;
   
@@ -155,7 +155,11 @@ public class GetResultsWrapper extends SimpleTagSupport {
                                 + ghEx.getMessage());
       close();
       return;
+    } catch (JspException jspEx) {
+      close();
+      throw jspEx;
     }
+    close();
 
     if (m_results == null) {
       if (m_jspContext.getAttribute("acknowledge") == null) {
@@ -166,7 +170,6 @@ public class GetResultsWrapper extends SimpleTagSupport {
       String outputString = mapper.writeValueAsString(m_results);
       m_jspContext.setAttribute(m_outputVariable, outputString);
     }
-    close();
     return;
   }
 
@@ -242,9 +245,9 @@ public class GetResultsWrapper extends SimpleTagSupport {
       break;
     default:
       m_jspContext.setAttribute("acknowledge", "Unknown function " + m_function);
-      close();
-      return;
     }
+    close();
+    return;
   }
   private void getManual(int func) 
     throws SQLException,GetResultsException,JspException {
@@ -319,9 +322,9 @@ public class GetResultsWrapper extends SimpleTagSupport {
       break;
     default:
       m_jspContext.setAttribute("acknowledge", "Unknown function " + m_function);
-      close();
-      return;
     }
+    close();
+    return;
   }
   private void getActivities(int func)
     throws SQLException,GetResultsException,JspException {
@@ -347,9 +350,9 @@ public class GetResultsWrapper extends SimpleTagSupport {
       break;
     default:
       m_jspContext.setAttribute("acknowledge","Unknown function " + m_function);
-      close();
-      return;
     }    
+    close();
+    return;
   }
   private void getHardware(int func)
     throws SQLException,GetResultsException,JspException {
@@ -375,6 +378,7 @@ public class GetResultsWrapper extends SimpleTagSupport {
                                   (String) m_inputs.get("model"),
                                   hardwareLabels); 
     }
+    close();
   }
   
   private void getSummary(int func)
@@ -409,6 +413,7 @@ public class GetResultsWrapper extends SimpleTagSupport {
     }      
   }
   private void close() throws JspException {
+    if (m_conn == null) return;
     try {
       m_conn.setAutoCommit(true);
       m_conn.close();
@@ -416,5 +421,6 @@ public class GetResultsWrapper extends SimpleTagSupport {
       System.out.println("Failed to close SQL connection with error "
                          + ex.getMessage());
     }
+    m_conn = null;
   }
 }
