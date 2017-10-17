@@ -87,11 +87,7 @@ order by id desc limit 1;
                     <c:set var="value" value="${valueQ.rows[0]}"/>
                     <c:choose>
                         <c:when test="${(row.ISName == 'filepath') && (! empty value.catalogKey)}">
-                            <c:url var="dcLink" value="http://srs.slac.stanford.edu/DataCatalog/dataset.jsp">
-                                <c:param name="dataset" value="${value.catalogKey}"/>
-                                <c:param name="experiment" value="${appVariables.experiment}"/>
-                            </c:url>
-                            <a href="${dcLink}" target="_blank"><c:out value="${value.value}"/></a>
+                            <traveler:dcLinks datasetPk="${value.catalogKey}" localPath="${value.value}"/>
                         </c:when>
                         <c:otherwise>
                             <traveler:webbify input="${value.value}"/>
