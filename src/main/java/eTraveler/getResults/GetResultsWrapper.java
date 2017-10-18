@@ -187,7 +187,7 @@ public class GetResultsWrapper extends SimpleTagSupport {
       String stepName= (String) m_inputs.get("stepName");
       if (run == null) {
         m_jspContext.setAttribute("acknowledge", "Missing run argument");
-        close();
+        // close();
         return;
       }
       if (m_inputs.get("filterKey") != null) {
@@ -222,7 +222,7 @@ public class GetResultsWrapper extends SimpleTagSupport {
       run= (String) m_inputs.get("run");
       if (run == null) {
         m_jspContext.setAttribute("acknowledge", "Missing run argument");
-        close();
+        //close();
         return;
       }
       m_results = getHD.getRunFilepaths(run, (String) m_inputs.get("stepName"));
@@ -246,7 +246,7 @@ public class GetResultsWrapper extends SimpleTagSupport {
     default:
       m_jspContext.setAttribute("acknowledge", "Unknown function " + m_function);
     }
-    close();
+    // close();
     return;
   }
   private void getManual(int func) 
@@ -271,7 +271,7 @@ public class GetResultsWrapper extends SimpleTagSupport {
       run = (String) m_inputs.get("run");
       if (run == null) {
         m_jspContext.setAttribute("acknowledge", "Missing run argument");
-        close();
+        //close();
         return;
       }
       String stepName= (String) m_inputs.get("stepName");
@@ -323,7 +323,7 @@ public class GetResultsWrapper extends SimpleTagSupport {
     default:
       m_jspContext.setAttribute("acknowledge", "Unknown function " + m_function);
     }
-    close();
+    //close();
     return;
   }
   private void getActivities(int func)
@@ -334,7 +334,7 @@ public class GetResultsWrapper extends SimpleTagSupport {
       String aid= (String) m_inputs.get("activityId");
       if (aid == null) {
         m_jspContext.setAttribute("acknowledge", "Missing activityId argument");
-        close();
+        //close();
         return;
       }
       m_results = getA.getActivity(aid);
@@ -343,7 +343,7 @@ public class GetResultsWrapper extends SimpleTagSupport {
       String run= (String) m_inputs.get("run");
       if (run == null) {
         m_jspContext.setAttribute("acknowledge", "Missing run argument");
-        close();
+        //close();
         return;
       }
       m_results = getA.getRunActivities(run);
@@ -351,7 +351,7 @@ public class GetResultsWrapper extends SimpleTagSupport {
     default:
       m_jspContext.setAttribute("acknowledge","Unknown function " + m_function);
     }    
-    close();
+    //close();
     return;
   }
   private void getHardware(int func)
@@ -363,7 +363,7 @@ public class GetResultsWrapper extends SimpleTagSupport {
       String htype = (String) m_inputs.get("hardwareType");
       if (htype == null) {
         m_jspContext.setAttribute("acknowledge", "Missing hardware type arg");
-        close();
+        //close();
         return;
       }
       if (m_inputs.get("hardwareLabels") != null)  {
@@ -378,7 +378,7 @@ public class GetResultsWrapper extends SimpleTagSupport {
                                   (String) m_inputs.get("model"),
                                   hardwareLabels); 
     }
-    close();
+    //close();
   }
   
   private void getSummary(int func)
@@ -389,7 +389,7 @@ public class GetResultsWrapper extends SimpleTagSupport {
       String run =(String) m_inputs.get("run");
       if (run == null) {
         m_jspContext.setAttribute("acknowledge", "Missing run argument");
-        close();
+        //close();
         return;
       }
       m_results = getS.getRunSummary(run);
@@ -399,7 +399,7 @@ public class GetResultsWrapper extends SimpleTagSupport {
       String expSN = (String) m_inputs.get("experimentSN");
       if ((htype == null) || (expSN == null)) {
         m_jspContext.setAttribute("acknowledge", "Missing argument");
-        close();
+        //close();
         return;
       }
       String travelerName = (String) m_inputs.get("travelerName");
@@ -408,14 +408,13 @@ public class GetResultsWrapper extends SimpleTagSupport {
     default:
       m_jspContext.setAttribute("acknowledge",
                                 "Unknown function " + m_function);
-      close();
+      //close();
       return;
     }      
   }
   private void close() throws JspException {
     if (m_conn == null) return;
     try {
-      m_conn.setAutoCommit(true);
       m_conn.close();
     } catch (SQLException ex) {
       System.out.println("Failed to close SQL connection with error "
