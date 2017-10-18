@@ -53,6 +53,7 @@
 
 <traveler:activityInputWidget activityId="${activityId}" var="resultsFiled"/>
 <traveler:activitySignatureWidget var="signedOff" activityId="${activityId}" resultsFiled="${resultsFiled}"/>
+<traveler:activityActionWidget activityId="${activityId}"/>
 
 <table>
     <tr>
