@@ -70,6 +70,10 @@ public class GetHardware {
       hidToLabels =
         GetResultsUtil.associateLabels(m_connect, hardwareLabels,
                                        hidSet, "hardware");
+      if (hidToLabels == null) {
+        String msg="No relevant components with specified labels";
+        throw new GetResultsNoDataException(msg);
+      }
       hidSet = hidToLabels.keySet();
     }
     String findHistoryRows =

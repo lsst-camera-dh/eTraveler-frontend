@@ -76,43 +76,43 @@ public class GetResultsWrapper extends SimpleTagSupport {
     // Get a suitable connection
     String dataSource = ModeSwitcherFilter.getVariable(request.getSession(),
                                                        "etravelerDb");
-    m_conn = ConnectionManager.getConnection(dataSource);
-
-    int func = 0;
-    m_function = (String) m_inputs.get("function");
-    if (m_function.equals("getRunResults")) func = FUNC_getRunResults;
-    if (m_function.equals("getResultsJH")) func = FUNC_getResultsJH;
-    if (m_function.equals("getRunFilepaths")) func = FUNC_getRunFilepaths;
-    if (m_function.equals("getFilepathsJH")) func = FUNC_getFilepathsJH;
-    if (m_function.equals("getManualRunResults")) func = FUNC_getManualRunResults;
-    if (m_function.equals("getManualResultsStep")) func = FUNC_getManualResultsStep;
-    if (m_function.equals("getManualRunFilepaths")) func = FUNC_getManualRunFilepaths;
-    if (m_function.equals("getManualFilepathsStep")) func = FUNC_getManualFilepathsStep;
-
-    if (m_function.equals("getManualRunSignatures")) func = FUNC_getManualRunSignatures;
-    if (m_function.equals("getManualSignaturesStep")) func = FUNC_getManualSignaturesStep;
-    if (m_function.equals("getMissingSignatures")) func = FUNC_getMissingSignatures;
-    if (m_function.equals("getActivity")) func = FUNC_getActivity;
-    if (m_function.equals("getRunActivities")) func = FUNC_getRunActivities;
-    if (m_function.equals("getRunSummary")) func = FUNC_getRunSummary;
-    if (m_function.equals("getComponentRuns")) func = FUNC_getComponentRuns;
-    if (m_function.equals("getHardwareInstances")) func = FUNC_getHardwareInstances;
-    if (func == 0) {
-      m_jspContext.setAttribute("acknowledge", "Unknown function " + m_function);
-      close();
-      return;
-    }
+    try  (Connection conn = ConnectionManager.getConnection(dataSource) ) {
+      m_conn = conn;
+      int func = 0;
+      m_function = (String) m_inputs.get("function");
+      if (m_function.equals("getRunResults")) func = FUNC_getRunResults;
+      if (m_function.equals("getResultsJH")) func = FUNC_getResultsJH;
+      if (m_function.equals("getRunFilepaths")) func = FUNC_getRunFilepaths;
+      if (m_function.equals("getFilepathsJH")) func = FUNC_getFilepathsJH;
+      if (m_function.equals("getManualRunResults")) func = FUNC_getManualRunResults;
+      if (m_function.equals("getManualResultsStep")) func = FUNC_getManualResultsStep;
+      if (m_function.equals("getManualRunFilepaths")) func = FUNC_getManualRunFilepaths;
+      if (m_function.equals("getManualFilepathsStep")) func = FUNC_getManualFilepathsStep;
+      
+      if (m_function.equals("getManualRunSignatures")) func = FUNC_getManualRunSignatures;
+      if (m_function.equals("getManualSignaturesStep")) func = FUNC_getManualSignaturesStep;
+      if (m_function.equals("getMissingSignatures")) func = FUNC_getMissingSignatures;
+      if (m_function.equals("getActivity")) func = FUNC_getActivity;
+      if (m_function.equals("getRunActivities")) func = FUNC_getRunActivities;
+      if (m_function.equals("getRunSummary")) func = FUNC_getRunSummary;
+      if (m_function.equals("getComponentRuns")) func = FUNC_getComponentRuns;
+      if (m_function.equals("getHardwareInstances")) func = FUNC_getHardwareInstances;
+      if (func == 0) {
+        m_jspContext.setAttribute("acknowledge", "Unknown function " + m_function);
+        //close();
+        return;
+      }
     
-    try {
-      m_conn.setAutoCommit(true);
-    } catch (SQLException se) {
-      m_jspContext.setAttribute("acknowledge", "SQL error" + se.getMessage());
-      close();
-      return;
-    }    
-    m_jspContext.removeAttribute("acknowledge"); // good status so far
+      try {
+        m_conn.setAutoCommit(true);
+      } catch (SQLException se) {
+        m_jspContext.setAttribute("acknowledge", "SQL error" + se.getMessage());
+        //close();
+        return;
+      }    
+      m_jspContext.removeAttribute("acknowledge"); // good status so far
 
-    try {
+      //try {
       switch(func) {
       case FUNC_getRunResults:
       case FUNC_getResultsJH:
@@ -142,24 +142,25 @@ public class GetResultsWrapper extends SimpleTagSupport {
         break;
       default:
         m_jspContext.setAttribute("acknowledge", "Unknown function " + m_function);
-        close();
+        //close();
         return;
       }
+        
     } catch (SQLException sqlEx) {
       m_jspContext.setAttribute("acknowledge", "Failed with SQL exception "
                                 + sqlEx.getMessage());
-      close();
+      //close();
       return;
     } catch (GetResultsException ghEx) {
       m_jspContext.setAttribute("acknowledge", "Failed with exception "
                                 + ghEx.getMessage());
-      close();
+      // close();
       return;
     } catch (JspException jspEx) {
-      close();
+      //close();
       throw jspEx;
     }
-    close();
+    // close();
 
     if (m_results == null) {
       if (m_jspContext.getAttribute("acknowledge") == null) {
@@ -412,6 +413,7 @@ public class GetResultsWrapper extends SimpleTagSupport {
       return;
     }      
   }
+  /*
   private void close() throws JspException {
     if (m_conn == null) return;
     try {
@@ -422,4 +424,5 @@ public class GetResultsWrapper extends SimpleTagSupport {
     }
     m_conn = null;
   }
+  */
 }
