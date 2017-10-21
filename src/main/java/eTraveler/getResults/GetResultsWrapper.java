@@ -99,7 +99,6 @@ public class GetResultsWrapper extends SimpleTagSupport {
       if (m_function.equals("getHardwareInstances")) func = FUNC_getHardwareInstances;
       if (func == 0) {
         m_jspContext.setAttribute("acknowledge", "Unknown function " + m_function);
-        //close();
         return;
       }
     
@@ -107,7 +106,6 @@ public class GetResultsWrapper extends SimpleTagSupport {
         m_conn.setAutoCommit(true);
       } catch (SQLException se) {
         m_jspContext.setAttribute("acknowledge", "SQL error" + se.getMessage());
-        //close();
         return;
       }    
       m_jspContext.removeAttribute("acknowledge"); // good status so far
@@ -142,25 +140,20 @@ public class GetResultsWrapper extends SimpleTagSupport {
         break;
       default:
         m_jspContext.setAttribute("acknowledge", "Unknown function " + m_function);
-        //close();
         return;
       }
         
     } catch (SQLException sqlEx) {
       m_jspContext.setAttribute("acknowledge", "Failed with SQL exception "
                                 + sqlEx.getMessage());
-      //close();
       return;
     } catch (GetResultsException ghEx) {
       m_jspContext.setAttribute("acknowledge", "Failed with exception "
                                 + ghEx.getMessage());
-      // close();
       return;
     } catch (JspException jspEx) {
-      //close();
       throw jspEx;
     }
-    // close();
 
     if (m_results == null) {
       if (m_jspContext.getAttribute("acknowledge") == null) {
@@ -188,7 +181,6 @@ public class GetResultsWrapper extends SimpleTagSupport {
       String stepName= (String) m_inputs.get("stepName");
       if (run == null) {
         m_jspContext.setAttribute("acknowledge", "Missing run argument");
-        // close();
         return;
       }
       if (m_inputs.get("filterKey") != null) {
@@ -223,7 +215,6 @@ public class GetResultsWrapper extends SimpleTagSupport {
       run= (String) m_inputs.get("run");
       if (run == null) {
         m_jspContext.setAttribute("acknowledge", "Missing run argument");
-        //close();
         return;
       }
       m_results = getHD.getRunFilepaths(run, (String) m_inputs.get("stepName"));
@@ -247,7 +238,6 @@ public class GetResultsWrapper extends SimpleTagSupport {
     default:
       m_jspContext.setAttribute("acknowledge", "Unknown function " + m_function);
     }
-    // close();
     return;
   }
   private void getManual(int func) 
@@ -272,7 +262,6 @@ public class GetResultsWrapper extends SimpleTagSupport {
       run = (String) m_inputs.get("run");
       if (run == null) {
         m_jspContext.setAttribute("acknowledge", "Missing run argument");
-        //close();
         return;
       }
       String stepName= (String) m_inputs.get("stepName");
@@ -324,7 +313,6 @@ public class GetResultsWrapper extends SimpleTagSupport {
     default:
       m_jspContext.setAttribute("acknowledge", "Unknown function " + m_function);
     }
-    //close();
     return;
   }
   private void getActivities(int func)
@@ -335,7 +323,6 @@ public class GetResultsWrapper extends SimpleTagSupport {
       String aid= (String) m_inputs.get("activityId");
       if (aid == null) {
         m_jspContext.setAttribute("acknowledge", "Missing activityId argument");
-        //close();
         return;
       }
       m_results = getA.getActivity(aid);
@@ -344,7 +331,6 @@ public class GetResultsWrapper extends SimpleTagSupport {
       String run= (String) m_inputs.get("run");
       if (run == null) {
         m_jspContext.setAttribute("acknowledge", "Missing run argument");
-        //close();
         return;
       }
       m_results = getA.getRunActivities(run);
@@ -352,7 +338,6 @@ public class GetResultsWrapper extends SimpleTagSupport {
     default:
       m_jspContext.setAttribute("acknowledge","Unknown function " + m_function);
     }    
-    //close();
     return;
   }
   private void getHardware(int func)
@@ -364,7 +349,6 @@ public class GetResultsWrapper extends SimpleTagSupport {
       String htype = (String) m_inputs.get("hardwareType");
       if (htype == null) {
         m_jspContext.setAttribute("acknowledge", "Missing hardware type arg");
-        //close();
         return;
       }
       if (m_inputs.get("hardwareLabels") != null)  {
@@ -379,7 +363,6 @@ public class GetResultsWrapper extends SimpleTagSupport {
                                   (String) m_inputs.get("model"),
                                   hardwareLabels); 
     }
-    //close();
   }
   
   private void getSummary(int func)
@@ -390,7 +373,6 @@ public class GetResultsWrapper extends SimpleTagSupport {
       String run =(String) m_inputs.get("run");
       if (run == null) {
         m_jspContext.setAttribute("acknowledge", "Missing run argument");
-        //close();
         return;
       }
       m_results = getS.getRunSummary(run);
@@ -400,7 +382,6 @@ public class GetResultsWrapper extends SimpleTagSupport {
       String expSN = (String) m_inputs.get("experimentSN");
       if ((htype == null) || (expSN == null)) {
         m_jspContext.setAttribute("acknowledge", "Missing argument");
-        //close();
         return;
       }
       String travelerName = (String) m_inputs.get("travelerName");
@@ -409,20 +390,7 @@ public class GetResultsWrapper extends SimpleTagSupport {
     default:
       m_jspContext.setAttribute("acknowledge",
                                 "Unknown function " + m_function);
-      //close();
       return;
     }      
   }
-  /*
-  private void close() throws JspException {
-    if (m_conn == null) return;
-    try {
-      m_conn.close();
-    } catch (SQLException ex) {
-      System.out.println("Failed to close SQL connection with error "
-                         + ex.getMessage());
-    }
-    m_conn = null;
-  }
-  */
 }
