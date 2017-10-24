@@ -76,25 +76,14 @@ public class GetHardware {
       }
       hidSet = hidToLabels.keySet();
     }
-    String findHistoryRows =
-      "(select max(HSH2.id) from HardwareStatusHistory HSH2 " +
-      "join Hardware H2 on HSH2.hardwareId=H2.id " +
-      "join HardwareType HT on HT.id=H2.hardwareTypeId " +
-      "join HardwareStatus HS2 on HS2.id=HSH2.hardwareStatusId " +
-      "where HS2.isStatusValue=1 and " + 
-      "H2.id in " + GetResultsUtil.setToSqlList(hidSet);
-
-    findHistoryRows += " group by HSH2.hardwareId) ";
-
     String sql="select H.id as hid,lsstId,  "
       + "remarks, model, manufacturer,manufacturerId, "
       + "HS.name as status, concat(Site.name,':', Location.name) as loc "
       + "from Hardware H "
-      + "join HardwareStatusHistory HSH on H.id=HSH.hardwareId "
-      + "join HardwareStatus HS on HS.id=HSH.hardwareStatusId "
+      + "join HardwareStatus HS on HS.id=H.hardwareStatusId "
       + "join Location on H.locationId = Location.id "
       + "join Site on Site.id=Location.siteId "
-      + " where HSH.id in " + findHistoryRows
+      + " where H.id in " GetResultsUtil.seqToSqlList(hidSet)
       + " order by hid";
 
     stmt =
