@@ -83,7 +83,7 @@ public class GetHardware {
       + "join HardwareStatus HS on HS.id=H.hardwareStatusId "
       + "join Location on H.locationId = Location.id "
       + "join Site on Site.id=Location.siteId "
-      + " where H.id in " GetResultsUtil.seqToSqlList(hidSet)
+      + " where H.id in " + GetResultsUtil.setToSqlList(hidSet) 
       + " order by hid";
 
     stmt =
