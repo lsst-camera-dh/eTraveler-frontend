@@ -8,6 +8,7 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql"%>
 <%@taglib prefix="display" uri="http://displaytag.sf.net"%>
+<%@taglib prefix="traveler" tagdir="/WEB-INF/tags"%>
 
 <%@attribute name="activityId" required="true"%>
 
@@ -44,11 +45,7 @@ order by section, schemaName, schemaVersion, schemaInstance, name
                     <c:out value="${row.value}"/>
                 </c:when>
                 <c:otherwise>
-                    <c:url var="dcLink" value="http://srs.slac.stanford.edu/DataCatalog/">
-                        <c:param name="dataset" value="${row.catalogKey}"/>
-                        <c:param name="experiment" value="${appVariables.experiment}"/>
-                    </c:url>
-                    <a href="${dcLink}" target="_blank"><c:out value="${row.value}"/></a>
+                    <traveler:dcLinks datasetPk="${row.catalogKey}" localPath="${row.value}"/>
                 </c:otherwise>
             </c:choose>
         </display:column>
