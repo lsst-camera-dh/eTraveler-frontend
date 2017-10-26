@@ -70,33 +70,20 @@ public class GetHardware {
       hidToLabels =
         GetResultsUtil.associateLabels(m_connect, hardwareLabels,
                                        hidSet, "hardware");
+      if (hidToLabels == null) {
+        String msg="No relevant components with specified labels";
+        throw new GetResultsNoDataException(msg);
+      }
       hidSet = hidToLabels.keySet();
     }
-    String findHistoryRows =
-      "(select max(HSH2.id) from HardwareStatusHistory HSH2 " +
-      "join Hardware H2 on HSH2.hardwareId=H2.id " +
-      "join HardwareType HT on HT.id=H2.hardwareTypeId " +
-      "join HardwareStatus HS2 on HS2.id=HSH2.hardwareStatusId " +
-      "where HS2.isStatusValue=1 and " + /*HT.name='" + htype + "' "; */
-      "H2.id in " + GetResultsUtil.setToSqlList(hidSet);
-
-    findHistoryRows += " group by HSH2.hardwareId) ";
-
-    String findLocationHistoryRows =
-      "(select max(HLH2.id) from HardwareLocationHistory HLH2 group by HLH2.hardwareid)"; 
-    
     String sql="select H.id as hid,lsstId,  "
       + "remarks, model, manufacturer,manufacturerId, "
-      + "HS.name as status, concat(Site.name,':', Location.name) as loc, "
-      + "HSH.creationTS as statusSetTS, HLH.creationTS as locationSetTS "
+      + "HS.name as status, concat(Site.name,':', Location.name) as loc "
       + "from Hardware H "
-      + "join HardwareStatusHistory HSH on H.id=HSH.hardwareId "
-      + "join HardwareStatus HS on HS.id=HSH.hardwareStatusId "
-      + "join HardwareLocationHistory HLH on H.id=HLH.hardwareId "
-      + "join Location on HLH.locationId = Location.id "
+      + "join HardwareStatus HS on HS.id=H.hardwareStatusId "
+      + "join Location on H.locationId = Location.id "
       + "join Site on Site.id=Location.siteId "
-      + " where HSH.id in " + findHistoryRows
-      + " and HLH.id in " + findLocationHistoryRows
+      + " where H.id in " + GetResultsUtil.setToSqlList(hidSet) 
       + " order by hid";
 
     stmt =
@@ -120,11 +107,7 @@ public class GetHardware {
       instance.put("manufacturerId",rs.getString("manufacturerId"));
       instance.put("remarks",rs.getString("remarks"));
       instance.put("status", rs.getString("status"));
-      instance.put("statusSetTS",
-                   GetResultsUtil.timeISO(rs.getString("statusSetTS")));
       instance.put("location", rs.getString("loc"));
-      instance.put("locationSetTS",
-                   GetResultsUtil.timeISO(rs.getString("locationSetTS")));
       if (hardwareLabels != null) {
         instance.put("hardwareLabels", hidToLabels.get(rs.getInt("hid")));
       }

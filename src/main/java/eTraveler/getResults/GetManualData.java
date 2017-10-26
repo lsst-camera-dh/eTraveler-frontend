@@ -165,7 +165,7 @@ public class GetManualData {
     switch(rqstdata) {
     case GetResultsWrapper.RQSTDATA_primitives:
       sql =
-        "select ?.value as resvalue,IP.units as resunits,IP.name as patname, IP.isOptional, Process.name as pname, A.id as aid,A.processId as pid,ASH.activityStatusId as actStatus from ? join Activity A on ?.activityId=A.id join InputPattern IP on ?.inputPatternId=IP.id "
+        "select ?.value as resvalue,IP.units as resunits,IP.name as patname, IP.isOptional, Process.name as pname, A.id as aid,A.processId as pid,A.activityFinalStatusId as actStatus from ? join Activity A on ?.activityId=A.id join InputPattern IP on ?.inputPatternId=IP.id "
         + GetResultsUtil.getActivityStatusJoins()
         + " join Process on Process.id=A.processId where ";
       if (m_stepName != null) {
@@ -183,7 +183,7 @@ public class GetManualData {
       break;
     case GetResultsWrapper.RQSTDATA_filepaths:
       sql =
-        "select F.virtualPath as vp,catalogKey,IP.name as patname, IP.isOptional, Process.name as pname, A.id as aid,A.processId as pid,ASH.activityStatusId as actStatus from FilepathResultManual F join Activity A on F.activityId=A.id join InputPattern IP on F.inputPatternId=IP.id "
+        "select F.virtualPath as vp,catalogKey,IP.name as patname, IP.isOptional, Process.name as pname, A.id as aid,A.processId as pid,A.activityFinalStatusId as actStatus from FilepathResultManual F join Activity A on F.activityId=A.id join InputPattern IP on F.inputPatternId=IP.id "
         + GetResultsUtil.getActivityStatusJoins()
         + " join Process on Process.id=A.processId where ";
       if (m_stepName != null) {
@@ -196,7 +196,7 @@ public class GetManualData {
       break;
     case GetResultsWrapper.RQSTDATA_signatures:
       sql =
-        "select signerRequest,signerValue,signerComment,signatureTS,IP.name as patname, IP.isOptional, Process.name as pname, A.id as aid,A.processId as pid,ASH.activityStatusId as actStatus from SignatureResultManual S join Activity A on S.activityId=A.id join InputPattern IP on S.inputPatternId=IP.id "
+        "select signerRequest,signerValue,signerComment,signatureTS,IP.name as patname, IP.isOptional, Process.name as pname, A.id as aid,A.processId as pid,A.activityFinalStatusId as actStatus from SignatureResultManual S join Activity A on S.activityId=A.id join InputPattern IP on S.inputPatternId=IP.id "
         + GetResultsUtil.getActivityStatusJoins()
         + " join Process on Process.id=A.processId where ";
       if (m_stepName != null) {
@@ -227,7 +227,9 @@ public class GetManualData {
         GetResultsException("getMissingSignatures: missing hardwareType arg");
     }
 
-    String sql="select A.begin as stepbegin, A.id as aid,A.rootActivityId as raid,P.name as pname,P.id as pid,A2.begin as runbegin,P2.name as travname,P2.version,SRM.activityId,signerRequest,signerValue,RunNumber.runNumber,RunNumber.runInt,H.lsstId,H.id as hid,HT.name as htname,AFS.name as status from Activity A join Process P on A.processId=P.id join Activity A2 on A2.id=A.rootActivityId join Process P2 on P2.id=A2.processId join SignatureResultManual SRM on SRM.activityId=A.id join RunNumber on RunNumber.rootActivityId=A.rootActivityId join Hardware H on A.hardwareId=H.id join HardwareType HT on H.hardwareTypeId=HT.id join ActivityStatusHistory ASH on ASH.activityId=A.id join ActivityFinalStatus AFS on AFS.id=ASH.activityStatusId where A.id in (select distinct A3.id from Activity A3 join SignatureResultManual SRM2 on SRM2.activityId=A3.id where signerValue is null) and ";
+    String sql="select A.begin as stepbegin, A.id as aid,A.rootActivityId as raid,P.name as pname,P.id as pid,A2.begin as runbegin,P2.name as travname,P2.version,SRM.activityId,signerRequest,signerValue,RunNumber.runNumber,RunNumber.runInt,H.lsstId,H.id as hid,HT.name as htname,AFS.name as status from Activity A join Process P on A.processId=P.id join Activity A2 on A2.id=A.rootActivityId join Process P2 on P2.id=A2.processId join SignatureResultManual SRM on SRM.activityId=A.id join RunNumber on RunNumber.rootActivityId=A.rootActivityId join Hardware H on A.hardwareId=H.id join HardwareType HT on H.hardwareTypeId=HT.id "
+      + GetResultsUtil.getActivityStatusJoins()
+      + " where A.id in (select distinct A3.id from Activity A3 join SignatureResultManual SRM2 on SRM2.activityId=A3.id where signerValue is null) and ";
     sql += GetResultsUtil.getActivityStatusCondition(statuses);
     if (travelerName != null) sql += " and P2.name='"+ travelerName + "' ";
     if (stepName != null) sql += " and P.name='"+ stepName + "' ";
@@ -338,7 +340,6 @@ public class GetManualData {
         ourStepMap = (HashMap<String, Object>)
           GetResultsUtil.findOrAddStep(stepMaps, pname);
       }
-      // gotRow = storeOne(rs, ourStepMap, datatype);
       gotRow = storer.storeRow(rs, ourStepMap);
       if (hid > 0) {
         if (!gotRow) return gotRow;

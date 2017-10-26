@@ -16,8 +16,8 @@ public class GetActivityInfo {
   private Connection m_connect=null;
   private ArrayList<HashMap<String, Object>> m_info=null;
   private static String s_queryInitial =
-    "select A.id,A.begin,A.end, P.name,AFS.name from Activity A join Process P on A.processId=P.id join ActivityStatusHistory ASH on ASH.activityId=A.id join ActivityFinalStatus AFS on AFS.id=ASH.activityStatusId where A.id";
-  
+    "select A.id,A.begin,A.end, P.name,AFS.name from Activity A join Process P on A.processId=P.id ";
+
   public GetActivityInfo(Connection conn) {
     m_connect=conn;
   }
@@ -26,8 +26,8 @@ public class GetActivityInfo {
     throws GetResultsException, SQLException  {
     HashMap<String, Object> info = new HashMap<String, Object>();
 
-    String q=s_queryInitial + "=" + activityId +
-      " order by ASH.id desc limit 1";
+    String q=s_queryInitial + GetResultsUtil.getActivityStatusJoins()
+      + " where A.id=" + activityId;
 
     PreparedStatement stmt =
       m_connect.prepareStatement(q, ResultSet.TYPE_SCROLL_INSENSITIVE);
@@ -49,7 +49,9 @@ public class GetActivityInfo {
 
     String subquery="(select A2.id from Activity A2 join RunNumber RN on A2.rootActivityId=RN.rootActivityId where '";
     subquery += runInt + "'=RN.runInt)";
-    String q=s_queryInitial+" in "+subquery+ " order by A.id asc, ASH.id desc";
+
+    String q=s_queryInitial+ GetResultsUtil.getActivityStatusJoins()
+      + " where A.id in "+subquery+ " order by A.id asc";
 
     PreparedStatement stmt =
       m_connect.prepareStatement(q, ResultSet.TYPE_SCROLL_INSENSITIVE);
@@ -68,6 +70,7 @@ public class GetActivityInfo {
       gotRow = rs.relative(1);
       if (!gotRow) return infoList;
       // Ignore all but first row with a certain activity id
+      //  Shouldn't need this any more
       while (oldActivity == rs.getInt("A.id")) {
         gotRow = rs.relative(1);
         if (!gotRow) return infoList;

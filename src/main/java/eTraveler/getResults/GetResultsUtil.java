@@ -13,17 +13,17 @@ import java.util.ArrayList;
 public class GetResultsUtil {
 
   //  Assumes Activity has alias A
-  private static final String s_activityStatusJoins="join ActivityStatusHistory ASH on A.id=ASH.activityId join ActivityFinalStatus AFS on AFS.id=ASH.activityStatusId";
+
+  private static final String s_activityStatusJoins="join ActivityFinalStatus AFS on AFS.id=A.activityFinalStatusId";
 
   private static final String s_activityStatusCondition=
-    "AFS.name='success' and ASH.id in (select max(id) from ActivityStatusHistory group by activityId)";
+    "AFS.name='success' "; 
 
   public static String getActivityStatusJoins() {return s_activityStatusJoins;}
   public static String getActivityStatusCondition() {return s_activityStatusCondition;}
   public static String getActivityStatusCondition(ArrayList<String> statuses) {
     if (statuses == null) return getActivityStatusCondition();
-    String cond = "ASH.id in (select max(id) from ActivityStatusHistory "
-      + "group by activityId) and AFS.name in ";
+    String cond = " AFS.name in ";
     cond += arrayToSqlList(statuses);
     return cond;
   }
@@ -90,12 +90,12 @@ public class GetResultsUtil {
       if (expSN == null) {
         throw new GetResultsException("getRunMaps needs non-null experimentSN when called by component");
       }
-      raiQuery = "select A.id as raid, H.id as hid, H.lsstId as expSN, runNumber,runInt,P.name as pname,P.version,A.begin,A.end,AFS.name as runStatus,Subsystem.name as subsystem from Hardware H join Activity A on H.id=A.hardwareId join Process P on A.processId=P.id join RunNumber on A.rootActivityId=RunNumber.rootActivityId join TravelerType on P.id=TravelerType.rootProcessId join Subsystem on Subsystem.id=TravelerType.subsystemId join ActivityStatusHistory ASH on ASH.activityId=A.id join ActivityFinalStatus AFS on AFS.id=ASH.activityStatusId where H.id in (" + hidSub + ") and A.id=A.rootActivityId ";
+      raiQuery = "select A.id as raid, H.id as hid, H.lsstId as expSN, runNumber,runInt,P.name as pname,P.version,A.begin,A.end,AFS.name as runStatus,Subsystem.name as subsystem from Hardware H join Activity A on H.id=A.hardwareId join Process P on A.processId=P.id join RunNumber on A.rootActivityId=RunNumber.rootActivityId join TravelerType on P.id=TravelerType.rootProcessId join Subsystem on Subsystem.id=TravelerType.subsystemId " + getActivityStatusJoins()
+        + " where H.id in (" + hidSub + ") and A.id=A.rootActivityId ";
       if (travelerName != null) {
         raiQuery += " and P.name='" + travelerName + "' ";
       }
-      raiQuery+= "and ASH.id in (select max(id) from ActivityStatusHistory group by activityId) "
-        + " order by A.id asc";
+      raiQuery  += " order by A.id asc";
     }
     PreparedStatement stmt =
       conn.prepareStatement(raiQuery, ResultSet.TYPE_SCROLL_INSENSITIVE);
