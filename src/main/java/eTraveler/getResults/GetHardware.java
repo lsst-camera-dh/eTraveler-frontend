@@ -198,12 +198,13 @@ public class GetHardware {
     // Generic Prepared statement.  Substitute in hid 
     String ncrQ = "select E.NCRActivityId as NCRnumber,";
     ncrQ +="H.lsstId as experimentSN,HT.name as hardwareType,";
-    ncrQ+="RN.runNumber as runNumber,AFS.name as NCRstatus from Exception E ";
+    ncrQ+="RN.runNumber as runNumber,P.name as NCRname,AFS.name as NCRstatus,AFS.isFinal as done from Exception E ";
     ncrQ += "join Activity A on E.exitActivityId=A.id ";
     ncrQ +="join RunNumber RN on A.rootActivityId=RN.rootActivityId ";
     ncrQ +="join Hardware H on H.id=A.hardwareId ";
     ncrQ +="join HardwareType HT on HT.id=H.hardwareTypeId ";
     ncrQ +="join Activity A2 on A2.id=E.NCRActivityId ";
+    ncrQ +="join Process P on P.id=A2.processId ";
     ncrQ +="join ActivityFinalStatus AFS on A2.activityFinalStatusId=AFS.id ";
     ncrQ +="where H.id=?";
     try (PreparedStatement stmt=
@@ -222,7 +223,9 @@ public class GetHardware {
           ncrMap.put("hardwareId", hid);
           ncrMap.put("NCRnumber", (Integer) rs.getInt("NCRnumber"));
           ncrMap.put("runNumber", rs.getString("runNumber"));
+          ncrMap.put("NCRname", rs.getString("NCRname")); 
           ncrMap.put("NCRstatus", rs.getString("NCRstatus"));
+          ncrMap.put("done", (Integer) rs.getInt("done"));
           ncrInfo.add(ncrMap);
           gotRow=rs.relative(1);
         }
@@ -239,7 +242,38 @@ public class GetHardware {
       }
     }
     Collections.sort(ncrInfo);
+    for (ComparableNCR c : ncrInfo)  {
+      getNCRcurrentStep(c);
+      getNCRlabels(c);
+    }
     return ncrInfo;
   }
-  
+  private void getNCRcurrentStep(ComparableNCR c)
+    throws SQLException, GetResultsException  {
+    if ((Integer) c.get("done") == 1) {
+      c.put("currentStep", "N/A");
+      return;
+    }
+    String qCur="select A.id as aid,P.name as pname,AFS.name as status,AFS.isFinal as done from Activity A join ActivityFinalStatus AFS on A.activityFinalStatusId=AFS.id join Process P on P.id=A.processId where rootActivityId='";
+    qCur += c.get("NCRnumber");
+    qCur += "' order by A.id desc";
+
+    // We're in most recently-started step which is not done
+    try (PreparedStatement stmt=
+         m_connect.prepareStatement(qCur,ResultSet.TYPE_SCROLL_INSENSITIVE)) {
+      ResultSet rs=stmt.executeQuery();
+      boolean gotRow=rs.first();
+      while (gotRow) {
+        int done=rs.getInt("done");
+        if (done==0) {
+          c.put("currentStep", rs.getString("pname"));
+          return;
+        }
+        gotRow=rs.relative(1);
+      }
+    }
+  }
+  private void getNCRlabels(ComparableNCR c)
+    throws SQLException, GetResultsException  {
+  }
 }
