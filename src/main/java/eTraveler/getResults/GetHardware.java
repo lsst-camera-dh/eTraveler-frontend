@@ -132,7 +132,7 @@ public class GetHardware {
         "children" - this and all subcomponents (if this is an assembly)
    */
   public ArrayList<ComparableNCR>
-    getNCRs(String htype, String expSN, String items)
+    getNCRs(String htype, String expSN, String items, Set<String> ncrLabels)
     throws SQLException, GetResultsException {
     // Check that items has a recognized value
     if (items == null) items = "this";
@@ -166,7 +166,7 @@ public class GetHardware {
       }
     }
     // Find all NCRs belonging to these hids
-    return getNCRs(hidsMap);
+    return getNCRs(hidsMap, ncrLabels);
   }
 
   private String getParent(String childHid, int parentLevel,
@@ -190,7 +190,8 @@ public class GetHardware {
     }
   }
 
-  private ArrayList<ComparableNCR> getNCRs(Map<String, Integer> hidsMap) 
+  private ArrayList<ComparableNCR>
+    getNCRs(Map<String, Integer> hidsMap, Set<String> ncrLabels)
     throws SQLException, GetResultsException {
     ArrayList<ComparableNCR> ncrInfo = new ArrayList<ComparableNCR>();
 
@@ -198,7 +199,7 @@ public class GetHardware {
     // Generic Prepared statement.  Substitute in hid 
     String ncrQ = "select E.NCRActivityId as NCRnumber,";
     ncrQ +="H.lsstId as experimentSN,HT.name as hardwareType,";
-    ncrQ+="RN.runNumber as runNumber,P.name as NCRname,AFS.name as NCRstatus,AFS.isFinal as done from Exception E ";
+    ncrQ+="RN.runNumber as runNumber,P.name as NCRname,AFS.name as NCRstatus,AFS.isFinal as done,E.id as exceptionId from Exception E ";
     ncrQ += "join Activity A on E.exitActivityId=A.id ";
     ncrQ +="join RunNumber RN on A.rootActivityId=RN.rootActivityId ";
     ncrQ +="join Hardware H on H.id=A.hardwareId ";
@@ -226,6 +227,7 @@ public class GetHardware {
           ncrMap.put("NCRname", rs.getString("NCRname")); 
           ncrMap.put("NCRstatus", rs.getString("NCRstatus"));
           ncrMap.put("done", (Integer) rs.getInt("done"));
+          ncrMap.put("exceptionId", (Integer) rs.getInt("exceptionId"));
           ncrInfo.add(ncrMap);
           gotRow=rs.relative(1);
         }
@@ -244,7 +246,7 @@ public class GetHardware {
     Collections.sort(ncrInfo);
     for (ComparableNCR c : ncrInfo)  {
       getNCRcurrentStep(c);
-      getNCRlabels(c);
+      if (ncrLabels != null) getNCRlabels(c, ncrLabels);
     }
     return ncrInfo;
   }
@@ -273,7 +275,26 @@ public class GetHardware {
       }
     }
   }
-  private void getNCRlabels(ComparableNCR c)
+  private void getNCRlabels(ComparableNCR c, Set<String> ncrLabels)
     throws SQLException, GetResultsException  {
+
+    String qLbl="select LH.objectId,concat(LG.name, ':',L.name) as fullname from LabelGroup LG join Label L on LG.id=L.labelGroupId join LabelHistory LH on LH.labelId=L.id join Labelable on Labelable.id=LG.labelableId where ";
+    qLbl += "(objectId='" + c.get("exceptionId").toString() + "') and ";
+    qLbl += "(Labelable.name='NCR') and LG.name in ";
+    qLbl += GetResultsUtil.stringSetToSqlList(ncrLabels);
+    qLbl += " and LH.id in (select max(LH2.id) from Labelable LBL join LabelHistory LH2 on LBL.id=LH2.labelableId where LBL.name='NCR' group by LH2.objectId,LH2.labelId) and adding=1";
+    // If we do this for all NCRs at once probably add
+    //  " order by LH.objectId "  at the end
+    try (PreparedStatement stmt=
+         m_connect.prepareStatement(qLbl,ResultSet.TYPE_SCROLL_INSENSITIVE)) {
+      ResultSet rs=stmt.executeQuery();
+      boolean gotRow=rs.first();
+      ArrayList<String> labels = new ArrayList<String> ();
+      while (gotRow) {
+        labels.add(rs.getString("fullname"));
+        gotRow=rs.relative(1);
+      }
+      c.put("ncrLabels", labels);
+    }
   }
 }

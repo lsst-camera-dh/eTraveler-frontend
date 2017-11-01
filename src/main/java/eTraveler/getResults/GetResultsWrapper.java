@@ -367,6 +367,14 @@ public class GetResultsWrapper extends SimpleTagSupport {
                                   hardwareLabels);
       break;
     case FUNC_getHardwareNCRs:
+      Set<String> ncrLabels=null;
+      if (m_inputs.get("ncrLabels") != null)  {
+        ArrayList<String> labelList =
+          (ArrayList<String>) m_inputs.get("ncrLabels");
+        ncrLabels = new HashSet<String>();
+        ncrLabels.addAll(labelList);
+      }
+
       htype = (String) m_inputs.get("hardwareType");
       if (htype == null) {
         m_jspContext.setAttribute("acknowledge", "Missing hardware type arg");
@@ -377,7 +385,8 @@ public class GetResultsWrapper extends SimpleTagSupport {
         m_jspContext.setAttribute("acknowledge", "Missing component SN arg");
         return;
       }
-      m_results = getH.getNCRs(htype, expSN, (String) m_inputs.get("items"));
+      m_results = getH.getNCRs(htype, expSN, (String) m_inputs.get("items"),
+                               ncrLabels);
       break;
     default:
       m_jspContext.setAttribute("acknowledge","Unknown function " + m_function);
