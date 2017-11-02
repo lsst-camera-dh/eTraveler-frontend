@@ -20,6 +20,15 @@
 <%@attribute name="labelableObject"%>
 <%@attribute name="hardwareGroupName"%>
 
+<c:set var="lgNameKnown" value="${! empty labelGroupName && labelGroupName != 'any'}"/>
+<c:set var="lgKnown" value="${! empty labelGroupId || lgNameKnown}"/>
+<c:set var="loNameKnown" value="${! empty labelableObject && labelableObject != 'any'}"/>
+<c:set var="loKnown" value="${! empty labelableId || loNameKnown || lgKnown}"/>
+<c:set var="ssNameKnown" value="${! empty subsystemName && subsystemName != 'any'}"/>
+<c:set var="ssKnown" value="${! empty subsystemId || ssNameKnown || lgKnown}"/>
+<c:set var="hgNameKnown" value="${! empty hardwareGroupName && hardwareGroupName != 'any'}"/>
+<c:set var="hgKnown" value="${hgNameKnown || lgKnown}"/>
+
 <%--  L.name, LG.name as groupName, --%>
 <sql:query var="result" >
   select L.id, SS.name as subsystem, SS.id as subsystemId, L.creationTS as labelTS, L.createdBy as labelCreator,
@@ -49,15 +58,15 @@ and LH.adding = 1) as count
   --%>
 
 
-  <c:if test="${! empty labelGroupName && labelGroupName != 'any'}">
+  <c:if test="${lgNameKnown}">
     and LG.name=?<sql:param value="${labelGroupName}"/>
   </c:if>
 
-    <c:if test="${! empty labelableObject && labelableObject != 'any'}">
+    <c:if test="${loNameKnown}">
     and LL.name=?<sql:param value="${labelableObject}"/>
     </c:if>
 
-    <c:if test="${! empty hardwareGroupName && hardwareGroupName != 'any'}">
+    <c:if test="${hgNameKnown}">
     and HG.name=?<sql:param value="${hardwareGroupName}"/>
     </c:if>
 
@@ -66,31 +75,39 @@ and LH.adding = 1) as count
     </c:if>
 
 
-    <c:if test="${! empty subsystemName && subsystemName != 'any'}">
+    <c:if test="${ssNameKnown}">
     and SS.name=?<sql:param value="${subsystemName}"/>
     </c:if>
 
      order by objectType, groupName, labelName;
 </sql:query>
 
-<display:table name="${result.rows}" id="row" class="datatable" >
+<display:table name="${result.rows}" id="row" class="datatable" sort="list"
+               pagesize="${fn:length(result.rows) > preferences.pageLength ? preferences.pageLength : 0}">
+    <c:if test="${! loKnown || preferences.showFilteredColumns}">
   <display:column property="objectType" title="Labelable Objects"
                   sortable="true" headerClass="sortable" />
-  
+    </c:if>
+    <c:if test="${! lgKnown || preferences.showFilteredColumns}">
   <display:column property="groupName" title="Label Group"
                   sortable="true" headerClass="sortable" 
                   href="displayLabelGroup.jsp" paramId="labelGroupId" paramProperty="labelGroupId"/>
+    </c:if>    
   <display:column property="labelName" title="Label"
                   sortable="true" headerClass="sortable" 
                   href="displayLabel.jsp" paramId="labelId" paramProperty="id"/>
   <display:column property="count" title="Count"
                   sortable="true" headerClass="sortable" />
+  <c:if test="${! ssKnown || preferences.showFilteredColumns}">
   <display:column property="subsystem" title="Subsystem"
                   sortable="true" headerClass="sortable" 
                   href="displaySubsystem.jsp" paramId="subsystemId" paramProperty="subsystemId"/>
+  </c:if>
+  <c:if test="${! hgKnown || preferences.showFilteredColumns}">
   <display:column property="hgName" title="Hardware Group"
                   sortable="true" headerClass="sortable"  
                   href="displayHardwareGroup.jsp" paramId="hardwareGroupId" paramProperty="hgId"/>
+  </c:if>
   <display:column property="labelCreator" title="Creator"
                   sortable="true" headerClass="sortable" />
   <display:column property="labelTS" title="Creation Time"
