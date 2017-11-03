@@ -136,7 +136,8 @@ public class GetHardware {
     throws SQLException, GetResultsException {
     // Check that items has a recognized value
     if (items == null) items = "this";
-    if (!items.equals("this") && !items.equals("ancestors")) {
+    if (!items.equals("this") && !items.equals("ancestors") &&
+        !items.equals("children") ) {
       String msg="getNCRs: unrecognized items argument: " + items;
       throw new GetResultsException(msg);
     }
@@ -165,6 +166,9 @@ public class GetHardware {
         next = getParent(next, level, hidsMap);
       }
     }
+    if (items.equals("children")) {
+      getChildren(thisId, 1, hidsMap);
+    }
     // Find all NCRs belonging to these hids
     return getNCRs(hidsMap, ncrLabels);
   }
@@ -190,6 +194,65 @@ public class GetHardware {
     }
   }
 
+  private void getChildren(String parentHid, int childLevel,
+                      Map<String, Integer> hidsMap)
+    throws SQLException, GetResultsException {
+
+    String q="select MRH.minorId as chId, MRA.name as action from ";
+    ArrayList<String> childPids=null;
+    q += "MultiRelationshipHistory MRH ";
+    q+= "join MultiRelationshipSlot MRS on MRH.multirelationshipSlotId=MRS.id ";
+    q += "join MultiRelationshipAction MRA on MRH.multiRelationshipActionId=MRA.id ";
+    q += " where MRS.hardwareId='" + parentHid + "' order by chId, MRH.id desc";
+
+    try (PreparedStatement stmt =
+         m_connect.prepareStatement(q, ResultSet.TYPE_SCROLL_INSENSITIVE) ) {
+    
+      ResultSet rs=stmt.executeQuery();
+      boolean gotRow = rs.first();
+      if (!gotRow) return;
+      String action = null;
+      String chId = null;
+
+      while (gotRow) {
+        action = rs.getString("action");
+        chId = rs.getString("chId");
+
+        if (!action.equals("install")) {  // skip to next chId
+            gotRow = skipToNext(rs, "chId", chId);
+        } else   { // got a good one
+          hidsMap.put(chId, childLevel);
+          if (childPids == null) childPids = new ArrayList<String>();
+          childPids.add(chId);
+          gotRow = skipToNext(rs, "chId", chId);          
+        }
+      }
+    }
+    if (childPids == null) return;
+    int nextLevel = childLevel+1;
+    for (String hid : childPids) {
+      getChildren(hid, nextLevel, hidsMap);
+    }
+
+  }
+
+
+  private boolean skipToNext(ResultSet rs, String key, String value)
+    throws SQLException {
+    boolean gotRow = true;
+    while (gotRow) {
+      gotRow = rs.relative(1);
+      if (!gotRow) return gotRow;
+      if (!(value.equals(rs.getString(key)) ) ) {
+        return gotRow;
+        //action = rs.getString("action");
+        //chId = rs.geString("chId");
+        
+      }
+    }
+    return gotRow;
+  }
+  
   private ArrayList<ComparableNCR>
     getNCRs(Map<String, Integer> hidsMap, Set<String> ncrLabels)
     throws SQLException, GetResultsException {
