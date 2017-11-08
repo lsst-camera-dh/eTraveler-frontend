@@ -89,6 +89,9 @@ order by id desc limit 1;
                         <c:when test="${(row.ISName == 'filepath') && (! empty value.catalogKey)}">
                             <traveler:dcLinks datasetPk="${value.catalogKey}" localPath="${value.value}"/>
                         </c:when>
+                        <c:when test="${row.ISName == 'url'}">
+                            <a href="${value.value}" target="_blank">${value.value}</a>
+                        </c:when>
                         <c:otherwise>
                             <traveler:webbify input="${value.value}"/>
                         </c:otherwise>
@@ -113,7 +116,7 @@ order by id desc limit 1;
                         <c:set var="resultsFiled" value="false"/>
                     </c:if>
                     <c:choose>
-                        <c:when test="${(row.ISName == 'string') || (row.ISName == 'timestamp')}">
+                        <c:when test="${(row.ISName == 'string') || (row.ISName == 'timestamp') || (row.ISName == 'url')}">
                             <c:set var="inputType" value="text"/>
                         </c:when>
                         <c:when test="${row.ISName == 'filepath'}">
@@ -134,6 +137,9 @@ order by id desc limit 1;
                             </c:when>
                             <c:when test="${row.ISName == 'text'}">
                                 <textarea name="${valueName}"></textarea>
+                            </c:when>
+                            <c:when test="${row.ISName == 'url'}">
+                                <input type="text" name="${valueName}">
                             </c:when>
                             <c:otherwise>
                                 <c:if test="${row.isOptional == 0}">*</c:if><input type="${inputType}" name="${valueName}" 

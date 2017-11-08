@@ -79,6 +79,7 @@ Role: <select name="sigRole">
 </select>
 Group: <select name="sigGroup">
     <option value="" selected>Select Group</option>
+    <option value="NCR-CameraCommissioner">NCR-CameraCommissioner</option>
     <option value="NCR-CameraProjectManager">NCR-CameraProjectManager</option>
     <option value="NCR-CameraProjectScientist">NCR-CameraProjectScientist</option>
     <option value="NCR-CCSManager">NCR-CCSManager</option>
