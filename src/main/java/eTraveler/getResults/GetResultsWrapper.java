@@ -66,6 +66,7 @@ public class GetResultsWrapper extends SimpleTagSupport {
 
   private static final int FUNC_getComponentRuns = 15;
   private static final int FUNC_getHardwareInstances = 16;
+  private static final int FUNC_getHardwareNCRs = 17;
 
   public void doTag() throws JspException, IOException {
     m_jspContext = getJspContext();
@@ -97,6 +98,7 @@ public class GetResultsWrapper extends SimpleTagSupport {
       if (m_function.equals("getRunSummary")) func = FUNC_getRunSummary;
       if (m_function.equals("getComponentRuns")) func = FUNC_getComponentRuns;
       if (m_function.equals("getHardwareInstances")) func = FUNC_getHardwareInstances;
+      if (m_function.equals("getHardwareNCRs")) func = FUNC_getHardwareNCRs;
       if (func == 0) {
         m_jspContext.setAttribute("acknowledge", "Unknown function " + m_function);
         return;
@@ -127,6 +129,7 @@ public class GetResultsWrapper extends SimpleTagSupport {
         getSummary(func);
         break;
       case FUNC_getHardwareInstances:
+      case FUNC_getHardwareNCRs:
         getHardware(func);
         break;
       case FUNC_getManualRunResults:
@@ -361,8 +364,34 @@ public class GetResultsWrapper extends SimpleTagSupport {
       m_results =
         getH.getHardwareInstances(htype,(String) m_inputs.get("experimentSN"),
                                   (String) m_inputs.get("model"),
-                                  hardwareLabels); 
+                                  hardwareLabels);
+      break;
+    case FUNC_getHardwareNCRs:
+      Set<String> ncrLabels=null;
+      if (m_inputs.get("ncrLabels") != null)  {
+        ArrayList<String> labelList =
+          (ArrayList<String>) m_inputs.get("ncrLabels");
+        ncrLabels = new HashSet<String>();
+        ncrLabels.addAll(labelList);
+      }
+
+      htype = (String) m_inputs.get("hardwareType");
+      if (htype == null) {
+        m_jspContext.setAttribute("acknowledge", "Missing hardware type arg");
+        return;
+      }
+      String expSN = (String) m_inputs.get("experimentSN");
+      if (expSN == null) {
+        m_jspContext.setAttribute("acknowledge", "Missing component SN arg");
+        return;
+      }
+      m_results = getH.getNCRs(htype, expSN, (String) m_inputs.get("items"),
+                               ncrLabels);
+      break;
+    default:
+      m_jspContext.setAttribute("acknowledge","Unknown function " + m_function);
     }
+    return;
   }
   
   private void getSummary(int func)
