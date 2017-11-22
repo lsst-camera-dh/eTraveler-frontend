@@ -30,9 +30,7 @@ labelableId=?<sql:param value="${objectTypeId}"/>,
     activityId=?<sql:param value="${activityId}"/>,
 </c:if>
 reason=?<sql:param value="${reason}"/>,
-<c:if test="${removeLabel}">
-    adding=0,
-</c:if>
+adding=${removeLabel ? 0 : 1},
 createdBy=?<sql:param value="${userName}"/>,
 creationTS=UTC_TIMESTAMP();
     </sql:update>
@@ -45,9 +43,7 @@ labelableId=?<sql:param value="${objectTypeId}"/>,
     activityId=?<sql:param value="${activityId}"/>,
 </c:if>
 reason=?<sql:param value="${reason}"/>,
-<c:if test="${removeLabel}">
-    adding=0,
-</c:if>
+adding=${removeLabel ? 0 : 1},
 createdBy=?<sql:param value="${userName}"/>,
 creationTS=UTC_TIMESTAMP()
 on duplicate key update
