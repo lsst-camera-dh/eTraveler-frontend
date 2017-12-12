@@ -46,11 +46,18 @@ order by abs(PE.step);
     </c:when>
     <c:otherwise>
 select 
-PE.child, PE.id as edgeId, PE.step, PE.cond,
-P.name
+PE.child, PE.id as edgeId, PE.step, (case PP.substeps
+    when 'SELECTION' then PE.cond
+    when 'HARDWARE_SELECTION' then (case 
+        when PE.branchHardwareTypeId is null then 'Default'
+        else (select name from HardwareType where id = PE.branchHardwareTypeId)
+        end)
+    end) as cond,
+PC.name
 from ProcessEdge PE
-inner join Process P on P.id=PE.child
-where PE.parent=?<sql:param value="${processId}"/>
+inner join Process PC on PC.id=PE.child
+inner join Process PP on PP.id = PE.parent
+where PP.id=?<sql:param value="${processId}"/>
 order by abs(PE.step);
     </c:otherwise>
 </c:choose>
