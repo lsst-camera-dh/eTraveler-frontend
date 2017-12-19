@@ -1,0 +1,683 @@
+Input and output will be JSON dicts.  All inputs will be provided for all
+commands though value may be empty string or null for some of them.
+
+1. Command name:  defineHardwareType
+
+Input parameters  (name and use):
+--------------------------------
+name           HardwareType.name
+description    HardwareType.description
+subsystem      Subsystem.shortName
+sequenceWidth  HardwareType.autoSequenceWidth
+batchedFlag    HardwareType.isBatched
+operator       HardwareType.createdBy
+
+
+Returns   (name and meaning)
+--------------------------------
+id            HardwareType.id if successful, else '0' or null
+acknowledge   Null if successful, else error string
+
+2. Command name: registerHardware
+
+Input parameters (name and use)
+--------------------------------
+htype           HardwareType.name  (must match existing hardware type)
+site            Site.name
+location        Location.name (where Location.siteId = Site.id for above site)
+experimentSN    Hardware.lsstId
+manufacturerId  Hardware.manufactureId
+model           Hardware.model
+manufactureDate Hardware.manufactureDate         [of form YYYY-MM-DD]
+manufacturer    Hardware.manufacturer
+remarks         Hardware.remarks
+quantity        BatchedInventoryHistory.adjustment   [int]
+operator        Hardware.createdBy
+
+Returns (name and meaning)
+--------------------------------
+id            Hardware.id if successful, else '0' or null
+acknowledge   Null if successful, else error string
+
+3. Command name: runAutomatable
+
+Input parameters (name and use)
+--------------------------------
+hardwareId      Hardware.id   for existing registered component
+experimentSN    Hardware.lsstId  (mutually exclusive with hardwareId)
+htype           HardwareType.name (needed only if experimentSN is used)
+travelerName    Process.name where Process.id = TravelerType.rootProcessId
+travelerVersion Process.version or empty string, denoting most recent active
+hardwareGroup   HardwareGroup.name needed to uniquely specify traveler
+site            Site.name
+jhInstall       JobHarness.name
+operator        Activity.createdBy
+
+Returns (name and meaning)
+---------------------------
+command         Command string to be executed locally, or null if failure
+acknowledge     Null if successful, else error string
+
+4. Command name: runOneStep
+No python client code for this yet.  No one seems to care about it.
+
+Input parameters (name and use)
+--------------------------------
+hardwareId      Hardware.id   for existing registered component
+travelerName    Process.name where Process.id = TravelerType.rootProcessId
+travelerVersion Process.version or empty string, denoting most recent active
+hardwareGroup   HardwareGroup.name needed to uniquely specify traveler
+operator        Activity.createdBy
+operatorInputs  Null or dict of key-value pairs where the key =
+                InputPattern.label (and InputPattern.processId = Process.id)
+As for runHarnessed, hardwareId may be replaced by experimentSN + htype
+
+Returns (name and meaning)
+--------------------------
+acknowledge     Null if successful, else error string
+
+5. Command name:  defineRelationshipType
+Input parameters (name and use)
+--------------------------------
+name             MultiRelationshipType.name
+description      MultiRelationshipType.description
+hardwareTypeName 
+  or
+hardwareTypeId   MultiRelationshipType.hardwareTypeId
+minorTypeName
+  or
+minortypeId      MultiRelationshipType.minorTypeId
+numItems         MultiRelationshipType.nMinorItems
+slotNames        MultiRelationshipSlotType.slotname
+operator         MultiRelationshipType.createdBy,
+                 MultiRelationshipSlotType.createdBy
+
+Returns (name and meaning)
+---------------------------
+id            MultiRelationshipType.id if successful, else '0' or null
+acknowledge   Null if successful, else error string
+
+6. Command name: uploadYaml
+
+Input parameters (name and use)
+--------------------------------
+contents         String representation of yaml input
+validateOnly     If true, validate against db but do not actually ingest
+reason           eRequired only if validateOnly is 'false'  TravelerType.reason
+responsible      Defaults to same value as operator      TravlerType.owner
+operator         TravelerType.createdBy
+
+Returns (name and meaning)
+--------------------------
+acknowledge        Null if successful, else error string
+
+7. Command name: setHardwareStatus
+
+Input parameters (name and use)
+-------------------------------
+experimentSN        Hardware.lsstId
+hardwareTypeName    HardwareType.name
+hardwareStatusName  HardwareStatus.name   (may be status or label)
+adding              'true' for label to be added, 'false' for label to be
+                    removed, 'NA' if attribute is a hardware status
+reason              HardwareStatusHistory.reason
+activityId          HardwareStatusHistory.activityId
+operator            HardwareStatusHistory.createdBy
+
+Returns (name and meaning)
+--------------------------
+acknowledge        Null if successful, else error string
+
+8. Command name: setHardwareLocation
+
+Input parameters (name and use)
+-------------------------------
+experimentSN        Hardware.lsstId
+hardwareTypeName    HardwareType.name
+locationName        Location.name  
+siteName            Site.name    If null, use component's current site
+reason              HardwareLocationHistory.reason
+activityId          HardwareLocationHistory.activityId
+operator            HardwareLocationHistory.createdBy
+
+Returns (name and meaning)
+--------------------------
+acknowledge        Null if successful, else error string
+
+9. Command name: getHardwareHierarchy
+
+Input parameter (name and use)
+------------------------------
+experimentSN       Hardware.lsstId
+hardwareTypeName   HardwareType.name
+noBatched          If true don't include elements where child
+                   hardware type is batched  (parent hardware type can
+                   never be batched in any case
+timestamp          Get hierarchy as it existed at this time.  Defaults
+                   to current time
+
+Returns (name and meaning)
+--------------------------
+acknowledge        Null if successful, else error string
+hierarchy          An array of dicts, each with key-value pairs as described:
+
+key                              value
+-------------------              -----------------------
+level                            non-negative integer
+parent_experimentSN              Hardware.lsstId
+parent_hardwareTypeName          HardwareType.name
+parent_id                        Hardware.id
+child_experimentSN               Hardware.lsstId
+child_hardwareTypeName           HardwareType.name
+child_id                         Hardware.id
+relationshipTypeName             MultiRelationshipType.name
+slotName                         MultiRelationshipSlotType.name
+
+Value of "level" is 0 if parent_experimentSN, parent_hardwareTypeName
+match the arguments, and otherwise equal to n+1 if there is a row with
+level n and child in that row is identical to parent in the current row.
+
+The level 0 rows are filled by finding all MultiRelationshipSlot rows with
+hardwareId corresponding to instance with supplied Hardware.lsstId and
+HardwareType.name.  If the specified component has no child components,
+the hierarchy array returned will be empty.
+
+Rows of level n+1 are obtained by repeating the procedure but with
+MultiRelationshipSlot.hardwareId corresponding to child_id
+for some row of level n.
+
+The columns parent_experimentSN, parent_hardwareTypeName, child_experimentSN,
+child_hardwareTypeName are included for the convenience of the client. They
+could be derived form parent_id and child_id.
+
+The information will be presented to the client as an array of maps, so
+that the appropriate column name is explicitly associated with each value.
+TBD: whether the information is already in this form when returned
+from the Front-end or whether it is transmitted in a more compact form
+and the map is created by the client side of the API.  For first draft,
+Front-end will return array of maps.
+
+Clients will almost certainly want filtering: e.g., return only those rows
+referencing CCDs or referencing hardware on the path to CCDs.  For queries
+where the hardware type is raft it ought to be sufficient to filter
+after the data have been sent.
+
+10. Command name:  getRunInfo
+
+Input parameters (name and use):
+--------------------------------
+name            Activity.id
+
+Returns (name and meaning)
+--------------------------
+rootActivityId  Activity.id for root activity if successful, else '0' or null
+runNumber       RunNumber.runNumber where RunNumber.rootActivityId = 
+                rootActivityId if successful, else '0' or null
+acknowledge     Null if successful, else error string
+
+11. Command name: getContainingHardware
+
+Input parameters (name and use):
+------------------------------
+experimentSN       Hardware.lsstId
+hardwareTypeName   HardwareType.name
+timestamp          Get hierarchy as it existed at this time.  Defaults
+                   to current time
+
+Returns (name and meaning)
+acknowledge        Null if successful, else error string
+hierarchy          An array of dicts, each with key-value pairs as described:
+
+key                              value
+-------------------              -----------------------
+level                            non-negative integer
+child_experimentSN               Hardware.lsstId
+child_hardwareTypeName           HardwareType.name
+child_id                         Hardware.id
+parent_experimentSN              Hardware.lsstId
+parent_hardwareTypeName          HardwareType.name
+parent_id                        Hardware.id
+relationshipTypeName             MultiRelationshipType.name
+slotName                         MultiRelationshipSlotType.name
+
+Value of "level" is 0 if child_experimentSN, child_hardwareTypeName
+match the arguments, and otherwise equal to n+1 if there is a row with
+level n and parent in that row is identical to child in the row under
+consideration.
+
+The level 0 row is filled by finding the MultiRelationship and slot
+which has the specified hardware component as child for that slot.
+If there is no parent component, the hierarchy array will have no elements.
+
+The row of level n+1 (if any) is obtained by repeating the procedure but with
+MultiRelationshipSlot.hardwareId corresponding to child_id
+for the row of level n.   
+
+The columns parent_experimentSN, parent_hardwareTypeName, child_experimentSN,
+child_hardwareTypeName are included for the convenience of the client. They
+could be derived form parent_id and child_id.
+
+The information will be presented to the client as an array of maps, so
+that the appropriate column name is explicitly associated with each value.
+
+12. setHardwareManufacturerId
+
+Input parameters (name and use):
+------------------------------
+experimentSN       Hardware.lsstId
+hardwareTypeName   HardwareType.name
+reason             discarded for now
+manufacturerId     Hardware.manufacturerId
+
+Set the manufacturerId field for specified component.  Only 
+succeeds if the value of Hardware.manufacturerId had been the 
+empty string or all blank characters.
+
+Returns (name and meaning)
+--------------------------
+acknowledge        Null if successful, else error string
+
+13. getManufacturerId
+
+Input parameters (name and use):
+------------------------------
+experimentSN       Hardware.lsstId
+hardwareTypeName   HardwareType.name
+
+Returns (name and meaning)
+--------------------------
+acknowledge        Null if successful, else error string
+manufacturerId     Hardware.manufacturerId if successful, else null
+
+14. modifyLabels
+
+Input parameters:
+-----------------
+experimentSN        Hardware.lsstId
+hardwareTypeName    HardwareType.name
+labelName           Label.name
+labelGroupName      LabelGroup.name
+adding              'true' for label to be added, 'false' for removed
+reason              LabelHistory.reason
+activityId          LabelHistory.activityId
+operator            must be write-enabled
+15. getResults
+
+This is a whole family of commands.  They all share an input parameter
+'function' used to distinguish among the different subcommands.
+
+15a. getRunResults
+
+Input parameters
+-----------------
+function = 'getRunResults'    (fixed)
+runNumber     RunNumber.runNumber  or RunNumber.runInt cast as string
+stepName      Process.name   (optional)
+schemaName    *ResultHarnessed.schemaName   (optional)
+filterKey     *ResultHarnessed.name         (optional)
+filterValue   *ResultHarnessed.value        (optional)
+
+Must have either both or neither of filterKey, filterValue
+
+Returns
+--------
+acknowledge      Null if successful, else error string
+results          Many-layered data structure.  It's a map. All keys
+                 have scalar values except for the key 'steps'.
+                 Value of 'steps' is a map where keys are
+                 process step names. Value for such a key is a map
+                 whose keys are schema names for the schemas used in
+                 that step.   Value for a particular schema name is
+                 an arraylist of schema instance data.  Each element
+                 in the array is itself a map.
+
+15b. getResultsJH
+
+Input parameters
+-----------------
+function = 'getResultsJH'   (fixed)
+travelerName  Process.name                  (required)
+hardwareType  HardwareType.name             (required)
+stepName      Process.name                  (required)
+schemaName    *ResultHarnessed.schemaName   (optional)
+model         Hardware.model                (optional)
+experimentSN  Hardware.lsstId               (optional)
+filterKey     *ResultHarnessed.name         (optional)
+filterValue   *ResultHarnessed.value        (optional)
+hardwareLabels                              (optional list)
+
+Value of hardwareLabels arg. is a list, each entry consisting of
+label group name followed by label name with intervening :, e.g.
+['SR_Grade:SR_SEN_Science', 'SR_Grade:SR_SEN_Reserve']
+
+Returns
+--------
+acknowledge      Null if successful, else error string
+results          Many-layered data structure. It's similar to output
+                 for getRunResults but has one more level.  The topmost
+                 map has keys which designate a component by experimentSN.
+                 Then for each such component, value is structured
+                 like getRunResults output.
+
+15c. getRunFilepaths
+
+Input parameters
+-----------------
+function = 'getRunFilepaths'    (fixed)
+runNumber     RunNumber.runNumber  or RunNumber.runInt cast as string
+stepName      Process.name   (optional)
+
+Returns
+--------
+acknowledge      Null if successful, else error string
+results          Many-layered data structure. It's similar to output
+                 for getRunResults but simpler since there is no need
+                 for a map of schema names (All data comes from the
+                 fileref schema).
+
+15.d getFilepathsJH
+
+Input parameters
+----------------
+function = 'getFilepathsJH'   (fixed)
+travelerName  Process.name                  (required)
+hardwareType  HardwareType.name             (required)
+stepName      Process.name                  (required)
+model         Hardware.model                (optional)
+experimentSN  Hardware.lsstId               (optional)
+hardwareLabels                              (optional list)
+
+Returns
+--------
+acknowledge      Null if successful, else error string
+results          Many-layered data structure. It's similar to output
+                 for getResultsJH but simpler since there is no need
+                 for a map of schema names (All data comes from the
+                 fileref schema).
+
+15.e getActivity
+
+Input parameters
+----------------
+function = 'getActivity' (fixed)
+activityId      Activity.id            (required)
+
+Returns
+--------
+acknowledge     Null if successful, else error string
+results         Map containing activity info: begin, run, step name,
+                final status and activity id
+
+15.f  getRunActivities
+
+Input parameters
+----------------
+function = 'getRunActivities' (fixed)
+run         RunNumber.runNumber (with or without final alpha character,required)
+
+Returns
+--------
+acknowledge     Null if successful, else error string
+results         List of maps, one for each activity in the run, ordered
+                by activity id. Info in each map is the same as for getActivity
+                
+15.g getHardwareInstances
+
+Input parameters
+----------------
+function = 'getHardwareInstances' (fixed)
+hardwareType             (required)
+experimentSN             (optional)
+model                    (optional)
+hardwareLabels           (optional list of label groups)
+
+Returns
+-------
+acknowledge     Null if successful, else error string
+results         list of maps, one for each hardware instance of specified
+                type, or just single entry if experimentSN is specified
+                Each map has values for
+                experimentSN
+                model
+                manufacturer
+                manufacturerId
+                remarks
+                status
+		If hardwareLabels was used, include only those instances with at least
+		one label in one of the groups.  Applied labels are part of results
+
+15.h getManualRunResults
+
+Input parameters
+----------------
+function = "getManualRunResults" (fixed)
+run         (required)
+stepName    (optional)
+
+Returns
+-------
+acknowledge     Null if successful, else error string
+results         A dict containing several scalar values with information
+                about the run plus an entry with key = 'steps' whose
+                value is a dict
+                Keys in this dict are stepnames, values are dicts, one
+                per manual result (of type int, float, string or text;
+                that is, all but filepaths and signatures)
+                associated with the step, keyed by manual result name.
+                Each manual result is itself represented by a dict
+                with fields datatype, units, activityId, isOptional
+                (0 or 1) and value
+
+15.i getManualResultsStep
+
+Input parameters
+----------------
+function = "getManualResultsStep" (fixed)
+travelerName   (required)
+hardwareType   (required)
+stepName       (required)
+model          (optional)
+experimentSN   (optional)
+hardwareLabels           (optional list)
+
+Returns
+-------
+acknowledge     Null if successful, else error string
+results         Many-layered data structure. It's similar to output
+                for getManualRunResults but has one more level.  The topmost
+                map has keys which designate a component by experimentSN.
+                Then for each such component, value is structured
+                like getManualRunResults output.
+
+15.j getManualRunFilepaths
+
+Input parameters
+----------------
+function = "getManualRunFilepaths" (fixed)
+run         (required)
+stepName    (optional)
+
+Returns
+-------
+acknowledge     Null if successful, else error string
+results         A dict containing several scalar values with information
+                about the run plus an entry with key = 'steps' whose
+                value is a dict
+                Keys in this dict are stepnames, values are dicts, one
+                per manual result of type filepath
+                associated with the step, keyed by manual result name.
+                Each manual result is itself represented by a dict
+                with fields  activityId, isOptional (0 or 1),
+                virtualPath and catalogKey
+
+15.k getManualFilepathsStep
+
+Input parameters
+----------------
+function = "getManualFilepathsStep" (fixed)
+travelerName   (required)
+hardwareType   (required)
+stepName       (required)
+model          (optional)
+experimentSN   (optional)
+hardwareLabels           (optional list)
+
+Returns
+-------
+acknowledge     Null if successful, else error string
+results         Many-layered data structure. It's similar to output
+                for getManualRunFilepaths but has one more level.  The topmost
+                map has keys which designate a component by experimentSN.
+                Then for each such component, value is structured
+                like getManualRunFilepaths output.
+---
+15.l getManualRunSignatures
+
+Input parameters
+----------------
+function = "getManualRunSignatures" (fixed)
+run            (required)
+stepName       (optional)
+activityStatus (optional list)
+
+Returns
+-------
+acknowledge     Null if successful, else error string
+results         A dict containing several scalar values with information
+                about the run plus an entry with key = 'steps' whose
+                value is a dict.
+                Keys in this dict are stepnames, values are dicts, one
+                per manual result of type signature
+                associated with the step, keyed by signerRequest.
+                Each manual result is itself represented by a dict
+                with fields activityId, inputinputPattern, signerValue,
+                signerComment and signatureTS.
+                Normally (activityStatus argument omitted) returns data only
+                for most recent activity with status 'success'. Use the
+                argument to include other possibilities such as
+                'paused' or 'inProgress'
+
+15.m getManualSignaturesStep
+
+Input parameters
+----------------
+function = "getManualSignaturesStep" (fixed)
+travelerName   (required)
+hardwareType   (required)
+stepName       (required)
+model          (optional)
+experimentSN   (optional)
+hardwareLabels (optional list)
+activityStatus (optional list)
+
+Returns
+-------
+acknowledge     Null if successful, else error string
+results         Many-layered data structure. It's similar to output
+                for getManualSignatureResults but has one more level.
+                The topmost map has keys which designate a component
+                by experimentSN. Then for each such component, value
+                is structured like getManualRunSignatures output.
+
+15.n getRunSummary
+
+Input parameters
+----------------
+function = "getRunSummary"   (fixed)
+run      (required)
+
+Returns
+-------
+acknowledge     Null if successful, else error string
+results         dict with keys travelerName, travelerVersion, subsystem,
+                run (run # as string), runInt (run # as integer),
+                rootActivityId, experimentSN, hardwareType, begin and
+                end timestamps, and runStatus
+
+15.o  getComponentRuns
+
+Input parameters
+----------------
+function = "getComponentRuns" (fixed)
+hardwareType   (required)
+experimentSN   (required)
+
+Returns
+-------
+acknowledge     Null if successful, else error string
+results         a dict.  Keys are rootActivityIds of travelers
+                run on the component. The value for such a key is dict
+                with keys travelerName, travelerVersion, subsystem,
+                run (run # as string), runInt (run # as integer),
+                rootActivityId, experimentSN, hardwareType, begin and
+                end timestamps, and runStatus (same as getRunSummary)
+                plus an additional key hid whose value is internal id
+                of the component.
+
+15.p getMissingSignatures
+Returns information about incomplete signatures for activities if
+   * its status is in activityStatus list
+   * it meets other optional filter criteria
+Input parameters
+----------------
+function = "getMissingSignatures" (fixed)
+activityStatus  (default ['inProgress','paused','success']
+travelerName    (optional)
+stepName        (optional)
+hardwareType    (optional)
+model           (optional but requires hardwareType)
+experimentSN    (optional but requires hardwareType)
+
+Returns
+--------
+acknowledge     Null if successful, else error string
+results         A dict.  Keys are hardware id for components
+                with at least one instance of incomplete signature
+                meeting any supplied filter criteria.
+                Value for a single key is
+                  A dict.  Keyed by root activity id
+                  Most keys have scalar value (info about the run):
+                     hardware type, experientSN, run number,
+                     traveler name, root activity id, start of run TS
+                  One key ("steps") has value 
+                     A dict. Keyed by process name
+                     Value for single key is an array list
+                        Each elt in array is a dict with keys for
+                          signer request
+                          status of activity
+                          activity id
+                          start of step timestamp
+
+15.q getHardwareNCRs
+Return information block for each NCR associated with specified component
+or also related components, depending on value of items parameter
+If labels parameter is present, labels from those groups belonging to an NCR will
+be part of the output for that NCR
+
+Input parameters
+----------------
+function = "getHardwareNCRs" (fixed)
+hardwareType
+experiementSN
+items        (one of "this", "ancestors"  Defaults to "this". Maybe also add "children")
+labels       (list of NCR label groups)
+
+Returns
+---------
+acknowldedge   Null if successful, else error string
+results        Array of dicts, one per NCR.  They are sorted by
+               level (specified compoent is level 0, parent/child is level 1, etc.)
+	       hardwareType
+	       experimentSN
+	       NCR number
+
+In addition to those four quantities, for each NCR also return hardware id, runNumber,
+NCR status, field "done" set to 1 or 0  depending on whether NCR is done or not,
+step name of current step ("N/A" if NCR is done), exception id, and, if labels
+argument was supplied, array of label names in the groups which have been applied
+to the NCR (empty list if none).
+
+
+
+                
+
