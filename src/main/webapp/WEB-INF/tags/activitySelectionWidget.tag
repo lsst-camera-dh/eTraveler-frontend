@@ -11,11 +11,8 @@
 <%@taglib prefix="traveler" tagdir="/WEB-INF/tags"%>
 
 <%@attribute name="activityId" %>
-<%@attribute name="processId" %>
 
-<c:if test="${! empty activityId}">
-    <traveler:checkMask var="mayOperate" activityId="${activityId}"/>
-</c:if>
+<traveler:checkMask var="mayOperate" activityId="${activityId}"/>
 
 <c:choose>
     <c:when test="${! empty param.topActivityId}">
@@ -26,9 +23,7 @@
     </c:otherwise>
 </c:choose>
 
-<sql:query var="choicesQ">
-     <c:choose>
-       <c:when test="${! empty activityId}">
+    <sql:query var="choicesQ">
 select 
 Ap.hardwareId, Ap.begin, Ap.inNCR,
 Pp.substeps,
@@ -45,26 +40,7 @@ inner join ActivityFinalStatus AFS on AFS.id=ASH.activityStatusId
 left join Activity Ac on Ac.parentActivityId=Ap.id and Ac.processEdgeId=PE.id
 where Ap.id=?<sql:param value="${activityId}"/>
 order by abs(PE.step);
-    </c:when>
-    <c:otherwise>
-select 
-Pp.substeps,
-PE.child, PE.id as edgeId, PE.step, (case Pp.substeps
-    when 'SELECTION' then PE.cond
-    when 'HARDWARE_SELECTION' then (case 
-        when PE.branchHardwareTypeId is null then 'Default'
-        else (select name from HardwareType where id = PE.branchHardwareTypeId)
-        end)
-    end) as cond,
-Pc.name
-from ProcessEdge PE
-inner join Process Pc on Pc.id=PE.child
-inner join Process Pp on Pp.id = PE.parent
-where Pp.id=?<sql:param value="${processId}"/>
-order by abs(PE.step);
-    </c:otherwise>
-</c:choose>
-</sql:query>
+    </sql:query>
 
 <c:set var="numChosen" value="0"/>
 <c:forEach items="${choicesQ.rows}" var="childRow">
