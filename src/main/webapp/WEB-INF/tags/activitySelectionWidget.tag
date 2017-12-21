@@ -1,5 +1,5 @@
 <%-- 
-    Document   : selectionWidget
+    Document   : activitySelectionWidget
     Created on : Jan 15, 2014, 4:21:02 PM
     Author     : focke
 --%>
