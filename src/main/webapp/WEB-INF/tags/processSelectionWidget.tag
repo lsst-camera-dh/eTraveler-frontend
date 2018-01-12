@@ -10,7 +10,7 @@
 <%@taglib prefix="display" uri="http://displaytag.sf.net"%>
 <%@taglib prefix="traveler" tagdir="/WEB-INF/tags"%>
 
-<%@attribute name="processId" %>
+<%@attribute name="processId" required="true"%>
 
     <sql:query var="choicesQ">
 select 
