@@ -87,7 +87,7 @@
     </c:when>
     <c:when test="${lastUnfinished != 0}">
         <c:choose>
-            <c:when test="${firstUninstantiated != 0 && lufSubSteps != 'SELECTION'}">
+            <c:when test="${firstUninstantiated != 0 && lufSubSteps != 'SELECTION' && lufSubSteps != 'HARDWARE_SELECTION'}">
                 <c:set var="mode" value="process"/>
                 <c:set var="theId" value="${firstUninstantiated}"/>
                 <c:set var="currentStepEPath" value="${fuPath}"/>
