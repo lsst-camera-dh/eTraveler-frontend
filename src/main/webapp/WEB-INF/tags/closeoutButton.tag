@@ -72,7 +72,7 @@ and not AFS.isFinal
                     <c:set var="readyToClose" value="true"/>
                 </c:if>
             </c:when>
-            <c:when test="${activity.substeps == 'SELECTION'}">
+            <c:when test="${activity.substeps == 'SELECTION' || activity.substeps == 'HARDWARE_SELECTION'}">
                 <sql:query var="childQ">
 select count(*) as completedSteps
 from Activity A 
