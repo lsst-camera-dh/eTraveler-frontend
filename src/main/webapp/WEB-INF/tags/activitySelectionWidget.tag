@@ -27,9 +27,11 @@
 select 
 A.hardwareId, A.begin, A.inNCR,
 P.substeps,
+H.hardwareTypeId,
 AFS.name as status
 from Activity A
 inner join Process P on P.id = A.processId
+inner join Hardware H on H.id = A.hardwareId
 inner join ActivityStatusHistory ASH on ASH.activityId=A.id and ASH.id=(select max(id) from ActivityStatusHistory where activityId=A.id)
 inner join ActivityFinalStatus AFS on AFS.id=ASH.activityStatusId
 where A.id=?<sql:param value="${activityId}"/>;
@@ -38,7 +40,7 @@ where A.id=?<sql:param value="${activityId}"/>;
 
     <sql:query var="choicesQ">
 select 
-PE.child, PE.id as edgeId, PE.step, 
+PE.child, PE.id as edgeId, PE.step, PE.branchHardwareTypeId,
 (case 
         when PE.branchHardwareTypeId is null then 'Default'
         else (select name from HardwareType where id = PE.branchHardwareTypeId)
@@ -53,9 +55,9 @@ left join Activity Ac on Ac.parentActivityId=Ap.id and Ac.processEdgeId=PE.id
 where Ap.id=?<sql:param value="${activityId}"/>
 order by abs(PE.step);
     </sql:query>
-<display:table name="${choicesQ.rows}"/>
+
 <c:set var="numChosen" value="0"/>
-<c:forEach items="${choicesQ.rows}" var="childRow">
+<c:forEach items="${choicesQ.rows}" var="childRow" varStatus="child">
     <c:if test="${! empty childRow.creationTS}">
         <c:set var="numChosen" value="${numChosen + 1}"/>
     </c:if>
@@ -68,8 +70,50 @@ order by abs(PE.step);
 <c:set var="doRedirect" value="${activity.substeps == 'HARDWARE_SELECTION' 
                                  && activity.status == 'inProgress'
                                  && numChosen == 0
-                                 && mayOperate}"/> <%-- and inProgress ? --%>
-[${doRedirect}]<br>
+                                 && mayOperate}"/>
+[${doRedirect}]
+<c:if test="${doRedirect}">
+    <c:set var="matchingBranch" value=""/>
+    <c:set var="defaultBranch" value=""/>
+    <c:forEach items="${choicesQ.rows}" var="childRow" varStatus="child">
+        <c:choose>
+            <c:when test="${empty childRow.branchHardwareTypeId}">
+                <c:choose>
+                    <c:when test="${empty defaultBranch}">
+                        <c:set var="defaultBranch" value="${child.count}"/>
+                    </c:when>
+                    <c:otherwise>
+                        <traveler:error message="Too many default branches."/>
+                    </c:otherwise>
+                </c:choose>
+            </c:when>
+            <c:when test="${childRow.branchHardwareTypeId == activity.hardwareTypeId}">
+                <c:choose>
+                    <c:when test="${empty matchingBranch}">
+                        <c:set var="matchingBranch" value="${child.count}"/>
+                    </c:when>
+                    <c:otherwise>
+                        <traveler:error message="Too many matching branches."/>
+                    </c:otherwise>
+                </c:choose>                    
+            </c:when>
+        </c:choose>        
+    </c:forEach>
+    <c:choose>
+        <c:when test="${! empty matchingBranch}">
+            <c:set var="selectedBranch" value="${matchingBranch}"/>
+        </c:when>
+        <c:when test="${! empty defaultBranch}">
+            <c:set var="selectedBranch" value="${defaultBranch}"/>
+        </c:when>
+        <c:otherwise>
+            <traveler:error message="No matching hardware branch"/>
+        </c:otherwise>
+    </c:choose>
+    <c:set var="selectedChild" value="${choicesQ.rows[selectedBranch - 1]}"/>
+    ${selectedChild.name}
+</c:if>
+<br>
 
 <h2>Selections</h2>
 <display:table name="${choicesQ.rows}" id="childRow" class="datatable">
