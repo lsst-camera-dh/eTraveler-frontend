@@ -7,8 +7,8 @@
 <%@tag description="Handle selection steps" pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql"%>
-<%@taglib prefix="display" uri="http://displaytag.sf.net"%>
 <%@taglib prefix="traveler" tagdir="/WEB-INF/tags"%>
+<%@taglib prefix="ta" tagdir="/WEB-INF/tags/actions"%>
 
 <%@attribute name="activityId" required="true"%>
 
@@ -38,22 +38,19 @@ where A.id=?<sql:param value="${activityId}"/>;
     </sql:query>
 <c:set var="activity" value="${activityQ.rows[0]}"/>
 
+<c:if test="${activity.substeps == 'HARDWARE_SELECTION'
+              && activity.status == 'inProgress'
+              && mayOperate}"> <%-- Skip all the rest if not --%>
+
     <sql:query var="choicesQ">
 select 
 PE.child, PE.id as edgeId, PE.step, PE.branchHardwareTypeId,
-(case 
-        when PE.branchHardwareTypeId is null then 'Default'
-        else (select name from HardwareType where id = PE.branchHardwareTypeId)
-        end)
-as cond,
-P.name,
 Ac.creationTS
 from Activity Ap
 inner join ProcessEdge PE on PE.parent=Ap.processId
 inner join Process P on P.id=PE.child
 left join Activity Ac on Ac.parentActivityId=Ap.id and Ac.processEdgeId=PE.id
-where Ap.id=?<sql:param value="${activityId}"/>
-order by abs(PE.step);
+where Ap.id=?<sql:param value="${activityId}"/>;
     </sql:query>
 <display:table name="${choicesQ.rows}"/>
 <c:set var="numChosen" value="0"/>
@@ -63,14 +60,8 @@ order by abs(PE.step);
     </c:if>
 </c:forEach>
 
-<c:set var="conditionTitle" value="${activity.subSteps == 'HARDWARE_SELECTION' ? 'Hardware Type' : 'Condition'}"/>
-<c:set var="selectionColumnTitle" value="${numChosen == 0 ? 'Pick One:' : 'Selected:'}"/>
-
-<%-- redirect if hardware selection --%>
-<c:set var="doRedirect" value="${activity.substeps == 'HARDWARE_SELECTION' 
-                                 && activity.status == 'inProgress'
-                                 && numChosen == 0
-                                 && mayOperate}"/>
+<%-- redirect if hardware selection not yet made--%>
+<c:set var="doRedirect" value="${numChosen == 0}"/>
 [${doRedirect}]
 <c:if test="${doRedirect}">
     <c:set var="matchingBranch" value=""/>
@@ -113,41 +104,10 @@ order by abs(PE.step);
     <c:set var="selectedChild" value="${choicesQ.rows[selectedBranch - 1]}"/>
     ${selectedChild.name}
     
-    <c:redirect url="operator/createActivity.jsp">
-        <c:param name="hardwareId" value="${activity.hardwareId}"/>
-        <c:param name="processId" value="${selectedChild.child}"/>
-        <c:param name="parentActivityId" value="${activityId}"/>
-        <c:param name="processEdgeId" value="${selectedChild.edgeId}"/>
-        <c:param name="inNCR" value="${activity.inNCR}"/>
-        <c:param name="topActivityId" value="${topActivityId}"/>
-        <c:param name="freshnessToken" value="${freshnessToken}"/>
-    </c:redirect>
-    ${redirLink}
+    <ta:createActivity hardwareId="${activity.hardwareId}" processId="${selectedChild.child}" 
+                       parentActivityId="${activityId}" processEdgeId="${selectedChild.edgeId}"
+                       inNCR="${activity.inNCR}"
+                       var="childActivityId"/>
 </c:if>
-<br>
 
-<h2>Selections</h2>
-<display:table name="${choicesQ.rows}" id="childRow" class="datatable">
-    <display:column property="step" sortable="true" headerClass="sortable"/>
-    <display:column property="cond" title="${conditionTitle}" sortable="true" headerClass="sortable"/>
-    <display:column title="${selectionColumnTitle}">
-        <c:choose>
-            <c:when test="${numChosen == 0 && ! empty activity.begin}">
-                <form method="get" action="operator/createActivity.jsp" target="_top">
-                    <input type="hidden" name="freshnessToken" value="${freshnessToken}">
-                    <input type="hidden" name="parentActivityId" value="${activityId}">
-                    <input type="hidden" name="hardwareId" value="${activity.hardwareId}">
-                    <input type="hidden" name="inNCR" value="${activity.inNCR}">
-                    <input type="hidden" name="topActivityId" value="${topActivityId}">
-                    <input type="hidden" name="processId" value="${childRow.child}">
-                    <input type="hidden" name="processEdgeId" value="${childRow.edgeId}">
-                    <input type="submit" value="${childRow.name}"
-    <c:if test="${(activity.status != 'new' && activity.status != 'inProgress') || (! mayOperate)}">disabled</c:if>>
-                </form>
-            </c:when>
-            <c:otherwise>
-                ${childRow.creationTs}
-            </c:otherwise>
-        </c:choose>
-    </display:column>
-</display:table>
+</c:if>

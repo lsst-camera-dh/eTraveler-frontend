@@ -22,10 +22,17 @@ where A.id=?<sql:param value="${activityId}"/>
 ;
     </sql:query>
 
-<c:if test="${initParam['activityAutoCreate'] && activityQ.rows[0].substeps == 'SEQUENCE'}">
-    <traveler:expandActivity var="stepList" activityId="${activityId}"/>
-    <traveler:findCurrentStep scriptMode="true" stepList="${stepList}"
-                              varStepId="stepId"
-                              varStepEPath="stepEPath"
-                              varStepLink="stepLink"/>
+<c:if test="${initParam['activityAutoCreate']}">
+    <c:choose>
+        <c:when test="${activityQ.rows[0].substeps == 'SEQUENCE'}">
+            <traveler:expandActivity var="stepList" activityId="${activityId}"/>
+            <traveler:findCurrentStep scriptMode="true" stepList="${stepList}"
+                                      varStepId="stepId"
+                                      varStepEPath="stepEPath"
+                                      varStepLink="stepLink"/>
+        </c:when>
+        <c:when test="${activityQ.rows[0].substeps == 'HARDWARE_SELECTION'}">
+            <ta:hardwareSelect activityId="${activityId}"/>
+        </c:when>
+    </c:choose>
 </c:if>
