@@ -66,73 +66,14 @@ order by abs(PE.step);
 <c:set var="conditionTitle" value="${activity.subSteps == 'HARDWARE_SELECTION' ? 'Hardware Type' : 'Condition'}"/>
 <c:set var="selectionColumnTitle" value="${numChosen == 0 ? 'Pick One:' : 'Selected:'}"/>
 
-<%-- redirect if hardware selection --%>
-<c:set var="doRedirect" value="${activity.substeps == 'HARDWARE_SELECTION' 
-                                 && activity.status == 'inProgress'
-                                 && numChosen == 0
-                                 && mayOperate}"/>
-[${doRedirect}]
-<c:if test="${doRedirect}">
-    <c:set var="matchingBranch" value=""/>
-    <c:set var="defaultBranch" value=""/>
-    <c:forEach items="${choicesQ.rows}" var="childRow" varStatus="child">
-        <c:choose>
-            <c:when test="${empty childRow.branchHardwareTypeId}">
-                <c:choose>
-                    <c:when test="${empty defaultBranch}">
-                        <c:set var="defaultBranch" value="${child.count}"/>
-                    </c:when>
-                    <c:otherwise>
-                        <traveler:error message="Too many default branches."/>
-                    </c:otherwise>
-                </c:choose>
-            </c:when>
-            <c:when test="${childRow.branchHardwareTypeId == activity.hardwareTypeId}">
-                <c:choose>
-                    <c:when test="${empty matchingBranch}">
-                        <c:set var="matchingBranch" value="${child.count}"/>
-                    </c:when>
-                    <c:otherwise>
-                        <traveler:error message="Too many matching branches."/>
-                    </c:otherwise>
-                </c:choose>                    
-            </c:when>
-        </c:choose>        
-    </c:forEach>
-    <c:choose>
-        <c:when test="${! empty matchingBranch}">
-            <c:set var="selectedBranch" value="${matchingBranch}"/>
-        </c:when>
-        <c:when test="${! empty defaultBranch}">
-            <c:set var="selectedBranch" value="${defaultBranch}"/>
-        </c:when>
-        <c:otherwise>
-            <traveler:error message="No matching hardware branch"/>
-        </c:otherwise>
-    </c:choose>
-    <c:set var="selectedChild" value="${choicesQ.rows[selectedBranch - 1]}"/>
-    ${selectedChild.name}
-    
-    <c:redirect url="operator/createActivity.jsp">
-        <c:param name="hardwareId" value="${activity.hardwareId}"/>
-        <c:param name="processId" value="${selectedChild.child}"/>
-        <c:param name="parentActivityId" value="${activityId}"/>
-        <c:param name="processEdgeId" value="${selectedChild.edgeId}"/>
-        <c:param name="inNCR" value="${activity.inNCR}"/>
-        <c:param name="topActivityId" value="${topActivityId}"/>
-        <c:param name="freshnessToken" value="${freshnessToken}"/>
-    </c:redirect>
-    ${redirLink}
-</c:if>
-<br>
-
 <h2>Selections</h2>
 <display:table name="${choicesQ.rows}" id="childRow" class="datatable">
     <display:column property="step" sortable="true" headerClass="sortable"/>
     <display:column property="cond" title="${conditionTitle}" sortable="true" headerClass="sortable"/>
+    <c:if test="${! empty activity.begin}">
     <display:column title="${selectionColumnTitle}">
         <c:choose>
-            <c:when test="${numChosen == 0 && ! empty activity.begin}">
+            <c:when test="${numChosen == 0}">
                 <form method="get" action="operator/createActivity.jsp" target="_top">
                     <input type="hidden" name="freshnessToken" value="${freshnessToken}">
                     <input type="hidden" name="parentActivityId" value="${activityId}">
@@ -150,4 +91,5 @@ order by abs(PE.step);
             </c:otherwise>
         </c:choose>
     </display:column>
+    </c:if>
 </display:table>
