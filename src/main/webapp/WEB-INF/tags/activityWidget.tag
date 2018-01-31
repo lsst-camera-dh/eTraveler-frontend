@@ -49,7 +49,7 @@
     <traveler:scriptWidget activityId="${activityId}"/>
 </c:if>
 
-<c:if test="${activityQ.rows[0].substeps == 'SELECTION'}"><traveler:selectionWidget activityId="${activityId}"/></c:if>
+<c:if test="${activityQ.rows[0].substeps == 'SELECTION' || activityQ.rows[0].substeps == 'HARDWARE_SELECTION'}"><traveler:activitySelectionWidget activityId="${activityId}"/></c:if>
 
 <traveler:activityInputWidget activityId="${activityId}" var="resultsFiled"/>
 <traveler:activitySignatureWidget var="signedOff" activityId="${activityId}" resultsFiled="${resultsFiled}"/>
