@@ -19,18 +19,18 @@
     <body>
 <traveler:checkFreshness formToken="${param.freshnessToken}"/>
 
-<sql:transaction>
-    <c:forEach var="pattern" begin="0" end="${param.nInputs - 1}" step="1">
-        <c:set var="valueName" value="value${pattern}"/>
-        <c:if test="${! empty param[valueName]}">
-            <c:set var="inputName" value="inputPatternId${pattern}"/>
+<c:forEach var="pattern" begin="0" end="${param.nInputs - 1}" step="1">
+    <c:set var="valueName" value="value${pattern}"/>
+    <c:if test="${! empty param[valueName]}">
+        <c:set var="inputName" value="inputPatternId${pattern}"/>
+        <sql:transaction>
             <ta:inputResult inputPatternId="${param[inputName]}" 
                             value="${param[valueName]}" 
                             activityId="${param.activityId}"
                             fieldName="${valueName}"/>
-        </c:if>
-    </c:forEach>
-</sql:transaction>
+        </sql:transaction>
+    </c:if>
+</c:forEach>
 <c:redirect url="${param.referringPage}"/>
     </body>
 </html>
