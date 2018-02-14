@@ -176,6 +176,8 @@ public class GetResultsWrapper extends SimpleTagSupport {
     ImmutablePair<String, Object> filter=null;
     Set<String> hardwareLabels=null;
     String run=null;
+    ArrayList<String> runStatuses =
+      (ArrayList<String>) m_inputs.get("runStatus");
       
     switch(func) {
     case FUNC_getRunResults:
@@ -212,7 +214,7 @@ public class GetResultsWrapper extends SimpleTagSupport {
                            (String) m_inputs.get("schemaName"),
                            (String) m_inputs.get("model"),
                            (String) m_inputs.get("experimentSN"),
-                           filter, hardwareLabels); 
+                           filter, hardwareLabels, runStatuses); 
       break;
     case FUNC_getRunFilepaths:
       run= (String) m_inputs.get("run");
@@ -236,7 +238,7 @@ public class GetResultsWrapper extends SimpleTagSupport {
                              (String) m_inputs.get("stepName"),
                              (String) m_inputs.get("model"),
                              (String) m_inputs.get("experimentSN"),
-                             hardwareLabels);
+                             hardwareLabels, runStatuses);
       break;
     default:
       m_jspContext.setAttribute("acknowledge", "Unknown function " + m_function);
@@ -250,6 +252,8 @@ public class GetResultsWrapper extends SimpleTagSupport {
     
     ArrayList<String> statuses =
       (ArrayList<String>) m_inputs.get("activityStatus");
+    ArrayList<String> runStatuses =
+      (ArrayList<String>) m_inputs.get("runStatus");
     int rqstdata = RQSTDATA_none;
     
     String run=null;
@@ -294,7 +298,7 @@ public class GetResultsWrapper extends SimpleTagSupport {
                             (String) m_inputs.get("stepName"),
                             (String) m_inputs.get("model"),
                             (String) m_inputs.get("experimentSN"),
-                            hardwareLabels, statuses);
+                            hardwareLabels, statuses, runStatuses);
       break;
     case FUNC_getMissingSignatures:
       if (statuses == null) {
@@ -347,6 +351,7 @@ public class GetResultsWrapper extends SimpleTagSupport {
     throws SQLException,GetResultsException,JspException {
     GetHardware getH = new GetHardware(m_conn);
     Set<String> hardwareLabels=null;
+
     switch(func) {
     case FUNC_getHardwareInstances:
       String htype = (String) m_inputs.get("hardwareType");
@@ -397,6 +402,9 @@ public class GetResultsWrapper extends SimpleTagSupport {
   private void getSummary(int func)
     throws SQLException,GetResultsException,JspException {
     GetSummary getS = new GetSummary(m_conn);
+    ArrayList<String> runStatuses =
+      (ArrayList<String>) m_inputs.get("runStatus");
+
     switch(func) {
     case FUNC_getRunSummary:
       String run =(String) m_inputs.get("run");
@@ -414,7 +422,8 @@ public class GetResultsWrapper extends SimpleTagSupport {
         return;
       }
       String travelerName = (String) m_inputs.get("travelerName");
-      m_results = getS.getComponentRuns(htype, expSN, travelerName);
+      m_results = getS.getComponentRuns(htype, expSN, travelerName,
+                                        runStatuses);
       break;
     default:
       m_jspContext.setAttribute("acknowledge",

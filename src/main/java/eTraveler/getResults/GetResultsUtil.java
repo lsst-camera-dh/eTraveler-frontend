@@ -76,16 +76,25 @@ public class GetResultsUtil {
    */
   public static HashMap<Integer, Object>
     getRunMaps(Connection conn, String hardwareType, String expSN,
-               String model, String travelerName, boolean byComponent)
+               String model, String travelerName, boolean byComponent,
+               ArrayList<String> runStatuses)
     throws SQLException, GetResultsException {
     String hidSub=GetResultsUtil.hidSubquery(hardwareType, expSN, model);
 
     String raiQuery;
+
+    String runStatusCut = "";
+    if (runStatuses != null) {
+      runStatusCut = " and AFS.name in " +
+        GetResultsUtil.arrayToSqlList(runStatuses);
+    }
+    
     if (!byComponent) {
       if (travelerName == null) {
         throw new GetResultsException("getRunMaps needs non-null traveler name");
       }
-      raiQuery = "select A.id as raid, H.id as hid, H.lsstId as expSN, runNumber,runInt,P.version,A.begin,A.end from Hardware H join Activity A on H.id=A.hardwareId join Process P on A.processId=P.id join RunNumber on A.rootActivityId=RunNumber.rootActivityId where H.id in (" + hidSub + ") and A.id=A.rootActivityId and P.name='" + travelerName + "' order by H.id asc, A.id desc";
+      raiQuery = "select A.id as raid, H.id as hid, H.lsstId as expSN, runNumber,runInt,P.version,A.begin,A.end,AFS.name as runStatus from Hardware H join Activity A on H.id=A.hardwareId join Process P on A.processId=P.id join RunNumber on A.rootActivityId=RunNumber.rootActivityId join ActivityFinalStatus AFS on AFS.id=A.activityFinalStatusId where H.id in (" + hidSub + ") and A.id=A.rootActivityId and P.name='" + travelerName + "' ";
+      raiQuery += runStatusCut + " order by H.id asc, A.id desc";
     } else {
       if (expSN == null) {
         throw new GetResultsException("getRunMaps needs non-null experimentSN when called by component");
@@ -95,7 +104,7 @@ public class GetResultsUtil {
       if (travelerName != null) {
         raiQuery += " and P.name='" + travelerName + "' ";
       }
-      raiQuery  += " order by A.id asc";
+      raiQuery  += runStatusCut + " order by A.id asc";
     }
     PreparedStatement stmt =
       conn.prepareStatement(raiQuery, ResultSet.TYPE_SCROLL_INSENSITIVE);
@@ -119,6 +128,7 @@ public class GetResultsUtil {
       runMap.put("rootActivityId", rs.getInt("raid"));
       if (!byComponent) {
         runMap.put("travelerName", travelerName);
+        runMap.put("runStatus", rs.getString("runStatus"));
       } else {
         runMap.put("travelerName", rs.getString("pname"));
         runMap.put("subsystem", rs.getString("subsystem"));
