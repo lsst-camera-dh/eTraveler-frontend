@@ -55,7 +55,7 @@ left join Activity Ac on Ac.parentActivityId=Ap.id and Ac.processEdgeId=PE.id
 where Ap.id=?<sql:param value="${activityId}"/>
 order by abs(PE.step);
     </sql:query>
-<display:table name="${choicesQ.rows}"/>
+
 <c:set var="numChosen" value="0"/>
 <c:forEach items="${choicesQ.rows}" var="childRow" varStatus="child">
     <c:if test="${! empty childRow.creationTS}">
