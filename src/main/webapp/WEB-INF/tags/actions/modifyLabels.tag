@@ -30,10 +30,33 @@ labelableId=?<sql:param value="${objectTypeId}"/>,
     activityId=?<sql:param value="${activityId}"/>,
 </c:if>
 reason=?<sql:param value="${reason}"/>,
-<c:if test="${removeLabel}">
-    adding=0,
-</c:if>
+adding=${removeLabel ? 0 : 1},
 createdBy=?<sql:param value="${userName}"/>,
 creationTS=UTC_TIMESTAMP();
+    </sql:update>
+    <sql:update>
+insert into LabelCurrent set
+labelId=?<sql:param value="${labelId}"/>,
+objectId=?<sql:param value="${objectId}"/>,
+labelableId=?<sql:param value="${objectTypeId}"/>,
+<c:if test="${! empty activityId}">
+    activityId=?<sql:param value="${activityId}"/>,
+</c:if>
+reason=?<sql:param value="${reason}"/>,
+adding=${removeLabel ? 0 : 1},
+createdBy=?<sql:param value="${userName}"/>,
+creationTS=UTC_TIMESTAMP()
+on duplicate key update
+    labelId=?<sql:param value="${labelId}"/>,
+    objectId=?<sql:param value="${objectId}"/>,
+    labelableId=?<sql:param value="${objectTypeId}"/>,
+    <c:if test="${! empty activityId}">
+        activityId=?<sql:param value="${activityId}"/>,
+    </c:if>
+    reason=?<sql:param value="${reason}"/>,
+    adding=${removeLabel ? 0 : 1},
+    createdBy=?<sql:param value="${userName}"/>,
+    creationTS=UTC_TIMESTAMP()
+;
     </sql:update>
 </c:if>

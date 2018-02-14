@@ -32,7 +32,7 @@ where id=?<sql:param value="${processId}"/>;
 
 <c:if test="${empty param.activityId}">
     <traveler:processPrereqWidget processId="${processId}"/>
-    <c:if test="${processQ.rows[0].substeps == 'SELECTION'}"><traveler:selectionWidget processId="${processId}"/></c:if>
+    <c:if test="${processQ.rows[0].substeps == 'SELECTION' || processQ.rows[0].substeps == 'HARDWARE_SELECTION'}"><traveler:processSelectionWidget processId="${processId}"/></c:if>
     <traveler:processInputWidget processId="${processId}"/>
 </c:if>
 
