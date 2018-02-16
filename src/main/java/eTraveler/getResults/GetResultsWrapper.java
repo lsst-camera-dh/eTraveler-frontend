@@ -150,6 +150,9 @@ public class GetResultsWrapper extends SimpleTagSupport {
       m_jspContext.setAttribute("acknowledge", "Failed with SQL exception "
                                 + sqlEx.getMessage());
       return;
+    } catch (GetResultsNoDataException ndEx) {
+      m_jspContext.setAttribute("acknowledge", "Failed with GetResultsNoDataException: "
+                                + ndEx.getMessage());
     } catch (GetResultsException ghEx) {
       m_jspContext.setAttribute("acknowledge", "Failed with exception "
                                 + ghEx.getMessage());
