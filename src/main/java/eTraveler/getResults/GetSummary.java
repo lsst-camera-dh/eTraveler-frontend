@@ -2,6 +2,7 @@ package eTraveler.getResults;
 
 import java.util.Map;
 import java.util.HashMap;
+import java.util.ArrayList;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -81,12 +82,13 @@ public class GetSummary {
 
   public Map<Integer, Object>
     getComponentRuns(String hardwareType, String experimentSN,
-                     String travelerName)
+                     String travelerName, ArrayList<String> runStatuses)
     throws SQLException, GetResultsException {
 
     Map<Integer, Object> results =
       GetResultsUtil.getRunMaps(m_connect, hardwareType,
-                                experimentSN, null, travelerName, true);
+                                experimentSN, null, travelerName, true,
+                                runStatuses);
     if (results == null) {
       throw new GetResultsNoDataException("No data found");
     }

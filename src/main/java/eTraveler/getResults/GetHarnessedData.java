@@ -52,13 +52,15 @@ public class GetHarnessedData {
      hardwareType must be non-null
      schemaName must be non-null to start; might loosen this requirements
      model, experimentSN are used for filtering if non-null
+     runStatuses is used for filtering if non-null
      Return data is map of maps (one for each component)
    */
   public Map<String, Object>
     getResultsJH(String travelerName, String hardwareType, String stepName,
                  String schemaName,
                  String model, String experimentSN,
-                 Pair<String, Object> filter, Set<String> hardwareLabels)
+                 Pair<String, Object> filter, Set<String> hardwareLabels,
+                 ArrayList<String> runStatuses)
     throws GetResultsException, SQLException {
     if (m_connect == null)
       throw new GetResultsException("Set connection before attempting to fetch data");
@@ -80,7 +82,7 @@ public class GetHarnessedData {
 
     m_runMaps =
       GetResultsUtil.getRunMaps(m_connect, hardwareType, experimentSN,
-                                model, travelerName, false);
+                                model, travelerName, false, runStatuses);
     if (m_runMaps == null) {
       throw new GetResultsNoDataException("No data found");
     }
@@ -204,7 +206,8 @@ public class GetHarnessedData {
 
   public Map<String, Object>
     getFilepathsJH(String travelerName, String hardwareType, String stepName,
-                   String model, String experimentSN,Set<String> hardwareLabels)
+                   String model, String experimentSN,Set<String> hardwareLabels,
+                   ArrayList<String> runStatuses)
     throws GetResultsException, SQLException {
     if (m_connect == null)
       throw new GetResultsException("Set connection before attempting to fetch data");
@@ -222,7 +225,7 @@ public class GetHarnessedData {
 
     m_runMaps =
       GetResultsUtil.getRunMaps(m_connect, hardwareType, experimentSN,
-                                model, travelerName, false);
+                                model, travelerName, false, runStatuses);
                                          
     if (m_runMaps == null) {
       throw new GetResultsNoDataException("No data found");

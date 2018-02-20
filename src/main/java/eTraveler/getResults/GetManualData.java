@@ -47,7 +47,8 @@ public class GetManualData {
   public Map<String, Object>
     getManualStep(int rqstData, String travelerName, String hardwareType,
                   String stepName, String model, String experimentSN,
-                  Set<String> hardwareLabels, ArrayList<String> statuses)
+                  Set<String> hardwareLabels, ArrayList<String> statuses,
+                  ArrayList<String> runStatuses)
     throws GetResultsException, SQLException {
 
     if (m_connect == null)
@@ -69,7 +70,7 @@ public class GetManualData {
      */
     m_runMaps =
       GetResultsUtil.getRunMaps(m_connect, m_hardwareType, m_expSN, m_model,
-                                m_travelerName, false);
+                                m_travelerName, false, runStatuses);
     if (m_runMaps == null) {
       throw new GetResultsNoDataException("No data found");
     }
@@ -227,7 +228,7 @@ public class GetManualData {
         GetResultsException("getMissingSignatures: missing hardwareType arg");
     }
 
-    String sql="select A.begin as stepbegin, A.id as aid,A.rootActivityId as raid,P.name as pname,P.id as pid,A2.begin as runbegin,P2.name as travname,P2.version,SRM.activityId,signerRequest,signerValue,RunNumber.runNumber,RunNumber.runInt,H.lsstId,H.id as hid,HT.name as htname,AFS.name as status from Activity A join Process P on A.processId=P.id join Activity A2 on A2.id=A.rootActivityId join Process P2 on P2.id=A2.processId join SignatureResultManual SRM on SRM.activityId=A.id join RunNumber on RunNumber.rootActivityId=A.rootActivityId join Hardware H on A.hardwareId=H.id join HardwareType HT on H.hardwareTypeId=HT.id "
+    String sql="select A.begin as stepbegin, A.id as aid,A.rootActivityId as raid,P.name as pname,P.id as pid,A2.begin as runbegin,P2.name as travname,P2.version,SRM.activityId,signerRequest,signerValue,RunNumber.runNumber,RunNumber.runInt,H.lsstId,H.id as hid,HT.name as htname,AFS.name as status,AFS2.name as runStatus from Activity A join Process P on A.processId=P.id join Activity A2 on A2.id=A.rootActivityId join Process P2 on P2.id=A2.processId join SignatureResultManual SRM on SRM.activityId=A.id join RunNumber on RunNumber.rootActivityId=A.rootActivityId join Hardware H on A.hardwareId=H.id join HardwareType HT on H.hardwareTypeId=HT.id join ActivityFinalStatus AFS2 on AFS2.id=A2.activityFinalStatusId "
       + GetResultsUtil.getActivityStatusJoins()
       + " where A.id in (select distinct A3.id from Activity A3 join SignatureResultManual SRM2 on SRM2.activityId=A3.id where signerValue is null) and ";
     sql += GetResultsUtil.getActivityStatusCondition(statuses);
@@ -477,6 +478,7 @@ public class GetManualData {
         ourRunMap.put("rootActivityId", raid);
         ourRunMap.put("runInt", rs.getInt("runInt"));
         ourRunMap.put("runBegin", rs.getString("runbegin"));
+        ourRunMap.put("runStatus", rs.getString("runStatus"));
         ourStepMap = new HashMap<String, Object>();
         ourRunMap.put("steps", ourStepMap);
 
