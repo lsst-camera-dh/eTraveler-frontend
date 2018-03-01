@@ -101,6 +101,10 @@ public class GetHarnessedData {
       GetResultsUtil.latestGoodActivities(m_connect, m_stepName,
                                           m_runMaps.keySet(), null);
 
+    if (goodActivities == null) {
+      throw new GetResultsNoDataException("No data found");
+    }
+
     // There are 6 replacements to be made.  All of them are results table
     // name (e.g. "FloatResultHarnessed")
     String sqlString=
@@ -185,7 +189,7 @@ public class GetHarnessedData {
 
 
     String sql =
-      "select F.virtualPath as vp,basename,catalogKey,schemaInstance,A.id as aid,P.name as pname,P.id as pid,A.id as aid from FilepathResultHarnessed F join Activity A on F.activityId=A.id "
+      "select F.virtualPath as vp,basename,F.value as path,catalogKey,schemaInstance,A.id as aid,P.name as pname,P.id as pid,A.id as aid from FilepathResultHarnessed F join Activity A on F.activityId=A.id "
       + GetResultsUtil.getActivityStatusJoins() +
       " join Process P on P.id=A.processId join RunNumber on A.rootActivityId=RunNumber.rootActivityId where RunNumber.runInt='"
       + m_run + "' and " + GetResultsUtil.getActivityStatusCondition(); 
@@ -567,6 +571,7 @@ public class GetHarnessedData {
     HashMap<String, Object> newDict = new HashMap<String, Object>();
     newDict.put("virtualPath", rs.getString("vp"));
     newDict.put("basename", rs.getString("basename"));
+    newDict.put("originalPath", rs.getString("path"));
     newDict.put("catalogKey", rs.getInt("catalogKey"));
     newDict.put("schemaInstance", rs.getInt("schemaInstance"));
     newDict.put("activityId", rs.getInt("aid"));
