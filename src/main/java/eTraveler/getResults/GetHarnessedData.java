@@ -250,7 +250,7 @@ public class GetHarnessedData {
                                           m_runMaps.keySet(), null);
 
     String sql =
-      "select F.virtualPath as vp,basename,catalogKey,schemaInstance,A.id as aid,A.rootActivityId as raid, A.hardwareId as hid,P.name as pname,P.id as pid from FilepathResultHarnessed F join Activity A on F.activityId=A.id "
+      "select F.virtualPath as vp,basename,catalogKey,F.value as path,schemaInstance,A.id as aid,A.rootActivityId as raid, A.hardwareId as hid,P.name as pname,P.id as pid from FilepathResultHarnessed F join Activity A on F.activityId=A.id "
       + " join Process P on P.id=A.processId where A.id in " + goodActivities;
       sql += " and P.name='" + m_stepName  + "' ";
     if (hidSet != null) {
