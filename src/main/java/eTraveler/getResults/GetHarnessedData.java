@@ -587,6 +587,7 @@ public class GetHarnessedData {
     HashMap<String, Object> entry0 = new HashMap<String, Object>();
     entry0.put("virtualPath", "string");
     entry0.put("basename", "string");
+    entry0.put("originalPath", "string");
     entry0.put("catalogKey", "int");
     entry0.put("schemaInstance", 0);
     dictList.add(entry0);
