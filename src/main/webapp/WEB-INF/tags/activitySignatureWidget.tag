@@ -87,6 +87,7 @@ Group: <select name="sigGroup">
     <option value="NCR-ChiefMechanicalEngineer">NCR-ChiefMechanicalEngineer</option>
     <option value="NCR-CRScientist">NCR-CRScientist</option>
     <option value="NCR-IandTScientist">NCR-IandTScientist</option>
+    <option value="NCR-IR2CleanRoomManager">NCR-IR2CleanRoomManager</option>
     <option value="NCR-LSSTProjectDirector">NCR-LSSTProjectDirector</option>
     <option value="NCR-LSSTProjectManager">NCR-LSSTProjectManager</option>
     <option value="NCR-ObservatorySEManager">NCR-ObservatorySEManager</option>
