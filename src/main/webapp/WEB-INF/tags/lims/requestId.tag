@@ -40,7 +40,7 @@
     select A.id as activityId, A.hardwareId, A.createdBy,
     H.lsstId,
     HT.name as hardwareTypeName, 
-    P.name as processName, P.userVersionString
+    P.name as processName, P.userVersionString, P.jobname 
     from
     Prerequisite PI
     inner join Activity A on A.id=PI.prerequisiteActivityId
@@ -70,7 +70,7 @@
             "rootActivityId": "${rootActivityId}",
             "unit_type": "${prereqRow.hardwareTypeName}",
             "unit_id": "${prereqRow.lsstId}",
-            "job": "${prereqRow.processName}",
+            "job": "${prereqRow.jobname}",
             "version": "${prereqRow.userVersionString}",
             "operator": "${prereqRow.createdBy}"
         }<c:if test="${! status.last}">,</c:if>

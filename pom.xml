@@ -12,7 +12,7 @@
     <artifactId>org-lsst-camera-etraveler-web</artifactId>
     <packaging>war</packaging>
 
-    <version>1.2.40-SNAPSHOT</version>
+    <version>1.2.40-rc2-SNAPSHOT</version>
 
     <name>LSST ETraveler Web Application</name>
     <url>http://srs.slac.stanford.edu/eTraveler</url>
@@ -40,11 +40,13 @@
             <name>SRS Maven2 central SNAPSHOTS repository</name>
             <url>http://srs.slac.stanford.edu/maven2/SNAPSHOTS</url>
         </repository>
+
         <repository>
             <id>lsst-maven2-public</id>
             <name>LSST Maven 2 central repository</name>
-            <url>http://dev.lsstcorp.org:8081/nexus/content/groups/ccs-maven2-public/</url>
-        </repository>    
+            <url>http://repo-nexus.lsst.org/nexus/content/groups/ccs-maven2-public/</url>
+            </repository>
+
         <repository>
             <id>lsst-dh-maven2-public</id>
             <name>LSST Data Handling Maven Central repository</name>
@@ -86,7 +88,7 @@
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
-            <version>2.7.0</version>
+            <version>2.9.8</version>
         </dependency>
 
         <dependency>

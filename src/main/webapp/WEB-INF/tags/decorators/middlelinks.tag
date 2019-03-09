@@ -4,7 +4,7 @@
 <%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql"%>
 
     <sql:query var="dbReleaseQ">
-select major, minor, patch, id from DbRelease order by id desc limit 1;
+select major, minor, patch, id from DbRelease where status='CURRENT' order by id desc limit 1;
     </sql:query>
 <c:set var="dbRelease" value="${dbReleaseQ.rows[0]}"/>
     

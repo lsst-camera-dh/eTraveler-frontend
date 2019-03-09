@@ -43,6 +43,7 @@
     select
         A.id as activityId,
         P.id as processId, P.name as processName, P.userVersionString,
+	P.jobname as processJobname,
         H.id as hardwareId, H.lsstId, 
         HT.id as hardwareTypeId, HT.name as hardwareTypeName,
         HG.id as hardwareGroupId, HG.name as hardwareGroupName
@@ -163,12 +164,20 @@ where A.id=?<sql:param value="${activityId}"/>
 
 <traveler:findRun varRun="runNumber" varTraveler="runTraveler" activityId="${activityId}"/>
 
-<c:set var="commonPath" value=
-"${activity.hardwareTypeName}/${activity.lsstId}/${runNumber}/${activity.processName}${processVersion}/${activityId}"
-/>
+<c:choose>
+    <c:when test="${mode == 'harnessed'}">
+        <c:set var="commonPath" value=
+"${activity.hardwareTypeName}/${activity.lsstId}/${runNumber}/${activity.processJobname}${processVersion}/${activityId}" />
+    </c:when>
+    <c:otherwise>
+        <c:set var="commonPath" value=
+"${activity.hardwareTypeName}/${activity.lsstId}/${runNumber}/${activity.processName}${processVersion}/${activityId}" />
+    </c:otherwise>
+</c:choose>
 <c:if test="${mode == 'harnessed' && ! empty jhSubPath}">
     <c:set var="commonPath" value="${commonPath}/${jhSubPath}"/>
 </c:if>
+
 
 <c:set var="logicalFolderPath" value="${dcHead}/${commonPath}"/>
 
