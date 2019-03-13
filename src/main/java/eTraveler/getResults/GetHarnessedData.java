@@ -60,7 +60,7 @@ public class GetHarnessedData {
                  String schemaName,
                  String model, String experimentSN,
                  Pair<String, Object> filter, Set<String> hardwareLabels,
-                 ArrayList<String> runStatuses)
+                 ArrayList<String> runStatuses, Set<String> runLabels)
     throws GetResultsException, SQLException {
     if (m_connect == null)
       throw new GetResultsException("Set connection before attempting to fetch data");
@@ -95,6 +95,9 @@ public class GetHarnessedData {
         throw new GetResultsNoDataException("No data found");
       }
     }
+
+    m_runMaps = handleRunLabels(m_connect, m_runMaps, runLabels);
+    
                                          
     // Find good activities in the runs of interest
     String goodActivities =
@@ -211,7 +214,7 @@ public class GetHarnessedData {
   public Map<String, Object>
     getFilepathsJH(String travelerName, String hardwareType, String stepName,
                    String model, String experimentSN,Set<String> hardwareLabels,
-                   ArrayList<String> runStatuses)
+                   ArrayList<String> runStatuses, Set<String> runLabels)
     throws GetResultsException, SQLException {
     if (m_connect == null)
       throw new GetResultsException("Set connection before attempting to fetch data");
@@ -243,6 +246,8 @@ public class GetHarnessedData {
         throw new GetResultsNoDataException("No data found");
       }
     }
+
+    m_runMaps = handleRunLabels(m_connect, m_runMaps, runLabels);
     
     // Find good activities in the runs of interest
     String goodActivities =
@@ -628,6 +633,35 @@ public class GetHarnessedData {
     return newSchema;
   }
 
+  private static HashMap<Integer, Object>
+    handleRunLabels(Connection conn, HashMap<Integer, Object> runMaps,
+                    Set<String> runLabels)
+    throws SQLException, GetResultsNoDataException {
+    if (runLabels == null) return runMaps;
+    Set<Integer> runSet = null;
+    runSet = GetResultsUtil.addRunLabels(conn, runMaps,
+                                         runLabels);
+    if (runSet == null) {
+      throw new GetResultsNoDataException("No data found");
+    }
+    //  Cut out any runs without one of the runLabels
+
+    HashMap<Integer, Object> okMaps = new HashMap<Integer, Object>();
+
+    for (Integer raid : runMaps.keySet()) {
+          HashMap<String, Object> runMap =
+        (HashMap<String, Object>) runMaps.get(raid);
+      if (runSet.contains(runMap.get("runId"))) {
+        okMaps.put(raid, runMaps.get(raid));
+      }
+    }
+    if (okMaps.isEmpty()) {
+      throw new GetResultsNoDataException("No data found");
+    }      
+    return okMaps;
+  }
+  
+    
   
   private void pruneInstances(ArrayList<HashMap <String, Object> > mapList,
                               Pair<String, Object> filter)
