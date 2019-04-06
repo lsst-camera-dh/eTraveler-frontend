@@ -297,68 +297,19 @@ public class GetResultsUtil {
     associateLabels(Connection conn, Set<String> labels,
                     Set<Integer> objectIds, String labelableType)
   throws SQLException {
-
-    // If any of the label strings is of the form 'groupName:', could
-    //    expand into set of fullnames with that groupname or
-
-    Set<String> expandedLabels = new HashSet<String>();
-    Set<String> groups  = new HashSet<String>();
     PreparedStatement stmt;
     ResultSet rs;
     boolean gotRow;
-    for (String lbl : labels) {
-      String cmps[] = lbl.split(":");
-      if (cmps.length == 1 ) {
-        groups.add(cmps[0]);
-      } else {
-        expandedLabels.add(lbl);
-      }
-    }
-    if (groups.size() > 0) {
-      String expandQ =
-        "select concat(LabelGroup.name,':',Label.name) as fullname from "
-        + "LabelGroup join Label on LabelGroup.id=Label.labelGroupId "
-        + "join Labelable on LabelGroup.labelableId=Labelable.id "
-        + "where Labelable.name='hardware' and LabelGroup.name in "
-        + GetResultsUtil.stringSetToSqlList(groups);
-      stmt=conn.prepareStatement(expandQ, ResultSet.TYPE_SCROLL_INSENSITIVE);
-      rs = stmt.executeQuery();
-      gotRow = rs.first();
-      while (gotRow) {
-        expandedLabels.add(rs.getString("fullname"));
-        gotRow = rs.relative(1);
-      }
-      stmt.close();
-    }
-
-    String labelCondition = " in " + stringSetToSqlList(expandedLabels);
     
-    String labelIdQ =
-      "select Label.id as lid,concat(LG.name,':',Label.name) as "
-      + "fullname from Label join LabelGroup LG on LG.id=Label.labelGroupId "
-      + "where concat(LG.name,':',Label.name) " + labelCondition;
-    stmt =
-      conn.prepareStatement(labelIdQ, ResultSet.TYPE_SCROLL_INSENSITIVE);
-    rs = stmt.executeQuery();
-    gotRow=rs.first();
-    if (!gotRow) {
-      stmt.close();
-      return null;
-    }
-    HashMap<Integer, String> labelIds = new HashMap<Integer,String>();
-    while (gotRow) {
-      labelIds.put(rs.getInt("lid"), rs.getString("fullname"));
-      gotRow = rs.relative(1);
-    }
-    stmt.close();
+    HashMap<Integer, String> labelIds =
+      expandLabels(conn, labels, labelableType);
+
     String assocQ = "select labelId,objectId from "
-      +"LabelHistory LH join Labelable on LH.labelableId=Labelable.id where "
+      +"LabelCurrent LC join Labelable on LC.labelableId=Labelable.id where "
       + "labelId in " + setToSqlList(labelIds.keySet())
       + " and objectId in " + setToSqlList(objectIds)
-      + " and Labelable.name='" + labelableType
-      + "' and LH.id in "
-      + "(select max(id) from LabelHistory LH2 group by LH2.objectId, "
-      + "LH2.labelId) and adding=1";
+      + " and Labelable.name='" + labelableType + "'";
+
     stmt = conn.prepareStatement(assocQ, ResultSet.TYPE_SCROLL_INSENSITIVE);
     rs = stmt.executeQuery();
     gotRow=rs.first();
@@ -384,6 +335,71 @@ public class GetResultsUtil {
     return idToLabels;
   }
 
+  public static HashMap<Integer, String>
+    expandLabels(Connection conn, Set<String> labels, String labelableType)
+  throws SQLException {
+    // If any of the label strings is of the form 'groupName:'
+    //    expand into set of fullnames with that groupname 
+    Set<String> expandedLabels = new HashSet<String>();
+    Set<String> groups  = new HashSet<String>();
+    PreparedStatement stmt;
+    ResultSet rs;
+    boolean gotRow;
+    for (String lbl : labels) {
+      String cmps[] = lbl.split(":");
+      if (cmps.length == 2 ) {
+        expandedLabels.add(lbl);
+      } else {
+        groups.add(cmps[0]);
+      }
+    }
+    if (groups.size() > 0) {
+      String expandQ =
+        "select concat(LabelGroup.name,':',Label.name) as fullname from "
+        + "LabelGroup join Label on LabelGroup.id=Label.labelGroupId "
+        + "join Labelable on LabelGroup.labelableId=Labelable.id "
+        + "where Labelable.name='" + labelableType +"' and LabelGroup.name"
+        //+ "='" + g
+        + " in " + GetResultsUtil.stringSetToSqlList(groups);
+      stmt=conn.prepareStatement(expandQ,ResultSet.TYPE_SCROLL_INSENSITIVE);
+      try {
+        rs = stmt.executeQuery();
+      } catch (SQLException se) {
+        throw new SQLException(se.getMessage() + " from query \n" + expandQ);
+      }
+      gotRow = rs.first();
+      while (gotRow) {
+        expandedLabels.add(rs.getString("fullname"));
+        gotRow = rs.relative(1);
+      }
+      stmt.close();
+    }
+    String labelCondition = " in " + stringSetToSqlList(expandedLabels);
+    String labelIdQ =
+      "select Label.id as lid,concat(LG.name,':',Label.name) as "
+      + "fullname from Label join LabelGroup LG on LG.id=Label.labelGroupId "
+      + "where concat(LG.name,':',Label.name) " + labelCondition;
+    stmt =
+      conn.prepareStatement(labelIdQ, ResultSet.TYPE_SCROLL_INSENSITIVE);
+    try {
+      rs = stmt.executeQuery();
+    } catch (SQLException sel) {
+      throw new SQLException(sel.getMessage() + " from query \n" + labelIdQ);
+    }
+    gotRow=rs.first();
+    if (!gotRow) {
+      stmt.close();
+      return null;
+    }
+    HashMap<Integer, String> labelIds = new HashMap<Integer,String>();
+    while (gotRow) {
+      labelIds.put(rs.getInt("lid"), rs.getString("fullname"));
+      gotRow = rs.relative(1);
+    }
+    stmt.close();
+    return labelIds;
+  }
+  
   public static Object findOrAddStep(HashMap<String, Object> stepMap,
                                      String stepName) {
     if (stepMap.containsKey(stepName)) return stepMap.get(stepName);

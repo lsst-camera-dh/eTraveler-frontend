@@ -63,10 +63,11 @@ public class GetResultsWrapper extends SimpleTagSupport {
 
   // Hardware, run summaries  
   private static final int FUNC_getRunSummary = 14;
+  private static final int FUNC_getRunsByLabel = 15;
 
-  private static final int FUNC_getComponentRuns = 15;
-  private static final int FUNC_getHardwareInstances = 16;
-  private static final int FUNC_getHardwareNCRs = 17;
+  private static final int FUNC_getComponentRuns = 16;
+  private static final int FUNC_getHardwareInstances = 17;
+  private static final int FUNC_getHardwareNCRs = 18;
 
   public void doTag() throws JspException, IOException {
     m_jspContext = getJspContext();
@@ -96,6 +97,7 @@ public class GetResultsWrapper extends SimpleTagSupport {
       if (m_function.equals("getActivity")) func = FUNC_getActivity;
       if (m_function.equals("getRunActivities")) func = FUNC_getRunActivities;
       if (m_function.equals("getRunSummary")) func = FUNC_getRunSummary;
+      if (m_function.equals("getRunsByLabel")) func = FUNC_getRunsByLabel;
       if (m_function.equals("getComponentRuns")) func = FUNC_getComponentRuns;
       if (m_function.equals("getHardwareInstances")) func = FUNC_getHardwareInstances;
       if (m_function.equals("getHardwareNCRs")) func = FUNC_getHardwareNCRs;
@@ -125,6 +127,7 @@ public class GetResultsWrapper extends SimpleTagSupport {
         getActivities(func);
         break;
       case FUNC_getRunSummary:
+      case FUNC_getRunsByLabel:
       case FUNC_getComponentRuns:
         getSummary(func);
         break;
@@ -431,6 +434,24 @@ public class GetResultsWrapper extends SimpleTagSupport {
       }
       m_results = getS.getRunSummary(run);
       break;
+    case FUNC_getRunsByLabel:
+      if (m_inputs.get("runLabels") == null) {
+        m_jspContext.setAttribute("acknowledge", "Missing argument runLabels");
+        return;
+      }
+      ArrayList<String> labelList =
+        (ArrayList<String>) m_inputs.get("runLabels");
+      if (labelList.size() == 0) {
+        m_jspContext.setAttribute("acknowledge", "0-length argument runLabels");
+        return;
+      }
+      HashSet<String> runLabels = new HashSet<String>();
+      runLabels.addAll(labelList);
+      m_results = getS.getRunsByLabel(runLabels, runStatuses,
+                                      (String) m_inputs.get("travelerType"));
+      break;
+      
+      
     case FUNC_getComponentRuns:
       String htype = (String) m_inputs.get("hardwareType");
       String expSN = (String) m_inputs.get("experimentSN");
