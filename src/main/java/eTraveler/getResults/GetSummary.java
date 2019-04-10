@@ -90,7 +90,9 @@ public class GetSummary {
     HashMap<Integer, Object> labeledRuns = new HashMap<Integer, Object>();
     //ArrayList<String> labelArray = new ArrayList<String>(runLabels);
     String q="select runNumber, runInt, RN.id as runId, ";
-    q += "RN.rootActivityId as raid, L.name as labelName,begin,end, ";
+    q += "RN.rootActivityId as raid,begin,end, ";
+    //q += "RN.rootActivityId as raid, L.name as labelName,begin,end, ";
+    q += "concat(LG.name, ':', L.name) as fullname,";
     q += "AFS.name as runStatus, P.name as pname, version, H.id as hid,";
     q += "H.lsstId as expSN, HT.name as hname from LabelCurrent LC ";
     q += "join Label L on L.id= LC.labelId ";
@@ -155,12 +157,12 @@ public class GetSummary {
         if (end == null) end = "";
         runMap.put("end", GetResultsUtil.timeISO(end));
         ArrayList<String> labelList = new ArrayList<String>();
-        labelList.add(rs.getString("labelName"));
+        labelList.add(rs.getString("fullname"));
         runMap.put("runLabels", labelList);
       }  else {  // Just add new label to list
         ArrayList<String> oldList =
           (ArrayList<String>) oldRunMap.get("runLabels");
-        oldList.add(rs.getString("labelName"));
+        oldList.add(rs.getString("fullname"));
       }
       gotRow = rs.relative(1);
     }
