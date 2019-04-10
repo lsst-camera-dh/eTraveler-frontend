@@ -448,7 +448,7 @@ public class GetResultsWrapper extends SimpleTagSupport {
       HashSet<String> runLabels = new HashSet<String>();
       runLabels.addAll(labelList);
       m_results = getS.getRunsByLabel(runLabels, runStatuses,
-                                      (String) m_inputs.get("travelerType"));
+                                      (String) m_inputs.get("travelerName"));
       break;
       
       

@@ -107,7 +107,7 @@ public class GetSummary {
       + GetResultsUtil.setToSqlList(labelHash.keySet());
 
     if (travelerType != null) {
-      q += " and P.name == '" + travelerType + "' ";
+      q += " and P.name = '" + travelerType + "' ";
     }
     q += " and AFS.name in ";
     q += GetResultsUtil.arrayToSqlList(runStatuses);
