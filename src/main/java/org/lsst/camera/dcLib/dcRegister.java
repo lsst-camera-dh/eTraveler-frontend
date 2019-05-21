@@ -39,7 +39,7 @@ public class dcRegister extends SimpleTagSupport {
     private String var;
     
     public Client getClient() throws IOException{
-        String datacatUrl = "http://srs.slac.stanford.edu/datacat-v0.4/r";
+        String datacatUrl = "https://srs.slac.stanford.edu/datacat-v0.4/r";
         try {
             
             Map<String, Object> headers = new HashMap<String, Object>();
