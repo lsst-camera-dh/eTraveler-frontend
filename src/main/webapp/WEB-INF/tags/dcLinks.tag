@@ -10,13 +10,13 @@
 <%@attribute name="datasetPk" required="true"%>
 <%@attribute name="localPath" required="true"%>
 
-<c:url var="dcLink" value="http://srs.slac.stanford.edu/DataCatalog/dataset.jsp">
+<c:url var="dcLink" value="https://srs.slac.stanford.edu/DataCatalog/dataset.jsp">
     <c:param name="dataset" value="${datasetPk}"/>
     <c:param name="experiment" value="${appVariables.experiment}"/>
 </c:url>
 <a href="${dcLink}" target="_blank">${localPath}</a>
 <br>
-<c:url var="dlLink" value="http://srs.slac.stanford.edu/DataCatalog/get">
+<c:url var="dlLink" value="https://srs.slac.stanford.edu/DataCatalog/get">
     <c:param name="dataset" value="${datasetPk}"/>
     <c:param name="experiment" value="${appVariables.experiment}"/>
 </c:url>

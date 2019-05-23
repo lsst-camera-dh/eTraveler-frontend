@@ -227,7 +227,7 @@ location: <c:out value="${fullFsPath}"/><br>
     <c:if test="${!empty ex}">
         <traveler:error message="Couldn't register file ${fullFsPath}.<br>
 Perhaps the file format (${fileFormat}) is not on the data catalog's list?<br>
-Check <a href='http://srs.slac.stanford.edu/DataCatalog/datasetfileformat.jsp' target='_'>here</a>.
+Check <a href='https://srs.slac.stanford.edu/DataCatalog/datasetfileformat.jsp' target='_'>here</a>.
 ${ex} ${ex.cause}"/>
     </c:if>
 </c:if>
