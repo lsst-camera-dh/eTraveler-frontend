@@ -12,7 +12,7 @@
     <artifactId>org-lsst-camera-etraveler-web</artifactId>
     <packaging>war</packaging>
 
-    <version>1.2.41-SNAPSHOT-runLabels-plus</version>
+    <version>1.2.41-SNAPSHOT-runLabels-checkstatus</version>
 
     <name>LSST ETraveler Web Application</name>
     <url>http://srs.slac.stanford.edu/eTraveler</url>
