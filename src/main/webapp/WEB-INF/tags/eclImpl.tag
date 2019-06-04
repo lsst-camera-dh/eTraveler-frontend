@@ -79,16 +79,12 @@
 <c:set var="displayLink" value="<a href='${displayUrl}' target='_blank'>eTraveler</a>"/>
 
 <table border="1">
-    <tr>
-        <td>
-<c:url var="searchLink" value="${eLogHome}/${eLogSearchPath}">
-    <c:param name="adv_text" value="${searchField}"/>
-</c:url>
-<a href="${searchLink}" target="_blank">Search eLog</a>
-        </td>
-    </tr>
+  <%--      Get rid of general eLog search, requiring log-in  --%>
+
+<%--  The next section looks up relevant entries in eLog and displays them --%>
 <ecl:eclSearch var="entries" version="${appVariables.etravelerELogVersion}" url="${appVariables.etravelerELogUrl}"
                query="si=${searchField}"/>
+
 <c:forEach var="entry" items="${entries}">
     <c:set var="text" value="${fn:replace(entry.text, displayLink, '')}"/>
     <c:url var="entryLink" value="${eLogHome}/${eLogShowPath}">
@@ -100,59 +96,7 @@
     ${text}
         </td>
     </tr>
-</c:forEach>        
-    <tr>
-        <td>
-<form method="GET" action="fh/eclPost.jsp">
-    <input type="hidden" name="freshnessToken" value="${freshnessToken}">
-    <input type="hidden" name="referringPage" value="${thisPage}">
-    <input type="hidden" name="displayLink" value="${displayLink}">
-    <input type="hidden" name="author" value="${author}">
-    <input type="hidden" name="hardwareTypeId" value="${hardwareTypeField}">
-    <input type="hidden" name="hardwareGroupId" value="${hardwareGroupField}">
-    <input type="hidden" name="hardwareId" value="${hardwareField}">
-    <input type="hidden" name="processId" value="${processField}">
-    <input type="hidden" name="activityId" value="${activityField}">
-    <input type="hidden" name="version" value="${version}">
-    <table>
-        <tr>
-            <td>
-    <textarea name="text" required="true"></textarea>
-            </td>
-            <td>
-                <table>
-                    <tr>
-                        <td>
-    <select name="category" required="true">
-        <option value="" selected disabled>Pick a category</option>
-        <c:forEach var="category" items="${categories}">
-            <option value="${category}">${category}</option>
-        </c:forEach>
-    </select>
-                        </td>
-                    </tr>
-                    <%--
-                    <tr>
-                        <td>
-    <select name="tag">
-        <option value="" selected>Optional tag</option>
-        <c:forEach var="tag" items="${tags}">
-            <option value="${tag}">${tag}</option>
-        </c:forEach>
-    </select>
-                        </td>
-                    </tr>
-                    --%>
-                    <tr>
-                        <td>
-    <input type="SUBMIT" value="Post a comment">
-                        </td>
-                    </tr>
-                </table>
-            </td>
-        </tr>
-    </table>
-</form>
-        </td>
-    </tr>
+</c:forEach>
+
+<%-- Final section was for posting new comments.  Get rid of it  --%>
 </table>

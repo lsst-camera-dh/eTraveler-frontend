@@ -62,6 +62,11 @@ where A.id=?<sql:param value="${activityId}"/>;
     <c:if test="${empty newStatusId}">
         <traveler:error message="No hardware status supplied"/>
     </c:if>
+    <traveler:checkHardwareStatusTransition hardwareId="${activity.hardwareId}" newStatusId="${newStatusId}"
+                                            var="allowed" />
+    <c:if test="${! allowed}">
+        <traveler:error message="Cannot transition to/from USED nor from REJECTED hardware status" />
+    </c:if>
     <c:if test="${empty newStatusReason}"><c:set var="newStatusReason" value="Set by traveler step"/></c:if>
     <ta:setHardwareStatus activityId="${activityId}" hardwareId="${activity.hardwareId}"
                           hardwareStatusId="${newStatusId}" reason="${newStatusReason}"/>

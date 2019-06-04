@@ -72,6 +72,8 @@ public class GetResultsUtil {
       2. those (currently just one) wanting information about runs executed
         on a particular component (getComponentRuns)
       The argument byComponent is false in the first case, true in the second
+     Returns: a dict where key is root activity id for the run. Value
+     is a dict of quantities associated with the run.
         
    */
   public static HashMap<Integer, Object>
@@ -93,13 +95,13 @@ public class GetResultsUtil {
       if (travelerName == null) {
         throw new GetResultsException("getRunMaps needs non-null traveler name");
       }
-      raiQuery = "select A.id as raid, H.id as hid, H.lsstId as expSN, runNumber,runInt,P.version,A.begin,A.end,AFS.name as runStatus from Hardware H join Activity A on H.id=A.hardwareId join Process P on A.processId=P.id join RunNumber on A.rootActivityId=RunNumber.rootActivityId join ActivityFinalStatus AFS on AFS.id=A.activityFinalStatusId where H.id in (" + hidSub + ") and A.id=A.rootActivityId and P.name='" + travelerName + "' ";
+      raiQuery = "select A.id as raid, H.id as hid, H.lsstId as expSN, runNumber,runInt,RunNumber.id as runid,P.version,A.begin,A.end,AFS.name as runStatus from Hardware H join Activity A on H.id=A.hardwareId join Process P on A.processId=P.id join RunNumber on A.rootActivityId=RunNumber.rootActivityId join ActivityFinalStatus AFS on AFS.id=A.activityFinalStatusId where H.id in (" + hidSub + ") and A.id=A.rootActivityId and P.name='" + travelerName + "' ";
       raiQuery += runStatusCut + " order by H.id asc, A.id desc";
     } else {
       if (expSN == null) {
         throw new GetResultsException("getRunMaps needs non-null experimentSN when called by component");
       }
-      raiQuery = "select A.id as raid, H.id as hid, H.lsstId as expSN, runNumber,runInt,P.name as pname,P.version,A.begin,A.end,AFS.name as runStatus,Subsystem.name as subsystem from Hardware H join Activity A on H.id=A.hardwareId join Process P on A.processId=P.id join RunNumber on A.rootActivityId=RunNumber.rootActivityId join TravelerType on P.id=TravelerType.rootProcessId join Subsystem on Subsystem.id=TravelerType.subsystemId " + getActivityStatusJoins()
+      raiQuery = "select A.id as raid, H.id as hid, H.lsstId as expSN, runNumber,runInt,RunNumber.id as runId,P.name as pname,P.version,A.begin,A.end,AFS.name as runStatus,Subsystem.name as subsystem from Hardware H join Activity A on H.id=A.hardwareId join Process P on A.processId=P.id join RunNumber on A.rootActivityId=RunNumber.rootActivityId join TravelerType on P.id=TravelerType.rootProcessId join Subsystem on Subsystem.id=TravelerType.subsystemId " + getActivityStatusJoins()
         + " where H.id in (" + hidSub + ") and A.id=A.rootActivityId ";
       if (travelerName != null) {
         raiQuery += " and P.name='" + travelerName + "' ";
@@ -134,6 +136,7 @@ public class GetResultsUtil {
         runMap.put("subsystem", rs.getString("subsystem"));
         runMap.put("runStatus", rs.getString("runStatus"));
       }
+      runMap.put("runId", rs.getInt("runId"));
       runMap.put("travelerVersion", rs.getInt("version"));
       runMap.put("hardwareType", hardwareType);
       runMap.put("experimentSN", rs.getString("expSN"));
@@ -255,74 +258,58 @@ public class GetResultsUtil {
     return hidLabels.keySet();
   }
 
+  /**
+     Given run maps as created by GetResultsUtil.getRunMaps
+     and set of labels of interest, for each run
+     appearing in a run map, if it has any of the labels of
+     interest add key "runLabels" whose value is list
+     of labels it has
+     Returns set of runs (RunNumber.id) having at least one label
+   */
+  public static Set<Integer>
+    addRunLabels(Connection conn, HashMap<Integer, Object> runMaps,
+                 Set<String> labels) throws SQLException {
+    Set<Integer> runIds = new HashSet<Integer>();
+    for (Integer raid : runMaps.keySet()) {
+      HashMap<String, Object> runMap =
+        (HashMap<String, Object>) runMaps.get(raid);
+      runIds.add((Integer) runMap.get("runId"));
+    }
+    HashMap<Integer, Object> runLabels =
+      associateLabels(conn, labels, runIds, "run");
+    if (runLabels == null) return null;
+
+    for (Integer raid : runMaps.keySet()) {
+      HashMap<String, Object> runMap =
+        (HashMap<String, Object>) runMaps.get(raid);
+      
+      Integer runId = (Integer) runMap.get("runId");
+      if (runLabels.keySet().contains(runId)) {
+        runMap.put("runLabels", runLabels.get(runId));
+      }
+    }
+    return runLabels.keySet();
+  }
+  
   // Maybe be more explicit with return type.  It's really going to
   // be a list or set of strings
   public static HashMap<Integer, Object>
     associateLabels(Connection conn, Set<String> labels,
                     Set<Integer> objectIds, String labelableType)
   throws SQLException {
-
-    // If any of the label strings is of the form 'groupName:', could
-    //    expand into set of fullnames with that groupname or
-
-    Set<String> expandedLabels = new HashSet<String>();
-    Set<String> groups  = new HashSet<String>();
     PreparedStatement stmt;
     ResultSet rs;
     boolean gotRow;
-    for (String lbl : labels) {
-      String cmps[] = lbl.split(":");
-      if (cmps.length == 1 ) {
-        groups.add(cmps[0]);
-      } else {
-        expandedLabels.add(lbl);
-      }
-    }
-    if (groups.size() > 0) {
-      String expandQ =
-        "select concat(LabelGroup.name,':',Label.name) as fullname from "
-        + "LabelGroup join Label on LabelGroup.id=Label.labelGroupId "
-        + "join Labelable on LabelGroup.labelableId=Labelable.id "
-        + "where Labelable.name='hardware' and LabelGroup.name in "
-        + GetResultsUtil.stringSetToSqlList(groups);
-      stmt=conn.prepareStatement(expandQ, ResultSet.TYPE_SCROLL_INSENSITIVE);
-      rs = stmt.executeQuery();
-      gotRow = rs.first();
-      while (gotRow) {
-        expandedLabels.add(rs.getString("fullname"));
-        gotRow = rs.relative(1);
-      }
-      stmt.close();
-    }
-
-    String labelCondition = " in " + stringSetToSqlList(expandedLabels);
     
-    String labelIdQ =
-      "select Label.id as lid,concat(LG.name,':',Label.name) as "
-      + "fullname from Label join LabelGroup LG on LG.id=Label.labelGroupId "
-      + "where concat(LG.name,':',Label.name) " + labelCondition;
-    stmt =
-      conn.prepareStatement(labelIdQ, ResultSet.TYPE_SCROLL_INSENSITIVE);
-    rs = stmt.executeQuery();
-    gotRow=rs.first();
-    if (!gotRow) {
-      stmt.close();
-      return null;
-    }
-    HashMap<Integer, String> labelIds = new HashMap<Integer,String>();
-    while (gotRow) {
-      labelIds.put(rs.getInt("lid"), rs.getString("fullname"));
-      gotRow = rs.relative(1);
-    }
-    stmt.close();
+    HashMap<Integer, String> labelIds =
+      expandLabels(conn, labels, labelableType);
+
     String assocQ = "select labelId,objectId from "
-      +"LabelHistory LH join Labelable on LH.labelableId=Labelable.id where "
+      +"LabelCurrent LC join Labelable on LC.labelableId=Labelable.id where "
       + "labelId in " + setToSqlList(labelIds.keySet())
       + " and objectId in " + setToSqlList(objectIds)
-      + " and Labelable.name='" + labelableType
-      + "' and LH.id in "
-      + "(select max(id) from LabelHistory LH2 group by LH2.objectId, "
-      + "LH2.labelId) and adding=1";
+      + " and Labelable.name='" + labelableType + "'";
+
     stmt = conn.prepareStatement(assocQ, ResultSet.TYPE_SCROLL_INSENSITIVE);
     rs = stmt.executeQuery();
     gotRow=rs.first();
@@ -348,6 +335,71 @@ public class GetResultsUtil {
     return idToLabels;
   }
 
+  public static HashMap<Integer, String>
+    expandLabels(Connection conn, Set<String> labels, String labelableType)
+  throws SQLException {
+    // If any of the label strings is of the form 'groupName:'
+    //    expand into set of fullnames with that groupname 
+    Set<String> expandedLabels = new HashSet<String>();
+    Set<String> groups  = new HashSet<String>();
+    PreparedStatement stmt;
+    ResultSet rs;
+    boolean gotRow;
+    for (String lbl : labels) {
+      String cmps[] = lbl.split(":");
+      if (cmps.length == 2 ) {
+        expandedLabels.add(lbl);
+      } else {
+        groups.add(cmps[0]);
+      }
+    }
+    if (groups.size() > 0) {
+      String expandQ =
+        "select concat(LabelGroup.name,':',Label.name) as fullname from "
+        + "LabelGroup join Label on LabelGroup.id=Label.labelGroupId "
+        + "join Labelable on LabelGroup.labelableId=Labelable.id "
+        + "where Labelable.name='" + labelableType +"' and LabelGroup.name"
+        //+ "='" + g
+        + " in " + GetResultsUtil.stringSetToSqlList(groups);
+      stmt=conn.prepareStatement(expandQ,ResultSet.TYPE_SCROLL_INSENSITIVE);
+      try {
+        rs = stmt.executeQuery();
+      } catch (SQLException se) {
+        throw new SQLException(se.getMessage() + " from query \n" + expandQ);
+      }
+      gotRow = rs.first();
+      while (gotRow) {
+        expandedLabels.add(rs.getString("fullname"));
+        gotRow = rs.relative(1);
+      }
+      stmt.close();
+    }
+    String labelCondition = " in " + stringSetToSqlList(expandedLabels);
+    String labelIdQ =
+      "select Label.id as lid,concat(LG.name,':',Label.name) as "
+      + "fullname from Label join LabelGroup LG on LG.id=Label.labelGroupId "
+      + "where concat(LG.name,':',Label.name) " + labelCondition;
+    stmt =
+      conn.prepareStatement(labelIdQ, ResultSet.TYPE_SCROLL_INSENSITIVE);
+    try {
+      rs = stmt.executeQuery();
+    } catch (SQLException sel) {
+      throw new SQLException(sel.getMessage() + " from query \n" + labelIdQ);
+    }
+    gotRow=rs.first();
+    if (!gotRow) {
+      stmt.close();
+      return null;
+    }
+    HashMap<Integer, String> labelIds = new HashMap<Integer,String>();
+    while (gotRow) {
+      labelIds.put(rs.getInt("lid"), rs.getString("fullname"));
+      gotRow = rs.relative(1);
+    }
+    stmt.close();
+    return labelIds;
+  }
+  
   public static Object findOrAddStep(HashMap<String, Object> stepMap,
                                      String stepName) {
     if (stepMap.containsKey(stepName)) return stepMap.get(stepName);
