@@ -65,10 +65,5 @@ table.datatable th, table.datatable td {
                 But you really shouldn't be seeing it. Please report this as a bug.
             </form>
         </c:if>
-        <traveler:eclWidget
-            author="${userName}"
-            hardwareGroupId="${process.hardwareGroupId}"
-            processId="${param.processId}"
-            />
     </body>
 </html>

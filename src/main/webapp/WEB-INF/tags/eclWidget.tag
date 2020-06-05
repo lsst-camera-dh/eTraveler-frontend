@@ -15,6 +15,7 @@
 <%@attribute name="processId"%>
 <%@attribute name="activityId"%>
 
+<%--
 <c:url var="eclLink" value="eclPane.jsp">
     <c:param name="author" value="${author}"/>
     <c:param name="hardwareTypeId" value="${hardwareTypeId}"/>
@@ -25,3 +26,7 @@
 </c:url>
 
 <iframe name="eclFrame" src="${eclLink}" height="200" width="400"></iframe>
+
+--%>
+
+<p><b>NOTE:</b>  ECL no longer available.  </p>

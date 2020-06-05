@@ -58,10 +58,5 @@ where H.id=?<sql:param value="${param.hardwareTypeId}"/>;
         <h3>Components</h3>
         <relationships:relationshipTypeList assemblyTypeId="${param.hardwareTypeId}"/>
         
-        <traveler:eclWidget
-            author="${userName}"
-            hardwareTypeId="${param.hardwareTypeId}"
-            />
-
     </body>   
 </html>

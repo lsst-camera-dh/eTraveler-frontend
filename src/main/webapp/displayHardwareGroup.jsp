@@ -63,9 +63,6 @@
             <traveler:newTravelerForm hardwareGroupId="${param.hardwareGroupId}"/>
         <h2>Components</h2>
         <traveler:hardwareList hardwareGroupId="${param.hardwareGroupId}"/>
-        <traveler:eclWidget
-            author="${userName}"
-            hardwareGroupId="${param.hardwareGroupId}"
-            />
+	
     </body>
 </html>
