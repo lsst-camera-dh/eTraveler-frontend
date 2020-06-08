@@ -31,25 +31,25 @@
         <repository>
             <id>srs-maven2</id>
             <name>SRS Maven 2 central repository</name>
-            <url>http://srs.slac.stanford.edu/maven2</url>
+            <url>https://srs.slac.stanford.edu/maven2</url>
         </repository>
         <!-- use the following if you ARE using a snapshot version. -->
         <repository>
             <id>srs-maven2-snapshots</id>
             <name>SRS Maven2 central SNAPSHOTS repository</name>
-            <url>http://srs.slac.stanford.edu/maven2/SNAPSHOTS</url>
+            <url>https://srs.slac.stanford.edu/maven2/SNAPSHOTS</url>
         </repository>
 
         <repository>
             <id>lsst-maven2-public</id>
             <name>LSST Maven 2 central repository</name>
-            <url>http://repo-nexus.lsst.org/nexus/content/groups/ccs-maven2-public/</url>
+            <url>https://repo-nexus.lsst.org/nexus/content/groups/ccs-maven2-public/</url>
             </repository>
 
         <repository>
             <id>lsst-dh-maven2-public</id>
             <name>LSST Data Handling Maven Central repository</name>
-<url>http://srs.slac.stanford.edu/nexus/content/groups/lsst-dh-maven2-public/</url>
+<url>https://srs.slac.stanford.edu/nexus/content/groups/lsst-dh-maven2-public/</url>
         </repository>
     </repositories>
 
