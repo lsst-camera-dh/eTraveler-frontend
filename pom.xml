@@ -6,7 +6,6 @@
         <version>1.0.3</version>
     </parent>
 
-
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.lsst.camera</groupId>
     <artifactId>org-lsst-camera-etraveler-web</artifactId>
