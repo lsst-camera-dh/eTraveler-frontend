@@ -102,11 +102,5 @@
         <h2>Recent Activities</h2>
         <traveler:activityList hardwareId="${param.hardwareId}"/>
         
-        <traveler:eclWidget
-            author="${userName}"
-            hardwareTypeId="${hardwareTypeId}"
-            hardwareId="${param.hardwareId}"
-            />
-        
     </body>
 </html>

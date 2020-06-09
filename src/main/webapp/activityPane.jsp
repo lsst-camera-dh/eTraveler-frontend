@@ -51,13 +51,5 @@ table.datatable th, table.datatable td {
         <h2><c:out value="${activity.shortDescription}"/></h2>
         <traveler:activityWidget activityId="${param.activityId}"/>
         <%--<traveler:processWidget processId="${activity.processId}"/>--%>
-        <traveler:eclWidget
-            author="${userName}"
-            hardwareTypeId="${activity.hardwareTypeId}"
-            hardwareGroupId="${activity.hardwareGroupId}"
-            hardwareId="${activity.hardwareId}"
-            processId="${activity.processId}"
-            activityId="${param.activityId}"
-            />
     </body>
 </html>
