@@ -63,7 +63,7 @@ order by PP.id
 ;
     </sql:query>
 <c:if test="${! empty prereqsQ.rows}">
-    <c:set var="rai" value= prereqsQ.rows[0].rai />
+    <c:set var="rai" value="${prereqsQ.rows[0].rai}" />
     <h2>Required Steps</h2>
     <display:table name="${prereqsQ.rows}" id="row" class="datatable">
         <display:column property="patternName" title="Pattern"/>
