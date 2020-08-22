@@ -85,7 +85,7 @@ where
 A.hardwareId=?<sql:param value="${row.hardwareId}"/>
 and A.processId=?<sql:param value="${row.prereqProcessId}"/>
 and AFS.id=(select id from ActivityFinalStatus where name='success')
-                      <c:if test "${DSM == 'Prod'}">
+                      <c:if test="${DSM == 'Prod'}">
 and A.rootActivityId=?<sql:param value="${rai}"/>
                       </c:if>
 order by A.begin desc;
