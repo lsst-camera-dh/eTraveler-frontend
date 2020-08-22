@@ -20,7 +20,7 @@
   allow prerequisite jobs from the same run
 --%>
 <c:choose>
-    <c:when test="${appVariables.dataSourceMode == 'Prod')}">
+    <c:when test="${appVariables.dataSourceMode == 'Prod'}">
         <c:set var="DSM" value="Prod" />
     </c:when>
     <c:otherwise>
