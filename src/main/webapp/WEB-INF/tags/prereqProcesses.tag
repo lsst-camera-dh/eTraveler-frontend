@@ -21,10 +21,13 @@
 --%>
 <c:choose>
     <c:when test="${appVariables.dataSourceMode == 'Prod'}">
-        <c:set var="DSM" value="Prod" />
+        <c:set var="REQUIRE_IN_RUN" value="True" />
+    </c:when>
+    <c:when test="${appVariables.dataSourceMode == 'Test'}">
+        <c:set var="REQUIRE_IN_RUN" value="True" />
     </c:when>
     <c:otherwise>
-        <c:set var="DSM" value="other" />
+        <c:set var="REQUIRE_IN_RUN" value="False" />
     </c:otherwise>
 </c:choose>
 <%--
@@ -79,13 +82,14 @@ order by PP.id
                     <sql:query var="activityQ" >
 select A.id, A.begin, A.rootActivityId
 from Activity A
-inner join ActivityStatusHistory ASH on ASH.activityId=A.id and ASH.id=(select max(id) from ActivityStatusHistory where activityId=A.id)
+inner join ActivityStatusHistory ASH on ASH.activityId=A.id and
+    ASH.id=(select max(id) from ActivityStatusHistory where activityId=A.id)
 inner join ActivityFinalStatus AFS on AFS.id=ASH.activityStatusId
 where
 A.hardwareId=?<sql:param value="${row.hardwareId}"/>
 and A.processId=?<sql:param value="${row.prereqProcessId}"/>
 and AFS.id=(select id from ActivityFinalStatus where name='success')
-                      <c:if test="${DSM == 'Prod'}">
+                      <c:if test="${REQUIRE_IN_RUN == 'True'}">
 and A.rootActivityId=?<sql:param value="${rai}"/>
                       </c:if>
 order by A.begin desc;
