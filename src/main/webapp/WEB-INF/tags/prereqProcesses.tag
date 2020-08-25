@@ -15,9 +15,37 @@
 <traveler:fullRequestString var="thisPage"/>
 <traveler:checkMask var="mayOperate" activityId="${activityId}"/>
 
+<%--
+  We need to know if we're in prod because, if we are, only should
+  allow prerequisite jobs from the same run
+--%>
+<c:choose>
+    <c:when test="${appVariables.dataSourceMode == 'Prod'}">
+        <c:set var="REQUIRE_IN_RUN" value="True" />
+    </c:when>
+    <c:when test="${appVariables.dataSourceMode == 'Test'}">
+        <c:set var="REQUIRE_IN_RUN" value="True" />
+    </c:when>
+    <c:otherwise>
+        <c:set var="REQUIRE_IN_RUN" value="False" />
+    </c:otherwise>
+</c:choose>
+<%--
+  prereqsQ gets information necessary for the table with heading
+  "Required Steps".  There are three outcomes:
+   * no job step prerequisites.  In this case there is no heading and
+     no table rendered
+   * All necessary prerequisites have been selected.  Then display information
+     about the prerequisites in a static table. Final column is labled
+     "Id, Start" and has activity id, begin time of selected activity.
+   * Not all prerequisites are satisfied.   For each such row, put up a form
+     in the "Id, Start" column.  Have to do an additional query (activityQ)
+     to look for candidates which will appear in
+
+--%>
     <sql:query var="prereqsQ" >
 select 
-Ap.id as activityId, Ap.hardwareId,
+Ap.id as activityId, Ap.hardwareId, Ap.rootActivityId as rai,
 PP.id as ppId, PP.name as patternName, PP.prereqProcessId, PP.description,
 P.name as processName, P.userVersionString,
 AFS.name as status,
@@ -38,6 +66,7 @@ order by PP.id
 ;
     </sql:query>
 <c:if test="${! empty prereqsQ.rows}">
+    <c:set var="rai" value="${prereqsQ.rows[0].rai}" />
     <h2>Required Steps</h2>
     <display:table name="${prereqsQ.rows}" id="row" class="datatable">
         <display:column property="patternName" title="Pattern"/>
@@ -51,14 +80,18 @@ order by PP.id
                 </c:when>
                 <c:otherwise>
                     <sql:query var="activityQ" >
-select A.id, A.begin 
+select A.id, A.begin, A.rootActivityId
 from Activity A
-inner join ActivityStatusHistory ASH on ASH.activityId=A.id and ASH.id=(select max(id) from ActivityStatusHistory where activityId=A.id)
+inner join ActivityStatusHistory ASH on ASH.activityId=A.id and
+    ASH.id=(select max(id) from ActivityStatusHistory where activityId=A.id)
 inner join ActivityFinalStatus AFS on AFS.id=ASH.activityStatusId
 where
 A.hardwareId=?<sql:param value="${row.hardwareId}"/>
 and A.processId=?<sql:param value="${row.prereqProcessId}"/>
 and AFS.id=(select id from ActivityFinalStatus where name='success')
+                      <c:if test="${REQUIRE_IN_RUN == 'True'}">
+and A.rootActivityId=?<sql:param value="${rai}"/>
+                      </c:if>
 order by A.begin desc;
                     </sql:query>
                     <c:choose>
