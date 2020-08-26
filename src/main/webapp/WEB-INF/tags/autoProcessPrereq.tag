@@ -13,7 +13,7 @@
 <%@variable name-from-attribute="var" alias="gotAll" scope="AT_BEGIN"%>
 
 <sql:query var="unfilledPrereqsQ" >
-    select A.hardwareId, PP.id as ppid, PP.prereqProcessId, PI.id as piid
+    select A.hardwareId, A.rootActivityId, PP.id as ppid, PP.prereqProcessId, PI.id as piid
     from
     Activity A
     inner join PrerequisitePattern PP on PP.processId=A.processId
@@ -27,13 +27,14 @@
 <c:forEach var="prereq" items="${unfilledPrereqsQ.rows}">
 
     <sql:query var="activityQ" >
-select A.id 
+select A.id, A.rootActivityId
 from Activity A
 inner join ActivityStatusHistory ASH on ASH.activityId=A.id and ASH.id=(select max(id) from ActivityStatusHistory where activityId=A.id)
 inner join ActivityFinalStatus AFS on AFS.id=ASH.activityStatusId
 where
 A.hardwareId=?<sql:param value="${prereq.hardwareId}"/>
 and A.processId=?<sql:param value="${prereq.prereqProcessId}"/>
+and A.rootActivityId=?<sql:param value="${prereq.rootActivityId}"/>
 and ASH.activityStatusId=(select id from ActivityFinalStatus where name='success')
 order by A.end desc limit 1;
     </sql:query>
