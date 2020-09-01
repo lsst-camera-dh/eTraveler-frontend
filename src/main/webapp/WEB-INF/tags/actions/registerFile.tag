@@ -199,7 +199,9 @@ where A.id=?<sql:param value="${activityId}"/>
     </c:when>
 </c:choose>
 <c:set var="fullFsPath" value="${fsHead}/${commonPath}/${name}"/>
-
+<!--
+    This output isn't showing up anywhere.  But if it did for a large
+    number of files it could be a problem
 <c:if test="${not doRegister}">
 <br>
 dataCatalogDb: <c:out value="${dataCatalogDb}"/><br>
@@ -211,6 +213,7 @@ groupName: <c:out value="${groupName}"/><br>
 site: <c:out value="${dcSite}"/><br>
 location: <c:out value="${fullFsPath}"/><br>
 </c:if>
+--!>
 <c:if test="${doRegister}">
     <c:if test="${mode == 'manual'}">
         <c:catch var="ex">
