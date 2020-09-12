@@ -47,8 +47,7 @@ class RegisterDC():
             schemaInstance from FilepathResultHarnessed where
             catalogKey is NULL and activityId={} order by id'''
     uq_template='''
-            INSERT  into FilepathResultHarnessed (id, catalogKey, activityId,
-            sha1, schemaName, schemaVersion, createdBy)
+            INSERT  into FilepathResultHarnessed (id, catalogKey, activityId)
             VALUES {} ON DUPLICATE KEY UPDATE catalogKey=VALUES(catalogKey)
             '''
     def __init__(self, engine):
@@ -70,7 +69,7 @@ class RegisterDC():
                                                    resource=physical_path)
         return dc_dataset.pk
 
-    def register_activity(self, activityId):
+    def register_activity(self, activityId, debug=False):
         '''
         For each file belonging to the activity which is not already
         registered, register with data catalog and store catalog key in db
@@ -102,15 +101,15 @@ class RegisterDC():
             key = self.register_file(folder, basename, file_format,
                                      row['value'])
 
-            if count == 1:
-                print('catalog key: {}'.format(key))
-                print('folder: {}\nbasename: {}'.format(folder, basename))
-                print('file_format: {}\ndc path: {}'.format(file_format,
+            if debug:
+                if count == 1:
+                    print('catalog key: {}'.format(key))
+                    print('folder: {}\nbasename: {}'.format(folder, basename))
+                    print('file_format: {}\ndc path: {}'.format(file_format,
                                                             row['virtualPath']))
-                print('physical path: {}'.format(row['value']))
-                sys.stdout.flush()
-            val_list.append("({},{},{},0,'fileref',0,'jrb')".format(str(row['id']), str(key), str(activityId)))
-            #print('For id={} catalogKey={}'.format(str(row['id']), str(key)))
+                    print('physical path: {}'.format(row['value']))
+                    sys.stdout.flush()
+            val_list.append("({},{},{})".format(str(row['id']), str(key), str(activityId)))
             row = results.fetchone()
               
         if count == 0: return 0
@@ -118,7 +117,6 @@ class RegisterDC():
 
         values = ','.join(val_list)
         uq = self.uq_template.format(values)
-        #print(uq)
 
         self.engine.execute('set sql_notes = 0')
         self.engine.execute(uq)
@@ -136,6 +134,14 @@ if __name__ == '__main__':
     # 1550 (17751)     REGISTERED, DB UPDATED. 21 minutes with print statement
     # 1551 (1)         REGISTERED; hand DB UPDATE
     # 
+    # 1554 (3)         tested with defaults defined in db table
+    # 1555 (1)         tested with defaults defined in db table
+    # 1558 (3)         tested --debug argument
+    # 1559 (1)         tested default (debug is False)
+    # 1562 (3)
+    # 1563 (1)
+    # 1566 (3)
+    # 1567 (1)
 
     import argparse
     from datetime import datetime as dt
@@ -148,6 +154,8 @@ if __name__ == '__main__':
     parser.add_argument('--db', required=True,
                         choices = ['Prod', 'Dev', 'Test', 'Raw'],
                         help='one of Prod, Dev, Test, Raw')
+    parser.add_argument('--debug', action='store_true', default=False,
+                        help='Write extra output to stdout')
     args = parser.parse_args()
 
     
@@ -159,7 +167,7 @@ if __name__ == '__main__':
     print('Called with db={}, activity-id={}'.format(args.db, args.activity_id))
     print('Before register time is ',dt.now())
     sys.stdout.flush()
-    cnt = registrar.register_activity(activity_id)
+    cnt = registrar.register_activity(activity_id, debug=args.debug)
     print('After register time is ',dt.now())    
     sys.stdout.flush()
     print('Registered {cnt} files for activity {activity_id}'.format(**locals()))
