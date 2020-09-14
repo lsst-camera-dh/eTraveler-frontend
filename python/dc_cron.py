@@ -149,7 +149,7 @@ class RegisterDC():
 
         Return
         ------
-        Count of files registered  (maybe also list of activities?)
+        List of pairs (activity, count)
         '''
 
         sq = self.sq_template.format(start_TS.isoformat(' '), 
@@ -158,9 +158,9 @@ class RegisterDC():
 
         activities = []
         for row in results:
-            print(row[0])
-        
-        
+            count = self.register_activity(int(row[0]), debug)
+            activities.append((int(row[0]), count))
+        return activities
 
 if __name__ == '__main__':
     # Can try it out with Raw, activity ids 
@@ -195,11 +195,11 @@ if __name__ == '__main__':
     parser.add_argument('--debug', action='store_true', default=False,
                         help='Write extra output to stdout')
     parser.add_argument('--start', help='''
-       start of activity interval.  Acceptable formats are YYYY-MM-DD or
+       start of activity interval (UTC).  Acceptable formats are YYYY-MM-DD or
        YYYY-MM-DD HH:MM:DD
        One of activity-id, start must be specified''')
-    parser.add_argument('--end', help='''end of activity interval. If omitted
-              when start is used, end will default to 1 day later''')
+    parser.add_argument('--end', help='''end of activity interval (UTC). 
+        If omitted when start is used, end will default to 1 day later''')
 
     args = parser.parse_args()
                         
@@ -234,10 +234,12 @@ if __name__ == '__main__':
         end_dt = start_dt + td(days=1)
     else:
         end_dt = to_dt(end)
-
+                              
     print('Using start {} and end {} '.format(str(start_dt), str(end_dt)))
     print('Before register_span.  Time is ',dt.now())
     sys.stdout.flush()
-    registrar.register_span(start_dt, end_dt)
+    activities = registrar.register_span(start_dt, end_dt)
     print('After register_span. Time is ',dt.now())    
     sys.stdout.flush()
+    for p in activities:
+        print('For activity {} registered {} files'.format(p[0], p[1]))
