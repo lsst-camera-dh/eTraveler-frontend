@@ -12,6 +12,7 @@ from datetime import timedelta as td
 # has been added to PATH or PYTHONPATH
 
 from datacat import client_from_config_file
+import datacat.error
 
 def get_db_engine(kwds):
     '''
@@ -78,10 +79,24 @@ class RegisterDC():
             self.dc_client.mkdir(dc_folder, parents=True)
 
         # Register
-        dc_dataset = self.dc_client.create_dataset(dc_folder, basename, 
-                                                   datatype, file_format, 
-                                                   site=site,
-                                                   resource=physical_path)
+        try:
+            dc_dataset = self.dc_client.create_dataset(dc_folder, basename, 
+                                                       datatype, file_format, 
+                                                       site=site,
+                                                       resource=physical_path)
+        except datacat.error.DcClientException as ex:
+            # If dataset was already registered find its key
+            found = False
+            for a in ex.args:
+                if 'FileAlreadyExists' in a:
+                    fullpath = os.path.join(dc_folder, basename)
+                    dc_dataset = self.dc_client.path(fullpath, site=site)
+                    found = True
+                    break
+
+            if not found:
+                raise
+
         return dc_dataset.pk
 
     def register_activity(self, activityId, debug=False):
