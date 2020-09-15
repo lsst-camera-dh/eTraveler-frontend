@@ -188,7 +188,7 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(
         description='Register files in data catalog for one harnessed job')
     parser.add_argument('--activity-id', type=int, 
-                        help='activity id of harnessed job. One of activity-id, start must be specified')
+                        help='activity id of harnessed job. One of activity-id, start or end must be specified')
     parser.add_argument('--db', required=True,
                         choices = ['Prod', 'Dev', 'Test', 'Raw'],
                         help='one of Prod, Dev, Test, Raw')
@@ -197,25 +197,26 @@ if __name__ == '__main__':
     parser.add_argument('--start', help='''
        start of activity interval (UTC).  Acceptable formats are YYYY-MM-DD or
        YYYY-MM-DD HH:MM:DD
-       One of activity-id, start must be specified''')
+       If omitted when end is used, start defauts to 25 hours earlier.
+       One of activity-id, start, end must be specified''')
     parser.add_argument('--end', help='''end of activity interval (UTC). 
-        If omitted when start is used, end will default to 1 day later''')
+        If omitted when start is used, end will default to 25 hours later''')
 
     args = parser.parse_args()
                         
     activity_id = args.activity_id
     start = args.start
     end = args.end
-    if activity_id is None and start is None:
-        print('Must specify either activity id or start time')
+    if activity_id is None and start is None and end is None:
+        print('Must specify either activity id, start time or end time')
         exit(0)
 
     engine = get_et_engine(dataSource=args.db)
     registrar = RegisterDC(engine)
     
     if activity_id is not None:
-        if start is not None:
-            print('Cannot specify both activity id and start time')
+        if start is not None or end is not None:
+            print('Cannot specify both activity id and start or end time')
             exit(0)
         else:
             print('Called with db={}, activity-id={}'.format(args.db, args.activity_id))
@@ -228,12 +229,15 @@ if __name__ == '__main__':
             exit(0)
 
     # attempt to convert start to datetime object.  
-    start_dt = to_dt(start)
-
-    if end is None:
-        end_dt = start_dt + td(days=1)
+    if start is not None:
+        start_dt = to_dt(start)
+        if end is None:
+            end_dt = start_dt + td(days=1, hours=1)
+        else:
+            end_dt = to_dt(end)
     else:
         end_dt = to_dt(end)
+        start_dt = end_dt - td(days=1, hours=1)
                               
     print('Using start {} and end {} '.format(str(start_dt), str(end_dt)))
     print('Before register_span.  Time is ',dt.now())
