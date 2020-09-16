@@ -212,7 +212,7 @@ if __name__ == '__main__':
     parser.add_argument('--start', help='''
        start of activity interval (UTC).  Acceptable formats are YYYY-MM-DD or
        YYYY-MM-DD HH:MM:DD
-       If omitted when end is used, start defauts to 25 hours earlier.
+       If omitted when end is used, start defauts to 50 hours earlier.
        One of activity-id, start, end must be specified''')
     parser.add_argument('--end', help='''end of activity interval (UTC). 
         If omitted when start is used, end will default to 25 hours later''')
@@ -252,7 +252,7 @@ if __name__ == '__main__':
             end_dt = to_dt(end)
     else:
         end_dt = to_dt(end)
-        start_dt = end_dt - td(days=1, hours=1)
+        start_dt = end_dt - td(days=2, hours=2)
                               
     print('Using start {} and end {} '.format(str(start_dt), str(end_dt)))
     print('Before register_span.  Time is ',dt.now())
