@@ -255,6 +255,7 @@ if __name__ == '__main__':
         start_dt = end_dt - td(days=2, hours=2)
                               
     print('Using start {} and end {} '.format(str(start_dt), str(end_dt)))
+    print('for database "{}"'.format(args.db)) 
     print('Before register_span.  Time is ',dt.now())
     sys.stdout.flush()
     activities = registrar.register_span(start_dt, end_dt)
