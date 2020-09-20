@@ -25,14 +25,18 @@
 <%@variable name-from-attribute="varDcPath" alias="fullVirtualPath" scope="AT_BEGIN"%>
 <%@attribute name="varDcPk" required="true" rtexprvalue="false"%>
 <%@variable name-from-attribute="varDcPk" alias="dcPk" scope="AT_BEGIN"%>
+
+
 <%@attribute name="dataType"%>
 
 <c:choose>
     <c:when test="${mode == 'manual'}">
         <c:set var="modePath" value="${initParam['uploadedSubfolder']}"/>
+    	<c:set var="doRegister" value="true"/>
     </c:when>
     <c:when test="${mode == 'harnessed'}">
         <c:set var="modePath" value="${initParam['mirroredSubfolder']}"/>
+    	<c:set var="doRegister" value="false"/>
     </c:when>
     <c:otherwise>
         <traveler:error message="AAAaaack!!!! #220560" bug="true"/>
@@ -191,12 +195,13 @@ where A.id=?<sql:param value="${activityId}"/>
         <c:set var="fsHead" value="${site.jhOutputRoot}"/>
     </c:when>
     <c:when test="${mode=='manual'}">
-        <c:set var="fsHead" value="${appVariables.etravelerFileStore}/${initParam['eTravelerFileSubfolder']}/${dataSourceFolder}/${siteName}"/>
+  	 <c:set var="fsHead" value="${appVariables.etravelerFileStore}/${initParam['eTravelerFileSubfolder']}/${dataSourceFolder}/${siteName}"/>
     </c:when>
 </c:choose>
 <c:set var="fullFsPath" value="${fsHead}/${commonPath}/${name}"/>
-
-<c:set var="doRegister" value="true"/>
+<!--
+    This output isn't showing up anywhere.  But if it did for a large
+    number of files it could be a problem
 <c:if test="${not doRegister}">
 <br>
 dataCatalogDb: <c:out value="${dataCatalogDb}"/><br>
@@ -208,6 +213,7 @@ groupName: <c:out value="${groupName}"/><br>
 site: <c:out value="${dcSite}"/><br>
 location: <c:out value="${fullFsPath}"/><br>
 </c:if>
+--!>
 <c:if test="${doRegister}">
     <c:if test="${mode == 'manual'}">
         <c:catch var="ex">

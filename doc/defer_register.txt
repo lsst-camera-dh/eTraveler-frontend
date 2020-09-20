@@ -1,0 +1,38 @@
+See LSSTTD-1505, "Address very long ingest times", for background.
+
+The Python module dc_register_harnessed.py has a main which can be invoked
+to either
+
+* register all unregistered files belonging to a particular activity in
+  the specified database
+
+* register all unregistered files belonging to activities overlapping
+  with a time interval in a specified database
+
+In either case the program will also update the database with the new
+catalog key.   If the file was already registered but the key was not
+entered in the db, the program will look up the key and update the db.
+
+The script dc_cron.sh is suitable for invocation from a trscron job. In
+its current form it takes two arguments (not options)
+
+db         (defaults to "Prod")
+logdir     (defaults to ${HOME}/lsst/dc_cron_logs
+
+You cannot just specify logdir.  If there are any arguments, db must come first
+
+The script will call the program with --db=db --end=current time. The
+program will then search for activities with ingested files from 50 hours 
+before invocation up to invocation
+
+To search more than one db, make a trscrontab entry for each.
+
+
+Other possibilities to be considered:
+
+* dispense with db argument. Call python program for each database ("Prod",
+"Dev", "Test", "Raw") -- or maybe just "Prod" and "Dev" -- in sequence
+
+* same as above but invocations are in parallel
+
+
