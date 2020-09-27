@@ -149,8 +149,9 @@ class RegisterDC():
         values = ','.join(val_list)
         uq = self.uq_template.format(values)
 
-        self.engine.execute('set sql_notes = 0')
-        self.engine.execute(uq)
+        with self.engine.begin() as connection:
+            connection.execute('set sql_notes = 0')
+            connection.execute(uq)
 
         return count
 
