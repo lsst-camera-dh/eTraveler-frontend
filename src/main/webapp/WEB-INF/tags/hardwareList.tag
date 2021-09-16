@@ -1,4 +1,4 @@
-<%-- 
+<%--
     Document   : hardwareList
     Created on : May 3, 2013, 3:05:28 PM
     Author     : focke
@@ -26,7 +26,7 @@
 
 <sql:query var="result" >
     select H.id, H.creationTS, H.lsstId, H.manufacturer, H.manufacturerId, H.model, H.manufactureDate,
-    HT.name as hardwareTypeName, HT.id as hardwareTypeId, 
+    HT.name as hardwareTypeName, HT.id as hardwareTypeId,
     HS.name as hardwareStatusName,
     L.id as locationId, L.name as locationName,
     S.id as siteId, S.name as siteName,
@@ -42,21 +42,21 @@
     </c:if>
     inner join HardwareStatusHistory HSH on HSH.hardwareId=H.id and HSH.id=(select max(HSH2.id) from HardwareStatusHistory HSH2 inner join HardwareStatus HS on HS.id=HSH2.hardwareStatusId where HSH2.hardwareId=H.id and HS.isStatusValue=1)
     inner join HardwareStatus HS on HS.id=HSH.hardwareStatusId
-    inner join HardwareLocationHistory HLH on HLH.hardwareId=H.id and HLH.id=(select max(id) from HardwareLocationHistory where hardwareId=H.id)
+    inner join HardwareLocationHistory HLH on HLH.hardwareId=H.id and HLH.creationTS=(select max(creationTS) from HardwareLocationHistory where hardwareId=H.id)
     inner join Location L on L.id=HLH.locationId
     inner join Site S on S.id=L.siteId
     inner join Subsystem SS on SS.id=HT.subsystemId
     <c:if test="${! empty labelId and labelId != 'any'}" >
-    inner join LabelHistory LH on 
-      (LH.labelId=?<sql:param value="${labelId}" />) 
+    inner join LabelHistory LH on
+      (LH.labelId=?<sql:param value="${labelId}" />)
       and (LH.objectId=H.id) and
-      (LH.labelableId=(select LBL.id from Labelable LBL 
-       where name="hardware") ) 
+      (LH.labelableId=(select LBL.id from Labelable LBL
+       where name="hardware") )
       and LH.id in (select max(id) from LabelHistory LH2
       where LH2.labelableId=2 and LH2.labelId=?<sql:param value="${labelId}" />
       group by LH2.objectId) and LH.adding=1
     </c:if >
-    left join HardwareIdentifier HI on HI.hardwareId=H.id 
+    left join HardwareIdentifier HI on HI.hardwareId=H.id
         and HI.authorityId=(select id from HardwareIdentifierAuthority where name=?<sql:param value="${preferences.idAuthName}"/>)
     where 1
     <c:if test="${! empty hardwareGroupId}">
